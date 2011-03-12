@@ -1,3 +1,4 @@
+
 /**
  * Created by .
  * User: Liam
@@ -8,12 +9,13 @@
 var agentTimerId = 0;
 
 var interval = 100;
-var numAgents = 10;
+var numAgents = 1;
 var worldSize = 11;
 var cellWidth = 400 / worldSize;
 var pieceWidth = cellWidth * 0.5;
 var agents;
 var patches = new Array();
+var cells = new Hash();
 
 /* Agent class definition */
 function Agent(agentType, color) {
@@ -21,9 +23,11 @@ function Agent(agentType, color) {
     this._color = color;
     this._x = 0;
     this._y = 0;
+    this._history = new Array();
 }
 Agent.prototype.getPosition = function() { return [this._x, this._y]; }
-Agent.prototype.setPosition = function(x, y) { this._x =x; this._y = y; }
+Agent.prototype.setPosition = function(x, y) { this._history.push([this._x, this._y]); this._x =x; this._y = y; }
+Agent.prototype.lastPosition = function() { return this._history[this._history.length - 1]; }
 Agent.prototype.getX = function() { return this._x; }
 Agent.prototype.setX = function(x) { this._x = x; }
 Agent.prototype.getY = function() { return this._y; }
@@ -36,14 +40,11 @@ Agent.prototype.getColor = function() { return this._color;}
 function Patch(patchType, color) {
     this._patchType = patchType;
     this._color = color;
-    this._x = 0;
-    this._y = 0;
 }
 function Patch(patchType, color, x, y) {
     this._patchType = patchType;
     this._color = color;
-    this._x = x;
-    this._y = y;
+    this.setPosition(x, y);
 }
 Patch.prototype.getType = function() { return this._patchType;}
 Patch.prototype.getColor = function() { return this._color;}
@@ -62,6 +63,7 @@ function initWorld() {
     cellWidth = 400 / worldSize;
     pieceWidth = cellWidth * 0.5;
     patches = new Array();
+    cells = new Hash();
     setupWorld1();
     //agents = randomAgents(numAgents, worldSize);
 }
@@ -70,7 +72,7 @@ function fillWithPatches() {
     var fixedPatches = new Array();
     for (var i = 0; i < worldSize; i++) {
         for (var j = 0; j < worldSize; j++) {
-            fixedPatches.push(new Patch("landscape", "ddd", j, i));
+            patches.push(new Patch("landscape", "ddd", j, i));
         }
     }
     return fixedPatches;
@@ -79,7 +81,7 @@ function fillWithPatches() {
 
 /* Need somewhere to load a specific world */
 function setupWorld1() {
-    patches = fillWithPatches();
+    fillWithPatches();
     patches.splice(99, 10);
     patches.splice(97, 1);
     patches.splice(78, 9);
@@ -89,6 +91,10 @@ function setupWorld1() {
     patches.splice(34, 9);
     patches.splice(23, 1);
     patches.splice(12, 10);
+    for (var i = 0; i < patches.length; i++) {
+        var p = patches[i];
+        cells.set([p.getX(), p.getY()], p);
+    }
 
     agents = presetAgents(numAgents, 0, 9);
 }
@@ -137,6 +143,7 @@ function dropItem(e) {
     var patch = new Patch(patchType, c);
     patch.setPosition(cellX / cellWidth, cellY / cellWidth);
     patches.push(patch);
+    cells.set([patch.getX(), patch.getY()], patch);
 
     drawPatch(patch);
 }
@@ -168,7 +175,73 @@ function drawGrid() {
 
 }
 
-function moveAgents() {
+
+/* Move Strategies */
+
+function moveAgents(withNoRepeat, withNoCollision) {
+    for (var i = 0; i < agents.length; i+= 1) {
+        var agent = agents[i];
+        var x = agent.getX();
+        var y = agent.getY();
+        var lastX = -1, lastY = -1;
+        var p = agent.lastPosition();
+        if (p != undefined) {
+            lastX = p[0];
+            lastY = p[1];
+        }
+        var position = findPosition(x, y, withNoRepeat, withNoCollision, lastX, lastY);
+        if ((position[0] != x || position[1] != y) && (position[0] != lastX || position[1] != lastY))
+            agent.setPosition(position[0], position[1]);
+    }
+}
+
+function findPosition(x, y, withNoRepeat, withNoCollision, lastX, lastY) {
+    var positionFound = false;
+    var existingDirections = new Array();
+    var directions = 4;
+    var newX = x;
+    var newY = y;
+    for (var i = 0; i < directions; i++) {
+        newX = x;
+        newY = y;
+        var dir = Math.floor(Math.random() * directions);
+        var existing = false;
+        for (var j = 0; j < existingDirections.length; j++) {
+            if (existingDirections[j] == dir) {
+                existing = true;
+            }
+        }
+        if (existing == true) {
+            i--;
+            continue;
+        }
+        existingDirections.push(dir);
+
+        switch (dir) {
+            case 0:
+                (newX == 0) ? newX = worldSize - 1 : newX = newX - 1;
+                break;
+            case 1:
+                (newX == worldSize - 1) ? newX = 0 : newX = newX + 1;
+                break;
+            case 2:
+                (newY == 0) ? newY = worldSize - 1 : newY = newY - 1;
+                break;
+            case 3:
+                (newY == worldSize - 1) ? newY = 0 : newY = newY + 1;
+                break;
+        }
+        if (withNoRepeat == true && lastX == x && lastY == y) {
+            continue;
+        }
+        if (cells.get([newX, newY]) == undefined) {
+            return [newX, newY];
+        }
+    }
+    return [x, y];
+}
+
+function moveAgentsRandomly() {
     for (var i = 0; i < agents.length; i+= 1) {
         var dir = Math.floor(Math.random() * 4);
         var agent = agents[i];
@@ -191,8 +264,11 @@ function moveAgents() {
         if (!checkPatches(newX, newY))
             agent.setPosition(newX, newY);
     }
-
 }
+
+
+/* End Move Strategies */
+
 
 function checkPatches(newX, newY) {
     var isPatch = false;
@@ -239,7 +315,8 @@ function drawAgents() {
     }
 
     //agents = randomAgents(10, 10);
-    moveAgents();
+    moveAgents(true, false);
+//    moveAgentsRandomly();
 
     //drawPatches();
 
