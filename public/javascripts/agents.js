@@ -76,6 +76,7 @@ function fillWithPatches() {
     return fixedPatches;
 }
 
+
 /* Need somewhere to load a specific world */
 function setupWorld1() {
     patches = fillWithPatches();
