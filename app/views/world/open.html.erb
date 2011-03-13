@@ -4,9 +4,11 @@
 
     <div>
       <div id="gameworld">
-          <div id="world">
-            <canvas id="c1" width="401" height="401">A Canvas</canvas>
-          </div>
+        <div id="world">
+          <canvas id="c1" width="401" height="401" style="z-index: 1;">A Canvas</canvas>
+          <canvas id="c2" width="401" height="401" style="z-index: 2;">A Canvas</canvas>
+        </div>
+
           <div id="swatch">
             <ul>
               <li><a href="#" id="env">Environmental Good</a></li>
@@ -17,27 +19,28 @@
             <%= javascript_include_tag "world_canvas_handler" %>
           </div>
 
-          <div id="controls">
-            <br/>
-            Number of agents: <input id="numAgentsInput" name="numAgents" value="10"/>
-            <br/>
-            World size: <input id="worldSizeInput" name="worldSize" value="10"/>
-            <br/>
-            Interval: <input id="intervalInput" name="interval" value="100"/>
-            <br/>
-            <button id="startAgents" onclick="startAgents();">Start</button>
-            <button id="stopAgents" onclick="stopAgents();">Stop</button>
-            <button id="resetWorld" onclick="resetWorld();">Reset</button>
-            <script type="text/javascript">
-                drawGrid();
-                drawPatches();
-            </script>
-          </div>
       </div>
     </div>
 
     <div id="content">
-      
+      <div id="controls">
+        <br/>
+        Number of agents: <input id="numAgentsInput" name="numAgents" value="5"/>
+        <br/>
+        World size: <input id="worldSizeInput" name="worldSize" value="11"/>
+        <br/>
+        Interval: <input id="intervalInput" name="interval" value="20"/>
+        <br/>
+        <button id="startAgents" onclick="startAgents();">Start</button>
+        <button id="stopAgents" onclick="stopAgents();">Stop</button>
+        <button id="resetWorld" onclick="resetWorld();">Reset</button>
+        <script type="text/javascript">
+            drawGrid();
+            drawPatches();
+        </script>
+        <button id="cells" onclick="drawAgents();">Debug</button>
+      </div>
+
     </div>
 
     <br/>
