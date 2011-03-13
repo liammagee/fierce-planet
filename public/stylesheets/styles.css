@@ -4,6 +4,7 @@
 }
 
 #content {
+    clear: both;
     float: right;
     width: 50%;
 }
@@ -14,7 +15,8 @@
 }
 
 #swatch {
-    float: left;
+    clear: both;
+    float: right;
     width: 50%;
     text-align: left;
 }
@@ -24,11 +26,11 @@
 }
 
 
-#c1 {
+#c1, #c2 {
   border: #ccc 3px solid;
 }
 
-#c1.over {
+#c1.over, #c2.over {
   border: #333 3px solid;
 }
 
@@ -72,4 +74,10 @@ li a:hover:after {
 li.over {
   border-color: #333;
   background: #ccc;
+}
+
+canvas {
+    position:absolute;
+    left:0px;
+    top:0px;
 }

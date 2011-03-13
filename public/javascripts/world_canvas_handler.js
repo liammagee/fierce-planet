@@ -1,4 +1,4 @@
-var canvas = document.getElementById('c1');
+var canvas = document.getElementById('c2');
 var msie = /*@cc_on!@*/0;
 
 var links = document.querySelectorAll('li > a'), el = null;
@@ -12,7 +12,7 @@ for (var i = 0; i < links.length; i++) {
   }, false);
 }
 
-var world = document.querySelector('#c1');
+var world = document.querySelector('#c2');
 
 world.addEventListener('dragstart', function (e) {
     if (e.preventDefault) e.preventDefault(); // allows us to drop
