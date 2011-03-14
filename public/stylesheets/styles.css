@@ -1,15 +1,29 @@
-#gameworld {
+#left-pane {
     float: left;
-    width: 50%;
+    width:20%;
 }
-
-#content {
-    clear: both;
-    float: right;
-    width: 50%;
+#content-pane {
+    float: left;
+    width:60%;
 }
+#right-pane {
+    float: left;
+    width:20%;
+}
+#main-panel {
+    position:relative;
+}
+#info-panel {
+    height:20px;
+    position:relative;
+}
+#gameworld {
+    clear:both;
+    position:relative;
 
+}
 #world {
+    position:relative;
     float: left;
     width: 50%;
 }
@@ -23,14 +37,24 @@
 
 #controls {
     clear: both;
+    position:absolute;
+    left:0px;
+    top:421px;
 }
 
+canvas {
+    position:absolute;
+}
 
-#c1, #c2 {
+#c1, #c2, #c3 {
   border: #ccc 3px solid;
 }
 
-#c1.over, #c2.over {
+#c1.over, #c2.over, #c3.over {
+  border: #333 3px solid;
+}
+
+#c1.over, #c2.over, #c3.over {
   border: #333 3px solid;
 }
 
@@ -76,8 +100,9 @@ li.over {
   background: #ccc;
 }
 
-canvas {
+footer {
+    clear: both;
     position:absolute;
     left:0px;
-    top:0px;
+    top:621px;
 }

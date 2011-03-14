@@ -12,7 +12,7 @@ for (var i = 0; i < links.length; i++) {
   }, false);
 }
 
-var world = document.querySelector('#c2');
+var world = document.querySelector('#c3');
 
 world.addEventListener('dragstart', function (e) {
     if (e.preventDefault) e.preventDefault(); // allows us to drop
