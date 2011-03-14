@@ -7,20 +7,25 @@
     </div>
     <div id="content-pane">
       <div id="main-panel">
-        <div id="info-panel">
-          <div style="width: 20%; float: left">
+        <div id="global-info-panel">
+          <div style="width: 50%; float: left">
+            Level: <span id="level-display">1</span>
+          </div>
+          <div style="width: 50%; float: left">
             Score: <span id="score-display">0</span>
           </div>
-          <div style="width: 20%; float: left">
+        </div>
+        <div id="level-info-panel">
+          <div style="width: 25%;; float: left">
             Saved: <span id="saved-display">0</span>
           </div>
-          <div style="width: 20%; float: left">
+          <div style="width: 25%;; float: left">
             Expired: <span id="dead-display">0</span>
           </div>
-          <div style="width: 20%; float: left">
+          <div style="width: 25%;; float: left">
             Waves: <span id="waves-display">1 out of 30</span>
           </div>
-          <div style="width: 20%; float: left">
+          <div style="width: 25%;; float: left">
             Goodness: <span id="goodness-display">100</span>
           </div>
         </div>
@@ -38,7 +43,7 @@
                 <li><a href="#" id="soc">Social Good <br/><small>(Cost: 10; PAY: 5)</small></a></li>
               </ul>
 
-              <%= javascript_include_tag "world_canvas_handler" %>
+              <%= javascript_include_tag "agents/world_canvas_handler" %>
             </div>
 
         </div>
@@ -46,9 +51,9 @@
           <br/>
           Number of agents: <input id="numAgentsInput" name="numAgents" value="1"/>
           <br/>
-          World size: <input id="worldSizeInput" name="worldSize" value="11"/>
-          <br/>
           Interval: <input id="intervalInput" name="interval" value="20"/>
+          <br/>
+          Level: <input id="levelInput" name="interval" value="1"/>
           <br/>
           <button id="startAgents" onclick="startAgents();">Start</button>
           <button id="stopAgents" onclick="stopAgents();">Stop</button>
@@ -73,20 +78,22 @@
     <footer>
       <p>Todos:</p>
       <ol>
-        <li>Levels</li>
+        <li>Levels - DONE</li>
+        <li>Separate world/level code from generic classes - DONE</li>
         <li>Patch fading & redraw</li>
         <li>Patch upgrading</li>
         <li>Pause</li>
+        <li>Speed up/slow down</li>
         <li>Different difficulties</li>
         <li>Worlds</li>
         <li>Instructions</li>
         <li>Save scores</li>
         <li>Achievements</li>
+        <li>Fight rather than save</li>
         <li>Distinguish social, economic and environment</li>
         <li>ABM features: demography</li>
         <li>ABM features: regeneration</li>
         <li>ABM features: communication</li>
         <li>ABM features: goal orientation</li>
-        <li>Separate world/level code from generic classes</li>
       </ol>
     </footer>

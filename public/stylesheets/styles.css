@@ -13,7 +13,11 @@
 #main-panel {
     position:relative;
 }
-#info-panel {
+#global-info-panel {
+    height:20px;
+    position:relative;
+}
+#level-info-panel {
     height:20px;
     position:relative;
 }
@@ -39,7 +43,7 @@
     clear: both;
     position:absolute;
     left:0px;
-    top:421px;
+    top:441px;
 }
 
 canvas {

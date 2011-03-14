@@ -1,24 +1,12 @@
 
-/**
- * Created by .
- * User: Liam
- * Date: 11/03/11
- * Time: 1:07 PM
- * To change this template use File | Settings | File Templates.
- */
-var agentTimerId = 0;
 
-var interval = 20;
-var numAgents = 5;
-var worldSize = 11;
-var cellWidth = 400 / worldSize;
-var pieceWidth = cellWidth * 0.5;
-var agents;
-var tiles = new Array();
-var patches = new Array();
-var cells = new Hash();
-var counter = 0;
-var counterLoops = 0;
+/* NB: agents.js and relevant level sources must be pre-loaded */
+
+/* Constants */
+var NO_DIE = 5;
+
+var LEVELS = 2;
+
 var MOVE_INCREMENTS = 5;
 var INITIAL_HEALTH = 100;
 var MOVE_HEALTH_COST = -5;
@@ -27,8 +15,23 @@ var STARTING_GOODNESS = 100;
 var PATCH_GOODNESS = 10;
 var WAVE_GOODNESS_BONUS = 5;
 
-var maxWaves = 30;
 
+/* Global variables */
+
+var agentTimerId = 0;
+
+var interval = 20;
+var numAgents = 1;
+
+var agents;
+var tiles = new Array();
+var patches = new Array();
+var cells = new Hash();
+var counter = 0;
+var counterLoops = 0;
+
+var currentLevelNumber = 2;
+var currentLevel;
 var score = 0;
 var goodness = 0;
 var waves = 1;
@@ -36,164 +39,9 @@ var deadAgentCount = 0;
 var savedAgentCount = 0;
 var savedAgentThisWaveCount = 0;
 
-var initialAgentX = 0;
-var initialAgentY = 0;
-
-
-/* Class definitions */
-
-/* Agent class definition */
-function Agent(agentType, color, x, y) {
-    this._agentType = agentType;
-    this._color = color;
-    this._x = x;
-    this._y = y;
-    this._history = new Array();
-    var tmpX = -1, tmpY = -1;
-    if (x == 0 || x == worldSize - 1 || y == 0 || x == worldSize - 1) {
-        var tmpX = x, tmpY = y;
-        if (x == 0)
-            tmpX = -1;
-        else if (x == worldSize - 1)
-            tmpX = worldSize;
-        else if (y == 0)
-            tmpY = -1;
-        else if (x == worldSize - 1)
-            tmpY = worldSize;
-        this._history.push([tmpX, tmpY])
-    }
-    this._delay = 0;
-    this._wanderX = 0;
-    this._wanderY = 0;
-    this._speed = MOVE_INCREMENTS;
-    this._health = INITIAL_HEALTH;
-}
-Agent.prototype.getPosition = function() { return [this._x, this._y]; }
-Agent.prototype.setPosition = function(x, y) { this._history.push([this._x, this._y]); this._x =x; this._y = y; }
-Agent.prototype.lastPosition = function() { return this._history[this._history.length - 1]; }
-Agent.prototype.getX = function() { return this._x; }
-Agent.prototype.setX = function(x) { this._x = x; }
-Agent.prototype.getY = function() { return this._y; }
-Agent.prototype.setY = function(y) { this._y = y; }
-Agent.prototype.getType = function() { return this._agentType;}
-Agent.prototype.getColor = function() { return this._color;}
-Agent.prototype.getDelay = function() { return this._delay; }
-Agent.prototype.setDelay = function(delay) { this._delay = delay; }
-Agent.prototype.getHealth = function() { return this._health; }
-Agent.prototype.setHealth = function(health) { this._health = health; }
-Agent.prototype.adjustHealth = function(adjustment) {
-    var newHealth = this._health + adjustment;
-    if (newHealth > 0)
-        this._health = newHealth;
-    else
-        this._health = 0;
-}
-Agent.prototype.getWanderX = function() { return this._wanderX; }
-Agent.prototype.getWanderY = function() { return this._wanderY; }
-Agent.prototype.adjustWander = function() {
-    var wx = this._wanderX;
-    var wy = this._wanderY;
-    var limit = cellWidth / 2 - pieceWidth / 2;
-    var rx = Math.floor(Math.random() * 3 - 1);
-    var ry = Math.floor(Math.random() * 3 - 1);
-    wx = wx + rx;
-    wy = wy + ry;
-
-    if (limit - Math.abs(wx) > 0)
-        this._wanderX = wx;
-
-    if (limit - Math.abs(wy) > 0)
-        this._wanderY = wy;
-}
-Agent.prototype.getSpeed = function() { return this._speed; }
-Agent.prototype.setSpeed = function(speed) { this._speed = speed; }
-/* Change the speed, but sparingly as the speed moves away from the standard speed: MOVE_INCREMENTS */
-Agent.prototype.adjustSpeed = function() {
-    var tmpSpeed = this._speed;
-    var variance = this._speed - MOVE_INCREMENTS;
-
-    // Makes movement away from MOVE_INCREMENTS very unlikely
-//    var prob = Math.pow(Math.abs(variance), Math.abs(variance));
-    // Makes movement away from MOVE_INCREMENTS unlikely
-//    var prob = Math.pow(Math.abs(variance), 2);
-    // Makes movement away from MOVE_INCREMENTS moderately likely
-    var prob = Math.abs(variance);
-    // Makes movement away from MOVE_INCREMENTS an even chance
-//    var prob = 1;
-
-    var r = Math.floor(Math.random() * 3 * prob - 1);
-    // Set the speed to above, equal or below the current speed
-    var change = (r < 0 ? -1 : (r > 0 ? 1 : 0));
-    // Change direction if the speed is already negative
-    change = (variance > 0 ? -change : change);
-
-    // Add a multiplier to the change
-//    var multiplier = Math.ceil(Math.random() * 3);
-    var multiplier = 1;
-
-    var s = this._speed;
-
-    tmpSpeed = this._speed + change * multiplier;
-
-    if (tmpSpeed > 0)
-        this._speed = tmpSpeed;
-}
-
-
-/* Patch class definition */
-function Patch(patchType, color) {
-    this._patchType = patchType;
-    this._color = color;
-    this._initialTotalYield = 0;
-    this._totalYield = 0;
-    this._perAgentYield = 0;
-}
-function Patch(patchType, color, x, y) {
-    this._patchType = patchType;
-    this._color = color;
-    this.setPosition(x, y);
-    this._initialTotalYield = 0;
-    this._totalYield = 0;
-    this._perAgentYield = 0;
-}
-Patch.prototype.getType = function() { return this._patchType;}
-Patch.prototype.getColor = function() { return this._color;}
-Patch.prototype.getPosition = function() { return [this._x, this._y]; }
-Patch.prototype.setPosition = function(x, y) { this._x =x; this._y = y; }
-Patch.prototype.getX = function() { return this._x; }
-Patch.prototype.setX = function(x) { this._x = x; }
-Patch.prototype.getY = function() { return this._y; }
-Patch.prototype.setY = function(y) { this._y = y; }
-Patch.prototype.getInitialTotalYield = function() { return this._initialTotalYield; }
-Patch.prototype.setInitialTotalYield = function(initialTotalYield) { this._initialTotalYield = initialTotalYield; this._totalYield = initialTotalYield; }
-Patch.prototype.getTotalYield = function() { return this._totalYield; }
-Patch.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; }
-Patch.prototype.getPerAgentYield = function() { return this._perAgentYield; }
-Patch.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; }
-Patch.prototype.provideYield = function(agent) {
-    if (this._totalYield > this._perAgentYield) {
-        agent.adjustHealth(this._perAgentYield);
-        agent.setSpeed(this._perAgentYield);
-        this._totalYield -= this._perAgentYield;
-    }
-}
-
-
-/* Tile class definition */
-function Tile(color) {
-    this._color = color;
-}
-function Tile(color, x, y) {
-    this._color = color;
-    this.setPosition(x, y);
-}
-Tile.prototype.getColor = function() { return this._color;}
-Tile.prototype.getPosition = function() { return [this._x, this._y]; }
-Tile.prototype.setPosition = function(x, y) { this._x =x; this._y = y; }
-Tile.prototype.getX = function() { return this._x; }
-Tile.prototype.setX = function(x) { this._x = x; }
-Tile.prototype.getY = function() { return this._y; }
-Tile.prototype.setY = function(y) { this._y = y; }
+var worldSize = 11;
+var cellWidth = 400 / worldSize;
+var pieceWidth = cellWidth * 0.5;
 
 
 
@@ -294,7 +142,7 @@ function moveAgent(agent, withNoRepeat, withNoCollision) {
         lastX = p[0];
         lastY = p[1];
     }
-    var position = findPosition(x, y, withNoRepeat, withNoCollision, lastX, lastY);
+    var position = findPosition(x, y, withNoRepeat, withNoCollision, true, lastX, lastY);
     if ((position[0] != x || position[1] != y) && (position[0] != lastX || position[1] != lastY))
         agent.setPosition(position[0], position[1]);
 }
@@ -306,7 +154,7 @@ function moveAgents(withNoRepeat, withNoCollision) {
     }
 }
 
-function findPosition(x, y, withNoRepeat, withNoCollision, lastX, lastY) {
+function findPosition(x, y, withNoRepeat, withNoCollision, withNoCycle, lastX, lastY) {
     var positionFound = false;
     var existingDirections = new Array();
     var directions = 4;
@@ -330,20 +178,20 @@ function findPosition(x, y, withNoRepeat, withNoCollision, lastX, lastY) {
         existingDirections.push(dir);
 
         var offScreen1 = 0;
-        var offScreen2 = worldSize - 1;
+        var offScreen2 = currentLevel.getWorldSize() - 1;
         var offset = 1;
         switch (dir) {
             case 0:
-                (newX == offScreen1) ? newX = offScreen2 : newX = newX - offset;
+                (newX == offScreen1 && !withNoCycle) ? newX = offScreen2 : newX = newX - offset;
                 break;
             case 1:
-                (newX == offScreen2) ? newX = offScreen1 : newX = newX + offset;
+                (newX == offScreen2 && !withNoCycle) ? newX = offScreen1 : newX = newX + offset;
                 break;
             case 2:
-                (newY == offScreen1) ? newY = offScreen2 : newY = newY - offset;
+                (newY == offScreen1 && !withNoCycle) ? newY = offScreen2 : newY = newY - offset;
                 break;
             case 3:
-                (newY == offScreen2) ? newY = offScreen1 : newY = newY + offset;
+                (newY == offScreen2 && !withNoCycle) ? newY = offScreen1 : newY = newY + offset;
                 break;
         }
         if (withNoRepeat == true && lastX == newX && lastY == newY) {
@@ -538,7 +386,7 @@ function drawAgents() {
         }
     }
 
-    if (deadAgentCount >= maxWaves) {
+    if (deadAgentCount >= currentLevel.getExpiryLimit()) {
         return gameOver();
     }
 
@@ -549,9 +397,12 @@ function drawAgents() {
     // No agents left? End of wave
     if (agents.length == 0) {
         // Start a new wave
-        if (waves <= maxWaves) {
+        if (waves < currentLevel.getWaveNumber()) {
             newWave();
             drawScoreboard();
+        }
+        else if (currentLevelNumber < LEVELS) {
+            newLevel();
         }
         else {
             return gameOver();
@@ -591,46 +442,51 @@ function drawAgents() {
             var newColor = (r - hOffset).toString(16) + (g - hOffset).toString(16) + (b - hOffset).toString(16);
             ctx.fillStyle = "#" + newColor;
             ctx.fill();
-            ctx.fillStyle = "#0f0";
-            ctx.fillText(agent.getHealth(), intX, intY);
+//            ctx.fillStyle = "#0f0";
+//            ctx.fillText(agent.getHealth(), intX, intY);
         }
     }
 }
 
+function drawLevel() {
+    var e = document.getElementById("level-display");
+    e.innerHTML = currentLevelNumber.toString();
+}
 function drawScore() {
     var e = document.getElementById("score-display");
-    e.innerText = score.toString();
+    e.innerHTML = score.toString();
 }
 
 function drawGoodness() {
     var e = document.getElementById("goodness-display");
-    e.innerText = goodness.toString();
+    e.innerHTML = goodness.toString();
 }
 function drawDead() {
     var e = document.getElementById("dead-display");
-    e.innerText = deadAgentCount.toString();
+    e.innerHTML = deadAgentCount.toString() + " out of " + currentLevel.getExpiryLimit();
 }
 function drawSaved() {
     var e = document.getElementById("saved-display");
-    e.innerText = savedAgentCount.toString();
+    e.innerHTML = savedAgentCount.toString();
 }
 
 function drawWaves() {
     var e = document.getElementById("waves-display");
-    e.innerText = waves.toString() + " out of " + maxWaves;
+    e.innerHTML = waves.toString() + " out of " + currentLevel.getWaveNumber();
 }
 
 function drawScoreboard() {
+    drawLevel();
+    drawScore();
     drawWaves();
     drawSaved();
     drawDead();
-    drawScore();
     drawGoodness();
 }
+
 /* End Drawing Methods */
 
 
-// NOTE: very inefficient
 function processNeighbouringPatches(agent) {
     var x = agent.getX();
     var y = agent.getY();
@@ -665,15 +521,19 @@ function newWave() {
     savedAgentThisWaveCount = 0;
     waves ++;
     resetPatchYields();
-    agents = presetAgents(++numAgents, initialAgentX, initialAgentY);
+    agents = presetAgents(++numAgents, currentLevel.getInitialAgentX(), currentLevel.getInitialAgentY());
+}
+
+function newLevel() {
+    currentLevelNumber++;
+    redoWorld();
+    startAgents();
 }
 
 
 /* Set up code */
 
 function initWorld() {
-    cellWidth = 400 / worldSize;
-    pieceWidth = cellWidth * 0.5;
     tiles = new Array();
     // Keep active patches for now
 //    activePatches = new Array();
@@ -686,8 +546,13 @@ function initWorld() {
     savedAgentCount = 0;
     waves = 0;
 
-    setupWorld1();
-    //agents = randomAgents(numAgents, worldSize);
+
+    currentLevel = eval("level" + currentLevelNumber.toString());
+
+    worldSize = currentLevel.getWorldSize();
+    cellWidth = 400 / worldSize;
+    pieceWidth = cellWidth * 0.5;
+    currentLevel.setupLevel();
 }
 
 function fillWithTiles() {
@@ -698,35 +563,8 @@ function fillWithTiles() {
     }
 }
 
-
-/* Need somewhere to load a specific world */
-function setupWorld1() {
-    fillWithTiles();
-    tiles.splice(99, 10);
-    tiles.splice(97, 1);
-    tiles.splice(78, 9);
-    tiles.splice(67, 1);
-    tiles.splice(56, 9);
-    tiles.splice(53, 1);
-    tiles.splice(34, 9);
-    tiles.splice(23, 1);
-    tiles.splice(12, 10);
-    for (var i = 0; i < tiles.length; i++) {
-        var p = tiles[i];
-        cells.set([p.getX(), p.getY()], p);
-    }
-
-    initialAgentX = 0;
-    initialAgentY = 9;
-    agents = presetAgents(numAgents, initialAgentX, initialAgentY);
-}
-
-
-function resetWorld() {
+function redoWorld() {
     stopAgents();
-    numAgents = checkInteger(document.getElementById("numAgentsInput").value);
-    worldSize = checkInteger(document.getElementById("worldSizeInput").value);
-    interval = checkInteger(document.getElementById("intervalInput").value);
 
 
     initWorld();
@@ -736,25 +574,31 @@ function resetWorld() {
     drawPatches();
     drawScoreboard();
 
-    var canvas = document.getElementById('c3');
+    clearCanvas('c2');
+    clearCanvas('c3');
+
+}
+
+function clearCanvas(canvasID) {
+    var canvas = document.getElementById(canvasID);
     var ctx = canvas.getContext('2d');
     var w = canvas.width;
     var h = canvas.height;
 
     ctx.clearRect(0, 0, w, h);
-
-    //startAgents();
 }
+
+function resetWorld() {
+    numAgents = checkInteger(document.getElementById("numAgentsInput").value);
+    interval = checkInteger(document.getElementById("intervalInput").value);
+    currentLevelNumber = checkInteger(document.getElementById("levelInput").value);
+    redoWorld();
+}
+
 function fullResetWorld() {
     resetWorld();
-    
-    patches = new Array();
-    var canvas = document.getElementById('c2');
-    var ctx = canvas.getContext('2d');
-    var w = canvas.width;
-    var h = canvas.height;
-
-    ctx.clearRect(0, 0, w, h);
+    clearCanvas('c2');
+    clearCanvas('c3');
 }
 
 
@@ -795,3 +639,5 @@ function presetAgents(number, cellX, cellY) {
     }
     return agents;
 }
+
+
