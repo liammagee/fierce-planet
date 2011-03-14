@@ -1,49 +1,92 @@
     <header>
-        Heading
+        <!--Heading-->
     </header>
 
-    <div>
-      <div id="gameworld">
-        <div id="world">
-          <canvas id="c1" width="401" height="401" style="z-index: 1;">A Canvas</canvas>
-          <canvas id="c2" width="401" height="401" style="z-index: 2;">A Canvas</canvas>
+    <div id="left-pane">
+      <p></p>
+    </div>
+    <div id="content-pane">
+      <div id="main-panel">
+        <div id="info-panel">
+          <div style="width: 20%; float: left">
+            Score: <span id="score-display">0</span>
+          </div>
+          <div style="width: 20%; float: left">
+            Saved: <span id="saved-display">0</span>
+          </div>
+          <div style="width: 20%; float: left">
+            Expired: <span id="dead-display">0</span>
+          </div>
+          <div style="width: 20%; float: left">
+            Waves: <span id="waves-display">1 out of 30</span>
+          </div>
+          <div style="width: 20%; float: left">
+            Goodness: <span id="goodness-display">100</span>
+          </div>
         </div>
-
-          <div id="swatch">
-            <ul>
-              <li><a href="#" id="env">Environmental Good</a></li>
-              <li><a href="#" id="eco">Economic Good</a></li>
-              <li><a href="#" id="soc">Social Good</a></li>
-            </ul>
-
-            <%= javascript_include_tag "world_canvas_handler" %>
+        <div id="gameworld">
+          <div id="world">
+            <canvas id="c1" width="401" height="401" style="z-index: 1;">A Canvas</canvas>
+            <canvas id="c2" width="401" height="401" style="z-index: 2;">A Canvas</canvas>
+            <canvas id="c3" width="401" height="401" style="z-index: 3;">A Canvas</canvas>
           </div>
 
+            <div id="swatch">
+              <ul>
+                <li><a href="#" id="eco">Economic Good <br/><small>(Cost: 10; PAY: 20)</small></a></li>
+                <li><a href="#" id="env">Environmental Good <br/><small>(Cost: 10; PAY: 10)</small></a></li>
+                <li><a href="#" id="soc">Social Good <br/><small>(Cost: 10; PAY: 5)</small></a></li>
+              </ul>
+
+              <%= javascript_include_tag "world_canvas_handler" %>
+            </div>
+
+        </div>
+        <div id="controls">
+          <br/>
+          Number of agents: <input id="numAgentsInput" name="numAgents" value="1"/>
+          <br/>
+          World size: <input id="worldSizeInput" name="worldSize" value="11"/>
+          <br/>
+          Interval: <input id="intervalInput" name="interval" value="20"/>
+          <br/>
+          <button id="startAgents" onclick="startAgents();">Start</button>
+          <button id="stopAgents" onclick="stopAgents();">Stop</button>
+          <button id="resetWorld" onclick="resetWorld();">Restart</button>
+          <button id="fullResetWorld" onclick="fullResetWorld();">Reset</button>
+          <script type="text/javascript">
+              drawGrid();
+              drawTiles();
+              drawPatches();
+          </script>
+          <button id="cells" onclick="drawAgents();">Debug</button>
+        </div>
+
       </div>
+
+    </div>
+    <div id="right-pane">
+      <p></p>
+
     </div>
 
-    <div id="content">
-      <div id="controls">
-        <br/>
-        Number of agents: <input id="numAgentsInput" name="numAgents" value="5"/>
-        <br/>
-        World size: <input id="worldSizeInput" name="worldSize" value="11"/>
-        <br/>
-        Interval: <input id="intervalInput" name="interval" value="20"/>
-        <br/>
-        <button id="startAgents" onclick="startAgents();">Start</button>
-        <button id="stopAgents" onclick="stopAgents();">Stop</button>
-        <button id="resetWorld" onclick="resetWorld();">Reset</button>
-        <script type="text/javascript">
-            drawGrid();
-            drawPatches();
-        </script>
-        <button id="cells" onclick="drawAgents();">Debug</button>
-      </div>
-
-    </div>
-
-    <br/>
     <footer>
-        Footer
+      <p>Todos:</p>
+      <ol>
+        <li>Levels</li>
+        <li>Patch fading & redraw</li>
+        <li>Patch upgrading</li>
+        <li>Pause</li>
+        <li>Different difficulties</li>
+        <li>Worlds</li>
+        <li>Instructions</li>
+        <li>Save scores</li>
+        <li>Achievements</li>
+        <li>Distinguish social, economic and environment</li>
+        <li>ABM features: demography</li>
+        <li>ABM features: regeneration</li>
+        <li>ABM features: communication</li>
+        <li>ABM features: goal orientation</li>
+        <li>Separate world/level code from generic classes</li>
+      </ol>
     </footer>
