@@ -10,9 +10,18 @@ for (var i = 0; i < links.length; i++) {
     e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
     e.dataTransfer.setData('Text', this.id); // required otherwise doesn't work
   }, false);
+  el.addEventListener('click', function (e) {
+      currentPatchTypeId = this.id;
+  }, false);
 }
 
 var world = document.querySelector('#c3');
+
+world.addEventListener('click', function (e) {
+    if (e.preventDefault) e.preventDefault(); // allows us to drop
+    showDeleteUpgradeSwatch(e);
+    return false;
+  }, false);
 
 world.addEventListener('dragstart', function (e) {
     if (e.preventDefault) e.preventDefault(); // allows us to drop
