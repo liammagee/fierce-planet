@@ -45,6 +45,7 @@
               <div id="delete-upgrade" style="display: none;">
                   <p><a href="#" id="del" onclick="deleteCurrentPatch();">Delete <br/><small>(Revenue: 5)</small></a></p>
                   <p><a href="#" id="upg" onclick="upgradeCurrentPatch();">Upgrade <br/><small>(Cost: 20; PAY: 20)</small></a></p>
+                  <p><a href="#" id="cancel" onclick="document.getElementById('delete-upgrade').style.display = 'none'">Cancel</a></p>
               </div>
               <%= javascript_include_tag "agents/world_canvas_handler" %>
             </div>
@@ -53,8 +54,6 @@
         <div id="controls">
           <br/>
           Number of agents: <input id="numAgentsInput" name="numAgents" value="1"/>
-          <br/>
-          Interval: <input id="intervalInput" name="interval" value="20"/>
           <br/>
           Level: <input id="levelInput" name="interval" value="1"/>
           <br/>
@@ -66,6 +65,9 @@
               <option value="4">EXTREME</option>
             </select>
           <br/>
+          Speed: [Slow] <input id="intervalInput" name="intervalInput" type="range" min="10" max="100" value="50" step="10" onchange="resetSpeed()" /> [Fast]
+          <br/>
+
           <button id="startAgents" onclick="startAgents();">Start</button>
           <button id="stopAgents" onclick="stopAgents();">Stop</button>
           <button id="resetWorld" onclick="resetWorld();">Restart</button>
@@ -83,38 +85,4 @@
     </div>
     <div id="right-pane">
       <p></p>
-
     </div>
-
-    <footer>
-      <p>Todos:</p>
-      <ol>
-        <li>Levels - DONE</li>
-        <li>Separate world/level code from generic classes - DONE</li>
-        <li>Patch fading & redraw - DONE</li>
-        <li>Patch upgrading - DONE</li>
-        <li>Different difficulties - DONE</li>
-        <li>Pause - DONE</li>
-
-        <li>Speed up/slow down</li>
-
-        <li>10 Levels</li>
-
-        <li>Code refactoring</li>
-        <li>Instructions</li>
-        <li>Height and width parameters</li>
-
-        <li>Distinguish social, economic and environment</li>
-
-        <li>Drag and drop on iPad</li>
-
-        <li>Save scores</li>
-        <li>Achievements</li>
-        <li>Fight rather than save</li>
-        
-        <li>ABM features: demography</li>
-        <li>ABM features: regeneration</li>
-        <li>ABM features: communication</li>
-        <li>ABM features: goal orientation</li>
-      </ol>
-    </footer>

@@ -169,7 +169,7 @@ Patch.prototype.setTotalYield = function(totalYield) { this._totalYield = totalY
 Patch.prototype.getPerAgentYield = function() { return this._perAgentYield; }
 Patch.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; }
 Patch.prototype.provideYield = function(agent) {
-    if (this._totalYield > this._perAgentYield) {
+    if (this._totalYield > this._perAgentYield && agent.getHealth() < 100) {
         agent.adjustHealth(this._perAgentYield * this._upgradeLevel);
         agent.setSpeed(this._perAgentYield);
         this._totalYield -= this._perAgentYield;

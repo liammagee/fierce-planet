@@ -29,14 +29,13 @@
 #world {
     position:relative;
     float: left;
-    width: 50%;
 }
 
 #swatch {
     clear: both;
-    float: right;
-    width: 50%;
-    text-align: left;
+    float: left;
+    position:absolute;
+    left:441px;
 }
 
 #controls {

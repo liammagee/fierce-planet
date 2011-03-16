@@ -20,7 +20,7 @@ var WAVE_GOODNESS_BONUS = 5;
 
 var WAVE_INTERVAL_CYCLES = 25;
 
-var DEFAULT_PATCH_RECOVERY = 5;
+var DEFAULT_PATCH_RECOVERY = 2;
 
 var EASY_DIFFICULTY = 1;
 var MEDIUM_DIFFICULTY = 2;
@@ -31,6 +31,8 @@ var EXTREME_DIFFICULTY = 4;
 /* Global variables */
 
 var agentTimerId = 0;
+
+var currentPatchTypeId = null;
 
 var levelOfDifficulty = MEDIUM_DIFFICULTY;
 var patchRecoveryCycle = 5;
@@ -110,12 +112,17 @@ function showDeleteUpgradeSwatch(e) {
     var __ret = getPatchPosition(e, canvas);
     var posX = __ret.posX;
     var posY = __ret.posY;
+    var foundPatch = false;
     for (var i = 0; i < patches.length; i++) {
         var p = patches[i];
         if (p.getX() == posX && p.getY() == posY) {
             currentPatch = p;
             document.getElementById("delete-upgrade").style.display = "block";
+            return;
         }
+    }
+    if (!foundPatch && currentPatchTypeId != null) {
+        dropItem(e);
     }
 }
 
@@ -158,6 +165,7 @@ function getPatchPosition(e, canvas) {
     var posY = Math.floor(cellY / cellWidth);
     return {posX:posX, posY:posY};
 }
+
 function dropItem(e) {
     var canvas = document.getElementById('c2');
     var ctx = canvas.getContext('2d');
@@ -166,8 +174,16 @@ function dropItem(e) {
     var posY = __ret.posY;
     if (cells.get([posX, posY]) == undefined)
         return;
+    for (var i = 0; i < patches.length; i++) {
+        var p = patches[i];
+        if (p.getX() == posX && p.getY() == posY) {
+            return;
+        }
+    }
 
-    var patchType = document.getElementById(e.dataTransfer.getData('Text')).id;
+    var patchType = currentPatchTypeId;
+    if (e.dataTransfer)
+        patchType = document.getElementById(e.dataTransfer.getData('Text')).id;
     var c = "0f0";
     var totalYield = 0, perAgentYield = 0, cost = 0, upgradeCost = 0;
     if (patchType == 'eco') {
@@ -208,6 +224,7 @@ function dropItem(e) {
         drawPatch(patch);
         drawGoodness();
     }
+    currentPatchTypeId = null;
 }
 
 
@@ -733,22 +750,6 @@ function fillWithTiles() {
     }
 }
 
-function redoWorld() {
-    stopAgents();
-
-
-    initWorld();
-    drawGrid();
-    drawTiles();
-    resetPatchYields();
-    drawPatches();
-    drawScoreboard();
-
-    clearCanvas('c2');
-    clearCanvas('c3');
-
-}
-
 function clearCanvas(canvasID) {
     var canvas = document.getElementById(canvasID);
     var ctx = canvas.getContext('2d');
@@ -758,9 +759,24 @@ function clearCanvas(canvasID) {
     ctx.clearRect(0, 0, w, h);
 }
 
+
+function redoWorld() {
+    stopAgents();
+    initWorld();
+    clearCanvas('c2');
+    clearCanvas('c3');
+
+    drawGrid();
+    drawTiles();
+    resetPatchYields();
+    drawPatches();
+    drawScoreboard();
+
+}
+
 function resetWorld() {
     numAgents = checkInteger(document.getElementById("numAgentsInput").value);
-    interval = checkInteger(document.getElementById("intervalInput").value);
+    interval = checkInteger(1000 / document.getElementById("intervalInput").value);
     currentLevelNumber = checkInteger(document.getElementById("levelInput").value);
     var diffSelect = document.getElementById("difficultyInput");
     levelOfDifficulty = checkInteger(diffSelect[diffSelect.selectedIndex].value);
@@ -768,17 +784,17 @@ function resetWorld() {
 }
 
 function fullResetWorld() {
+    patches = new Array();
     resetWorld();
-    clearCanvas('c2');
-    clearCanvas('c3');
 }
 
 
 function checkInteger(value) {
-    return value;
+    return Math.floor(value);
 }
 
 function startAgents() {
+    clearInterval(agentTimerId);
     agentTimerId = setInterval("processAgents()", interval);
 }
 
@@ -786,6 +802,10 @@ function stopAgents() {
     clearInterval(agentTimerId);
 }
 
+function resetSpeed() {
+    interval = checkInteger(1000 / document.getElementById("intervalInput").value);
+    startAgents();
+}
 
 /* Initial agent functions */
 
@@ -804,7 +824,7 @@ function randomAgents(number, limit) {
 function presetAgents(number, cellX, cellY) {
     var agents = new Array();
     for (var i = 0; i < number; i ++) {
-        var agent = new Agent("basic", "ccc", cellX, cellY);
+        var agent = new Agent("basic", "000", cellX, cellY);
         var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
         agent.setDelay(delay);
         agents.push(agent);
