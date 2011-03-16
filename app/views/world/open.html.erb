@@ -42,7 +42,10 @@
                 <li><a href="#" id="env">Environmental Good <br/><small>(Cost: 10; PAY: 10)</small></a></li>
                 <li><a href="#" id="soc">Social Good <br/><small>(Cost: 10; PAY: 5)</small></a></li>
               </ul>
-
+              <div id="delete-upgrade" style="display: none;">
+                  <p><a href="#" id="del" onclick="deleteCurrentPatch();">Delete <br/><small>(Revenue: 5)</small></a></p>
+                  <p><a href="#" id="upg" onclick="upgradeCurrentPatch();">Upgrade <br/><small>(Cost: 20; PAY: 20)</small></a></p>
+              </div>
               <%= javascript_include_tag "agents/world_canvas_handler" %>
             </div>
 
@@ -54,6 +57,14 @@
           Interval: <input id="intervalInput" name="interval" value="20"/>
           <br/>
           Level: <input id="levelInput" name="interval" value="1"/>
+          <br/>
+          Difficulty:
+            <select id="difficultyInput" name="difficultyInput">
+              <option value="1">Easy</option>
+              <option value="2" selected="selected">Medium</option>
+              <option value="3">Hard</option>
+              <option value="4">EXTREME</option>
+            </select>
           <br/>
           <button id="startAgents" onclick="startAgents();">Start</button>
           <button id="stopAgents" onclick="stopAgents();">Stop</button>
@@ -80,17 +91,27 @@
       <ol>
         <li>Levels - DONE</li>
         <li>Separate world/level code from generic classes - DONE</li>
-        <li>Patch fading & redraw</li>
-        <li>Patch upgrading</li>
-        <li>Pause</li>
+        <li>Patch fading & redraw - DONE</li>
+        <li>Patch upgrading - DONE</li>
+        <li>Different difficulties - DONE</li>
+        <li>Pause - DONE</li>
+
         <li>Speed up/slow down</li>
-        <li>Different difficulties</li>
-        <li>Worlds</li>
+
+        <li>10 Levels</li>
+
+        <li>Code refactoring</li>
         <li>Instructions</li>
+        <li>Height and width parameters</li>
+
+        <li>Distinguish social, economic and environment</li>
+
+        <li>Drag and drop on iPad</li>
+
         <li>Save scores</li>
         <li>Achievements</li>
         <li>Fight rather than save</li>
-        <li>Distinguish social, economic and environment</li>
+        
         <li>ABM features: demography</li>
         <li>ABM features: regeneration</li>
         <li>ABM features: communication</li>

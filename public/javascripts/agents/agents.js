@@ -69,8 +69,10 @@ Agent.prototype.getHealth = function() { return this._health; }
 Agent.prototype.setHealth = function(health) { this._health = health; }
 Agent.prototype.adjustHealth = function(adjustment) {
     var newHealth = this._health + adjustment;
-    if (newHealth > 0)
+    if (newHealth > 0 && newHealth < INITIAL_HEALTH)
         this._health = newHealth;
+    else if (newHealth > 0)
+        this._health = INITIAL_HEALTH;
     else
         this._health = 0;
 }
@@ -141,6 +143,10 @@ function Patch(patchType, color, x, y) {
     this._initialTotalYield = 0;
     this._totalYield = 0;
     this._perAgentYield = 0;
+
+    this._cost = 0;
+    this._upgradeCost = 0;
+    this._upgradeLevel = 1;
 }
 Patch.prototype.getType = function() { return this._patchType;}
 Patch.prototype.getColor = function() { return this._color;}
@@ -150,6 +156,12 @@ Patch.prototype.getX = function() { return this._x; }
 Patch.prototype.setX = function(x) { this._x = x; }
 Patch.prototype.getY = function() { return this._y; }
 Patch.prototype.setY = function(y) { this._y = y; }
+Patch.prototype.getCost = function() { return this._cost; }
+Patch.prototype.setCost = function(cost) { this._cost = cost; }
+Patch.prototype.getUpgradeCost = function() { return this._upgradeCost; }
+Patch.prototype.setUpgradeCost = function(upgradeCost) { this._upgradeCost = upgradeCost; }
+Patch.prototype.getUpgradeLevel = function() { return this._upgradeLevel; }
+Patch.prototype.setUpgradeLevel = function(upgradeLevel) { this._upgradeLevel = upgradeLevel; }
 Patch.prototype.getInitialTotalYield = function() { return this._initialTotalYield; }
 Patch.prototype.setInitialTotalYield = function(initialTotalYield) { this._initialTotalYield = initialTotalYield; this._totalYield = initialTotalYield; }
 Patch.prototype.getTotalYield = function() { return this._totalYield; }
@@ -158,7 +170,7 @@ Patch.prototype.getPerAgentYield = function() { return this._perAgentYield; }
 Patch.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; }
 Patch.prototype.provideYield = function(agent) {
     if (this._totalYield > this._perAgentYield) {
-        agent.adjustHealth(this._perAgentYield);
+        agent.adjustHealth(this._perAgentYield * this._upgradeLevel);
         agent.setSpeed(this._perAgentYield);
         this._totalYield -= this._perAgentYield;
     }

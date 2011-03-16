@@ -14,6 +14,12 @@ for (var i = 0; i < links.length; i++) {
 
 var world = document.querySelector('#c3');
 
+world.addEventListener('click', function (e) {
+    if (e.preventDefault) e.preventDefault(); // allows us to drop
+    showDeleteUpgradeSwatch(e);
+    return false;
+  }, false);
+
 world.addEventListener('dragstart', function (e) {
     if (e.preventDefault) e.preventDefault(); // allows us to drop
     this.className = 'over';
