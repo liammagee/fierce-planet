@@ -7,7 +7,7 @@
 // Helpful for debugging
 var NO_DIE = false;
 
-var LEVELS = 2;
+var LEVELS = 4;
 
 var MOVE_INCREMENTS = 5;
 var INITIAL_HEALTH = 100;
@@ -34,6 +34,9 @@ var agentTimerId = 0;
 
 var currentPatchTypeId = null;
 
+var currentLevelNumber = 2;
+var currentLevel;
+
 var levelOfDifficulty = MEDIUM_DIFFICULTY;
 var patchRecoveryCycle = 5;
 var interval = 20;
@@ -47,8 +50,6 @@ var cells = new Hash();
 var counter = 0;
 var counterLoops = 0;
 
-var currentLevelNumber = 1;
-var currentLevel;
 var score = 0;
 var goodness = 0;
 var waves = 1;
@@ -230,138 +231,6 @@ function dropItem(e) {
 
 
 
-/* Move Strategies */
-
-function moveAgent(agent, withNoRepeat, withNoCollision) {
-    var x = agent.getX();
-    var y = agent.getY();
-    var lastX = -1, lastY = -1;
-    var p = agent.lastPosition();
-    if (p != undefined || (p[0] > -1 && p[1] > -1)) {
-        lastX = p[0];
-        lastY = p[1];
-    }
-    var position = findPosition(x, y, withNoRepeat, withNoCollision, true, lastX, lastY);
-    if ((position[0] != x || position[1] != y) && (position[0] != lastX || position[1] != lastY))
-        agent.setPosition(position[0], position[1]);
-}
-
-function moveAgents(withNoRepeat, withNoCollision) {
-    for (var i = 0; i < agents.length; i+= 1) {
-        var agent = agents[i];
-        moveAgent(agent, withNoRepeat, withNoCollision);
-    }
-}
-
-function findPosition(x, y, withNoRepeat, withNoCollision, withNoCycle, lastX, lastY) {
-    var positionFound = false;
-    var existingDirections = new Array();
-    var directions = 4;
-    var newX = x;
-    var newY = y;
-    for (var i = 0; i < directions; i++) {
-        counterLoops++;
-        newX = x;
-        newY = y;
-        var dir = Math.floor(Math.random() * directions);
-        var existing = false;
-        for (var j = 0; j < existingDirections.length; j++) {
-            if (existingDirections[j] == dir) {
-                existing = true;
-            }
-        }
-        if (existing == true) {
-            i--;
-            continue;
-        }
-        existingDirections.push(dir);
-
-        var offScreen1 = 0;
-        var offScreen2 = currentLevel.getWorldSize() - 1;
-        var offset = 1;
-        switch (dir) {
-            case 0:
-                (newX == offScreen1 && !withNoCycle) ? newX = offScreen2 : newX = newX - offset;
-                break;
-            case 1:
-                (newX == offScreen2 && !withNoCycle) ? newX = offScreen1 : newX = newX + offset;
-                break;
-            case 2:
-                (newY == offScreen1 && !withNoCycle) ? newY = offScreen2 : newY = newY - offset;
-                break;
-            case 3:
-                (newY == offScreen2 && !withNoCycle) ? newY = offScreen1 : newY = newY + offset;
-                break;
-        }
-        if (withNoRepeat == true && lastX == newX && lastY == newY) {
-            continue;
-        }
-        if (cells.get([newX, newY]) == undefined) {
-            return [newX, newY];
-        }
-    }
-    // Allow for movement off-screen, if no other option is available
-    if (x == offScreen2 || x == offScreen1 || y == offScreen2 || y == offScreen1) {
-        if (x == offScreen2) {
-            x = offScreen2 + 1;
-        }
-        else if (x == offScreen1) {
-            x = offScreen1 - 1;
-        }
-        else if (y == offScreen2) {
-            y = offScreen2 + 1;
-        }
-        else if (y == offScreen1) {
-            y = offScreen1 - 1;
-        }
-    }
-
-    return [x, y];
-}
-
-function checkCollision(x, y) {
-    return cells.get([x, y]) == undefined;
-}
-
-function moveAgentsRandomly() {
-    for (var i = 0; i < agents.length; i+= 1) {
-        var dir = Math.floor(Math.random() * 4);
-        var agent = agents[i];
-        var newX = agent.getX();
-        var newY = agent.getY();
-        switch (dir) {
-            case 0:
-                (newX == 0) ? newX = worldSize - 1 : newX = newX - 1;
-                break;
-            case 1:
-                (newX == worldSize - 1) ? newX = 0 : newX = newX + 1;
-                break;
-            case 2:
-                (newY == 0) ? newY = worldSize - 1 : newY = newY - 1;
-                break;
-            case 3:
-                (newY == worldSize - 1) ? newY = 0 : newY = newY + 1;
-                break;
-        }
-        if (!checkPatches(newX, newY))
-            agent.setPosition(newX, newY);
-    }
-}
-
-
-function checkPatches(newX, newY) {
-    var isPatch = false;
-    for (var j = 0; j < tiles.length; j+= 1) {
-        var patch = tiles[j];
-        if (patch.getX() == newX && patch.getY() == newY)
-            return true;
-    }
-    return isPatch;
-}
-
-/* End Move Strategies */
-
-
 /* Draw Methods */
 
 
@@ -409,6 +278,25 @@ function drawTile(p) {
     ctx.fillRect(x, y, cellWidth, cellWidth);
     ctx.strokeStyle = "#ccc";
     ctx.strokeRect(x, y, cellWidth, cellWidth);
+}
+
+function drawGoal() {
+    var canvas = document.getElementById('c1');
+    var ctx = canvas.getContext('2d');
+
+    var x = currentLevel.getGoalX() * cellWidth + cellWidth / 2;
+    var y = currentLevel.getGoalY() * cellWidth + cellWidth / 2;
+
+
+    var radius = (pieceWidth / 2);
+
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    ctx.closePath();
+    ctx.strokeStyle = "#ccc";
+    ctx.stroke();
+    ctx.fillStyle = "#fbe53b";
+    ctx.fill();
 }
 
 function drawPatches() {
@@ -580,6 +468,140 @@ function drawScoreboard() {
 /* End Drawing Methods */
 
 
+
+
+/* Move Strategies */
+
+function moveAgent(agent, withNoRepeat, withNoCollision) {
+    var x = agent.getX();
+    var y = agent.getY();
+    var lastX = -1, lastY = -1;
+    var p = agent.lastPosition();
+    if (p != undefined || (p[0] > -1 && p[1] > -1)) {
+        lastX = p[0];
+        lastY = p[1];
+    }
+    var position = findPosition(x, y, withNoRepeat, withNoCollision, true, true, lastX, lastY);
+    if ((position[0] != x || position[1] != y) && (position[0] != lastX || position[1] != lastY))
+        agent.setPosition(position[0], position[1]);
+}
+
+function moveAgents(withNoRepeat, withNoCollision) {
+    for (var i = 0; i < agents.length; i+= 1) {
+        var agent = agents[i];
+        moveAgent(agent, withNoRepeat, withNoCollision);
+    }
+}
+
+function findPosition(x, y, withNoRepeat, withNoCollision, withNoCycle, withNoOffscreen, lastX, lastY) {
+    var positionFound = false;
+    var existingDirections = new Array();
+    var directions = 4;
+    var newX = x;
+    var newY = y;
+    for (var i = 0; i < directions; i++) {
+        counterLoops++;
+        newX = x;
+        newY = y;
+        var dir = Math.floor(Math.random() * directions);
+        var existing = false;
+        for (var j = 0; j < existingDirections.length; j++) {
+            if (existingDirections[j] == dir) {
+                existing = true;
+            }
+        }
+        if (existing == true) {
+            i--;
+            continue;
+        }
+        existingDirections.push(dir);
+
+        var offScreen1 = 0;
+        var offScreen2 = currentLevel.getWorldSize() - 1;
+        var offset = 1;
+        switch (dir) {
+            case 0:
+                (newX == offScreen1 ? (withNoOffscreen ? newX = lastX : (withNoCycle ? newX = newX - offset : newX = offScreen2)) : newX = newX - offset);
+                break;
+            case 1:
+                (newX == offScreen2 ? (withNoOffscreen ? newX = lastX : (withNoCycle ? newX = newX + offset : newX = offScreen1)) : newX = newX + offset);
+                break;
+            case 2:
+                (newY == offScreen1 ? (withNoOffscreen ? newY = lastY : (withNoCycle ? newY = newY - offset : newY = offScreen2)) : newY = newY - offset);
+                break;
+            case 3:
+                (newY == offScreen2 ? (withNoOffscreen ? newY = lastY : (withNoCycle ? newY = newY + offset : newY = offScreen1)) : newY = newY + offset);
+                break;
+        }
+        if (withNoRepeat == true && lastX == newX && lastY == newY) {
+            continue;
+        }
+        if (cells.get([newX, newY]) == undefined) {
+            return [newX, newY];
+        }
+    }
+    // Allow for movement off-screen, if no other option is available
+    if (x == offScreen2 || x == offScreen1 || y == offScreen2 || y == offScreen1) {
+        if (x == offScreen2) {
+            x = offScreen2 + 1;
+        }
+        else if (x == offScreen1) {
+            x = offScreen1 - 1;
+        }
+        else if (y == offScreen2) {
+            y = offScreen2 + 1;
+        }
+        else if (y == offScreen1) {
+            y = offScreen1 - 1;
+        }
+    }
+
+    return [x, y];
+}
+
+function checkCollision(x, y) {
+    return cells.get([x, y]) == undefined;
+}
+
+function moveAgentsRandomly() {
+    for (var i = 0; i < agents.length; i+= 1) {
+        var dir = Math.floor(Math.random() * 4);
+        var agent = agents[i];
+        var newX = agent.getX();
+        var newY = agent.getY();
+        switch (dir) {
+            case 0:
+                (newX == 0) ? newX = worldSize - 1 : newX = newX - 1;
+                break;
+            case 1:
+                (newX == worldSize - 1) ? newX = 0 : newX = newX + 1;
+                break;
+            case 2:
+                (newY == 0) ? newY = worldSize - 1 : newY = newY - 1;
+                break;
+            case 3:
+                (newY == worldSize - 1) ? newY = 0 : newY = newY + 1;
+                break;
+        }
+        if (!checkPatches(newX, newY))
+            agent.setPosition(newX, newY);
+    }
+}
+
+
+function checkPatches(newX, newY) {
+    var isPatch = false;
+    for (var j = 0; j < tiles.length; j+= 1) {
+        var patch = tiles[j];
+        if (patch.getX() == newX && patch.getY() == newY)
+            return true;
+    }
+    return isPatch;
+}
+
+/* End Move Strategies */
+
+
 /* Game logic methods */
 function processAgents() {
 
@@ -598,6 +620,14 @@ function processAgents() {
         var agent = agents[i];
         var speed = agent.getSpeed();
         if (counter >= agent.getDelay() && (counter - agent.getDelay()) % speed == 0) {
+            if (agent.getX() == currentLevel.getGoalX() && agent.getY() == currentLevel.getGoalY()) {
+                score += SURVIVAL_SCORE;
+                savedAgentCount++;
+                savedAgentThisWaveCount++;
+                nullifiedAgents.push(i);
+                drawScore();
+                drawSaved();
+            }
             moveAgent(agent, true, false);
             agent.adjustSpeed();
             agent.adjustWander();
@@ -609,12 +639,7 @@ function processAgents() {
                 drawDead();
             }
             else if (agent.getX() < 0 || agent.getX() >=  worldSize || agent.getY() < 0 || agent.getY() >= worldSize) {
-                score += SURVIVAL_SCORE;
-                savedAgentCount++;
-                savedAgentThisWaveCount++;
                 nullifiedAgents.push(i);
-                drawScore();
-                drawSaved();
             }
             else
                 // Hook for detecting 'active' patches
@@ -768,6 +793,7 @@ function redoWorld() {
 
     drawGrid();
     drawTiles();
+    drawGoal();
     resetPatchYields();
     drawPatches();
     drawScoreboard();

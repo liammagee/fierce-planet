@@ -12,6 +12,8 @@ function Level(number) {
     this._worldSize = 11;
     this._waveNumber = 10;
     this._expiryLimit = 20;
+    this._goalX = 0;
+    this._goalY = 0;
 }
 Level.prototype.getInitialAgentNumber = function() { return this._initialAgentNumber; }
 Level.prototype.setInitialAgentNumber = function(initialAgentNumber) { this._initialAgentNumber = initialAgentNumber; }
@@ -25,6 +27,10 @@ Level.prototype.getWaveNumber = function() { return this._waveNumber; }
 Level.prototype.setWaveNumber = function(waveNumber) { this._waveNumber = waveNumber; }
 Level.prototype.getExpiryLimit = function() { return this._expiryLimit; }
 Level.prototype.setExpiryLimit = function(expiryLimit) { this._expiryLimit = expiryLimit; }
+Level.prototype.getGoalX = function() { return this._goalX; }
+Level.prototype.setGoalX = function(goalX) { this._goalX = goalX; }
+Level.prototype.getGoalY = function() { return this._goalY; }
+Level.prototype.setGoalY = function(goalY) { this._goalY = goalY; }
 
 
 

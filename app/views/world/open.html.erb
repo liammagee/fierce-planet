@@ -55,7 +55,19 @@
           <br/>
           Number of agents: <input id="numAgentsInput" name="numAgents" value="1"/>
           <br/>
-          Level: <input id="levelInput" name="interval" value="1"/>
+          Level:
+          <select id="levelInput" name="levelInput">
+            <option value="1" selected="selected">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
           <br/>
           Difficulty:
             <select id="difficultyInput" name="difficultyInput">
@@ -75,6 +87,7 @@
           <script type="text/javascript">
               drawGrid();
               drawTiles();
+              drawGoal();
               drawPatches();
           </script>
           <button id="cells" onclick="drawAgents();">Debug</button>
