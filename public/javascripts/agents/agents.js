@@ -14,6 +14,8 @@ function Level(number) {
     this._expiryLimit = 20;
     this._goalX = 0;
     this._goalY = 0;
+    this._startingGoodness = 100;
+    this._allowOffscreenCycling = false;
 }
 Level.prototype.getInitialAgentNumber = function() { return this._initialAgentNumber; }
 Level.prototype.setInitialAgentNumber = function(initialAgentNumber) { this._initialAgentNumber = initialAgentNumber; }
@@ -31,6 +33,10 @@ Level.prototype.getGoalX = function() { return this._goalX; }
 Level.prototype.setGoalX = function(goalX) { this._goalX = goalX; }
 Level.prototype.getGoalY = function() { return this._goalY; }
 Level.prototype.setGoalY = function(goalY) { this._goalY = goalY; }
+Level.prototype.getStartingGoodness = function() { return this._startingGoodness; }
+Level.prototype.setStartingGoodness = function(startingGoodness) { this._startingGoodness = startingGoodness; }
+Level.prototype.getAllowOffscreenCycling = function() { return this._allowOffscreenCycling; }
+Level.prototype.setAllowOffscreenCycling = function(allowOffscreenCycling) { this._allowOffscreenCycling = allowOffscreenCycling; }
 
 
 
@@ -42,7 +48,7 @@ function Agent(agentType, color, x, y) {
     this._y = y;
     this._history = new Array();
     var tmpX = -1, tmpY = -1;
-    if (x == 0 || x == worldSize - 1 || y == 0 || x == worldSize - 1) {
+    if (x == 0 || x == worldSize - 1 || y == 0 || y == worldSize - 1) {
         var tmpX = x, tmpY = y;
         if (x == 0)
             tmpX = -1;
@@ -50,9 +56,12 @@ function Agent(agentType, color, x, y) {
             tmpX = worldSize;
         else if (y == 0)
             tmpY = -1;
-        else if (x == worldSize - 1)
+        else if (y == worldSize - 1)
             tmpY = worldSize;
-        this._history.push([tmpX, tmpY])
+        this._history.push([tmpX, tmpY]);
+    }
+    else {
+        this._history.push([x, y]);
     }
     this._delay = 0;
     this._wanderX = 0;
@@ -67,6 +76,8 @@ Agent.prototype.getX = function() { return this._x; }
 Agent.prototype.setX = function(x) { this._x = x; }
 Agent.prototype.getY = function() { return this._y; }
 Agent.prototype.setY = function(y) { this._y = y; }
+Agent.prototype.getHistory = function() { return this._history; }
+Agent.prototype.setHistory = function(history) { this._history = history; } 
 Agent.prototype.getType = function() { return this._agentType;}
 Agent.prototype.getColor = function() { return this._color;}
 Agent.prototype.getDelay = function() { return this._delay; }
@@ -93,10 +104,10 @@ Agent.prototype.adjustWander = function() {
     wx = wx + rx;
     wy = wy + ry;
 
-    if (limit - Math.abs(wx) > 0)
+    if (limit - Math.abs(wx) >= 0)
         this._wanderX = wx;
 
-    if (limit - Math.abs(wy) > 0)
+    if (limit - Math.abs(wy) >= 0)
         this._wanderY = wy;
 }
 Agent.prototype.getSpeed = function() { return this._speed; }
@@ -109,11 +120,12 @@ Agent.prototype.adjustSpeed = function() {
     // Makes movement away from MOVE_INCREMENTS very unlikely
 //    var prob = Math.pow(Math.abs(variance), Math.abs(variance));
     // Makes movement away from MOVE_INCREMENTS unlikely
-//    var prob = Math.pow(Math.abs(variance), 2);
-    // Makes movement away from MOVE_INCREMENTS moderately likely
-    var prob = Math.abs(variance);
+    var prob = Math.pow(Math.abs(variance) + 1, 2);
+//    Makes movement away from MOVE_INCREMENTS moderately likely
+//    var prob = Math.abs(variance);
     // Makes movement away from MOVE_INCREMENTS an even chance
 //    var prob = 1;
+//    prob = (prob == 0 ? 1 : prob);
 
     var r = Math.floor(Math.random() * 3 * prob - 1);
     // Set the speed to above, equal or below the current speed

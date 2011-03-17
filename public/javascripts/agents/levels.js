@@ -47,6 +47,7 @@ level2.setWorldSize(12);
 level2.setInitialAgentNumber(1);
 level2.setWaveNumber(20);
 level2.setExpiryLimit(20);
+level2.setStartingGoodness(120);
 
 level2.setupLevel = function() {
     fillWithTiles();
@@ -93,6 +94,7 @@ level3.setWorldSize(13);
 level3.setInitialAgentNumber(1);
 level3.setWaveNumber(20);
 level3.setExpiryLimit(20);
+level3.setStartingGoodness(130);
 
 level3.setupLevel = function() {
     fillWithTiles();
@@ -144,14 +146,15 @@ level3.setupLevel = function() {
 /* Level 4 Definition */
 
 var level4 = new Level(1);
-level4.setInitialAgentX(0);
-level4.setInitialAgentY(0);
-level4.setGoalX(6);
-level4.setGoalY(6);
+level4.setInitialAgentX(6);
+level4.setInitialAgentY(6);
+level4.setGoalX(0);
+level4.setGoalY(0);
 level4.setWorldSize(14);
 level4.setInitialAgentNumber(1);
 level4.setWaveNumber(20);
 level4.setExpiryLimit(20);
+level4.setStartingGoodness(150);
 
 level4.setupLevel = function() {
     fillWithTiles();
@@ -218,28 +221,92 @@ level4.setupLevel = function() {
 /* Level 5 Definition */
 
 var level5 = new Level(1);
-level5.setInitialAgentX(0);
-level5.setInitialAgentY(9);
-level5.setGoalX(11);
+level5.setInitialAgentX(13);
+level5.setInitialAgentY(0);
+level5.setGoalX(0);
 level5.setGoalY(1);
-level5.setWorldSize(11);
+level5.setWorldSize(15);
 level5.setInitialAgentNumber(1);
 level5.setWaveNumber(20);
 level5.setExpiryLimit(20);
+level5.setStartingGoodness(180);
 
 level5.setupLevel = function() {
     fillWithTiles();
     agents = presetAgents(this.getInitialAgentNumber(), this.getInitialAgentX(), this.getInitialAgentY());
 
-    tiles.splice(99, 10);
-    tiles.splice(97, 1);
-    tiles.splice(78, 9);
-    tiles.splice(67, 1);
-    tiles.splice(56, 9);
-    tiles.splice(53, 1);
-    tiles.splice(34, 9);
-    tiles.splice(23, 1);
-    tiles.splice(12, 10);
+    tiles.splice(208, 1);
+    tiles.splice(204, 3);
+    tiles.splice(196, 7);
+    tiles.splice(193, 1);
+    tiles.splice(191, 1);
+    tiles.splice(189, 1);
+    tiles.splice(187, 1);
+    tiles.splice(183, 1);
+    tiles.splice(178, 1);
+    tiles.splice(176, 1);
+    tiles.splice(174, 1);
+    tiles.splice(172, 1);
+    tiles.splice(170, 1);
+    tiles.splice(166, 3);
+    tiles.splice(163, 1);
+    tiles.splice(161, 1);
+    tiles.splice(159, 1);
+    tiles.splice(157, 1);
+    tiles.splice(155, 1);
+    tiles.splice(151, 1);
+    tiles.splice(148, 1);
+    tiles.splice(146, 1);
+    tiles.splice(144, 1);
+    tiles.splice(142, 1);
+    tiles.splice(140, 1);
+    tiles.splice(138, 1);
+    tiles.splice(136, 1);
+    tiles.splice(131, 3);
+    tiles.splice(129, 1);
+    tiles.splice(127, 1);
+    tiles.splice(125, 1);
+    tiles.splice(123, 1);
+    tiles.splice(121, 1);
+    tiles.splice(118, 1);
+    tiles.splice(114, 1);
+    tiles.splice(112, 1);
+    tiles.splice(110, 1);
+    tiles.splice(108, 1);
+    tiles.splice(106, 1);
+    tiles.splice(103, 1);
+    tiles.splice(99, 3);
+    tiles.splice(95, 3);
+    tiles.splice(91, 3);
+    tiles.splice(88, 1);
+    tiles.splice(86, 1);
+    tiles.splice(80, 1);
+    tiles.splice(78, 1);
+    tiles.splice(76, 1);
+    tiles.splice(73, 1);
+    tiles.splice(71, 1);
+    tiles.splice(67, 3);
+    tiles.splice(65, 1);
+    tiles.splice(63, 1);
+    tiles.splice(61, 1);
+    tiles.splice(58, 1);
+    tiles.splice(56, 1);
+    tiles.splice(54, 1);
+    tiles.splice(52, 1);
+    tiles.splice(50, 1);
+    tiles.splice(48, 1);
+    tiles.splice(46, 1);
+    tiles.splice(43, 1);
+    tiles.splice(41, 1);
+    tiles.splice(39, 1);
+    tiles.splice(37, 1);
+    tiles.splice(35, 1);
+    tiles.splice(33, 1);
+    tiles.splice(28, 1);
+    tiles.splice(24, 3);
+    tiles.splice(20, 3);
+    tiles.splice(15, 4);
+    tiles.splice(13, 1);
 
     for (var i = 0; i < tiles.length; i++) {
         var p = tiles[i];
@@ -253,27 +320,39 @@ level5.setupLevel = function() {
 
 var level6 = new Level(1);
 level6.setInitialAgentX(0);
-level6.setInitialAgentY(9);
-level6.setGoalX(11);
-level6.setGoalY(1);
-level6.setWorldSize(11);
+level6.setInitialAgentY(1);
+level6.setGoalX(2);
+level6.setGoalY(14);
+level6.setWorldSize(16);
 level6.setInitialAgentNumber(1);
 level6.setWaveNumber(20);
 level6.setExpiryLimit(20);
+level6.setAllowOffscreenCycling(true);
 
 level6.setupLevel = function() {
     fillWithTiles();
     agents = presetAgents(this.getInitialAgentNumber(), this.getInitialAgentX(), this.getInitialAgentY());
 
-    tiles.splice(99, 10);
-    tiles.splice(97, 1);
-    tiles.splice(78, 9);
-    tiles.splice(67, 1);
-    tiles.splice(56, 9);
-    tiles.splice(53, 1);
-    tiles.splice(34, 9);
-    tiles.splice(23, 1);
-    tiles.splice(12, 10);
+    tiles.splice(226, 1);
+    tiles.splice(212, 12);
+    tiles.splice(208, 3);
+    tiles.splice(196, 1);
+    tiles.splice(182, 10);
+    tiles.splice(176, 5);
+    tiles.splice(166, 1);
+    tiles.splice(152, 8);
+    tiles.splice(144, 7);
+    tiles.splice(136, 1);
+    tiles.splice(122, 6);
+    tiles.splice(112, 9);
+    tiles.splice(106, 1);
+    tiles.splice(92, 4);
+    tiles.splice(80, 11);
+    tiles.splice(76, 1);
+    tiles.splice(62, 2);
+    tiles.splice(48, 13);
+    tiles.splice(46, 1);
+    tiles.splice(16, 15);
 
     for (var i = 0; i < tiles.length; i++) {
         var p = tiles[i];

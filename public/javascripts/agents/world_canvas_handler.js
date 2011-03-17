@@ -19,6 +19,7 @@ var world = document.querySelector('#c3');
 
 world.addEventListener('click', function (e) {
     if (e.preventDefault) e.preventDefault(); // allows us to drop
+//    showPatch(e);
     showDeleteUpgradeSwatch(e);
     return false;
   }, false);
