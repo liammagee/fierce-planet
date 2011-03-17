@@ -4,12 +4,11 @@
 
 /* Constants */
 
-// Helpful for debugging
 var NO_DIE = false;
 
-var LEVELS = 4;
+var LEVELS = 6;
 
-var MOVE_INCREMENTS = 5;
+var MOVE_INCREMENTS = 10;
 var INITIAL_HEALTH = 100;
 var MOVE_HEALTH_COST = -5;
 var SURVIVAL_SCORE = 10;
@@ -28,13 +27,23 @@ var HARD_DIFFICULTY = 3;
 var EXTREME_DIFFICULTY = 4;
 
 
+
+
+
+
+
+
+
+
+
+
 /* Global variables */
 
 var agentTimerId = 0;
 
 var currentPatchTypeId = null;
 
-var currentLevelNumber = 2;
+var currentLevelNumber = 1;
 var currentLevel;
 
 var levelOfDifficulty = MEDIUM_DIFFICULTY;
@@ -109,6 +118,14 @@ function upgradeCurrentPatch() {
     }
     document.getElementById("delete-upgrade").style.display = "none";
 }
+function showPatch(e) {
+    var canvas = document.getElementById('c2');
+    var __ret = getPatchPosition(e, canvas);
+    var posX = __ret.posX;
+    var posY = __ret.posY;
+    alert(e.x + " : " + e.y);
+    alert(posX + " : " + posY);
+}
 function showDeleteUpgradeSwatch(e) {
     var __ret = getPatchPosition(e, canvas);
     var posX = __ret.posX;
@@ -148,22 +165,24 @@ function getPatchPosition(e, canvas) {
     var h = canvas.height;
 
     // Get cell
-    for (var i = 0; i < w; i += cellWidth) {
-        if (x > i && x < i + cellWidth) {
-            cellX = i;
-            break;
-        }
-    }
-    for (var j = 0; j < h; j += cellWidth) {
-        if (y > j && y < j + cellWidth) {
-            cellY = j;
-            break;
-        }
-    }
+//    for (var i = 0; i < w; i += cellWidth) {
+//        if (x > i && x < i + cellWidth) {
+//            cellX = i;
+//            break;
+//        }
+//    }
+//    for (var j = 0; j < h; j += cellWidth) {
+//        if (y > j && y < j + cellWidth) {
+//            cellY = j;
+//            break;
+//        }
+//    }
 
     // Check if this patch can be dropped on a tile
-    var posX = Math.floor(cellX / cellWidth);
-    var posY = Math.floor(cellY / cellWidth);
+//    var posX = Math.floor(cellX / cellWidth);
+//    var posY = Math.floor(cellY / cellWidth);
+    var posX = Math.floor(x / cellWidth);
+    var posY = Math.floor(y / cellWidth);
     return {posX:posX, posY:posY};
 }
 
@@ -352,19 +371,11 @@ function clearAgents() {
     if (counter > 0) {
         for (var i = 0; i < agents.length; i += 1) {
             var agent = agents[i];
-            var lastX = agent.lastPosition()[0];
-            var lastY = agent.lastPosition()[1];
-            var x = agent.getPosition()[0];
-            var y = agent.getPosition()[1];
             var wx = agent.getWanderX();
             var wy = agent.getWanderY();
-            var speed = agent.getSpeed();
-            var increment = (speed - (counter - 1 - agent.getDelay()) % speed) / speed;
-            var offsetX = (x - lastX) * (increment);
-            var offsetY = (y - lastY) * (increment);
-            var intX = (x - offsetX) * cellWidth + wx + 1;
-            var intY = (y - offsetY) * cellWidth + wy + 1;
-
+            var __ret = getDrawingPosition(agent, counter - 1);
+            var intX = __ret.intX * cellWidth + wx + 1;
+            var intY = __ret.intY * cellWidth + wy + 1;
             ctx.clearRect(intX, intY, cellWidth - 2, cellWidth - 2);
         }
     }
@@ -393,25 +404,77 @@ function diluteColour(strength, colour) {
     return newColor;
 }
 
+function getDrawingPosition(agent, count) {
+    var lastX = agent.lastPosition()[0];
+    var lastY = agent.lastPosition()[1];
+    var x = agent.getPosition()[0];
+    var y = agent.getPosition()[1];
+    var wx = agent.getWanderX();
+    var wy = agent.getWanderY();
+    var speed = agent.getSpeed();
+    var increment = (speed - (count - agent.getDelay()) % speed) / speed;
+
+
+    var offsetX = (x - lastX) * (increment);
+    var offsetY = (y - lastY) * (increment);
+    var intX = (x - offsetX);
+    var intY = (y - offsetY);
+
+    if (currentLevel.getAllowOffscreenCycling()) {
+        var halfWay = (increment < 0.5);
+        if (x == worldSize - 1 && lastX == 0) {
+            if (halfWay) {
+                offsetX = (x - worldSize) * (increment);
+                intX = (x - offsetX);
+            }
+            else {
+                offsetX = 1 - increment;
+                intX = offset;
+            }
+        }
+        else if (x == 0 && lastX == worldSize - 1) {
+            if (halfWay) {
+                offsetX = increment;
+                intX = (0 - offsetX);
+            }
+            else {
+                offsetX = (worldSize - lastX) * (increment);
+                intX = (worldSize - offsetX);
+            }
+        }
+        else if (y == worldSize - 1 && lastY == 0) {
+            if (halfWay) {
+                offsetY = (y - worldSize) * (increment);
+                intY = (y - offsetY);
+            }
+            else {
+                offsetY = 1 - increment;
+                intY = offset;
+            }
+        }
+        else if (y == worldSize - 1 && lastY == 0) {
+            if (halfWay) {
+                offsetY = increment;
+                intY = offsetY;
+            }
+            else {
+                offsetY = (lastY - worldSize) * (increment);
+                intY = (lastY - offsetY);
+            }
+        }
+    }
+    return {intX:intX, intY:intY};
+}
 function drawAgents() {
     var canvas = document.getElementById('c3');
     var ctx = canvas.getContext('2d');
     for (var i = 0; i < agents.length; i += 1) {
         var agent = agents[i];
-        var lastX = agent.lastPosition()[0];
-        var lastY = agent.lastPosition()[1];
-        var x = agent.getPosition()[0];
-        var y = agent.getPosition()[1];
         var wx = agent.getWanderX();
         var wy = agent.getWanderY();
-        var speed = agent.getSpeed();
-        var increment = (speed - (counter - agent.getDelay()) % speed) / speed;
-        var offsetX = (x - lastX) * (increment);
-        var offsetY = (y - lastY) * (increment);
-        var intX = (x - offsetX) * cellWidth + wx + cellWidth / 2;
-        var intY = (y - offsetY) * cellWidth + wy + cellWidth / 2;
-
-
+        var __ret = getDrawingPosition(agent, counter);
+        var intX = __ret.intX * cellWidth + wx + cellWidth / 2;
+        var intY = __ret.intY * cellWidth + wy + cellWidth / 2;
         var radius = (pieceWidth / 2);
 
         ctx.beginPath();
@@ -481,8 +544,8 @@ function moveAgent(agent, withNoRepeat, withNoCollision) {
         lastX = p[0];
         lastY = p[1];
     }
-    var position = findPosition(x, y, withNoRepeat, withNoCollision, true, true, lastX, lastY);
-    if ((position[0] != x || position[1] != y) && (position[0] != lastX || position[1] != lastY))
+    var position = findPosition(agent, withNoRepeat, withNoCollision, currentLevel.getAllowOffscreenCycling(), currentLevel.getAllowOffscreenCycling());
+//    if ((position[0] != x || position[1] != y) && (position[0] != lastX || position[1] != lastY))
         agent.setPosition(position[0], position[1]);
 }
 
@@ -493,12 +556,17 @@ function moveAgents(withNoRepeat, withNoCollision) {
     }
 }
 
-function findPosition(x, y, withNoRepeat, withNoCollision, withNoCycle, withNoOffscreen, lastX, lastY) {
+function findPosition(agent, withNoRepeat, withNoCollision, withOffscreenCycling) {
     var positionFound = false;
     var existingDirections = new Array();
     var directions = 4;
+    var x = agent.getPosition()[0];
+    var y = agent.getPosition()[1];
     var newX = x;
     var newY = y;
+    var lastX = agent.lastPosition()[0];
+    var lastY = agent.lastPosition()[1];
+    var candidateCells = new Array();
     for (var i = 0; i < directions; i++) {
         counterLoops++;
         newX = x;
@@ -519,44 +587,69 @@ function findPosition(x, y, withNoRepeat, withNoCollision, withNoCycle, withNoOf
         var offScreen1 = 0;
         var offScreen2 = currentLevel.getWorldSize() - 1;
         var offset = 1;
+        var toContinue = false;
         switch (dir) {
             case 0:
-                (newX == offScreen1 ? (withNoOffscreen ? newX = lastX : (withNoCycle ? newX = newX - offset : newX = offScreen2)) : newX = newX - offset);
+                (newX == offScreen1 ? (withOffscreenCycling ? newX = offScreen2 : toContinue = true) : newX = newX - offset);
                 break;
             case 1:
-                (newX == offScreen2 ? (withNoOffscreen ? newX = lastX : (withNoCycle ? newX = newX + offset : newX = offScreen1)) : newX = newX + offset);
+                (newX == offScreen2 ? (withOffscreenCycling ? newX = offScreen1 : toContinue = true) : newX = newX + offset);
                 break;
             case 2:
-                (newY == offScreen1 ? (withNoOffscreen ? newY = lastY : (withNoCycle ? newY = newY - offset : newY = offScreen2)) : newY = newY - offset);
+                (newY == offScreen1 ? (withOffscreenCycling ? newY = offScreen2 : toContinue = true) : newY = newY - offset);
                 break;
             case 3:
-                (newY == offScreen2 ? (withNoOffscreen ? newY = lastY : (withNoCycle ? newY = newY + offset : newY = offScreen1)) : newY = newY + offset);
+                (newY == offScreen2 ? (withOffscreenCycling ? newY = offScreen1 : toContinue = true) : newY = newY + offset);
                 break;
         }
-        if (withNoRepeat == true && lastX == newX && lastY == newY) {
+        if ((withNoRepeat && lastX == newX && lastY == newY) || toContinue) {
             continue;
         }
         if (cells.get([newX, newY]) == undefined) {
+            candidateCells.push([newX, newY]);
+        }
+    }
+    // Allow for back-tracking, if there is no way forward
+    if (candidateCells.length == 0) {
+        return [lastX, lastY];
+    }
+
+    // Find the first candidate which is not in the history.
+    for (var i = 0; i < candidateCells.length; i++) {
+        var candidate = candidateCells[i];
+        var inHistory = false;
+        for (var j = agent.getHistory().length - 1 ; j >= 0; j--) {
+            var historyCell = agent.getHistory()[j];
+            if (historyCell[0] == candidate[0] && historyCell[1] == candidate[1])
+                inHistory = true;
+        }
+        if (!inHistory)
+            return candidate;
+    }
+
+
+    // Allow for movement off-screen, if no other option is available
+    if (! withOffscreenCycling) {
+        if (x == offScreen2 || x == offScreen1 || y == offScreen2 || y == offScreen1) {
+            if (x == offScreen2) {
+                newX = offScreen2 + 1;
+            }
+            else if (x == offScreen1) {
+                newX = offScreen1 - 1;
+            }
+            else if (y == offScreen2) {
+                newY = offScreen2 + 1;
+            }
+            else if (y == offScreen1) {
+                newY = offScreen1 - 1;
+            }
             return [newX, newY];
         }
     }
-    // Allow for movement off-screen, if no other option is available
-    if (x == offScreen2 || x == offScreen1 || y == offScreen2 || y == offScreen1) {
-        if (x == offScreen2) {
-            x = offScreen2 + 1;
-        }
-        else if (x == offScreen1) {
-            x = offScreen1 - 1;
-        }
-        else if (y == offScreen2) {
-            y = offScreen2 + 1;
-        }
-        else if (y == offScreen1) {
-            y = offScreen1 - 1;
-        }
-    }
 
-    return [x, y];
+
+    // Use the first NON-candidate cell to use if no candidate is found
+    return candidateCells[0];
 }
 
 function checkCollision(x, y) {
@@ -638,9 +731,9 @@ function processAgents() {
                 deadAgentCount++;
                 drawDead();
             }
-            else if (agent.getX() < 0 || agent.getX() >=  worldSize || agent.getY() < 0 || agent.getY() >= worldSize) {
-                nullifiedAgents.push(i);
-            }
+//            else if (agent.getX() < 0 || agent.getX() >=  worldSize || agent.getY() < 0 || agent.getY() >= worldSize) {
+//                nullifiedAgents.push(i);
+//            }
             else
                 // Hook for detecting 'active' patches
                 processNeighbouringPatches(agent);
@@ -750,7 +843,6 @@ function initWorld() {
     cells = new Hash();
 
     score = 0;
-    goodness = STARTING_GOODNESS;
     deadAgentCount = 0;
     savedAgentCount = 0;
     waves = 0;
@@ -760,6 +852,10 @@ function initWorld() {
 
 
     currentLevel = eval("level" + currentLevelNumber.toString());
+    goodness = currentLevel.getStartingGoodness();
+    if (goodness == undefined || goodness == null) {
+        goodness = STARTING_GOODNESS;
+    }
 
     worldSize = currentLevel.getWorldSize();
     cellWidth = 400 / worldSize;
@@ -857,5 +953,4 @@ function presetAgents(number, cellX, cellY) {
     }
     return agents;
 }
-
 
