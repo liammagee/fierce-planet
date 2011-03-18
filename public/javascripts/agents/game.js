@@ -1,6 +1,6 @@
 
 
-/* NB: agents.js and relevant level sources must be pre-loaded */
+/* NB: classes.js and relevant level sources must be pre-loaded */
 
 /* Constants */
 
@@ -16,7 +16,8 @@ var PATCH_GOODNESS = 10;
 var WAVE_GOODNESS_BONUS = 5;
 
 
-var WAVE_INTERVAL_CYCLES = 25;
+var NEW_LEVEL_DELAY = 3000;
+var NEW_WAVE_DELAY = 1000;
 
 var DEFAULT_PATCH_RECOVERY = 2;
 
@@ -39,6 +40,7 @@ var EXTREME_DIFFICULTY = 4;
 /* Global variables */
 
 var godMode = false;
+var inPlay = false;
 
 var agentTimerId = 0;
 
@@ -50,7 +52,10 @@ var currentLevel;
 var levelOfDifficulty = MEDIUM_DIFFICULTY;
 var patchRecoveryCycle = 5;
 var interval = 20;
-var currentWaveIntervals = 0;
+
+var levelDelayCounter = 0;
+var waveDelayCounter = 0;
+
 var numAgents = 1;
 
 var agents;
@@ -60,6 +65,7 @@ var cells = new Hash();
 var counter = 0;
 var counterLoops = 0;
 
+var previousLevelScore = 0;
 var score = 0;
 var goodness = 0;
 var waves = 1;
@@ -353,6 +359,15 @@ function drawPatch(p) {
 }
 
 
+function clearCanvas(canvasID) {
+    var canvas = document.getElementById(canvasID);
+    var ctx = canvas.getContext('2d');
+    var w = canvas.width;
+    var h = canvas.height;
+
+    ctx.clearRect(0, 0, w, h);
+}
+
 function clearAgents() {
     var canvas = document.getElementById('c4');
     var ctx = canvas.getContext('2d');
@@ -484,9 +499,23 @@ function drawLevel() {
     var e = document.getElementById("level-display");
     e.innerHTML = currentLevelNumber.toString();
 }
+function drawHighestLevel() {
+    var e = document.getElementById("highest-level-display");
+    var hl = localStorage.highestLevel;
+    if (hl == undefined)
+        hl = 0;
+    e.innerHTML = hl.toString();
+}
 function drawScore() {
     var e = document.getElementById("score-display");
     e.innerHTML = score.toString();
+}
+function drawHighestScore() {
+    var e = document.getElementById("highest-score-display");
+    var hs = localStorage.highestScore;
+    if (hs == undefined)
+        hs = 0;
+    e.innerHTML = hs.toString();
 }
 
 function drawGoodness() {
@@ -507,14 +536,20 @@ function drawWaves() {
     e.innerHTML = waves.toString() + " out of " + currentLevel.getWaveNumber();
 }
 
+
+
 function drawScoreboard() {
     drawLevel();
+    drawHighestLevel();
     drawScore();
+    drawHighestScore();
     drawWaves();
     drawSaved();
     drawDead();
     drawGoodness();
 }
+
+
 
 /* End Drawing Methods */
 
@@ -714,14 +749,21 @@ function checkPatches(newX, newY) {
 /* Game logic methods */
 function processAgents() {
 
+    // Delay, until we are ready for the first wave
+    if (levelDelayCounter < NEW_LEVEL_DELAY / interval) {
+        levelDelayCounter++;
+        return;
+    }
+
     // Delay, until we are ready for a new wave
-    if (currentWaveIntervals < WAVE_INTERVAL_CYCLES) {
-        currentWaveIntervals++;
+    if (waveDelayCounter < NEW_WAVE_DELAY / interval) {
+        waveDelayCounter++;
         return;
     }
 
     // Increment counter
     counter++;
+
 
     clearAgents();
     var nullifiedAgents = new Array();
@@ -773,11 +815,11 @@ function processAgents() {
         if (waves < currentLevel.getWaveNumber()) {
             newWave();
             drawScoreboard();
-            currentWaveIntervals = 0;
+            waveDelayCounter = 0;
         }
         else if (currentLevelNumber < LEVELS) {
             newLevel();
-            currentWaveIntervals = 0;
+            levelDelayCounter = 0;
         }
         else {
             return gameOver();
@@ -850,37 +892,97 @@ function resetPatchYields() {
 }
 
 
-function gameOver() {
-    alert('Game over - press "Reset" to start again.');
-    stopAgents();
-    return;
-}
-
 function newWave() {
-    // Do this immediately when an agent is saved
-//    var multiplier = (waves < 5 ? 4 : (waves < 10 ? 3 : (waves < 20 ? 2 : 1)));
-//    goodness += savedAgentThisWaveCount * multiplier; //WAVE_GOODNESS_BONUS;
     counter = 0;
     savedAgentThisWaveCount = 0;
     waves ++;
-    /* Allow in game healing
-    resetPatchYields();
-    drawPatches();
-    */
-    currentLevel.presetAgents(++numAgents);
+    presetAgents(++numAgents, currentLevel.getInitialAgentX(), currentLevel.getInitialAgentY());
 }
 
 function newLevel() {
+    storeData();
+    drawScoreboard();
+    alert("Level " + currentLevelNumber + " successfully completed. Game over - you scored an impressive " + score + ". Click 'OK' to start the next level.");
+
     currentLevelNumber++;
+    previousLevelScore = score;
     patches = new Array();
-    redoWorld();
+    redrawWorld();
+
+    levelInfo(currentLevel.getNotice());
+    log("Starting new level...");
+
+
     startAgents();
 }
+
+function gameOver() {
+    storeData();
+    drawScoreboard();
+    alert("Game over - you scored an impressive " + score + ". Press 'Restart Level' to start this level again.");
+    // Add hook for proper jump screen
+    stopAgents();
+}
+
 
 
 /* Set up code */
 
+
+
+function newGame() {
+    currentLevelNumber = 1;
+    score = 0;
+    previousLevelScore = 0;
+    storeCurrentLevelData();
+    restartLevel();
+}
+
+function restartLevel() {
+    interval = checkInteger(1000 / document.getElementById("intervalInput").value);
+//    currentLevelNumber = checkInteger(document.getElementById("levelInput").value);
+    godMode = document.getElementById("godModeInput").checked;
+    var diffSelect = document.getElementById("difficultyInput");
+    levelOfDifficulty = checkInteger(diffSelect[diffSelect.selectedIndex].value);
+    score = previousLevelScore;
+    patches = new Array();
+    redrawWorld();
+}
+
+function redrawWorld() {
+    // Stop any existing timers
+    stopAgents();
+
+    // Clear canvases
+    clearCanvas('c2');
+    clearCanvas('c4');
+    
+    // Initialise the world
+    initWorld();
+
+    // Reset existing patches
+    resetPatchYields();
+
+    // Draw basic elements
+    drawGrid();
+    drawTiles();
+    drawGoal();
+    drawPatches();
+    drawScoreboard();
+
+    levelInfo(currentLevel.getNotice());
+}
+
+function reloadGame() {
+
+    currentLevelNumber = (localStorage.currentLevelNumber != undefined ? parseInt(localStorage.currentLevelNumber) : currentLevelNumber);
+    score = (localStorage.currentScore != undefined ? parseInt(localStorage.currentScore) : score);
+    redrawWorld();
+}
+
 function initWorld() {
+    log("Initialising world...");
+
     tiles = new Array();
     // Keep active patches for now
 //    activePatches = new Array();
@@ -895,7 +997,6 @@ function initWorld() {
 
     patchRecoveryCycle = Math.pow(DEFAULT_PATCH_RECOVERY, levelOfDifficulty - 1);
 
-
     currentLevel = eval("level" + currentLevelNumber.toString());
     goodness = currentLevel.getStartingGoodness();
     if (goodness == undefined || goodness == null) {
@@ -905,46 +1006,51 @@ function initWorld() {
     worldSize = currentLevel.getWorldSize();
     cellWidth = 400 / worldSize;
     pieceWidth = cellWidth * 0.5;
+
+    // Set up level
+    preSetupLevel(currentLevel);
     currentLevel.setupLevel();
-}
-
-function clearCanvas(canvasID) {
-    var canvas = document.getElementById(canvasID);
-    var ctx = canvas.getContext('2d');
-    var w = canvas.width;
-    var h = canvas.height;
-
-    ctx.clearRect(0, 0, w, h);
+    postSetupLevel(currentLevel);
 }
 
 
-function redoWorld() {
-    stopAgents();
-    initWorld();
-    clearCanvas('c2');
-    clearCanvas('c4');
+function startAgents() {
+    log("Starting agents...");
 
-    drawGrid();
-    drawTiles();
-    drawGoal();
-    resetPatchYields();
-    drawPatches();
-    drawScoreboard();
-
+    clearInterval(agentTimerId);
+    agentTimerId = setInterval("processAgents()", interval);
+    inPlay = true;
 }
 
-function resetWorld() {
+
+function stopAgents() {
+    log("Stopping agents...");
+
+    clearInterval(agentTimerId);
+    inPlay = false;
+}
+
+function resetSpeed() {
     interval = checkInteger(1000 / document.getElementById("intervalInput").value);
-    currentLevelNumber = checkInteger(document.getElementById("levelInput").value);
-    godMode = document.getElementById("godModeInput").checked;
-    var diffSelect = document.getElementById("difficultyInput");
-    levelOfDifficulty = checkInteger(diffSelect[diffSelect.selectedIndex].value);
-    redoWorld();
+    if (inPlay)
+        startAgents();
 }
 
-function fullResetWorld() {
-    patches = new Array();
-    resetWorld();
+
+/* Utility functions */
+
+/* Uses local storage to store highest scores and levels */
+function storeData() {
+    localStorage.currentScore = previousLevelScore;
+    localStorage.currentLevelNumber = currentLevelNumber;
+    if (localStorage.highestScore == undefined || score > localStorage.highestScore)
+        localStorage.highestScore = score;
+    if (localStorage.highestLevel == undefined || currentLevelNumber > localStorage.highestLevel)
+        localStorage.highestLevel = currentLevelNumber;
+}
+function storeCurrentLevelData() {
+    localStorage.currentScore = previousLevelScore;
+    localStorage.currentLevelNumber = currentLevelNumber;
 }
 
 
@@ -952,17 +1058,16 @@ function checkInteger(value) {
     return Math.floor(value);
 }
 
-function startAgents() {
-    clearInterval(agentTimerId);
-    agentTimerId = setInterval("processAgents()", interval);
+function log(message) {
+    console.log(message);
 }
 
-function stopAgents() {
-    clearInterval(agentTimerId);
+function globalInfo(notice) {
+    $('global-info').innerHTML = notice;
 }
 
-function resetSpeed() {
-    interval = checkInteger(1000 / document.getElementById("intervalInput").value);
-    startAgents();
+function levelInfo(notice) {
+    $('level-info').innerHTML = notice;
 }
 
+/* End utility functions */

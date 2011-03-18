@@ -1,5 +1,56 @@
 
-/* NB: Level is defined in agents.js */
+/* NB: Level is defined in classes.js */
+
+
+/* Level setup methods - this should be moved to the Level class when refactored. */
+function assignCells() {
+    for (var i = 0; i < tiles.length; i++) {
+        var p = tiles[i];
+        cells.set([p.getX(), p.getY()], p);
+    }
+};
+function fillWithTiles() {
+    for (var i = 0; i < worldSize; i++) {
+        for (var j = 0; j < worldSize; j++) {
+            tiles.push(new Tile("ddd", j, i));
+        }
+    }
+};
+function randomAgents(number, limit) {
+    var agents = new Array();
+    for (var i = 0; i < number; i ++) {
+        var x = Math.floor(Math.random() * limit);
+        var y = Math.floor(Math.random() * limit);
+        var agent = new Agent("basic", "888", x, y);
+        agents.push(agent);
+    }
+    return agents;
+};
+function presetAgents(number, cellX, cellY) {
+    agents = new Array();
+    for (var i = 0; i < number; i ++) {
+        var agent = new Agent("basic", "000", cellX, cellY);
+        var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
+        agent.setDelay(delay);
+        agents.push(agent);
+    }
+};
+function preSetupLevel(level) {
+    fillWithTiles();
+    presetAgents(level.getInitialAgentNumber(), level.getInitialAgentX(), level.getInitialAgentY());
+};
+function postSetupLevel(level) {
+    assignCells();
+};
+/*
+Level.prototype.preSetupLevel = new function() {
+    fillWithTiles();
+    presetAgents(this.getInitialAgentNumber(), this.getInitialAgentX(), this.getInitialAgentY());
+};
+Level.prototype.postSetupLevel = new function() {
+    assignCells();
+};
+*/
 
 
 /* Level 1 Definition */
@@ -13,11 +64,9 @@ level1.setWorldSize(11);
 level1.setInitialAgentNumber(1);
 level1.setWaveNumber(20);
 level1.setExpiryLimit(20);
+level1.setNotice("Level 1: place environmental, economic and social 'goods' around the path of agents as they try to reach home.");
 
 level1.setupLevel = function() {
-    this.fillWithTiles();
-    this.presetAgents(this.getInitialAgentNumber());
-
     tiles.splice(99, 10);
     tiles.splice(97, 1);
     tiles.splice(78, 9);
@@ -27,8 +76,6 @@ level1.setupLevel = function() {
     tiles.splice(34, 9);
     tiles.splice(23, 1);
     tiles.splice(12, 10);
-
-    this.assignCells();
 };
 
 
@@ -46,9 +93,6 @@ level2.setExpiryLimit(20);
 level2.setStartingGoodness(120);
 
 level2.setupLevel = function() {
-    this.fillWithTiles();
-    this.presetAgents(this.getInitialAgentNumber());
-
     tiles.splice(121, 10);
     tiles.splice(118, 1);
     tiles.splice(109, 1);
@@ -71,8 +115,6 @@ level2.setupLevel = function() {
     tiles.splice(18, 3);
     tiles.splice(13, 1);
     tiles.splice(0, 2);
-
-    this.assignCells();
 };
 
 
@@ -90,9 +132,6 @@ level3.setExpiryLimit(20);
 level3.setStartingGoodness(130);
 
 level3.setupLevel = function() {
-    this.fillWithTiles();
-    this.presetAgents(this.getInitialAgentNumber());
-
     tiles.splice(161, 1);
     tiles.splice(150, 5);
     tiles.splice(148, 1);
@@ -127,8 +166,6 @@ level3.setupLevel = function() {
     tiles.splice(37, 1);
     tiles.splice(27, 1);
     tiles.splice(14, 11);
-
-    this.assignCells();
 };
 
 
@@ -146,9 +183,6 @@ level4.setExpiryLimit(20);
 level4.setStartingGoodness(150);
 
 level4.setupLevel = function() {
-    this.fillWithTiles();
-    this.presetAgents(this.getInitialAgentNumber());
-
     tiles.splice(168, 13);
     tiles.splice(166, 1);
     tiles.splice(154, 1);
@@ -198,8 +232,6 @@ level4.setupLevel = function() {
     tiles.splice(16, 11);
     tiles.splice(14, 1);
     tiles.splice(0, 1);
-
-    this.assignCells();
 };
 
 
@@ -217,9 +249,6 @@ level5.setExpiryLimit(20);
 level5.setStartingGoodness(180);
 
 level5.setupLevel = function() {
-    this.fillWithTiles();
-    this.presetAgents(this.getInitialAgentNumber());
-
     tiles.splice(208, 1);
     tiles.splice(204, 3);
     tiles.splice(196, 7);
@@ -292,8 +321,6 @@ level5.setupLevel = function() {
     tiles.splice(20, 3);
     tiles.splice(15, 4);
     tiles.splice(13, 1);
-
-    this.assignCells();
 };
 
 
@@ -309,12 +336,9 @@ level6.setInitialAgentNumber(1);
 level6.setWaveNumber(20);
 level6.setExpiryLimit(20);
 level6.setAllowOffscreenCycling(true);
-level6.setStartingGoodness(180);
+level6.setStartingGoodness(250);
 
 level6.setupLevel = function() {
-    this.fillWithTiles();
-    this.presetAgents(this.getInitialAgentNumber());
-
     tiles.splice(226, 1);
     tiles.splice(212, 12);
     tiles.splice(208, 3);
@@ -335,8 +359,6 @@ level6.setupLevel = function() {
     tiles.splice(48, 13);
     tiles.splice(46, 1);
     tiles.splice(16, 15);
-
-    this.assignCells();
 };
 
 
@@ -352,13 +374,11 @@ level7.setInitialAgentNumber(1);
 level7.setWaveNumber(10);
 level7.setExpiryLimit(10);
 level7.setAllowPatchesOnPath(true);
+level7.setNotice("You can add patches to the paths (the white squares) on this level.");
 level7.setStartingGoodness(200);
 
 
 level7.setupLevel = function() {
-    this.fillWithTiles();
-    this.presetAgents(this.getInitialAgentNumber());
-
     tiles.splice(280, 1);
     tiles.splice(262, 3);
     tiles.splice(244, 5);
@@ -376,12 +396,6 @@ level7.setupLevel = function() {
     tiles.splice(40, 5);
     tiles.splice(24, 3);
     tiles.splice(8, 1);
-
-    for (var i = 0; i < tiles.length; i++) {
-        var p = tiles[i];
-        cells.set([p.getX(), p.getY()], p);
-    }
-
 };
 
 
@@ -399,9 +413,6 @@ level8.setExpiryLimit(10);
 level8.setStartingGoodness(200);
 
 level8.setupLevel = function() {
-    this.fillWithTiles();
-    this.presetAgents(this.getInitialAgentNumber());
-
     tiles.splice(322, 2);
     tiles.splice(289, 16);
     tiles.splice(286, 1);
@@ -474,8 +485,6 @@ level8.setupLevel = function() {
     tiles.splice(37, 1);
     tiles.splice(19, 16);
     tiles.splice(0, 2);
-
-    this.assignCells();
 };
 
 
@@ -492,9 +501,6 @@ level9.setWaveNumber(10);
 level9.setExpiryLimit(10);
 
 level9.setupLevel = function() {
-    this.fillWithTiles();
-    this.presetAgents(this.getInitialAgentNumber());
-
     tiles.splice(351, 1);
     tiles.splice(330, 5);
     tiles.splice(315, 1);
@@ -529,8 +535,6 @@ level9.setupLevel = function() {
     tiles.splice(39, 1);
     tiles.splice(20, 17);
     tiles.splice(9, 1);
-
-    this.assignCells();
 };
 
 
@@ -549,9 +553,6 @@ level10.setExpiryLimit(1);
 level10.setStartingGoodness(250);
 
 level10.setupLevel = function() {
-    this.fillWithTiles();
-    this.presetAgents(this.getInitialAgentNumber());
-
     tiles.splice(398, 1);
     tiles.splice(396, 1);
     tiles.splice(378, 1);
@@ -628,6 +629,4 @@ level10.setupLevel = function() {
     tiles.splice(56, 1);
     tiles.splice(41, 1);
     tiles.splice(21, 18);
-
-    this.assignCells();
 };

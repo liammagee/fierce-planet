@@ -8,11 +8,17 @@
     <div id="content-pane">
       <div id="main-panel">
         <div id="global-info-panel">
-          <div style="width: 50%; float: left">
+          <div style="width: 25%; float: left">
             Level: <span id="level-display">1</span>
           </div>
-          <div style="width: 50%; float: left">
+          <div style="width: 25%; float: left">
+            Highest Level: <span id="highest-level-display">0</span>
+          </div>
+          <div style="width: 25%; float: left">
             Score: <span id="score-display">0</span>
+          </div>
+          <div style="width: 25%; float: left">
+            Highest Score: <span id="highest-score-display">0</span>
           </div>
         </div>
         <div id="level-info-panel">
@@ -48,33 +54,32 @@
                   <p><a href="#" id="upg" onclick="upgradeCurrentPatch();">Upgrade <br/><small>(Cost: 20; PAY: 20)</small></a></p>
                   <p><a href="#" id="cancel" onclick="document.getElementById('delete-upgrade').style.display = 'none'">Cancel</a></p>
               </div>
-              <%= javascript_include_tag "agents/world_canvas_handler" %>
+              <%= javascript_include_tag "agents/game_canvas_handler" %>
             </div>
-            <div id="instructions">
-              <div id="global-instructions">
+            <div id="info">
+              <div id="global-info">
                 <h2>Instructions</h2>
               </div>
-              <div id="level-instructions">
-                <h2>Instructions</h2>
+              <div id="level-info">
               </div>
             </div>
 
         </div>
         <div id="controls">
-          <br/>
-          Level:
-          <select id="levelInput" name="levelInput">
-            <option value="1" selected="selected">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
+          <!--<br/>-->
+          <!--Level:-->
+          <!--<select id="levelInput" name="levelInput">-->
+            <!--<option value="1" selected="selected">1</option>-->
+            <!--<option value="2">2</option>-->
+            <!--<option value="3">3</option>-->
+            <!--<option value="4">4</option>-->
+            <!--<option value="5">5</option>-->
+            <!--<option value="6">6</option>-->
+            <!--<option value="7">7</option>-->
+            <!--<option value="8">8</option>-->
+            <!--<option value="9">9</option>-->
+            <!--<option value="10">10</option>-->
+          <!--</select>-->
           <br/>
           Difficulty:
             <select id="difficultyInput" name="difficultyInput">
@@ -91,13 +96,10 @@
 
           <button id="startAgents" onclick="startAgents();">Start</button>
           <button id="stopAgents" onclick="stopAgents();">Stop</button>
-          <button id="resetWorld" onclick="resetWorld();">Restart</button>
-          <button id="fullResetWorld" onclick="fullResetWorld();">Reset</button>
+          <button id="resetWorld" onclick="restartLevel();">Restart Level</button>
+          <button id="fullResetWorld" onclick="newGame();">New Game</button>
           <script type="text/javascript">
-              drawGrid();
-              drawTiles();
-              drawGoal();
-              drawPatches();
+              reloadGame();
           </script>
           <button id="cells" onclick="processAgents();">Debug</button>
         </div>

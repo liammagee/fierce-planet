@@ -43,46 +43,8 @@ Level.prototype.getAllowPatchesOnPath = function() { return this._allowPatchesOn
 Level.prototype.setAllowPatchesOnPath = function(allowPatchesOnPath) { this._allowPatchesOnPath = allowPatchesOnPath; }
 Level.prototype.getNotice = function() { return this._notice; }
 Level.prototype.setNotice = function(notice) { this._notice = notice; }
-Level.prototype.assignCells = function() {
-    for (var i = 0; i < tiles.length; i++) {
-        var p = tiles[i];
-        cells.set([p.getX(), p.getY()], p);
-    }
-};
-Level.prototype.assignCells = function() {
-    for (var i = 0; i < tiles.length; i++) {
-        var p = tiles[i];
-        cells.set([p.getX(), p.getY()], p);
-    }
-};
-Level.prototype.fillWithTiles = function() {
-    for (var i = 0; i < worldSize; i++) {
-        for (var j = 0; j < worldSize; j++) {
-            tiles.push(new Tile("ddd", j, i));
-        }
-    }
-};
-Level.prototype.randomAgents = function(number, limit) {
-    var agents = new Array();
-    for (var i = 0; i < number; i ++) {
-        var agent = new Agent("basic", "888");
-        var x = Math.floor(Math.random() * limit);
-        var y = Math.floor(Math.random() * limit);
-        agent.setPosition(x, y);
-        agents.push(agent);
-    }
-    return agents;
-};
-Level.prototype.presetAgents = function(number) {
-    var cellX = this.getInitialAgentX();
-    var cellY = this.getInitialAgentY();
-    agents = new Array();
-    for (var i = 0; i < number; i ++) {
-        var agent = new Agent("basic", "000", cellX, cellY);
-        var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
-        agent.setDelay(delay);
-        agents.push(agent);
-    }
+Level.prototype.sayHello = function() {
+    log("hello");
 };
 
 
@@ -247,7 +209,8 @@ function Tile(color) {
 }
 function Tile(color, x, y) {
     this._color = color;
-    this.setPosition(x, y);
+    this._x = x;
+    this._y = y;
 }
 Tile.prototype.getColor = function() { return this._color;}
 Tile.prototype.getPosition = function() { return [this._x, this._y]; }
