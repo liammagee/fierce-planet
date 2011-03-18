@@ -22,6 +22,7 @@
     position:relative;
 }
 #gameworld {
+    margin-top: 20px;
     clear:both;
     position:relative;
 
@@ -38,8 +39,17 @@
     left:441px;
 }
 
-#controls {
+#instructions {
     clear: both;
+    float: left;
+    position:absolute;
+    left:641px;
+    margin-left: 20px;
+}
+
+#controls {
+    margin-top: 20px;
+        clear: both;
     position:absolute;
     left:0px;
     top:441px;

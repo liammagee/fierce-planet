@@ -34,6 +34,7 @@
             <canvas id="c1" width="401" height="401" style="z-index: 1;">A Canvas</canvas>
             <canvas id="c2" width="401" height="401" style="z-index: 2;">A Canvas</canvas>
             <canvas id="c3" width="401" height="401" style="z-index: 3;">A Canvas</canvas>
+            <canvas id="c4" width="401" height="401" style="z-index: 4;">A Canvas</canvas>
           </div>
 
             <div id="swatch">
@@ -49,11 +50,17 @@
               </div>
               <%= javascript_include_tag "agents/world_canvas_handler" %>
             </div>
+            <div id="instructions">
+              <div id="global-instructions">
+                <h2>Instructions</h2>
+              </div>
+              <div id="level-instructions">
+                <h2>Instructions</h2>
+              </div>
+            </div>
 
         </div>
         <div id="controls">
-          <br/>
-          Number of agents: <input id="numAgentsInput" name="numAgents" value="1"/>
           <br/>
           Level:
           <select id="levelInput" name="levelInput">
@@ -78,6 +85,8 @@
             </select>
           <br/>
           Speed: [Slow] <input id="intervalInput" name="intervalInput" type="range" min="10" max="100" value="50" step="10" onchange="resetSpeed()" /> [Fast]
+          <br/>
+          God mode: <input id="godModeInput" name="intervalInput" type="checkbox" />
           <br/>
 
           <button id="startAgents" onclick="startAgents();">Start</button>

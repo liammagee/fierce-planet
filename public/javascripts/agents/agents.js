@@ -16,6 +16,8 @@ function Level(number) {
     this._goalY = 0;
     this._startingGoodness = 100;
     this._allowOffscreenCycling = false;
+    this._allowPatchesOnPath = false;
+    this._notice = "";
 }
 Level.prototype.getInitialAgentNumber = function() { return this._initialAgentNumber; }
 Level.prototype.setInitialAgentNumber = function(initialAgentNumber) { this._initialAgentNumber = initialAgentNumber; }
@@ -37,7 +39,51 @@ Level.prototype.getStartingGoodness = function() { return this._startingGoodness
 Level.prototype.setStartingGoodness = function(startingGoodness) { this._startingGoodness = startingGoodness; }
 Level.prototype.getAllowOffscreenCycling = function() { return this._allowOffscreenCycling; }
 Level.prototype.setAllowOffscreenCycling = function(allowOffscreenCycling) { this._allowOffscreenCycling = allowOffscreenCycling; }
-
+Level.prototype.getAllowPatchesOnPath = function() { return this._allowPatchesOnPath; }
+Level.prototype.setAllowPatchesOnPath = function(allowPatchesOnPath) { this._allowPatchesOnPath = allowPatchesOnPath; }
+Level.prototype.getNotice = function() { return this._notice; }
+Level.prototype.setNotice = function(notice) { this._notice = notice; }
+Level.prototype.assignCells = function() {
+    for (var i = 0; i < tiles.length; i++) {
+        var p = tiles[i];
+        cells.set([p.getX(), p.getY()], p);
+    }
+};
+Level.prototype.assignCells = function() {
+    for (var i = 0; i < tiles.length; i++) {
+        var p = tiles[i];
+        cells.set([p.getX(), p.getY()], p);
+    }
+};
+Level.prototype.fillWithTiles = function() {
+    for (var i = 0; i < worldSize; i++) {
+        for (var j = 0; j < worldSize; j++) {
+            tiles.push(new Tile("ddd", j, i));
+        }
+    }
+};
+Level.prototype.randomAgents = function(number, limit) {
+    var agents = new Array();
+    for (var i = 0; i < number; i ++) {
+        var agent = new Agent("basic", "888");
+        var x = Math.floor(Math.random() * limit);
+        var y = Math.floor(Math.random() * limit);
+        agent.setPosition(x, y);
+        agents.push(agent);
+    }
+    return agents;
+};
+Level.prototype.presetAgents = function(number) {
+    var cellX = this.getInitialAgentX();
+    var cellY = this.getInitialAgentY();
+    agents = new Array();
+    for (var i = 0; i < number; i ++) {
+        var agent = new Agent("basic", "000", cellX, cellY);
+        var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
+        agent.setDelay(delay);
+        agents.push(agent);
+    }
+};
 
 
 /* Agent class definition */
