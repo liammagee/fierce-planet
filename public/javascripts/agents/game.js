@@ -940,7 +940,7 @@ function newGame() {
 
 function restartLevel() {
     interval = checkInteger(1000 / document.getElementById("intervalInput").value);
-//    currentLevelNumber = checkInteger(document.getElementById("levelInput").value);
+    currentLevelNumber = checkInteger(document.getElementById("levelInput").value);
     godMode = document.getElementById("godModeInput").checked;
     var diffSelect = document.getElementById("difficultyInput");
     levelOfDifficulty = checkInteger(diffSelect[diffSelect.selectedIndex].value);

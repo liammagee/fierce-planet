@@ -1,7 +1,7 @@
 var canvas = document.getElementById('c2');
 var msie = /*@cc_on!@*/0;
 
-var links = document.querySelectorAll('li > a'), el = null;
+var links = document.querySelectorAll('#swatch > div'), el = null;
 for (var i = 0; i < links.length; i++) {
   el = links[i];
 
@@ -9,6 +9,7 @@ for (var i = 0; i < links.length; i++) {
   el.addEventListener('dragstart', function (e) {
     e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
     e.dataTransfer.setData('Text', this.id); // required otherwise doesn't work
+      currentPatchTypeId = this.id;
   }, false);
   el.addEventListener('click', function (e) {
       currentPatchTypeId = this.id;

@@ -1,3 +1,8 @@
+
+body {
+    background-color: #fff;
+    color: #000;
+}
 #left-pane {
     float: left;
     width:10%;
@@ -16,10 +21,20 @@
 #global-info-panel {
     height:20px;
     position:relative;
+    background-color: #fbe53b;
+    border: #ccc 3px solid;
+    padding: 4px;
 }
 #level-info-panel {
-    height:20px;
     position:relative;
+}
+
+
+
+#info {
+    float: left;
+    position:absolute;
+    left:661px;
 }
 #gameworld {
     margin-top: 20px;
@@ -28,46 +43,39 @@
 
 }
 #world {
-    position:relative;
+    position:absolute;
+    left:200px;
+    top:0px;
     float: left;
 }
 
-#swatch {
-    clear: both;
-    float: left;
-    position:absolute;
-    left:441px;
-}
-
-#info {
-    clear: both;
-    float: left;
-    position:absolute;
-    left:641px;
-    margin-left: 20px;
-}
 
 #controls {
     margin-top: 20px;
+    clear: both;
+    position:relative;
+    left:0px;
+    top:0px;
+}
+
+#swatch {
+    margin-top: 20px;
         clear: both;
     position:absolute;
-    left:0px;
-    top:441px;
+    left:200px;
+    top:461px;
 }
+
 
 canvas {
     position:absolute;
 }
 
-#c1, #c2, #c3 {
+#c1, #c2, #c3, #c4 {
   border: #ccc 3px solid;
 }
 
-#c1.over, #c2.over, #c3.over {
-  border: #333 3px solid;
-}
-
-#c1.over, #c2.over, #c3.over {
+#c1.over, #c2.over, #c3.over, #c4.over {
   border: #333 3px solid;
 }
 
@@ -79,25 +87,32 @@ ul, li {
     margin: 0px;
     padding: 0px;
 }
-li a, #delete-upgrade p a {
+#swatch div {
+    float: left;
+    position: relative;
+}
+#swatch div, #delete-upgrade p a {
   text-decoration: none;
   color: #000;
-  margin: 10px;
-  width: 150px;
+  width: 110px;
   border: 3px dashed #999;
-  padding: 10px;
-  display: block;
+  padding: 4px;
+    margin-right: 10px;
+}
+#swatch div a, #delete-upgrade p a {
+  color: #000;
+  text-decoration: none;
 }
 
-li a#env {
+#swatch div#env {
   background: #00ff00;
 }
 
-li a#eco {
+#swatch div#eco {
     background: #99ccff;
 }
 
-li a#soc {
+#swatch div#soc {
     background: #ff3300;
 }
 
@@ -132,4 +147,8 @@ footer {
     position:absolute;
     left:0px;
     top:621px;
+}
+
+#info h2 {
+    margin-top: 0px;
 }

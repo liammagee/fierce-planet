@@ -11,28 +11,29 @@
           <div style="width: 25%; float: left">
             Level: <span id="level-display">1</span>
           </div>
-          <div style="width: 25%; float: left">
-            Highest Level: <span id="highest-level-display">0</span>
+          <div style="width: 25%;; float: left">
+            Waves: <span id="waves-display">1 out of 30</span>
+          </div>
+          <div style="width: 25%;; float: left">
+            Resource Store: <span id="goodness-display">100</span>
           </div>
           <div style="width: 25%; float: left">
             Score: <span id="score-display">0</span>
           </div>
-          <div style="width: 25%; float: left">
-            Highest Score: <span id="highest-score-display">0</span>
-          </div>
         </div>
-        <div id="level-info-panel">
+
+        <div id="level-info-panel" style="display:none">
           <div style="width: 25%;; float: left">
             Saved: <span id="saved-display">0</span>
           </div>
           <div style="width: 25%;; float: left">
             Expired: <span id="dead-display">0</span>
           </div>
-          <div style="width: 25%;; float: left">
-            Waves: <span id="waves-display">1 out of 30</span>
+          <div style="width: 25%; float: left">
+            Highest Level: <span id="highest-level-display">0</span>
           </div>
-          <div style="width: 25%;; float: left">
-            Goodness: <span id="goodness-display">100</span>
+          <div style="width: 25%; float: left">
+            Highest Score: <span id="highest-score-display">0</span>
           </div>
         </div>
         <div id="gameworld">
@@ -43,43 +44,45 @@
             <canvas id="c4" width="401" height="401" style="z-index: 4;">A Canvas</canvas>
           </div>
 
-            <div id="swatch">
-              <ul>
-                <li><a href="#" id="eco">Economic Good <br/><small>(Cost: 10; PAY: 20)</small></a></li>
-                <li><a href="#" id="env">Environmental Good <br/><small>(Cost: 10; PAY: 10)</small></a></li>
-                <li><a href="#" id="soc">Social Good <br/><small>(Cost: 10; PAY: 5)</small></a></li>
-              </ul>
-              <div id="delete-upgrade" style="display: none;">
-                  <p><a href="#" id="del" onclick="deleteCurrentPatch();">Delete <br/><small>(Revenue: 5)</small></a></p>
-                  <p><a href="#" id="upg" onclick="upgradeCurrentPatch();">Upgrade <br/><small>(Cost: 20; PAY: 20)</small></a></p>
-                  <p><a href="#" id="cancel" onclick="document.getElementById('delete-upgrade').style.display = 'none'">Cancel</a></p>
-              </div>
-              <%= javascript_include_tag "agents/game_canvas_handler" %>
-            </div>
-            <div id="info">
-              <div id="global-info">
-                <h2>Instructions</h2>
-              </div>
-              <div id="level-info">
-              </div>
-            </div>
 
         </div>
+        <div id="info">
+          <div id="level-info">
+          </div>
+          <div id="global-info">
+          </div>
+        </div>
+        <div id="swatch">
+            <div id="eco"><a href="#">Economic <br/><small>(Cost: 10; PAY: 20)</small></a></div>
+            <div id="env"><a href="#" >Environmental<br/><small>(Cost: 10; PAY: 10)</small></a></div>
+            <div id="soc"><a href="#" >Social<br/><small>(Cost: 10; PAY: 5)</small></a></div>
+
+
+
+          <div id="delete-upgrade" style="display: none;">
+              <p><a href="#" id="del" onclick="deleteCurrentPatch();">Delete <br/><small>(Revenue: 5)</small></a></p>
+              <p><a href="#" id="upg" onclick="upgradeCurrentPatch();">Upgrade <br/><small>(Cost: 20; PAY: 20)</small></a></p>
+              <p><a href="#" id="cancel" onclick="document.getElementById('delete-upgrade').style.display = 'none'">Cancel</a></p>
+          </div>
+          <%= javascript_include_tag "agents/game_canvas_handler" %>
+        </div>
+
         <div id="controls">
-          <!--<br/>-->
-          <!--Level:-->
-          <!--<select id="levelInput" name="levelInput">-->
-            <!--<option value="1" selected="selected">1</option>-->
-            <!--<option value="2">2</option>-->
-            <!--<option value="3">3</option>-->
-            <!--<option value="4">4</option>-->
-            <!--<option value="5">5</option>-->
-            <!--<option value="6">6</option>-->
-            <!--<option value="7">7</option>-->
-            <!--<option value="8">8</option>-->
-            <!--<option value="9">9</option>-->
-            <!--<option value="10">10</option>-->
-          <!--</select>-->
+          <h3>Control Panel</h3>
+          <br/>
+          Level:
+          <select id="levelInput" name="levelInput">
+            <option value="1" selected="selected">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
           <br/>
           Difficulty:
             <select id="difficultyInput" name="difficultyInput">
@@ -89,15 +92,21 @@
               <option value="4">EXTREME</option>
             </select>
           <br/>
-          Speed: [Slow] <input id="intervalInput" name="intervalInput" type="range" min="10" max="100" value="50" step="10" onchange="resetSpeed()" /> [Fast]
+          Speed:
+          <br/>
+          <input id="intervalInput" name="intervalInput" type="range" min="10" max="100" value="50" step="10" onchange="resetSpeed()" />
           <br/>
           God mode: <input id="godModeInput" name="intervalInput" type="checkbox" />
           <br/>
 
           <button id="startAgents" onclick="startAgents();">Start</button>
-          <button id="stopAgents" onclick="stopAgents();">Stop</button>
-          <button id="resetWorld" onclick="restartLevel();">Restart Level</button>
+          <br/>
+          <button id="stopAgents" onclick="stopAgents();">Pause</button>
+          <br/>
+          <button id="resetWorld" onclick="restartLevel();">Restart/Go to Level</button>
+          <br/>
           <button id="fullResetWorld" onclick="newGame();">New Game</button>
+          <br/>
           <script type="text/javascript">
               reloadGame();
           </script>

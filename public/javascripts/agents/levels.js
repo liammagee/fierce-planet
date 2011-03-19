@@ -64,7 +64,10 @@ level1.setWorldSize(11);
 level1.setInitialAgentNumber(1);
 level1.setWaveNumber(20);
 level1.setExpiryLimit(20);
-level1.setNotice("Level 1: place environmental, economic and social 'goods' around the path of agents as they try to reach home.");
+level1.setNotice("<h2>Welcome to Fierce Planet</h2> " +
+        "<p>The citizens of Fierce Planet are under threat. They are migrating in ever increasing numbers, seeking a promised land of peace and prosperity.</p>" +
+        "<p>Help them by placing 'Economic', 'Environmental' and 'Social' resources beside their path before they expire! Drag or click the blue, green and red swatches onto the grey patches of the maze.</p> " +
+        "<p>Tip: you can pause at any time to add resources. Your resource store increases as you save more citizens.</p>");
 
 level1.setupLevel = function() {
     tiles.splice(99, 10);
