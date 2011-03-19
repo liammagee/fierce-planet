@@ -55,16 +55,13 @@
             <div id="eco"><a href="#">Economic <br/><small>(Cost: 10; PAY: 20)</small></a></div>
             <div id="env"><a href="#" >Environmental<br/><small>(Cost: 10; PAY: 10)</small></a></div>
             <div id="soc"><a href="#" >Social<br/><small>(Cost: 10; PAY: 5)</small></a></div>
-
-
-
-          <div id="delete-upgrade" style="display: none;">
-              <p><a href="#" id="del" onclick="deleteCurrentPatch();">Delete <br/><small>(Revenue: 5)</small></a></p>
-              <p><a href="#" id="upg" onclick="upgradeCurrentPatch();">Upgrade <br/><small>(Cost: 20; PAY: 20)</small></a></p>
-              <p><a href="#" id="cancel" onclick="document.getElementById('delete-upgrade').style.display = 'none'">Cancel</a></p>
-          </div>
-          <%= javascript_include_tag "agents/game_canvas_handler" %>
         </div>
+        <div id="delete-upgrade" style="display: none;">
+          <div><a href="#" id="del" onclick="deleteCurrentPatch();">Delete <br/><small>(Revenue: 5)</small></a></div>
+          <div><a href="#" id="upg" onclick="upgradeCurrentPatch();">Upgrade <br/><small>(Cost: 20; PAY: 20)</small></a></div>
+          <div><a href="#" id="cancel" onclick="document.getElementById('delete-upgrade').style.display = 'none'; document.getElementById('swatch').style.display = 'block'">Cancel</a></div>
+        </div>
+        <%= javascript_include_tag "agents/game_canvas_handler" %>
 
         <div id="controls">
           <h3>Control Panel</h3>
@@ -110,6 +107,9 @@
               reloadGame();
           </script>
           <button id="cells" onclick="processAgents();">Debug</button>
+          <br/>
+          <button id="levelEditor" onclick="showLevelEditor();">Make your own level</button>
+          <br/>
         </div>
 
       </div>

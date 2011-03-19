@@ -60,12 +60,18 @@ body {
 
 #swatch {
     margin-top: 20px;
-        clear: both;
+    clear: both;
     position:absolute;
     left:200px;
     top:471px;
 }
-
+#delete-upgrade {
+    margin-top: 20px;
+    clear: both;
+    position:absolute;
+    left:200px;
+    top:471px;
+}
 
 canvas {
     position:absolute;
@@ -87,11 +93,10 @@ ul, li {
     margin: 0px;
     padding: 0px;
 }
-#swatch div {
+
+#swatch div, #delete-upgrade div {
     float: left;
     position: relative;
-}
-#swatch div, #delete-upgrade p a {
   text-decoration: none;
   color: #000;
   width: 110px;
@@ -99,7 +104,7 @@ ul, li {
   padding: 4px;
     margin-right: 10px;
 }
-#swatch div a, #delete-upgrade p a {
+#swatch div a, #delete-upgrade div a {
   color: #000;
   text-decoration: none;
 }

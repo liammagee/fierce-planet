@@ -79,6 +79,9 @@ var pieceWidth = cellWidth * 0.5;
 var currentPatch = null;
 
 
+var scrollingImage = new Image(); // City image
+var scrollingImageX = 0;
+var scrollingImageOffset = 1;
 
 
 
@@ -105,6 +108,7 @@ function deleteCurrentPatch() {
         drawPatches();
     }
     document.getElementById("delete-upgrade").style.display = "none";
+    document.getElementById("swatch").style.display = "block";
 }
 function upgradeCurrentPatch() {
     var foundPatch = -1;
@@ -126,6 +130,7 @@ function upgradeCurrentPatch() {
         }
     }
     document.getElementById("delete-upgrade").style.display = "none";
+    document.getElementById("swatch").style.display = "block";
 }
 function showPatch(e) {
     var canvas = document.getElementById('c2');
@@ -144,6 +149,7 @@ function showDeleteUpgradeSwatch(e) {
         var p = patches[i];
         if (p.getX() == posX && p.getY() == posY) {
             currentPatch = p;
+            document.getElementById("swatch").style.display = "none";
             document.getElementById("delete-upgrade").style.display = "block";
             return;
         }
@@ -500,12 +506,12 @@ function drawAgents() {
         ctx.lineTo(intX, intY + radius + bodyLength / 2);
         if (counter % 2 == 0) {
             // Legs
-            var xOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
-            var yOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
+            var xOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
+            var yOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
             ctx.moveTo(intX, intY + radius + bodyLength / 2);
-            ctx.lineTo(intX - xOffset, intY + radius + yOffset);
+            ctx.lineTo(intX - xOffset, intY + radius + bodyLength / 2 + yOffset);
             ctx.moveTo(intX, intY + radius + bodyLength / 2);
-            ctx.lineTo(intX + xOffset, intY + radius + yOffset);
+            ctx.lineTo(intX + xOffset, intY + radius + bodyLength / 2 + yOffset);
             // Arms - 90 degrees
             ctx.moveTo(intX - bodyLength / 2, intY + radius + bodyLength / 6);
             ctx.lineTo(intX + bodyLength / 2, intY + radius + bodyLength / 6);
@@ -515,15 +521,16 @@ function drawAgents() {
             ctx.moveTo(intX, intY + radius + bodyLength / 2);
             ctx.lineTo(intX, intY + radius + bodyLength);
             // Arms - 45 degrees
-            var root = Math.sqrt(bodyLength / 2);
-            ctx.moveTo(intX - root, intY + radius + bodyLength / 6 + root);
+            var xOffset = Math.sin(45 * Math.PI/180) * bodyLength / 2;
+            var yOffset = Math.cos(45 * Math.PI/180) * bodyLength / 2;
+            ctx.moveTo(intX - xOffset, intY + radius + bodyLength / 6 + yOffset);
             ctx.lineTo(intX, intY + radius + bodyLength / 6);
-            ctx.moveTo(intX - root, intY + radius + bodyLength / 6 + root);
+            ctx.moveTo(intX + xOffset, intY + radius + bodyLength / 6 + yOffset);
             ctx.lineTo(intX, intY + radius + bodyLength / 6);
 
         }
         ctx.closePath();
-        ctx.strokeStyle = "#000";
+        ctx.strokeStyle = "#" + newColor;
         ctx.lineWidth = 2;
         ctx.stroke();
 
@@ -542,6 +549,20 @@ function drawAgents() {
 //        ctx.fillStyle = "#" + newColor;
 //        ctx.fill();
     }
+}
+
+function drawScrollingLayer() {
+    clearCanvas('c3');
+    var canvas = document.getElementById('c3');
+    var ctx = canvas.getContext('2d');
+    
+    if ((scrollingImageX + scrollingImageOffset) < (400 - scrollingImageOffset)){
+        scrollingImageX += scrollingImageOffset;
+    }
+    else {
+        scrollingImageX = 0;
+    }
+    ctx.drawImage(scrollingImage, scrollingImageX, 0, 400, 400, 0, 0, 400, 400);
 }
 
 function drawLevel() {
@@ -798,6 +819,10 @@ function checkPatches(newX, newY) {
 /* Game logic methods */
 function processAgents() {
 
+    // Draw the scrolling layer
+    drawScrollingLayer();
+
+
     // Delay, until we are ready for the first wave
     if (levelDelayCounter < NEW_LEVEL_DELAY / interval) {
         levelDelayCounter++;
@@ -1004,8 +1029,9 @@ function redrawWorld() {
 
     // Clear canvases
     clearCanvas('c2');
+    clearCanvas('c3');
     clearCanvas('c4');
-    
+
     // Initialise the world
     initWorld();
 
@@ -1017,6 +1043,7 @@ function redrawWorld() {
     drawTiles();
     drawGoal();
     drawPatches();
+    drawScrollingLayer();
     drawScoreboard();
 
     levelInfo(currentLevel.getNotice());
@@ -1052,9 +1079,11 @@ function initWorld() {
         goodness = STARTING_GOODNESS;
     }
 
+
     worldSize = currentLevel.getWorldSize();
     cellWidth = 400 / worldSize;
     pieceWidth = cellWidth * 0.5;
+    scrollingImage.src = "/images/yellow-rain.png";
 
     // Set up level
     preSetupLevel(currentLevel);
@@ -1120,3 +1149,10 @@ function levelInfo(notice) {
 }
 
 /* End utility functions */
+
+
+/* Level editor functions */
+function showLevelEditor() {
+    var proposedWorldSize = checkInteger(prompt("Enter a size for your level: ", "10"));
+    alert("Proposed world size: " + proposedWorldSize + ". This feature is not yet implemented.");
+}
