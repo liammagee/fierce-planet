@@ -7,11 +7,15 @@ gem 'rails', '3.0.5'
 
 gem 'sqlite3'
 
+
+#gem "socky-client-rails"
+
+
 # Use unicorn as the web server
 #gem 'unicorn'
 #
-#gem "eventmachine", :git => "http://github.com/eventmachine/eventmachine.git", :ref => "6c7997798"
-#gem "thin"
+gem "eventmachine", "1.0.0.beta.3" #, :git => "http://github.com/eventmachine/eventmachine.git", :ref => "6c7997798"
+gem "thin"
 
 
 # Deploy with Capistrano

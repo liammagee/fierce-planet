@@ -16,6 +16,8 @@ function Level(number) {
     this._goalY = 0;
     this._startingGoodness = 100;
     this._allowOffscreenCycling = false;
+    this._allowPatchesOnPath = false;
+    this._notice = "";
 }
 Level.prototype.getInitialAgentNumber = function() { return this._initialAgentNumber; }
 Level.prototype.setInitialAgentNumber = function(initialAgentNumber) { this._initialAgentNumber = initialAgentNumber; }
@@ -37,7 +39,13 @@ Level.prototype.getStartingGoodness = function() { return this._startingGoodness
 Level.prototype.setStartingGoodness = function(startingGoodness) { this._startingGoodness = startingGoodness; }
 Level.prototype.getAllowOffscreenCycling = function() { return this._allowOffscreenCycling; }
 Level.prototype.setAllowOffscreenCycling = function(allowOffscreenCycling) { this._allowOffscreenCycling = allowOffscreenCycling; }
-
+Level.prototype.getAllowPatchesOnPath = function() { return this._allowPatchesOnPath; }
+Level.prototype.setAllowPatchesOnPath = function(allowPatchesOnPath) { this._allowPatchesOnPath = allowPatchesOnPath; }
+Level.prototype.getNotice = function() { return this._notice; }
+Level.prototype.setNotice = function(notice) { this._notice = notice; }
+Level.prototype.sayHello = function() {
+    log("hello");
+};
 
 
 /* Agent class definition */
@@ -201,7 +209,8 @@ function Tile(color) {
 }
 function Tile(color, x, y) {
     this._color = color;
-    this.setPosition(x, y);
+    this._x = x;
+    this._y = y;
 }
 Tile.prototype.getColor = function() { return this._color;}
 Tile.prototype.getPosition = function() { return [this._x, this._y]; }
