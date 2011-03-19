@@ -478,7 +478,11 @@ function drawAgents() {
         var __ret = getDrawingPosition(agent, counter);
         var intX = __ret.intX * cellWidth + wx + cellWidth / 2;
         var intY = __ret.intY * cellWidth + wy + cellWidth / 2;
-        var radius = (pieceWidth / 2);
+
+
+
+        var radius = (pieceWidth / 4);
+        var bodyLength = (pieceWidth / 2);
 
         ctx.beginPath();
         ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
@@ -490,8 +494,53 @@ function drawAgents() {
         var newColor = diluteColour(health, c);
         ctx.fillStyle = "#" + newColor;
         ctx.fill();
-//            ctx.fillStyle = "#0f0";
-//            ctx.fillText(agent.getHealth(), intX, intY);
+
+        ctx.beginPath();
+        ctx.moveTo(intX, intY + radius);
+        ctx.lineTo(intX, intY + radius + bodyLength / 2);
+        if (counter % 2 == 0) {
+            // Legs
+            var xOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
+            var yOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
+            ctx.moveTo(intX, intY + radius + bodyLength / 2);
+            ctx.lineTo(intX - xOffset, intY + radius + yOffset);
+            ctx.moveTo(intX, intY + radius + bodyLength / 2);
+            ctx.lineTo(intX + xOffset, intY + radius + yOffset);
+            // Arms - 90 degrees
+            ctx.moveTo(intX - bodyLength / 2, intY + radius + bodyLength / 6);
+            ctx.lineTo(intX + bodyLength / 2, intY + radius + bodyLength / 6);
+        }
+        else {
+            // Legs - straight
+            ctx.moveTo(intX, intY + radius + bodyLength / 2);
+            ctx.lineTo(intX, intY + radius + bodyLength);
+            // Arms - 45 degrees
+            var root = Math.sqrt(bodyLength / 2);
+            ctx.moveTo(intX - root, intY + radius + bodyLength / 6 + root);
+            ctx.lineTo(intX, intY + radius + bodyLength / 6);
+            ctx.moveTo(intX - root, intY + radius + bodyLength / 6 + root);
+            ctx.lineTo(intX, intY + radius + bodyLength / 6);
+
+        }
+        ctx.closePath();
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+//
+//
+//        var radius = (pieceWidth / 2);
+//
+//        ctx.beginPath();
+//        ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
+//        ctx.closePath();
+//        ctx.strokeStyle = "#ccc";
+//        ctx.stroke();
+//        var health = agent.getHealth();
+//        var c = agent.getColor().toString();
+//        var newColor = diluteColour(health, c);
+//        ctx.fillStyle = "#" + newColor;
+//        ctx.fill();
     }
 }
 
