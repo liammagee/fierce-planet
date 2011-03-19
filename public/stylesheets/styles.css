@@ -19,9 +19,9 @@ body {
     position:relative;
 }
 #global-info-panel {
-    height:20px;
+    height:40px;
     position:relative;
-    background-color: #fbe53b;
+    background-color: #eee;
     border: #ccc 3px solid;
     padding: 4px;
 }
@@ -63,7 +63,7 @@ body {
         clear: both;
     position:absolute;
     left:200px;
-    top:461px;
+    top:471px;
 }
 
 
