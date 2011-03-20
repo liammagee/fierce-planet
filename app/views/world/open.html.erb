@@ -2,17 +2,18 @@
         <!--Heading-->
     </header>
 
+
     <div id="left-pane">
       <p></p>
     </div>
     <div id="content-pane">
       <div id="main-panel">
         <div id="global-info-panel">
-          <div style="width: 25%;; float: left">
-            Waves: <span id="waves-display">1 out of 20</span>
+          <div style="width: 25%;; float: left; color: green">
+            Resource Store: <span id="goodness-display">100</span>
           </div>
           <div style="width: 25%;; float: left">
-            Resource Store: <span id="goodness-display">100</span>
+            Waves: <span id="waves-display">1 out of 20</span>
           </div>
           <div style="width: 25%; float: left">
             Score: <span id="score-display">0</span>
@@ -21,17 +22,21 @@
             Level: <span id="level-display">1</span>
           </div>
 
-          <div style="clear:both; width: 25%;; float: left">
-            Saved: <span id="saved-display">0</span>
+          <div style="clear:both; width: 25%;; float: left; color: red">
+            Expired: <span id="expired-display">0</span>
           </div>
-          <div style="width: 25%;; float: left">
-            Expired: <span id="dead-display">0</span>
+          <div style="width: 25%; float: left">
+            Saved: <span id="saved-display">0</span>
           </div>
           <div style="width: 25%; float: left">
             Highest Score: <span id="highest-score-display">0</span>
           </div>
           <div style="width: 25%; float: left">
             Highest Level: <span id="highest-level-display">0</span>
+          </div>
+
+          <div id="notifications" style="clear:both; width: 100%; color: blue; padding: 0">
+            <p></p>
           </div>
         </div>
 
@@ -92,6 +97,8 @@
           <br/>
           <input id="intervalInput" name="intervalInput" type="range" min="10" max="100" value="50" step="10" onchange="resetSpeed()" />
           <br/>
+          Number of waves: <input id="wavesInput" name="wavesInput" value="0" size="3"/>
+          <br/>
           God mode: <input id="godModeInput" name="intervalInput" type="checkbox" />
           <br/>
 
@@ -109,6 +116,12 @@
           <button id="cells" onclick="processAgents();">Debug</button>
           <br/>
           <button id="levelEditor" onclick="showLevelEditor();">Make your own level</button>
+          <!--<br/>-->
+          <!--<a href="#" onclick="$gameOver.dialog('open');">Game Over</a>-->
+          <!--<br/>-->
+          <!--<a href="#" onclick="$completeLevel.dialog('open');">Game Over</a>-->
+          <!--<br/>-->
+          <!--<a href="#" onclick="$completeLevel.dialog('open');">Game Over</a>-->
           <br/>
         </div>
 

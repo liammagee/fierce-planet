@@ -48,6 +48,7 @@ var currentPatchTypeId = null;
 
 var currentLevelNumber = 1;
 var currentLevel;
+var waveOverride = 0;
 
 var levelOfDifficulty = MEDIUM_DIFFICULTY;
 var patchRecoveryCycle = 5;
@@ -68,9 +69,10 @@ var counterLoops = 0;
 
 var previousLevelScore = 0;
 var score = 0;
-var goodness = 0;
+var resourcesInStore = 0;
+var resourcesSpent = 0;
 var waves = 1;
-var deadAgentCount = 0;
+var expiredAgentCount = 0;
 var savedAgentCount = 0;
 var savedAgentThisWaveCount = 0;
 
@@ -85,9 +87,56 @@ var scrollingImageX = 0;
 var scrollingImageOffset = 1;
 
 
+// Dialogs
+var $gameOver;
+var $completeLevel;
+var $completeGame;
 
-// Initialise the world
-initWorld();
+
+/* Initialisation code: start game and dialog boxes */
+$(document).ready(function() {
+	$gameOver = $('<div></div>')
+		.html('Game Over!')
+		.dialog({
+			autoOpen: false,
+            modal: true,
+			title: 'Game Over!',
+            buttons: {
+                "OK": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+		});
+	$completeLevel = $('<div></div>')
+		.html('Level Complete!')
+		.dialog({
+			autoOpen: false,
+             modal: true,
+			title: 'Level Complete!',
+			buttons: {
+                "OK": function() {
+                    $( this ).dialog( "close" );
+                    newLevel();
+                }
+			}
+		});
+	$completeGame = $('<div></div>')
+		.html('Complete game!')
+		.dialog({
+			autoOpen: false,
+            modal: true,
+			title: 'Fierce Planet Complete!',
+            buttons: {
+                "OK": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+
+		});
+
+    initWorld();
+});
+
 
 
 /* UI functions */
@@ -102,9 +151,10 @@ function deleteCurrentPatch() {
     }
     if (foundPatch > -1) {
 //        patches = new Array();
-        goodness += 5;
+        resourcesInStore += 5;
+        resourcesSpent -= 5;
         patches.splice(foundPatch, 1);
-        drawGoodness();
+        drawResourcesInStore();
         clearCanvas('c2');
         drawPatches();
     }
@@ -123,11 +173,12 @@ function upgradeCurrentPatch() {
     if (foundPatch > -1) {
 //        patches = new Array();
         var p = patches[i];
-        if (p.getUpgradeLevel() <= 4 && goodness >= p.getUpgradeCost()) {
-            goodness -= p.getUpgradeCost();
+        if (p.getUpgradeLevel() <= 4 && resourcesInStore >= p.getUpgradeCost()) {
+            resourcesInStore -= p.getUpgradeCost();
+            resourcesSpent += p.getUpgradeCost();
             p.setUpgradeLevel(p.getUpgradeLevel() + 1);
             drawPatch(p);
-            drawGoodness();
+            drawResourcesInStore();
         }
     }
     document.getElementById("delete-upgrade").style.display = "none";
@@ -233,18 +284,19 @@ function dropItem(e) {
     patch.setPerAgentYield(perAgentYield);
     patch.setCost(cost);
     patch.setUpgradeCost(upgradeCost);
-    if (goodness < PATCH_GOODNESS) {
-        alert('Not enough goodness for now - save some more agents!');
+    if (resourcesInStore < PATCH_GOODNESS) {
+        notify('Not enough goodness for now - save some more agents!');
         return;
     }
     else {
-        goodness -= patch.getCost();
+        resourcesInStore -= patch.getCost();
+        resourcesSpent += patch.getCost();
         patches.push(patch);
 //        cells.set([posX, posY], patch);
         cells[[posX, posY]] = patch;
 
         drawPatch(patch);
-        drawGoodness();
+        drawResourcesInStore();
     }
     // Should we do this?
 //    currentPatchTypeId = null;
@@ -591,13 +643,13 @@ function drawHighestScore() {
     e.innerHTML = hs.toString();
 }
 
-function drawGoodness() {
+function drawResourcesInStore() {
     var e = document.getElementById("goodness-display");
-    e.innerHTML = goodness.toString();
+    e.innerHTML = resourcesInStore.toString();
 }
-function drawDead() {
-    var e = document.getElementById("dead-display");
-    e.innerHTML = deadAgentCount.toString() + " out of " + currentLevel.getExpiryLimit();
+function drawExpired() {
+    var e = document.getElementById("expired-display");
+    e.innerHTML = expiredAgentCount.toString() + " out of " + currentLevel.getExpiryLimit();
 }
 function drawSaved() {
     var e = document.getElementById("saved-display");
@@ -618,8 +670,8 @@ function drawScoreboard() {
     drawHighestScore();
     drawWaves();
     drawSaved();
-    drawDead();
-    drawGoodness();
+    drawExpired();
+    drawResourcesInStore();
 }
 
 
@@ -858,9 +910,9 @@ function processAgents() {
                 savedAgentThisWaveCount++;
                 nullifiedAgents.push(i);
                 var multiplier = (waves < 5 ? 4 : (waves < 10 ? 3 : (waves < 20 ? 2 : 1)));
-                goodness += multiplier; //WAVE_GOODNESS_BONUS;
+                resourcesInStore += multiplier; //WAVE_GOODNESS_BONUS;
                 drawScore();
-                drawGoodness();
+                drawResourcesInStore();
                 drawSaved();
             }
             moveAgent(agent, true, false);
@@ -870,8 +922,8 @@ function processAgents() {
                 agent.adjustHealth(MOVE_HEALTH_COST);
             if (agent.getHealth() <= 0) {
                 nullifiedAgents.push(i);
-                deadAgentCount++;
-                drawDead();
+                expiredAgentCount++;
+                drawExpired();
             }
 //            else if (agent.getX() < 0 || agent.getX() >=  worldSize || agent.getY() < 0 || agent.getY() >= worldSize) {
 //                nullifiedAgents.push(i);
@@ -882,7 +934,7 @@ function processAgents() {
         }
     }
 
-    if (deadAgentCount >= currentLevel.getExpiryLimit()) {
+    if (expiredAgentCount >= currentLevel.getExpiryLimit()) {
         return gameOver();
     }
 
@@ -899,11 +951,11 @@ function processAgents() {
             waveDelayCounter = 0;
         }
         else if (currentLevelNumber < LEVELS) {
-            newLevel();
+            completeLevel();
             levelDelayCounter = 0;
         }
         else {
-            return gameOver();
+            return completeGame();
         }
     }
     else {
@@ -978,13 +1030,17 @@ function newWave() {
     savedAgentThisWaveCount = 0;
     waves ++;
     presetAgents(++numAgents, currentLevel.getInitialAgentX(), currentLevel.getInitialAgentY());
+    notify("New wave coming...");
+}
+
+function completeLevel() {
+    stopAgents();
+    storeData();
+    drawScoreboard();
+    showCompleteLevelDialog();
 }
 
 function newLevel() {
-    storeData();
-    drawScoreboard();
-    alert("Level " + currentLevelNumber + " successfully completed. Game over - you scored an impressive " + score + ". Click 'OK' to start the next level.");
-
     currentLevelNumber++;
     previousLevelScore = score;
     patches = new Array();
@@ -992,16 +1048,23 @@ function newLevel() {
 
     levelInfo(currentLevel.getNotice());
     log("Starting new level...");
+    notify("Starting new level...");
 
     startAgents();
 }
 
 function gameOver() {
+    stopAgents();
     storeData();
     drawScoreboard();
-    alert("Game over - you scored an impressive " + score + ". Press 'Restart Level' to start this level again.");
-    // Add hook for proper jump screen
+    showGameOverDialog();
+}
+
+function completeGame() {
     stopAgents();
+    storeData();
+    drawScoreboard();
+    showCompleteGameDialog();
 }
 
 
@@ -1021,6 +1084,7 @@ function newGame() {
 function restartLevel() {
     interval = checkInteger(1000 / document.getElementById("intervalInput").value);
     currentLevelNumber = checkInteger(document.getElementById("levelInput").value);
+    waveOverride = checkInteger(document.getElementById("levelInput").value);
     godMode = document.getElementById("godModeInput").checked;
     var diffSelect = document.getElementById("difficultyInput");
     levelOfDifficulty = checkInteger(diffSelect[diffSelect.selectedIndex].value);
@@ -1074,7 +1138,7 @@ function initWorld() {
 
 
 //    score = 0;
-    deadAgentCount = 0;
+    expiredAgentCount = 0;
     savedAgentCount = 0;
     waves = 1;
     numAgents = 1;
@@ -1082,9 +1146,13 @@ function initWorld() {
     patchRecoveryCycle = Math.pow(DEFAULT_PATCH_RECOVERY, levelOfDifficulty - 1);
 
     currentLevel = eval("level" + currentLevelNumber.toString());
-    goodness = currentLevel.getStartingGoodness();
-    if (goodness == undefined || goodness == null) {
-        goodness = STARTING_GOODNESS;
+    if (waveOverride > 0) {
+        currentLevel.setWaveNumber(waveOverride);
+        waveOverride = 0;
+    }
+    resourcesInStore = currentLevel.getStartingGoodness();
+    if (resourcesInStore == undefined || resourcesInStore == null) {
+        resourcesInStore = STARTING_GOODNESS;
     }
 
 
@@ -1118,7 +1186,7 @@ function stopAgents() {
 
 function resetSpeed() {
     interval = checkInteger(1000 / document.getElementById("intervalInput").value);
-    if (inPlay)
+    if (inPlay) 
         startAgents();
 }
 
@@ -1148,8 +1216,8 @@ function log(message) {
     console.log(message);
 }
 
-function globalInfo(notice) {
-    $("#global-info")[0].innerHTML = notice;
+function notify(notice) {
+    $("#notifications")[0].innerHTML = notice;
 }
 
 function levelInfo(notice) {
@@ -1159,8 +1227,75 @@ function levelInfo(notice) {
 /* End utility functions */
 
 
+
+/* Dialog editor functions */
+function showGameOverDialog() {
+    $gameOver
+            .html(
+            "Unfortunately Fierce Planet has gotten the better of its citizens! Click 'Restart Level' or 'New Game' to try again." +
+                    generateStats()
+            )
+            .dialog('open');
+}
+
+function showCompleteGameDialog() {
+    $completeGame
+            .html(
+            "Congratulations! In spite of challenges ahead, the citizens of Fierce Planet look forward to a bright and sustainable future!" +
+            generateStats())
+            .dialog('open');
+}
+
+function showCompleteLevelDialog() {
+    $completeLevel
+            .html(
+                "<p>Congratulations! You have completed level " + currentLevelNumber + ". </p>" +
+                 generateStats() +
+                "<p>Click 'OK' to start the next level.</p>")
+            .dialog('open');
+}
+
+function generateStats() {
+    var stats = "<table>" +
+            "<tr>" +
+            "<td>Score:</td>" +
+            "<td>" + score + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>Level:</td>" +
+            "<td>" + currentLevelNumber + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>Waves survived:</td>" +
+            "<td>" + waves + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>Citizens saved:</td>" +
+            "<td>" + savedAgentCount + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>Citizens expired:</td>" +
+            "<td>" + expiredAgentCount + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>Resources spent:</td>" +
+            "<td>" + resourcesSpent + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>Resources remaining:</td>" +
+            "<td>" + resourcesInStore + "</td>" +
+            "</tr>" +
+            "</table>";
+    return stats;
+}
+
+
+/* Dialog editor functions */
+
 /* Level editor functions */
 function showLevelEditor() {
     var proposedWorldSize = checkInteger(prompt("Enter a size for your level: ", "10"));
     alert("Proposed world size: " + proposedWorldSize + ". This feature is not yet implemented.");
 }
+
+/* End Level editor functions */

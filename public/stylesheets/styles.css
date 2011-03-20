@@ -2,16 +2,22 @@
 body {
     background-color: #fff;
     color: #000;
+    font-family: "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+    font-size: 80%;
+
 }
 #left-pane {
+    position:relative;
     float: left;
     width:10%;
 }
 #content-pane {
+    position:relative;
     float: left;
     width:80%;
 }
 #right-pane {
+    position:relative;
     float: left;
     width:10%;
 }
@@ -19,14 +25,11 @@ body {
     position:relative;
 }
 #global-info-panel {
-    height:40px;
+    height:60px;
     position:relative;
     background-color: #eee;
     border: #ccc 3px solid;
     padding: 4px;
-}
-#level-info-panel {
-    position:relative;
 }
 
 
@@ -58,19 +61,12 @@ body {
     top:0px;
 }
 
-#swatch {
+#swatch, #delete-upgrade {
     margin-top: 20px;
     clear: both;
     position:absolute;
     left:200px;
-    top:471px;
-}
-#delete-upgrade {
-    margin-top: 20px;
-    clear: both;
-    position:absolute;
-    left:200px;
-    top:471px;
+    top:491px;
 }
 
 canvas {
@@ -140,6 +136,8 @@ li a:hover:after {
   content: ' (drag me)';
 }
 */
+
+
 
 
 li.over {
