@@ -61,7 +61,8 @@ var numAgents = 1;
 var agents;
 var tiles = new Array();
 var patches = new Array();
-var cells = new Hash();
+var cells = {};
+//var cells = new Hash();
 var counter = 0;
 var counterLoops = 0;
 
@@ -190,7 +191,8 @@ function dropItem(e) {
     var __ret = getPatchPosition(e, canvas);
     var posX = __ret.posX;
     var posY = __ret.posY;
-    if (cells.get([posX, posY]) == undefined && ! currentLevel.getAllowPatchesOnPath())
+//    if (cells.get([posX, posY]) == undefined && ! currentLevel.getAllowPatchesOnPath())
+    if (cells[[posX, posY]] == undefined && ! currentLevel.getAllowPatchesOnPath())
         return;
     for (var i = 0; i < patches.length; i++) {
         var p = patches[i];
@@ -238,7 +240,8 @@ function dropItem(e) {
     else {
         goodness -= patch.getCost();
         patches.push(patch);
-        cells.set([posX, posY], patch);
+//        cells.set([posX, posY], patch);
+        cells[[posX, posY]] = patch;
 
         drawPatch(patch);
         drawGoodness();
@@ -687,7 +690,10 @@ function findPosition(agent, withNoRepeat, withNoCollision, withOffscreenCycling
         if ((withNoRepeat && lastX == newX && lastY == newY) || toContinue) {
             continue;
         }
-        if (cells.get([newX, newY]) == undefined) {
+//        if (cells.get([newX, newY]) == undefined) {
+//            candidateCells.push([newX, newY]);
+//        }
+        if (cells[[newX, newY]] == undefined) {
             candidateCells.push([newX, newY]);
         }
     }
@@ -774,7 +780,8 @@ function randomDirectionOrder() {
 }
 
 function checkCollision(x, y) {
-    return cells.get([x, y]) == undefined;
+//    return cells.get([x, y]) == undefined;
+    return cells[[x, y]] == undefined;
 }
 
 function moveAgentsRandomly() {
@@ -986,7 +993,6 @@ function newLevel() {
     levelInfo(currentLevel.getNotice());
     log("Starting new level...");
 
-
     startAgents();
 }
 
@@ -1063,7 +1069,9 @@ function initWorld() {
     // Keep active patches for now
 //    activePatches = new Array();
     agents = new Array();
-    cells = new Hash();
+    cells = {};
+//    cells = new Hash();
+
 
 //    score = 0;
     deadAgentCount = 0;
@@ -1141,11 +1149,11 @@ function log(message) {
 }
 
 function globalInfo(notice) {
-    $('global-info').innerHTML = notice;
+    $("#global-info")[0].innerHTML = notice;
 }
 
 function levelInfo(notice) {
-    $('level-info').innerHTML = notice;
+    $("#level-info")[0].innerHTML = notice;
 }
 
 /* End utility functions */
