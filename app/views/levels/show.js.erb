@@ -1,6 +1,5 @@
 $('#notifications').html("<p>Opening level <%= @level.name %>...</p>");
 $levelList.dialog('close');
 <%=  render('levels/setup_level', :locals => { :level => @level}) %>
-$('#level-editor-form').html("<%=  escape_javascript(render('levels/inline_form', :locals => { :level => @level})) %>");
-setupLevelEditor();
+redrawWorld();
 

@@ -1,47 +1,20 @@
 <div id="controls">
   <h3>Control Panel</h3>
   <br/>
-  Level:
-  <select id="levelInput" name="levelInput">
-    <option value="1" selected="selected">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-    <option value="9">9</option>
-    <option value="10">10</option>
-  </select>
-  <br/>
-  Difficulty:
-    <select id="difficultyInput" name="difficultyInput">
-      <option value="1">Easy</option>
-      <option value="2" selected="selected">Medium</option>
-      <option value="3">Hard</option>
-      <option value="4">EXTREME</option>
-    </select>
-  <br/>
+
   Speed:
   <br/>
   <input id="intervalInput" name="intervalInput" type="range" min="10" max="100" value="50" step="10" onchange="resetSpeed()" />
-  <br/>
-  Number of waves: <input id="wavesInput" name="wavesInput" value="0" size="3"/>
   <br/>
 
   <button id="startAgents" onclick="startAgents();">Start</button>
   <br/>
   <button id="stopAgents" onclick="stopAgents();">Pause</button>
   <br/>
-  <button id="resetWorld" onclick="restartLevel();">Restart/Go to Level</button>
-  <br/>
   <button id="fullResetWorld" onclick="newGame();">New Game</button>
   <br/>
-  <script type="text/javascript">
-    if(level1.getImage().complete) reloadGame()
-    else level1.getImage().onload= reloadGame;
-  </script>
+  <%= button_to "Level gallery", gallery_levels_path, :method => :get, :remote => true %>
+  <br/>
   <%
     if current_user.try(:admin?)
   %>

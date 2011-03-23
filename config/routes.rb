@@ -2,7 +2,11 @@ Sustagency::Application.routes.draw do
 
   resources :profiles
 
-  resources :levels
+  resources :levels do
+    collection do
+      get 'gallery'
+    end
+  end
 
   devise_for :users
 

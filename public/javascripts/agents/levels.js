@@ -76,7 +76,7 @@ level1.setNotice("<h2>Level 1: Welcome to Fierce Planet!</h2> " +
         "<p><em>Tip: Keep watch on your resource and expired levels - once the maximum number of citizens have expired, it's Game Over!</em></p> ");
 
 level1.setupLevel = function() {
-    var tiles = currentLevel.getTiles();
+    var tiles = fillWithTiles();
     tiles.splice(99, 10);
     tiles.splice(97, 1);
     tiles.splice(78, 9);
@@ -86,6 +86,7 @@ level1.setupLevel = function() {
     tiles.splice(34, 9);
     tiles.splice(23, 1);
     tiles.splice(12, 10);
+    this.setTiles(tiles);
 };
 
 
@@ -108,7 +109,7 @@ level2.setNotice("<h2>Level 2: Twists and Turns</h2>" +
         );
 
 level2.setupLevel = function() {
-    var tiles = currentLevel.getTiles();
+    var tiles = fillWithTiles();
     tiles.splice(121, 10);
     tiles.splice(118, 1);
     tiles.splice(109, 1);
@@ -131,6 +132,7 @@ level2.setupLevel = function() {
     tiles.splice(18, 3);
     tiles.splice(13, 1);
     tiles.splice(0, 2);
+    this.setTiles(tiles);
 };
 
 
@@ -152,7 +154,7 @@ level3.setNotice("<h2>Level 3: Around and About</h2>" +
         );
 
 level3.setupLevel = function() {
-    var tiles = currentLevel.getTiles();
+    var tiles = fillWithTiles();
     tiles.splice(161, 1);
     tiles.splice(150, 5);
     tiles.splice(148, 1);
@@ -187,6 +189,7 @@ level3.setupLevel = function() {
     tiles.splice(37, 1);
     tiles.splice(27, 1);
     tiles.splice(14, 11);
+    this.setTiles(tiles);
 };
 
 
@@ -208,7 +211,7 @@ level4.setNotice("<h2>Level 4: Spiral of uncertainty</h2>" +
         );
 
 level4.setupLevel = function() {
-    var tiles = currentLevel.getTiles();
+    var tiles = fillWithTiles();
     tiles.splice(168, 13);
     tiles.splice(166, 1);
     tiles.splice(154, 1);
@@ -258,6 +261,7 @@ level4.setupLevel = function() {
     tiles.splice(16, 11);
     tiles.splice(14, 1);
     tiles.splice(0, 1);
+    this.setTiles(tiles);
 };
 
 
@@ -279,7 +283,7 @@ level5.setNotice("<h2>Level 5: A-mazing Grace</h2>" +
         );
 
 level5.setupLevel = function() {
-    var tiles = currentLevel.getTiles();
+    var tiles = fillWithTiles();
     tiles.splice(208, 1);
     tiles.splice(204, 3);
     tiles.splice(196, 7);
@@ -352,6 +356,7 @@ level5.setupLevel = function() {
     tiles.splice(20, 3);
     tiles.splice(15, 4);
     tiles.splice(13, 1);
+    this.setTiles(tiles);
 };
 
 
@@ -373,7 +378,7 @@ level6.setNotice("<h2>Level 6: Dire Straits</h2>" +
         "<p><em>Tip: Clicking on an existing resource allows you to delete or upgrade it. An upgraded resource will dispense more health to citizens passing by.</em></p>");
 
 level6.setupLevel = function() {
-    var tiles = currentLevel.getTiles();
+    var tiles = fillWithTiles();
     tiles.splice(226, 1);
     tiles.splice(212, 12);
     tiles.splice(208, 3);
@@ -394,6 +399,7 @@ level6.setupLevel = function() {
     tiles.splice(48, 13);
     tiles.splice(46, 1);
     tiles.splice(16, 15);
+    this.setTiles(tiles);
 };
 
 
@@ -415,7 +421,7 @@ level7.setNotice("<h2>Level 7: Like, Totally Random...</h2>" +
         "<p><em>You can add patches to the paths (the white squares) on this level, to direct citizens to their goal.</em></p>");
 
 level7.setupLevel = function() {
-    var tiles = currentLevel.getTiles();
+    var tiles = fillWithTiles();
     tiles.splice(280, 1);
     tiles.splice(262, 3);
     tiles.splice(244, 5);
@@ -433,6 +439,7 @@ level7.setupLevel = function() {
     tiles.splice(40, 5);
     tiles.splice(24, 3);
     tiles.splice(8, 1);
+    this.setTiles(tiles);
 };
 
 
@@ -453,7 +460,7 @@ level8.setNotice("<h2>Level 8: A Fork (or Two) in the Road</h2>" +
         "<p><em>Again, you'll need to direct citizen through numerous forks in the road, with strategic allocation of resources. Beware: leave no path under-resourced!</em></p>");
 
 level8.setupLevel = function() {
-    var tiles = currentLevel.getTiles();
+    var tiles = fillWithTiles();
     tiles.splice(322, 2);
     tiles.splice(289, 16);
     tiles.splice(286, 1);
@@ -526,6 +533,7 @@ level8.setupLevel = function() {
     tiles.splice(37, 1);
     tiles.splice(19, 16);
     tiles.splice(0, 2);
+    this.setTiles(tiles);
 };
 
 
@@ -545,7 +553,7 @@ level9.setNotice("<h2>Level 9: Cascades</h2>" +
         "<p><em>Tip: No tip! You've gotten this far...</em></p>");
 
 level9.setupLevel = function() {
-    var tiles = currentLevel.getTiles();
+    var tiles = fillWithTiles();
     tiles.splice(351, 1);
     tiles.splice(330, 5);
     tiles.splice(315, 1);
@@ -580,11 +588,12 @@ level9.setupLevel = function() {
     tiles.splice(39, 1);
     tiles.splice(20, 17);
     tiles.splice(9, 1);
+    this.setTiles(tiles);
 };
 
 
 
-/* Level 2 Definition */
+/* Level 10 Definition */
 
 var level10 = new Level(10);
 level10.setInitialAgentX(18);
@@ -602,7 +611,7 @@ level10.setNotice("<h2>Level 10: Fields of Ma(i)ze</h2>" +
         "<p><em>Tip: Remember to resource dead end paths, or citizens will expire, dazed and confused.</em></p>");
 
 level10.setupLevel = function() {
-    var tiles = currentLevel.getTiles();
+    var tiles = fillWithTiles();
     tiles.splice(398, 1);
     tiles.splice(396, 1);
     tiles.splice(378, 1);
@@ -679,4 +688,5 @@ level10.setupLevel = function() {
     tiles.splice(56, 1);
     tiles.splice(41, 1);
     tiles.splice(21, 18);
+    this.setTiles(tiles);
 };

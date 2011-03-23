@@ -103,6 +103,8 @@ var $editProperties;
 
 /* Initialisation code: start game and dialog boxes */
 $(document).ready(function() {
+    if(level1.getImage().complete) reloadGame()
+    else level1.getImage().onload= reloadGame;
 
 	$gameOver = $('<div></div>')
 		.html('Game Over!')
@@ -1232,18 +1234,19 @@ function newGame() {
 
 function restartLevel() {
     inDesignMode = false;
-    interval = checkInteger(1000 / $("#intervalInput")[0].value);
-    currentLevelNumber = checkInteger($("#levelInput")[0].value);
-    waveOverride = checkInteger($("#levelInput")[0].value);
     godMode = $("#godModeInput")[0].checked;
-    var diffSelect = $("#difficultyInput")[0];
-    levelOfDifficulty = checkInteger(diffSelect[diffSelect.selectedIndex].value);
+//    interval = checkInteger(1000 / $("#intervalInput")[0].value);
+//    currentLevelNumber = checkInteger($("#levelInput")[0].value);
+//    waveOverride = checkInteger($("#levelInput")[0].value);
+//    var diffSelect = $("#difficultyInput")[0];
+//    levelOfDifficulty = checkInteger(diffSelect[diffSelect.selectedIndex].value);
     score = previousLevelScore;
     patches = new Array();
     redrawWorld();
 }
 
 function redrawWorld() {
+
     // Stop any existing timers
     stopAgents();
 

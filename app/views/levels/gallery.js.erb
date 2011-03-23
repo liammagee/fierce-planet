@@ -1,6 +1,6 @@
-$('#notifications').html("<p>Showing levels...</p>");
+$('#notifications').html("<p>Opening level gallery</p>");
 $levelList = $('<div></div>')
-    .html("<%=  escape_javascript(render('levels/index', :locals => { :levels => @levels})) %>")
+    .html("<%=  escape_javascript(render('levels/gallery', :locals => { :levels => @levels})) %>")
     .dialog({
         autoOpen: false,
         modal: true,

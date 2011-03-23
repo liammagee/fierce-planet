@@ -13,6 +13,19 @@ class LevelsController < ApplicationController
     end
   end
 
+
+  # GET /levels/gallery
+  # GET /levels.xml/gallery
+  def gallery
+    @levels = Level.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.js # index.html.erb
+      format.xml  { render :xml => @levels }
+    end
+  end
+
   # GET /levels/1
   # GET /levels/1.xml
   def show

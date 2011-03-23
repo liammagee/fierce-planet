@@ -1,0 +1,53 @@
+<h1>Level Gallery</h1>
+
+
+
+<h2>Pre-built levels</h2>
+
+  <form>
+  Select difficulty:
+    <br/>
+    <select id="difficultyInput" name="difficultyInput" onchange="currentLevelNumber = checkInteger(difficultyInput.value)">
+      <option value="1">Easy</option>
+      <option value="2" selected="selected">Medium</option>
+      <option value="3">Hard</option>
+      <option value="4">EXTREME</option>
+    </select>
+  <br/>
+
+Level:
+    <br/>
+<select id="levelInput" name="levelInput" onchange="currentLevelNumber = checkInteger(levelInput.value)">
+  <option value="1" selected="selected">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+  <option value="6">6</option>
+  <option value="7">7</option>
+  <option value="8">8</option>
+  <option value="9">9</option>
+  <option value="10">10</option>
+</select>
+    <br/>
+
+    <button id="resetWorld" onclick=" $levelList.dialog('close'); restartLevel(); return false;">Restart/Go to Level</button>
+    </form>
+
+<h2>Custom levels</h2>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+  </tr>
+
+<% @levels.each do |level| %>
+  <tr>
+    <td><%= level.name %></td>
+    <td><%= link_to 'Open', level, :remote => true %></td>
+  </tr>
+<% end %>
+</table>
+
+    
