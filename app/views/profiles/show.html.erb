@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @profile.user_id %>
+</p>
+
+<p>
+  <b>Nickname:</b>
+  <%= @profile.nickname %>
+</p>
+
+<p>
+  <b>Current score:</b>
+  <%= @profile.current_score %>
+</p>
+
+<p>
+  <b>Highest score:</b>
+  <%= @profile.highest_score %>
+</p>
+
+<p>
+  <b>Current level:</b>
+  <%= @profile.current_level %>
+</p>
+
+<p>
+  <b>Highest level:</b>
+  <%= @profile.highest_level %>
+</p>
+
+<p>
+  <b>Status:</b>
+  <%= @profile.status %>
+</p>
+
+<p>
+  <b>Capabilities:</b>
+  <%= @profile.capabilities %>
+</p>
+
+
+<%= link_to 'Edit', edit_profile_path(@profile) %> |
+<%= link_to 'Back', profiles_path %>

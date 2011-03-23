@@ -1,0 +1,75 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @level.name %>
+</p>
+
+<p>
+  <b>World width:</b>
+  <%= @level.world_width %>
+</p>
+
+<p>
+  <b>World height:</b>
+  <%= @level.world_height %>
+</p>
+
+<p>
+  <b>Initial agent x:</b>
+  <%= @level.initial_agent_x %>
+</p>
+
+<p>
+  <b>Initial agent y:</b>
+  <%= @level.initial_agent_y %>
+</p>
+
+<p>
+  <b>Initial agent number:</b>
+  <%= @level.initial_agent_number %>
+</p>
+
+<p>
+  <b>Goal x:</b>
+  <%= @level.goal_x %>
+</p>
+
+<p>
+  <b>Goal y:</b>
+  <%= @level.goal_y %>
+</p>
+
+<p>
+  <b>Wave number:</b>
+  <%= @level.wave_number %>
+</p>
+
+<p>
+  <b>Expiry limit:</b>
+  <%= @level.expiry_limit %>
+</p>
+
+<p>
+  <b>Allow offscreen cycling:</b>
+  <%= @level.allow_offscreen_cycling %>
+</p>
+
+<p>
+  <b>Allow patches on path:</b>
+  <%= @level.allow_patches_on_path %>
+</p>
+
+<p>
+  <b>Notice:</b>
+  <%= @level.notice %>
+</p>
+
+<p>
+  <b>Tiles:</b>
+  <%= @level.tiles %>
+</p>
+
+
+<%= link_to 'Edit', edit_level_path(@level) %> |
+<%= link_to 'Back', levels_path %>

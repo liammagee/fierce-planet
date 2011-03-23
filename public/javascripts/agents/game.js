@@ -40,7 +40,10 @@ var EXTREME_DIFFICULTY = 4;
 /* Global variables */
 
 var godMode = false;
+var inDesignMode = false;
 var inPlay = false;
+var mouseDown = false;
+var mouseMoving = false;
 
 var agentTimerId = 0;
 
@@ -60,7 +63,7 @@ var waveDelayCounter = 0;
 var numAgents = 1;
 
 var agents;
-var tiles = new Array();
+var oldTiles = new Array();
 var patches = new Array();
 var cells = {};
 //var cells = new Hash();
@@ -91,10 +94,16 @@ var scrollingImageOffset = 1;
 var $gameOver;
 var $completeLevel;
 var $completeGame;
+var $levelSetup;
+var $levelList;
+var $upgradeDelete;
+var $designFeatures;
+var $editProperties;
 
 
 /* Initialisation code: start game and dialog boxes */
 $(document).ready(function() {
+
 	$gameOver = $('<div></div>')
 		.html('Game Over!')
 		.dialog({
@@ -134,7 +143,116 @@ $(document).ready(function() {
 
 		});
 
-    initWorld();
+	$levelSetup = $('<div></div>')
+		.html('Level Setup')
+		.dialog({
+			autoOpen: false,
+            modal: true,
+			title: 'Level Setup',
+            buttons: {
+                "OK": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+
+		});
+
+	$upgradeDelete = $('<div></div>')
+		.html('Upgrade or Delete Resource')
+		.dialog({
+			autoOpen: false,
+            modal: true,
+			title: 'Upgrade or Delete Resource',
+            buttons: {
+                "OK": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+
+		});
+
+	$designFeatures = $('<div></div>')
+		.html('Add design features')
+		.dialog({
+			autoOpen: false,
+            modal: true,
+			title: 'Add design features',
+            buttons: {
+                "Cancel": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+
+		});
+
+	$editProperties = $('<div></div>')
+		.html('Edit level properties')
+		.dialog({
+			autoOpen: false,
+            modal: true,
+			title: 'Edit level properties',
+            buttons: {
+                "Cancel": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+
+		});
+
+    var canvas = $('#c2')[0];
+    var msie = /*@cc_on!@*/0;
+
+    var links = $('#swatch > div'), el = null;
+    for (var i = 0; i < links.length; i++) {
+      el = links[i];
+
+      el.setAttribute('draggable', 'true');
+      el.addEventListener('dragstart', function (e) {
+        e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
+        e.dataTransfer.setData('Text', this.id); // required otherwise doesn't work
+          currentPatchTypeId = this.id;
+      }, false);
+      el.addEventListener('click', function (e) {
+          currentPatchTypeId = this.id;
+      }, false);
+    }
+
+    var world = $('#c4')[0];
+
+    world.addEventListener('click', function (e) {
+        if (e.preventDefault) e.preventDefault(); // allows us to drop
+//    showPatch(e);
+        if (! inDesignMode)
+            showUpgradeDeleteDialog(e);
+        return false;
+      }, false);
+
+    world.addEventListener('dragstart', function (e) {
+        if (e.preventDefault) e.preventDefault(); // allows us to drop
+        this.className = 'over';
+        e.dataTransfer.dropEffect = 'copy';
+        return false;
+      }, false);
+    world.addEventListener('dragover', function (e) {
+        if (e.preventDefault) e.preventDefault(); // allows us to drop
+        this.className = 'over';
+        e.dataTransfer.dropEffect = 'copy';
+        return false;
+      }, false);
+    world.addEventListener('dragenter', function (e) {
+        this.className = 'over';
+        return false;
+      }, false);
+    world.addEventListener('dragleave', function (e) {
+        this.className = '';
+      }, false);
+    world.addEventListener('drop', function (e) {
+        if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting...why???
+        this.className = '';
+        dropItem(e);
+      }, false);
+
+    
 });
 
 
@@ -158,9 +276,10 @@ function deleteCurrentPatch() {
         clearCanvas('c2');
         drawPatches();
     }
-    document.getElementById("delete-upgrade").style.display = "none";
-    document.getElementById("swatch").style.display = "block";
+    $('#delete-upgrade').hide();
+    $('#swatch').show();
 }
+
 function upgradeCurrentPatch() {
     var foundPatch = -1;
     for (var i = 0; i < patches.length; i++) {
@@ -181,8 +300,8 @@ function upgradeCurrentPatch() {
             drawResourcesInStore();
         }
     }
-    document.getElementById("delete-upgrade").style.display = "none";
-    document.getElementById("swatch").style.display = "block";
+    $('#delete-upgrade').hide();
+    $('#swatch').show();
 }
 function showPatch(e) {
     var canvas = document.getElementById('c2');
@@ -201,8 +320,8 @@ function showDeleteUpgradeSwatch(e) {
         var p = patches[i];
         if (p.getX() == posX && p.getY() == posY) {
             currentPatch = p;
-            document.getElementById("swatch").style.display = "none";
-            document.getElementById("delete-upgrade").style.display = "block";
+            $('#swatch').hide();
+            $('#delete-upgrade').show();
             return;
         }
     }
@@ -237,12 +356,12 @@ function getPatchPosition(e, canvas) {
 }
 
 function dropItem(e) {
-    var canvas = document.getElementById('c2');
+    var canvas = $('#c2')[0];;
     var ctx = canvas.getContext('2d');
     var __ret = getPatchPosition(e, canvas);
     var posX = __ret.posX;
     var posY = __ret.posY;
-//    if (cells.get([posX, posY]) == undefined && ! currentLevel.getAllowPatchesOnPath())
+//    alert(canvas.width);
     if (cells[[posX, posY]] == undefined && ! currentLevel.getAllowPatchesOnPath())
         return;
     for (var i = 0; i < patches.length; i++) {
@@ -254,7 +373,7 @@ function dropItem(e) {
 
     var patchType = currentPatchTypeId;
     if (e.dataTransfer)
-        patchType = document.getElementById(e.dataTransfer.getData('Text')).id;
+        patchType = $("#" + e.dataTransfer.getData('Text'))[0].id;
     var c = "0f0";
     var totalYield = 0, perAgentYield = 0, cost = 0, upgradeCost = 0;
     if (patchType == 'eco') {
@@ -309,7 +428,7 @@ function dropItem(e) {
 
 
 function drawGrid() {
-    var canvas = document.getElementById('c1');
+    var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
     var w = canvas.width;
     var h = canvas.height;
@@ -334,6 +453,7 @@ function drawGrid() {
 }
 
 function drawTiles() {
+    var tiles = currentLevel.getTiles();
     for (var i = 0; i < tiles.length; i+= 1) {
         drawTile(tiles[i]);
     }
@@ -342,20 +462,28 @@ function drawTiles() {
 
 
 function drawTile(p) {
-    var canvas = document.getElementById('c1');
+    var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
-    var x = p.getX() * cellWidth;
-    var y = p.getY() * cellWidth;
+    var x = p._x * cellWidth;
+    var y = p._y * cellWidth;
     ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellWidth - 1);
-    ctx.fillStyle = "#" + p.getColor();
+    ctx.fillStyle = "#" + p._color;
     ctx.fillRect(x, y, cellWidth, cellWidth);
+    ctx.strokeStyle = "#" + p._color;
     ctx.strokeStyle = "#ccc";
     ctx.strokeRect(x, y, cellWidth, cellWidth);
 }
 
+function drawBackgroundImage() {
+    if (currentLevel.getImage() != undefined) {
+        var canvas = $('#c1')[0];
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(currentLevel.getImage(), 0, 0);
+    }
+}
 function drawGoal() {
-    var canvas = document.getElementById('c1');
+    var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
     var x = currentLevel.getGoalX() * cellWidth + cellWidth / 2;
@@ -373,6 +501,25 @@ function drawGoal() {
     ctx.fill();
 }
 
+function drawEntryPoint() {
+    var canvas = $('#c1')[0];
+    var ctx = canvas.getContext('2d');
+
+    var x = currentLevel.getInitialAgentX() * cellWidth + cellWidth / 2;
+    var y = currentLevel.getInitialAgentY() * cellWidth + cellWidth / 2;
+
+
+    var radius = (pieceWidth / 2);
+
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    ctx.closePath();
+    ctx.strokeStyle = "#ddd";
+    ctx.stroke();
+    ctx.fillStyle = "#ddd";
+    ctx.fill();
+}
+
 function drawPatches() {
     for (var i = 0; i < patches.length; i+= 1) {
         drawPatch(patches[i]);
@@ -380,7 +527,7 @@ function drawPatches() {
 }
 
 function drawPatch(p) {
-    var canvas = document.getElementById('c2');
+    var canvas = $('#c2')[0];
     var ctx = canvas.getContext('2d');
 
     var x = p.getX() * cellWidth;
@@ -421,7 +568,7 @@ function drawPatch(p) {
 
 
 function clearCanvas(canvasID) {
-    var canvas = document.getElementById(canvasID);
+    var canvas = $('#' + canvasID)[0];
     var ctx = canvas.getContext('2d');
     var w = canvas.width;
     var h = canvas.height;
@@ -430,7 +577,7 @@ function clearCanvas(canvasID) {
 }
 
 function clearAgents() {
-    var canvas = document.getElementById('c4');
+    var canvas = $('#c4')[0];
     var ctx = canvas.getContext('2d');
     if (counter > 0) {
         for (var i = 0; i < agents.length; i += 1) {
@@ -530,7 +677,7 @@ function getDrawingPosition(agent, count) {
     return {intX:intX, intY:intY};
 }
 function drawAgents() {
-    var canvas = document.getElementById('c4');
+    var canvas = $('#c4')[0];
     var ctx = canvas.getContext('2d');
     for (var i = 0; i < agents.length; i += 1) {
         var agent = agents[i];
@@ -608,7 +755,7 @@ function drawAgents() {
 
 function drawScrollingLayer() {
     clearCanvas('c3');
-    var canvas = document.getElementById('c3');
+    var canvas = $('#c3')[0];
     var ctx = canvas.getContext('2d');
     
     if ((scrollingImageX + scrollingImageOffset) < (400 - scrollingImageOffset)){
@@ -621,22 +768,22 @@ function drawScrollingLayer() {
 }
 
 function drawLevel() {
-    var e = document.getElementById("level-display");
+    var e = $('#level-display')[0];
     e.innerHTML = currentLevelNumber.toString();
 }
 function drawHighestLevel() {
-    var e = document.getElementById("highest-level-display");
+    var e = $('#highest-level-display')[0];
     var hl = localStorage.highestLevel;
     if (hl == undefined)
         hl = 0;
     e.innerHTML = hl.toString();
 }
 function drawScore() {
-    var e = document.getElementById("score-display");
+    var e = $('#score-display')[0];
     e.innerHTML = score.toString();
 }
 function drawHighestScore() {
-    var e = document.getElementById("highest-score-display");
+    var e = $('#highest-score-display')[0];
     var hs = localStorage.highestScore;
     if (hs == undefined)
         hs = 0;
@@ -644,20 +791,20 @@ function drawHighestScore() {
 }
 
 function drawResourcesInStore() {
-    var e = document.getElementById("goodness-display");
+    var e = $('#goodness-display')[0];
     e.innerHTML = resourcesInStore.toString();
 }
 function drawExpired() {
-    var e = document.getElementById("expired-display");
+    var e = $('#expired-display')[0];
     e.innerHTML = expiredAgentCount.toString() + " out of " + currentLevel.getExpiryLimit();
 }
 function drawSaved() {
-    var e = document.getElementById("saved-display");
+    var e = $('#saved-display')[0];
     e.innerHTML = savedAgentCount.toString();
 }
 
 function drawWaves() {
-    var e = document.getElementById("waves-display");
+    var e = $('#waves-display')[0];
     e.innerHTML = waves.toString() + " out of " + currentLevel.getWaveNumber();
 }
 
@@ -864,6 +1011,7 @@ function moveAgentsRandomly() {
 
 function checkPatches(newX, newY) {
     var isPatch = false;
+    var tiles = currentLevel.getTiles();
     for (var j = 0; j < tiles.length; j+= 1) {
         var patch = tiles[j];
         if (patch.getX() == newX && patch.getY() == newY)
@@ -1074,6 +1222,7 @@ function completeGame() {
 
 
 function newGame() {
+    inDesignMode = false;
     currentLevelNumber = 1;
     score = 0;
     previousLevelScore = 0;
@@ -1082,11 +1231,12 @@ function newGame() {
 }
 
 function restartLevel() {
-    interval = checkInteger(1000 / document.getElementById("intervalInput").value);
-    currentLevelNumber = checkInteger(document.getElementById("levelInput").value);
-    waveOverride = checkInteger(document.getElementById("levelInput").value);
-    godMode = document.getElementById("godModeInput").checked;
-    var diffSelect = document.getElementById("difficultyInput");
+    inDesignMode = false;
+    interval = checkInteger(1000 / $("#intervalInput")[0].value);
+    currentLevelNumber = checkInteger($("#levelInput")[0].value);
+    waveOverride = checkInteger($("#levelInput")[0].value);
+    godMode = $("#godModeInput")[0].checked;
+    var diffSelect = $("#difficultyInput")[0];
     levelOfDifficulty = checkInteger(diffSelect[diffSelect.selectedIndex].value);
     score = previousLevelScore;
     patches = new Array();
@@ -1111,6 +1261,8 @@ function redrawWorld() {
     // Draw basic elements
     drawGrid();
     drawTiles();
+    drawBackgroundImage();
+    drawEntryPoint();
     drawGoal();
     drawPatches();
     drawScrollingLayer();
@@ -1129,7 +1281,6 @@ function reloadGame() {
 function initWorld() {
     log("Initialising world...");
 
-    tiles = new Array();
     // Keep active patches for now
 //    activePatches = new Array();
     agents = new Array();
@@ -1145,12 +1296,17 @@ function initWorld() {
 
     patchRecoveryCycle = Math.pow(DEFAULT_PATCH_RECOVERY, levelOfDifficulty - 1);
 
-    currentLevel = eval("level" + currentLevelNumber.toString());
+    try {
+        currentLevel = eval("level" + currentLevelNumber.toString());
+    }
+    catch(err) {
+        // Silently fail - current level stays the same if undefined
+    }
     if (waveOverride > 0) {
         currentLevel.setWaveNumber(waveOverride);
         waveOverride = 0;
     }
-    resourcesInStore = currentLevel.getStartingGoodness();
+    resourcesInStore = currentLevel.getInitialResourceStore();
     if (resourcesInStore == undefined || resourcesInStore == null) {
         resourcesInStore = STARTING_GOODNESS;
     }
@@ -1185,7 +1341,7 @@ function stopAgents() {
 }
 
 function resetSpeed() {
-    interval = checkInteger(1000 / document.getElementById("intervalInput").value);
+    interval = checkInteger(1000 / $("#intervalInput")[0].value);
     if (inPlay) 
         startAgents();
 }
@@ -1290,12 +1446,65 @@ function generateStats() {
 }
 
 
-/* Dialog editor functions */
-
-/* Level editor functions */
-function showLevelEditor() {
-    var proposedWorldSize = checkInteger(prompt("Enter a size for your level: ", "10"));
-    alert("Proposed world size: " + proposedWorldSize + ". This feature is not yet implemented.");
+function showUpgradeDeleteDialog(e) {
+    var canvas = document.getElementById('c2');
+    var __ret = getPatchPosition(e, canvas);
+    var posX = __ret.posX;
+    var posY = __ret.posY;
+    var foundPatch = false;
+    for (var i = 0; i < patches.length; i++) {
+        var p = patches[i];
+        if (p.getX() == posX && p.getY() == posY) {
+            currentPatch = p;
+            $upgradeDelete
+                    .html($('#delete-upgrade')[0].innerHTML)
+                    .dialog('open');
+            return;
+        }
+    }
+    if (!foundPatch && currentPatchTypeId != null) {
+        dropItem(e);
+    }
 }
 
-/* End Level editor functions */
+function showDesignFeaturesDialog() {
+    $designFeatures
+            .html(
+                "<p>Congratulations! You have completed level " + currentLevelNumber + ". </p>" +
+                 generateStats() +
+                "<p>Click 'OK' to start the next level.</p>")
+            .dialog('open');
+}
+
+function showLevelProperties() {
+    $editProperties.dialog('open');
+}
+
+/* End Dialog editor functions */
+
+
+
+/* Experimental Pan and Zoom functions */
+function pan() {
+    var canvases = $('canvas');
+    for (var i = 0; i < canvases.length; i++) {
+        var canvas = canvases[i];
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width,canvas.height);
+        ctx.translate(10, 10);
+    }
+    redrawWorld();
+}
+function zoom() {
+    var canvases = $('canvas');
+    for (var i = 0; i < canvases.length; i++) {
+        var canvas = canvases[i];
+        var ctx = canvas.getContext('2d');
+//        ctx.save();
+        ctx.scale(1.5, 1.5);
+//        ctx.restore();
+    }
+    redrawWorld();
+}
+/* End Experimental Pan and Zoom functions */
+

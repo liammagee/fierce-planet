@@ -1,0 +1,33 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  world_width: 1
+  world_height: 1
+  initial_agent_x: 1
+  initial_agent_y: 1
+  initial_agent_number: 1
+  goal_x: 1
+  goal_y: 1
+  wave_number: 1
+  expiry_limit: 1
+  allow_offscreen_cycling: false
+  allow_patches_on_path: false
+  notice: MyText
+  tiles: MyText
+
+two:
+  name: MyString
+  world_width: 1
+  world_height: 1
+  initial_agent_x: 1
+  initial_agent_y: 1
+  initial_agent_number: 1
+  goal_x: 1
+  goal_y: 1
+  wave_number: 1
+  expiry_limit: 1
+  allow_offscreen_cycling: false
+  allow_patches_on_path: false
+  notice: MyText
+  tiles: MyText

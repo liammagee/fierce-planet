@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user_id: 1
+  nickname: MyString
+  current_score: 1
+  highest_score: 1
+  current_level: 1
+  highest_level: 1
+  status: MyString
+  capabilities: MyText
+
+two:
+  user_id: 1
+  nickname: MyString
+  current_score: 1
+  highest_score: 1
+  current_level: 1
+  highest_level: 1
+  status: MyString
+  capabilities: MyText

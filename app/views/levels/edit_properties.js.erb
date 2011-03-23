@@ -1,0 +1,21 @@
+$('#notifications').html("<p>Editing level properties...</p>");
+$levelList.dialog('close');
+$levelList = $('<div></div>')
+    .html("<%=  escape_javascript(render('levels/edit', :locals => { :level => @level})) %>")
+    .dialog({
+        autoOpen: false,
+        modal: true,
+        title: 'Level Properties',
+        width: 460,
+        buttons: {
+            "Save": function() {
+                $('#edit_properties_level')[0].submit();
+                //$( this ).dialog( "close" );
+            },
+            "Cancel": function() {
+                $( this ).dialog( "close" );
+            }
+        }
+
+    });
+$levelList.dialog('open');

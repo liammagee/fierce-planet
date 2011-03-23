@@ -1,4 +1,11 @@
 Sustagency::Application.routes.draw do
+
+  resources :profiles
+
+  resources :levels
+
+  devise_for :users
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

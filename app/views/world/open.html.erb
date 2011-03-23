@@ -8,37 +8,7 @@
     </div>
     <div id="content-pane">
       <div id="main-panel">
-        <div id="global-info-panel">
-          <div style="width: 25%;; float: left; color: green">
-            Resource Store: <span id="goodness-display">100</span>
-          </div>
-          <div style="width: 25%;; float: left">
-            Waves: <span id="waves-display">1 out of 20</span>
-          </div>
-          <div style="width: 25%; float: left">
-            Score: <span id="score-display">0</span>
-          </div>
-          <div style="width: 25%; float: left">
-            Level: <span id="level-display">1</span>
-          </div>
-
-          <div style="clear:both; width: 25%;; float: left; color: red">
-            Expired: <span id="expired-display">0</span>
-          </div>
-          <div style="width: 25%; float: left">
-            Saved: <span id="saved-display">0</span>
-          </div>
-          <div style="width: 25%; float: left">
-            Highest Score: <span id="highest-score-display">0</span>
-          </div>
-          <div style="width: 25%; float: left">
-            Highest Level: <span id="highest-level-display">0</span>
-          </div>
-
-          <div id="notifications" style="clear:both; width: 100%; color: blue; padding: 0">
-            <p></p>
-          </div>
-        </div>
+        <%= render "score_board" %>
 
         <div id="gameworld">
           <div id="world">
@@ -66,68 +36,30 @@
           <div><a href="#" id="upg" onclick="upgradeCurrentPatch();">Upgrade <br/><small>(Cost: 20; PAY: 20)</small></a></div>
           <div><a href="#" id="cancel" onclick="document.getElementById('delete-upgrade').style.display = 'none'; document.getElementById('swatch').style.display = 'block'">Cancel</a></div>
         </div>
-        <%= javascript_include_tag "agents/game_canvas_handler" %>
+        <div id="level-features" style="display: none;">
+          <div><a href="#" id="makeTile" onclick="makeTile();" >Add Tile</a></div>
+          <div><a href="#" id="addGoal" onclick="addGoal(); ">Set Goal</a></div>
+          <div><a href="#" id="addAgentStartingPoint" onclick="addAgentStartingPoint(); ">Set Entry Point</a></div>
+        </div>
+        <div id="level-editor" style="display: none;">
+          <div><a href="#" id="levelProperties" onclick="showLevelProperties();">Properties</a></div>
+          <div><a href="#" id="refreshTiles" onclick="currentLevel.setTiles(fillWithTiles()); redrawWorld();">Clear all</a></div>
+          <div><a href="#" id="undo" onclick="undoAction();">Undo (last action only)</a></div>
+          <div style="clear: both"><a href="#" id="cancelLevelEditor" onclick="cancelLevelEditor();">Cancel</a></div>
 
-        <div id="controls">
-          <h3>Control Panel</h3>
-          <br/>
-          Level:
-          <select id="levelInput" name="levelInput">
-            <option value="1" selected="selected">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
-          <br/>
-          Difficulty:
-            <select id="difficultyInput" name="difficultyInput">
-              <option value="1">Easy</option>
-              <option value="2" selected="selected">Medium</option>
-              <option value="3">Hard</option>
-              <option value="4">EXTREME</option>
-            </select>
-          <br/>
-          Speed:
-          <br/>
-          <input id="intervalInput" name="intervalInput" type="range" min="10" max="100" value="50" step="10" onchange="resetSpeed()" />
-          <br/>
-          Number of waves: <input id="wavesInput" name="wavesInput" value="0" size="3"/>
-          <br/>
-          God mode: <input id="godModeInput" name="intervalInput" type="checkbox" />
-          <br/>
-
-          <button id="startAgents" onclick="startAgents();">Start</button>
-          <br/>
-          <button id="stopAgents" onclick="stopAgents();">Pause</button>
-          <br/>
-          <button id="resetWorld" onclick="restartLevel();">Restart/Go to Level</button>
-          <br/>
-          <button id="fullResetWorld" onclick="newGame();">New Game</button>
-          <br/>
-          <script type="text/javascript">
-              reloadGame();
-          </script>
-          <button id="cells" onclick="processAgents();">Debug</button>
-          <br/>
-          <button id="levelEditor" onclick="showLevelEditor();">Make your own level</button>
-          <!--<br/>-->
-          <!--<a href="#" onclick="$gameOver.dialog('open');">Game Over</a>-->
-          <!--<br/>-->
-          <!--<a href="#" onclick="$completeLevel.dialog('open');">Game Over</a>-->
-          <!--<br/>-->
-          <!--<a href="#" onclick="$completeLevel.dialog('open');">Game Over</a>-->
-          <br/>
+          <div id="level-editor-form"></div>
         </div>
 
+
+        <%= render "control_panel" %>
       </div>
 
     </div>
     <div id="right-pane">
       <p></p>
+    </div>
+
+
+
+    <div id="level-list">
     </div>

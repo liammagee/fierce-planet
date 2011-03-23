@@ -4,29 +4,45 @@
 
 
 /* Tile class definition */
-function Level(number) {
-    this._number = number;
+function Level(id) {
+    this._id = id;
+    this._name = name;
     this._initialAgentNumber = 1;
     this._initialAgentX = 0;
     this._initialAgentY = 0;
     this._worldSize = 11;
+    this._worldWidth = 11;
+    this._worldHeight = 11;
     this._waveNumber = 10;
     this._expiryLimit = 20;
     this._goalX = 0;
     this._goalY = 0;
-    this._startingGoodness = 100;
+    this._initialResourceStore = 100;
     this._allowOffscreenCycling = false;
     this._allowPatchesOnPath = false;
     this._notice = "";
+    this._image;
+    this._soundSrc;
+    this._tiles;
 }
+Level.prototype.getId = function() { return this._id; }
+Level.prototype.setId = function(id) { this._id = id; }
+Level.prototype.getName = function() { return this._name; }
+Level.prototype.setName = function(name) { this._name = name; }
 Level.prototype.getInitialAgentNumber = function() { return this._initialAgentNumber; }
 Level.prototype.setInitialAgentNumber = function(initialAgentNumber) { this._initialAgentNumber = initialAgentNumber; }
 Level.prototype.getInitialAgentX = function() { return this._initialAgentX; }
 Level.prototype.setInitialAgentX = function(initialAgentX) { this._initialAgentX = initialAgentX; }
 Level.prototype.getInitialAgentY = function() { return this._initialAgentY; }
 Level.prototype.setInitialAgentY = function(initialAgentY) { this._initialAgentY = initialAgentY; }
+Level.prototype.getInitialResourceStore = function() { return this._initialResourceStore; }
+Level.prototype.setInitialResourceStore = function(initialResourceStore) { this._initialResourceStore = initialResourceStore; }
 Level.prototype.getWorldSize = function() { return this._worldSize; }
-Level.prototype.setWorldSize = function(worldSize) { this._worldSize = worldSize; }
+Level.prototype.setWorldSize = function(worldSize) { this._worldSize = worldSize; this.setWorldWidth(worldSize); this.setWorldHeight(worldSize);  }
+Level.prototype.getWorldWidth = function() { return this._worldWidth; }
+Level.prototype.setWorldWidth = function(worldWidth) { this._worldWidth = worldWidth; }
+Level.prototype.getWorldHeight = function() { return this._worldHeight; }
+Level.prototype.setWorldHeight = function(worldHeight) { this._worldHeight = worldHeight; }
 Level.prototype.getWaveNumber = function() { return this._waveNumber; }
 Level.prototype.setWaveNumber = function(waveNumber) { this._waveNumber = waveNumber; }
 Level.prototype.getExpiryLimit = function() { return this._expiryLimit; }
@@ -35,17 +51,19 @@ Level.prototype.getGoalX = function() { return this._goalX; }
 Level.prototype.setGoalX = function(goalX) { this._goalX = goalX; }
 Level.prototype.getGoalY = function() { return this._goalY; }
 Level.prototype.setGoalY = function(goalY) { this._goalY = goalY; }
-Level.prototype.getStartingGoodness = function() { return this._startingGoodness; }
-Level.prototype.setStartingGoodness = function(startingGoodness) { this._startingGoodness = startingGoodness; }
 Level.prototype.getAllowOffscreenCycling = function() { return this._allowOffscreenCycling; }
 Level.prototype.setAllowOffscreenCycling = function(allowOffscreenCycling) { this._allowOffscreenCycling = allowOffscreenCycling; }
 Level.prototype.getAllowPatchesOnPath = function() { return this._allowPatchesOnPath; }
 Level.prototype.setAllowPatchesOnPath = function(allowPatchesOnPath) { this._allowPatchesOnPath = allowPatchesOnPath; }
 Level.prototype.getNotice = function() { return this._notice; }
 Level.prototype.setNotice = function(notice) { this._notice = notice; }
-Level.prototype.sayHello = function() {
-    log("hello");
-};
+Level.prototype.getImage = function() { return this._image; }
+Level.prototype.setImage = function(imageSrc) { this._image = new Image();  this._image.src = imageSrc; }
+Level.prototype.getSoundSrc = function() { return this._soundSrc; }
+Level.prototype.setSoundSrc = function(soundSrc) { this._soundSrc = soundSrc; }
+Level.prototype.getTiles = function() { return this._tiles; }
+Level.prototype.setTiles = function(tiles) { this._tiles = tiles; }
+
 
 
 /* Agent class definition */
@@ -76,6 +94,9 @@ function Agent(agentType, color, x, y) {
     this._wanderY = 0;
     this._speed = MOVE_INCREMENTS;
     this._health = INITIAL_HEALTH;
+    this._economicHealth = INITIAL_HEALTH;
+    this._environmentalHealth = INITIAL_HEALTH;
+    this._socialHealth = INITIAL_HEALTH;
 }
 Agent.prototype.getPosition = function() { return [this._x, this._y]; }
 Agent.prototype.setPosition = function(x, y) { this._history.push([this._x, this._y]); this._x =x; this._y = y; }
@@ -92,6 +113,12 @@ Agent.prototype.getDelay = function() { return this._delay; }
 Agent.prototype.setDelay = function(delay) { this._delay = delay; }
 Agent.prototype.getHealth = function() { return this._health; }
 Agent.prototype.setHealth = function(health) { this._health = health; }
+Agent.prototype.getEconomicHealth = function() { return this._economicHealth; }
+Agent.prototype.setEconomicHealth = function(economicHealth) { this._economicHealth = economicHealth; }
+Agent.prototype.getEnvironmentalHealth = function() { return this._environmentalHealth; }
+Agent.prototype.setEnvironmentalHealth = function(environmentalHealth) { this._environmentalHealth = environmentalHealth; }
+Agent.prototype.getSocialHealth = function() { return this._socialHealth; }
+Agent.prototype.setSocialHealth = function(socialHealth) { this._socialHealth = socialHealth; }
 Agent.prototype.adjustHealth = function(adjustment) {
     var newHealth = this._health + adjustment;
     if (newHealth > 0 && newHealth < INITIAL_HEALTH)

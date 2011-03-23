@@ -1,0 +1,15 @@
+$('#notifications').html("<p>Showing levels...</p>");
+$levelList = $('<div></div>')
+    .html("<%=  escape_javascript(render('levels/index', :locals => { :levels => @levels})) %>")
+    .dialog({
+        autoOpen: false,
+        modal: true,
+        title: 'Level Setup',
+        buttons: {
+            "OK": function() {
+                $( this ).dialog( "close" );
+            }
+        }
+
+    });
+$levelList.dialog('open');

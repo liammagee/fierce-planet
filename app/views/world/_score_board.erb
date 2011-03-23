@@ -1,0 +1,43 @@
+<div id="global-info-panel">
+  <div style="width: 25%;; float: left; color: green">
+    Resource Store: <span id="goodness-display">100</span>
+  </div>
+  <div style="width: 25%;; float: left">
+    Waves: <span id="waves-display">1 out of 20</span>
+  </div>
+  <div style="width: 25%; float: left">
+    Score: <span id="score-display">0</span>
+  </div>
+  <div style="width: 25%; float: left">
+    Level: <span id="level-display">1</span>
+  </div>
+
+  <div style="clear:both; width: 25%;; float: left; color: red">
+    Expired: <span id="expired-display">0</span>
+  </div>
+  <div style="width: 25%; float: left">
+    Saved: <span id="saved-display">0</span>
+  </div>
+  <div style="width: 25%; float: left">
+    Highest Score: <span id="highest-score-display">0</span>
+  </div>
+  <div style="width: 25%; float: left">
+    Highest Level: <span id="highest-level-display">0</span>
+  </div>
+
+  <div id="user-links" style="clear:both; float: right; position: relative; width: 25%; color: blue; padding: 0; text-align: right">
+    <p>
+<% if user_signed_in? %>
+<%=  'Welcome, ' + current_user.profile.nickname if current_user and current_user.profile.nickname %>
+  <%= link_to('Profile', edit_profile_path(current_user.profile)) %>
+  <%= link_to('Logout', destroy_user_session_path) %>
+<% else %>
+  <%= link_to('Login', new_user_session_path)  %>
+<% end %>
+    </p>
+  </div>
+  <div id="notifications" style="float: left; position: relative; width: 75%; color: blue; padding: 0">
+    <p><%= flash[:notice] %></p>
+  </div>
+
+</div>

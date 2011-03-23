@@ -61,7 +61,7 @@ body {
     top:0px;
 }
 
-#swatch, #delete-upgrade {
+#swatch, #delete-upgrade, #level-editor {
     margin-top: 20px;
     clear: both;
     position:absolute;
@@ -90,7 +90,7 @@ ul, li {
     padding: 0px;
 }
 
-#swatch div, #delete-upgrade div {
+#swatch div, #delete-upgrade div, #level-editor div {
     float: left;
     position: relative;
   text-decoration: none;
@@ -100,7 +100,7 @@ ul, li {
   padding: 4px;
     margin-right: 10px;
 }
-#swatch div a, #delete-upgrade div a {
+#swatch div a, #delete-upgrade div a, #level-editor div a {
   color: #000;
   text-decoration: none;
 }

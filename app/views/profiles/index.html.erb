@@ -1,0 +1,37 @@
+<h1>Listing profiles</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Nickname</th>
+    <th>Current score</th>
+    <th>Highest score</th>
+    <th>Current level</th>
+    <th>Highest level</th>
+    <th>Status</th>
+    <th>Capabilities</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @profiles.each do |profile| %>
+  <tr>
+    <td><%= profile.user_id %></td>
+    <td><%= profile.nickname %></td>
+    <td><%= profile.current_score %></td>
+    <td><%= profile.highest_score %></td>
+    <td><%= profile.current_level %></td>
+    <td><%= profile.highest_level %></td>
+    <td><%= profile.status %></td>
+    <td><%= profile.capabilities %></td>
+    <td><%= link_to 'Show', profile %></td>
+    <td><%= link_to 'Edit', edit_profile_path(profile) %></td>
+    <td><%= link_to 'Destroy', profile, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Profile', new_profile_path %>

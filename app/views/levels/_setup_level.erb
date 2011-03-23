@@ -1,0 +1,25 @@
+currentLevel = new Level(<%= @level.id %>);
+currentLevel.setName(<%= @level.name %>);
+currentLevel.setWorldSize(<%= @level.world_width %>);
+currentLevel.setWorldWidth(<%= @level.world_width %>);
+currentLevel.setWorldHeight(<%= @level.world_height %>);
+currentLevel.setNotice(<%= @level.notice %>);
+currentLevel.setInitialAgentX(<%= @level.initial_agent_x %>);
+currentLevel.setInitialAgentY(<%= @level.initial_agent_y %>);
+currentLevel.setInitialAgentNumber(<%= @level.initial_agent_number %>);
+currentLevel.setGoalX(<%= @level.goal_x %>);
+currentLevel.setGoalY(<%= @level.goal_y %>);
+currentLevel.setWaveNumber(<%= @level.wave_number %>);
+currentLevel.setExpiryLimit(<%= @level.expiry_limit %>);
+currentLevel.setAllowOffscreenCycling(<%= @level.allow_offscreen_cycling %>);
+currentLevel.setAllowPatchesOnPath(<%= @level.allow_patches_on_path %>);
+currentLevel.setupLevel = function() {};
+currentLevelNumber = parseInt("<%= @level.id %>");
+var arr = fillWithTiles();
+var jsonArray = '<%= raw @level.tiles %>';
+try {
+    arr = $.evalJSON(jsonArray);
+}
+catch (err) {
+}
+currentLevel.setTiles(arr);

@@ -4,18 +4,20 @@
 
 /* Level setup methods - this should be moved to the Level class when refactored. */
 function assignCells() {
-    for (var i = 0; i < tiles.length; i++) {
-        var p = tiles[i];
+    for (var i = 0; i < currentLevel.getTiles().length; i++) {
+        var p = currentLevel.getTiles()[i];
 //        cells.set([p.getX(), p.getY()], p);
-        cells[[p.getX(), p.getY()]] = p;
+        cells[[p._x, p._y]] = p;
     }
 };
 function fillWithTiles() {
-    for (var i = 0; i < worldSize; i++) {
-        for (var j = 0; j < worldSize; j++) {
-            tiles.push(new Tile("eee", j, i));
+    var tiles = new Array();
+    for (var i = 0; i < currentLevel.getWorldWidth(); i++) {
+        for (var j = 0; j < currentLevel.getWorldHeight(); j++) {
+            tiles.push(new Tile("ddd", j, i));
         }
     }
+    return tiles;
 };
 function randomAgents(number, limit) {
     var agents = new Array();
@@ -37,7 +39,9 @@ function presetAgents(number, cellX, cellY) {
     }
 };
 function preSetupLevel(level) {
-    fillWithTiles();
+    if (level.getTiles() == undefined) 
+        level.setTiles(fillWithTiles());
+
     presetAgents(level.getInitialAgentNumber(), level.getInitialAgentX(), level.getInitialAgentY());
 };
 function postSetupLevel(level) {
@@ -65,12 +69,14 @@ level1.setWorldSize(11);
 level1.setInitialAgentNumber(1);
 level1.setWaveNumber(20);
 level1.setExpiryLimit(20);
+level1.setImage("/images/Background_Level1.png");
 level1.setNotice("<h2>Level 1: Welcome to Fierce Planet!</h2> " +
         "<p>The citizens of Fierce Planet are under threat. They are migrating in ever increasing numbers, seeking a promised land of peace and prosperity.</p>" +
         "<p>Help them by placing 'Economic', 'Environmental' and 'Social' resources beside their path before they expire! Drag or click the blue, green and red swatches onto the grey patches of the maze.</p> " +
         "<p><em>Tip: Keep watch on your resource and expired levels - once the maximum number of citizens have expired, it's Game Over!</em></p> ");
 
 level1.setupLevel = function() {
+    var tiles = currentLevel.getTiles();
     tiles.splice(99, 10);
     tiles.splice(97, 1);
     tiles.splice(78, 9);
@@ -94,7 +100,7 @@ level2.setWorldSize(12);
 level2.setInitialAgentNumber(1);
 level2.setWaveNumber(20);
 level2.setExpiryLimit(20);
-level2.setStartingGoodness(120);
+level2.setInitialResourceStore(120);
 level2.setNotice("<h2>Level 2: Twists and Turns</h2>" +
         "<p>Congratulations! You successfully navigated Level 1!</p>" +
         "<p>The citizens of Fierce Planet now face a greater challenge... Can you supply them with resources to reach their goal?</p>" +
@@ -102,6 +108,7 @@ level2.setNotice("<h2>Level 2: Twists and Turns</h2>" +
         );
 
 level2.setupLevel = function() {
+    var tiles = currentLevel.getTiles();
     tiles.splice(121, 10);
     tiles.splice(118, 1);
     tiles.splice(109, 1);
@@ -138,13 +145,14 @@ level3.setWorldSize(13);
 level3.setInitialAgentNumber(1);
 level3.setWaveNumber(20);
 level3.setExpiryLimit(20);
-level3.setStartingGoodness(130);
+level3.setInitialResourceStore(130);
 level3.setNotice("<h2>Level 3: Around and About</h2>" +
         "<p>After some further twists, the citizens of Fierce Planet are about to embark on some long roads ahead....</p>" +
         "<p><em>Tip: Levels get progressively larger, requiring more planning about where you allocate resources. Aim to place resources at regular intervals.</em></p>"
         );
 
 level3.setupLevel = function() {
+    var tiles = currentLevel.getTiles();
     tiles.splice(161, 1);
     tiles.splice(150, 5);
     tiles.splice(148, 1);
@@ -193,13 +201,14 @@ level4.setWorldSize(14);
 level4.setInitialAgentNumber(1);
 level4.setWaveNumber(20);
 level4.setExpiryLimit(20);
-level4.setStartingGoodness(150);
+level4.setInitialResourceStore(150);
 level4.setNotice("<h2>Level 4: Spiral of uncertainty</h2>" +
         "<p>The only way out is via the long and winding road...</p>" +
         "<p><em>Tip: be sure to allocate plenty of resources to the outer reaches of the road. The citizens will start to sprint when there is less to go around.</em></p>"
         );
 
 level4.setupLevel = function() {
+    var tiles = currentLevel.getTiles();
     tiles.splice(168, 13);
     tiles.splice(166, 1);
     tiles.splice(154, 1);
@@ -263,13 +272,14 @@ level5.setWorldSize(15);
 level5.setInitialAgentNumber(1);
 level5.setWaveNumber(20);
 level5.setExpiryLimit(20);
-level5.setStartingGoodness(180);
+level5.setInitialResourceStore(180);
 level5.setNotice("<h2>Level 5: A-mazing Grace</h2>" +
         "<p>The citizens are -mistakenly? - hopeful that the promised land lies not too far ahead. If only they can find their way through...</p>" +
         "<p><em>Citizens are (sort of) smart - at forks in the road, they'll take the path which appears more plentiful. Place resources to help them choose the right path.</em>.</p>"
         );
 
 level5.setupLevel = function() {
+    var tiles = currentLevel.getTiles();
     tiles.splice(208, 1);
     tiles.splice(204, 3);
     tiles.splice(196, 7);
@@ -357,12 +367,13 @@ level6.setInitialAgentNumber(1);
 level6.setWaveNumber(20);
 level6.setExpiryLimit(20);
 level6.setAllowOffscreenCycling(true);
-level6.setStartingGoodness(250);
+level6.setInitialResourceStore(250);
 level6.setNotice("<h2>Level 6: Dire Straits</h2>" +
         "<p>Not there yet... This level looks well resourced - but your citizens will need them. </p>"+
         "<p><em>Tip: Clicking on an existing resource allows you to delete or upgrade it. An upgraded resource will dispense more health to citizens passing by.</em></p>");
 
 level6.setupLevel = function() {
+    var tiles = currentLevel.getTiles();
     tiles.splice(226, 1);
     tiles.splice(212, 12);
     tiles.splice(208, 3);
@@ -398,12 +409,13 @@ level7.setInitialAgentNumber(1);
 level7.setWaveNumber(10);
 level7.setExpiryLimit(10);
 level7.setAllowPatchesOnPath(true);
-level7.setStartingGoodness(200);
+level7.setInitialResourceStore(200);
 level7.setNotice("<h2>Level 7: Like, Totally Random...</h2>" +
         "<p>Ahead lies a vast and empty expanse. The citizens are understandably nervous. Left unaided, they will try not to backtrack, but could still find themselves hopelessly lost without your aid.</p>" +
         "<p><em>You can add patches to the paths (the white squares) on this level, to direct citizens to their goal.</em></p>");
 
 level7.setupLevel = function() {
+    var tiles = currentLevel.getTiles();
     tiles.splice(280, 1);
     tiles.splice(262, 3);
     tiles.splice(244, 5);
@@ -435,12 +447,13 @@ level8.setWorldSize(18);
 level8.setInitialAgentNumber(1);
 level8.setWaveNumber(10);
 level8.setExpiryLimit(10);
-level8.setStartingGoodness(200);
+level8.setInitialResourceStore(200);
 level8.setNotice("<h2>Level 8: A Fork (or Two) in the Road</h2>" +
         "<p>Life for the citizens of Fierce Planet is never easy. Having escaped the perils of random wandering, here they are faced with many decisions about which way to turn.</p>" + 
         "<p><em>Again, you'll need to direct citizen through numerous forks in the road, with strategic allocation of resources. Beware: leave no path under-resourced!</em></p>");
 
 level8.setupLevel = function() {
+    var tiles = currentLevel.getTiles();
     tiles.splice(322, 2);
     tiles.splice(289, 16);
     tiles.splice(286, 1);
@@ -532,6 +545,7 @@ level9.setNotice("<h2>Level 9: Cascades</h2>" +
         "<p><em>Tip: No tip! You've gotten this far...</em></p>");
 
 level9.setupLevel = function() {
+    var tiles = currentLevel.getTiles();
     tiles.splice(351, 1);
     tiles.splice(330, 5);
     tiles.splice(315, 1);
@@ -581,13 +595,14 @@ level10.setWorldSize(20);
 level10.setInitialAgentNumber(1);
 level10.setWaveNumber(5);
 level10.setExpiryLimit(1);
-level10.setStartingGoodness(250);
+level10.setInitialResourceStore(250);
 level10.setNotice("<h2>Level 10: Fields of Ma(i)ze</h2>" +
         "<p>Nearly there! Pastures of plenty, and a new future, lie in store for the citizens of Fierce Planet. " +
         "However the way ahead is full of false dawns. Can they navigate the treacherous maze?</p>" +
         "<p><em>Tip: Remember to resource dead end paths, or citizens will expire, dazed and confused.</em></p>");
 
 level10.setupLevel = function() {
+    var tiles = currentLevel.getTiles();
     tiles.splice(398, 1);
     tiles.splice(396, 1);
     tiles.splice(378, 1);

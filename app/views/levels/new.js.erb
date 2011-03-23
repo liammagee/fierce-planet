@@ -1,0 +1,21 @@
+$('#notifications').html("<p>Creating a new level...</p>");
+$levelList.dialog('close');
+$levelList = $('<div></div>')
+    .html("<%=  escape_javascript(render('levels/new', :locals => { :level => @level})) %>")
+    .dialog({
+        autoOpen: false,
+        modal: true,
+        title: 'Level Setup',
+        width: 460,
+        buttons: {
+            "Save": function() {
+                $('#new_level')[0].submit();
+                //$( this ).dialog( "close" );
+            },
+            "Cancel": function() {
+                $( this ).dialog( "close" );
+            }
+        }
+
+    });
+$levelList.dialog('open');
