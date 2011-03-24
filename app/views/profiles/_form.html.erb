@@ -16,6 +16,54 @@
     <%= f.text_field :nickname %>
   </div>
   <div class="field">
+    <%= f.label :profile_class %>:
+    <%= @profile.profile_class %>
+  </div>
+  <div class="field">
+    <%= f.label :progress_towards_next_class %>:
+    <%= @profile.progress_towards_next_class %>
+  </div>
+  <div class="field">
+    <%= f.label :credits %>:
+    <%= @profile.credits %>
+  </div>
+    <div class="field">
+      <%= f.label :status %><br />
+      <%= @profile.status %>
+    </div>
+    <div class="field">
+      <%= f.label :capabilities %><br />
+      <%= @profile.capabilities %>
+    </div>
+
+    <h2>Vital statistics</h2>
+
+  <div class="field">
+    <%= f.label :total_saved %>:
+    <%= @profile.total_saved %>
+  </div>
+  <div class="field">
+    <%= f.label :total_expired %>:
+    <%= @profile.total_expired %>
+  </div>
+  <div class="field">
+    <%= f.label :total_patches %>:
+    <%= @profile.total_patches %>
+  </div>
+  <div class="field">
+    <%= f.label :total_economic_patches %>:
+    <%= @profile.total_economic_patches %>
+  </div>
+  <div class="field">
+    <%= f.label :total_environmental_patches %>:
+    <%= @profile.total_environmental_patches %>
+  </div>
+  <div class="field">
+    <%= f.label :total_social_patches %>:
+    <%= @profile.total_social_patches %>
+  </div>
+
+  <div class="field">
     <%= f.label :current_score %><br />
     <%= @profile.current_score %>
   </div>
@@ -31,14 +79,7 @@
     <%= f.label :highest_level %><br />
     <%= @profile.highest_level %>
   </div>
-  <div class="field">
-    <%= f.label :status %><br />
-    <%= @profile.status %>
-  </div>
-  <div class="field">
-    <%= f.label :capabilities %><br />
-    <%= @profile.capabilities %>
-  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>

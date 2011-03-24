@@ -1,6 +1,10 @@
 Sustagency::Application.routes.draw do
 
-  resources :profiles
+  resources :profiles do
+    member do
+      post 'update_stats'
+    end
+  end
 
   resources :levels do
     collection do

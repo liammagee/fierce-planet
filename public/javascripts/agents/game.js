@@ -65,6 +65,9 @@ var numAgents = 1;
 var agents;
 var oldTiles = new Array();
 var patches = new Array();
+var economicPatchCount = 0;
+var environmentalPatchCount = 0;
+var socialPatchCount = 0;
 var cells = {};
 //var cells = new Hash();
 var counter = 0;
@@ -90,22 +93,33 @@ var scrollingImageX = 0;
 var scrollingImageOffset = 1;
 
 
-// Dialogs
+/* Dialogs */
 var $gameOver;
 var $completeLevel;
 var $completeGame;
 var $levelSetup;
 var $levelList;
 var $upgradeDelete;
-var $designFeatures;
-var $editProperties;
 
 
 /* Initialisation code: start game and dialog boxes */
+
+// Always send the authenticity_token with ajax
+$(document).ajaxSend(function(event, request, settings) {
+    if ( settings.type == 'post' ) {
+        settings.data = (settings.data ? settings.data + "&" : "")
+            + "authenticity_token=" + encodeURIComponent( AUTH_TOKEN );
+    }
+});
+
 $(document).ready(function() {
+
+    // Reload the game when the level 1 image is loaded (TODO: how should other levels be handled?)
     if(level1.getImage().complete) reloadGame()
     else level1.getImage().onload= reloadGame;
 
+
+    // Dialogs 
 	$gameOver = $('<div></div>')
 		.html('Game Over!')
 		.dialog({
@@ -126,11 +140,12 @@ $(document).ready(function() {
 			title: 'Level Complete!',
 			buttons: {
                 "OK": function() {
-                    $( this ).dialog( "close" );
                     newLevel();
+                    $( this ).dialog( "close" );
                 }
 			}
 		});
+
 	$completeGame = $('<div></div>')
 		.html('Complete game!')
 		.dialog({
@@ -159,47 +174,25 @@ $(document).ready(function() {
 
 		});
 
-	$upgradeDelete = $('<div></div>')
-		.html('Upgrade or Delete Resource')
+
+    /* Upgrade / delete dialog */
+	$upgradeDelete = $('#delete-upgrade-dialog')
 		.dialog({
 			autoOpen: false,
             modal: true,
 			title: 'Upgrade or Delete Resource',
             buttons: {
-                "OK": function() {
-                    $( this ).dialog( "close" );
-                }
-            }
-
-		});
-
-	$designFeatures = $('<div></div>')
-		.html('Add design features')
-		.dialog({
-			autoOpen: false,
-            modal: true,
-			title: 'Add design features',
-            buttons: {
                 "Cancel": function() {
                     $( this ).dialog( "close" );
                 }
             }
-
 		});
+    $('#del-button')[0].addEventListener('click', function(e) {deleteCurrentPatch(); $upgradeDelete.dialog('close'); } );
+    $('#upg-button')[0].addEventListener('click', function(e) {upgradeCurrentPatch(); $upgradeDelete.dialog('close'); } );
 
-	$editProperties = $('<div></div>')
-		.html('Edit level properties')
-		.dialog({
-			autoOpen: false,
-            modal: true,
-			title: 'Edit level properties',
-            buttons: {
-                "Cancel": function() {
-                    $( this ).dialog( "close" );
-                }
-            }
 
-		});
+
+    
 
     var canvas = $('#c2')[0];
     var msie = /*@cc_on!@*/0;
@@ -260,17 +253,11 @@ $(document).ready(function() {
 
 
 /* UI functions */
+
+// Delete the current patch
 function deleteCurrentPatch() {
-    var foundPatch = -1;
-    for (var i = 0; i < patches.length; i++) {
-        var p = patches[i];
-        if (p == currentPatch) {
-            foundPatch = i;
-            break;
-        }
-    }
+    var foundPatch = getCurrentPatchIndex();
     if (foundPatch > -1) {
-//        patches = new Array();
         resourcesInStore += 5;
         resourcesSpent -= 5;
         patches.splice(foundPatch, 1);
@@ -278,21 +265,12 @@ function deleteCurrentPatch() {
         clearCanvas('c2');
         drawPatches();
     }
-    $('#delete-upgrade').hide();
-    $('#swatch').show();
 }
 
+// Upgrade the current page (NOTE: SHOULD BE TIED TO PROFILE CAPABILITIES
 function upgradeCurrentPatch() {
-    var foundPatch = -1;
-    for (var i = 0; i < patches.length; i++) {
-        var p = patches[i];
-        if (p == currentPatch) {
-            foundPatch = i;
-            break;
-        }
-    }
+    var foundPatch = getCurrentPatchIndex();
     if (foundPatch > -1) {
-//        patches = new Array();
         var p = patches[i];
         if (p.getUpgradeLevel() <= 4 && resourcesInStore >= p.getUpgradeCost()) {
             resourcesInStore -= p.getUpgradeCost();
@@ -302,68 +280,15 @@ function upgradeCurrentPatch() {
             drawResourcesInStore();
         }
     }
-    $('#delete-upgrade').hide();
-    $('#swatch').show();
-}
-function showPatch(e) {
-    var canvas = document.getElementById('c2');
-    var __ret = getPatchPosition(e, canvas);
-    var posX = __ret.posX;
-    var posY = __ret.posY;
-    alert(e.x + " : " + e.y);
-    alert(posX + " : " + posY);
-}
-function showDeleteUpgradeSwatch(e) {
-    var __ret = getPatchPosition(e, canvas);
-    var posX = __ret.posX;
-    var posY = __ret.posY;
-    var foundPatch = false;
-    for (var i = 0; i < patches.length; i++) {
-        var p = patches[i];
-        if (p.getX() == posX && p.getY() == posY) {
-            currentPatch = p;
-            $('#swatch').hide();
-            $('#delete-upgrade').show();
-            return;
-        }
-    }
-    if (!foundPatch && currentPatchTypeId != null) {
-        dropItem(e);
-    }
 }
 
-function getPatchPosition(e, canvas) {
-    var cellX = 0;
-    var cellY = 0;
-
-    var x;
-    var y;
-    if (e.layerX || e.layerX == 0) { // Firefox
-        x = e.layerX;
-        y = e.layerY;
-    } else if (e.offsetX || e.offsetX == 0) { // Opera
-        x = e.offsetX;
-        y = e.offsetY;
-    }
-//    var x = e.pageX - canvas.offsetLeft;
-//    var y = e.pageY - canvas.offsetTop;
-
-
-    var w = canvas.width;
-    var h = canvas.height;
-
-    var posX = Math.floor(x / cellWidth);
-    var posY = Math.floor(y / cellWidth);
-    return {posX:posX, posY:posY};
-}
-
+// Handle the drop event, by placing a patch
 function dropItem(e) {
     var canvas = $('#c2')[0];;
     var ctx = canvas.getContext('2d');
     var __ret = getPatchPosition(e, canvas);
     var posX = __ret.posX;
     var posY = __ret.posY;
-//    alert(canvas.width);
     if (cells[[posX, posY]] == undefined && ! currentLevel.getAllowPatchesOnPath())
         return;
     for (var i = 0; i < patches.length; i++) {
@@ -413,7 +338,16 @@ function dropItem(e) {
         resourcesInStore -= patch.getCost();
         resourcesSpent += patch.getCost();
         patches.push(patch);
-//        cells.set([posX, posY], patch);
+        if (patchType == 'eco') {
+            economicPatchCount += 1;
+        }
+        else if (patchType == 'env') {
+            environmentalPatchCount += 1;
+        }
+        else if (patchType == 'soc') {
+            socialPatchCount += 1;
+        }
+    //        cells.set([posX, posY], patch);
         cells[[posX, posY]] = patch;
 
         drawPatch(patch);
@@ -423,7 +357,59 @@ function dropItem(e) {
 //    currentPatchTypeId = null;
 }
 
+/* End UI Methods */
 
+
+/* Patch Methods */
+
+// Find the current patch index
+function getCurrentPatchIndex() {
+    for (var i = 0; i < patches.length; i++) {
+        var p = patches[i];
+        if (p == currentPatch) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// Show the current patch
+function showPatch(e) {
+    var canvas = document.getElementById('c2');
+    var __ret = getPatchPosition(e, canvas);
+    var posX = __ret.posX;
+    var posY = __ret.posY;
+    alert(e.x + " : " + e.y);
+    alert(posX + " : " + posY);
+}
+
+// Get the patch associated with an event
+function getPatchPosition(e, canvas) {
+    var cellX = 0;
+    var cellY = 0;
+
+    var x;
+    var y;
+    if (e.layerX || e.layerX == 0) { // Firefox
+        x = e.layerX;
+        y = e.layerY;
+    } else if (e.offsetX || e.offsetX == 0) { // Opera
+        x = e.offsetX;
+        y = e.offsetY;
+    }
+//    var x = e.pageX - canvas.offsetLeft;
+//    var y = e.pageY - canvas.offsetTop;
+
+
+    var w = canvas.width;
+    var h = canvas.height;
+
+    var posX = Math.floor(x / cellWidth);
+    var posY = Math.floor(y / cellWidth);
+    return {posX:posX, posY:posY};
+}
+
+/* End Patch Methods */
 
 
 /* Draw Methods */
@@ -678,6 +664,7 @@ function getDrawingPosition(agent, count) {
     }
     return {intX:intX, intY:intY};
 }
+
 function drawAgents() {
     var canvas = $('#c4')[0];
     var ctx = canvas.getContext('2d');
@@ -737,21 +724,6 @@ function drawAgents() {
         ctx.strokeStyle = "#" + newColor;
         ctx.lineWidth = 2;
         ctx.stroke();
-
-//
-//
-//        var radius = (pieceWidth / 2);
-//
-//        ctx.beginPath();
-//        ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
-//        ctx.closePath();
-//        ctx.strokeStyle = "#ccc";
-//        ctx.stroke();
-//        var health = agent.getHealth();
-//        var c = agent.getColor().toString();
-//        var newColor = diluteColour(health, c);
-//        ctx.fillStyle = "#" + newColor;
-//        ctx.fill();
     }
 }
 
@@ -1293,6 +1265,9 @@ function initWorld() {
 
 
 //    score = 0;
+    economicPatchCount = 0;
+    environmentalPatchCount = 0;
+    socialPatchCount = 0;
     expiredAgentCount = 0;
     savedAgentCount = 0;
     waves = 1;
@@ -1406,13 +1381,48 @@ function showCompleteGameDialog() {
             .dialog('open');
 }
 
+// Show the completed level dialog
 function showCompleteLevelDialog() {
-    $completeLevel
-            .html(
-                "<p>Congratulations! You have completed level " + currentLevelNumber + ". </p>" +
-                 generateStats() +
-                "<p>Click 'OK' to start the next level.</p>")
-            .dialog('open');
+    // Try to save results to the server
+    if (PROFILE_ID != undefined) {
+        var patchCount = patches.length;
+        var credits = 0;
+        var profileClass = 0;
+        var progressTowardsNextClass = 0;
+        var stats = {
+            "profile[current_level]": currentLevelNumber,
+            "profile[current_score]": score,
+            waves_survived: waves,
+            saved_agent_count: savedAgentCount,
+            expired_agent_count: expiredAgentCount,
+            resources_spent: resourcesSpent,
+            resources_in_store: resourcesInStore,
+            patches: patchCount,
+            economic_patches: economicPatchCount,
+            environmental_patches: environmentalPatchCount,
+            social_patches: socialPatchCount,
+            credits: credits,
+            profile_class: profileClass,
+            progress_towards_next_class: progressTowardsNextClass
+        };
+        $.post("/profiles/" + PROFILE_ID + "/update_stats", stats,
+           function(data) {
+               $completeLevel
+                       .html(
+                           "<p>Congratulations! You have completed level " + currentLevelNumber + ". </p>" +
+                            generateStats() +
+                           "<p>Click 'OK' to start the next level.</p>")
+                       .dialog('open');
+           });
+    }
+    else {
+        $completeLevel
+                .html(
+                    "<p>Congratulations! You have completed level " + currentLevelNumber + ". </p>" +
+                     generateStats() +
+                    "<p>Click 'OK' to start the next level.</p>")
+                .dialog('open');
+    }
 }
 
 function generateStats() {
@@ -1460,9 +1470,7 @@ function showUpgradeDeleteDialog(e) {
         var p = patches[i];
         if (p.getX() == posX && p.getY() == posY) {
             currentPatch = p;
-            $upgradeDelete
-                    .html($('#delete-upgrade')[0].innerHTML)
-                    .dialog('open');
+            $upgradeDelete.dialog('open');
             return;
         }
     }
@@ -1471,14 +1479,6 @@ function showUpgradeDeleteDialog(e) {
     }
 }
 
-function showDesignFeaturesDialog() {
-    $designFeatures
-            .html(
-                "<p>Congratulations! You have completed level " + currentLevelNumber + ". </p>" +
-                 generateStats() +
-                "<p>Click 'OK' to start the next level.</p>")
-            .dialog('open');
-}
 
 function showLevelProperties() {
     $editProperties.dialog('open');

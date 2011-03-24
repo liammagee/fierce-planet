@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   has_one :profile
 
-  def after_save
+  def self.after_save
     if profile.nil?
       p = Profile.new
       p.user = self

@@ -67,7 +67,8 @@ level1.setGoalX(10);
 level1.setGoalY(1);
 level1.setWorldSize(11);
 level1.setInitialAgentNumber(1);
-level1.setWaveNumber(20);
+//level1.setWaveNumber(20);
+level1.setWaveNumber(1);
 level1.setExpiryLimit(20);
 level1.setImage("/images/Background_Level1.png");
 level1.setNotice("<h2>Level 1: Welcome to Fierce Planet!</h2> " +

@@ -32,11 +32,6 @@
             <div id="env"><a href="#" >Environmental<br/><small>(Cost: 10; PAY: 10)</small></a></div>
             <div id="soc"><a href="#" >Social<br/><small>(Cost: 10; PAY: 5)</small></a></div>
         </div>
-        <div id="delete-upgrade" style="display: none;">
-          <div><a href="#" id="del" onclick="deleteCurrentPatch();">Delete <br/><small>(Revenue: 5)</small></a></div>
-          <div><a href="#" id="upg" onclick="upgradeCurrentPatch();">Upgrade <br/><small>(Cost: 20; PAY: 20)</small></a></div>
-          <div><a href="#" id="cancel" onclick="document.getElementById('delete-upgrade').style.display = 'none'; document.getElementById('swatch').style.display = 'block'">Cancel</a></div>
-        </div>
         <div id="level-features" style="display: none;">
           <div><a href="#" id="makeTile" onclick="makeTile();" >Add Tile</a></div>
           <div><a href="#" id="addGoal" onclick="addGoal(); ">Set Goal</a></div>
@@ -63,4 +58,10 @@
 
 
     <div id="level-list">
+    </div>
+
+    <!-- Dialog boxes -->
+    <div id="delete-upgrade-dialog" style="display: none;">
+      <div><a href="#" id="del-button">Delete <br/><small>(Revenue: 5)</small></a></div>
+      <div><a href="#" id="upg-button">Upgrade <br/><small>(Cost: 20; PAY: 20)</small></a></div>
     </div>

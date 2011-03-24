@@ -11,6 +11,44 @@
 var currentX;
 var currentY;
 
+var $designFeatures;
+var $editProperties;
+
+
+$(document).ready(function() {
+
+	$designFeatures = $('<div></div>')
+		.html('Add design features')
+		.dialog({
+			autoOpen: false,
+            modal: true,
+			title: 'Add design features',
+            buttons: {
+                "Cancel": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+
+		});
+
+	$editProperties = $('<div></div>')
+		.html('Edit level properties')
+		.dialog({
+			autoOpen: false,
+            modal: true,
+			title: 'Edit level properties',
+            buttons: {
+                "Cancel": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+
+		});
+
+
+});
+
+
 function spliceTiles(e, canvas) {
     var __ret = getPatchPosition(e, canvas);
     var posX = __ret.posX;
