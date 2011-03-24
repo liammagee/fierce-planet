@@ -1234,7 +1234,8 @@ function newGame() {
 
 function restartLevel() {
     inDesignMode = false;
-    godMode = $("#godModeInput")[0].checked;
+    if ($("#godModeInput")[0] != undefined)
+        godMode = $("#godModeInput")[0].checked;
 //    interval = checkInteger(1000 / $("#intervalInput")[0].value);
 //    currentLevelNumber = checkInteger($("#levelInput")[0].value);
 //    waveOverride = checkInteger($("#levelInput")[0].value);

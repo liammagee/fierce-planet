@@ -1,5 +1,5 @@
 class LevelsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => :gallery
   
   # GET /levels
   # GET /levels.xml
