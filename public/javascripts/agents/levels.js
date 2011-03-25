@@ -67,8 +67,8 @@ level1.setGoalX(10);
 level1.setGoalY(1);
 level1.setWorldSize(11);
 level1.setInitialAgentNumber(1);
-//level1.setWaveNumber(20);
-level1.setWaveNumber(1);
+level1.setWaveNumber(20);
+//level1.setWaveNumber(1);
 level1.setExpiryLimit(20);
 level1.setImage("/images/Background_Level1.png");
 level1.setNotice("<h2>Level 1: Welcome to Fierce Planet!</h2> " +
@@ -415,11 +415,11 @@ level7.setGoalY(8);
 level7.setInitialAgentNumber(1);
 level7.setWaveNumber(10);
 level7.setExpiryLimit(10);
-level7.setAllowPatchesOnPath(true);
+level7.setAllowResourcesOnPath(true);
 level7.setInitialResourceStore(200);
 level7.setNotice("<h2>Level 7: Like, Totally Random...</h2>" +
         "<p>Ahead lies a vast and empty expanse. The citizens are understandably nervous. Left unaided, they will try not to backtrack, but could still find themselves hopelessly lost without your aid.</p>" +
-        "<p><em>You can add patches to the paths (the white squares) on this level, to direct citizens to their goal.</em></p>");
+        "<p><em>You can add resources to the paths (the white squares) on this level, to direct citizens to their goal.</em></p>");
 
 level7.setupLevel = function() {
     var tiles = fillWithTiles();

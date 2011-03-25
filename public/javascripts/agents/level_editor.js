@@ -50,7 +50,7 @@ $(document).ready(function() {
 
 
 function spliceTiles(e, canvas) {
-    var __ret = getPatchPosition(e, canvas);
+    var __ret = getResourcePosition(e, canvas);
     var posX = __ret.posX;
     var posY = __ret.posY;
     var tilePosition = -1;
@@ -153,7 +153,7 @@ function setupLevelEditor() {
         return false;
     }, false);
     canvas.addEventListener("mouseup", function(e) {
-        var __ret = getPatchPosition(e, canvas);
+        var __ret = getResourcePosition(e, canvas);
         currentX = __ret.posX;
         currentY = __ret.posY;
         var foundTile = false;
@@ -208,5 +208,9 @@ function cancelLevelEditor() {
     redrawWorld();
 }
 
+
+function showLevelProperties() {
+    $editProperties.dialog('open');
+}
 
 /* End Level editor functions */

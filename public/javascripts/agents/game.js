@@ -9,17 +9,18 @@ var LEVELS = 10;
 
 var MOVE_INCREMENTS = 5;
 var INITIAL_HEALTH = 100;
-var MOVE_HEALTH_COST = -5;
+var MOVE_HEALTH_COST = -2;
 var SURVIVAL_SCORE = 10;
-var STARTING_GOODNESS = 100;
-var PATCH_GOODNESS = 10;
+var STARTING_STORE = 100;
+
+var RESOURCE_STORE = 10;
+var DEFAULT_RESOURCE_RECOVERY = 2;
 var WAVE_GOODNESS_BONUS = 5;
 
 
 var NEW_LEVEL_DELAY = 3000;
 var NEW_WAVE_DELAY = 1000;
 
-var DEFAULT_PATCH_RECOVERY = 2;
 
 var EASY_DIFFICULTY = 1;
 var MEDIUM_DIFFICULTY = 2;
@@ -32,12 +33,24 @@ var EXTREME_DIFFICULTY = 4;
 
 
 
-
-
-
-
-
 /* Global variables */
+
+
+// Profile properties
+var PROFILE_CLASSES = ["Novice", "Planner", "Expert", "Visionary", "Genius"];
+var CAPABILITY_COSTS = [0, 100, 200, 300, 500];
+var NOVICE_CAPABILITIES = ["farm", "water", "clinic"];
+var PLANNER_CAPABILITIES = NOVICE_CAPABILITIES.concat(["shop", "sanctuary", "school"]);
+var EXPERT_CAPABILITIES = PLANNER_CAPABILITIES.concat(["bank", "air", "legal-system"]);
+var VISIONARY_CAPABILITIES = EXPERT_CAPABILITIES.concat(["factory", "renewable-energy", "democracy"]);
+var GENIUS_CAPABILITIES = VISIONARY_CAPABILITIES.concat(["stockmarket", "biodiversity", "festival"]);
+
+var capabilities = ["farm", "water", "clinic"];
+//var credits = 0;
+//var profileClass = "Novice";
+var credits = 10000;
+var profileClass = "Genius";
+
 
 var godMode = false;
 var inDesignMode = false;
@@ -47,14 +60,15 @@ var mouseMoving = false;
 
 var agentTimerId = 0;
 
-var currentPatchTypeId = null;
+var currentResourceId = null;
+var resourceTypes = {};
 
 var currentLevelNumber = 1;
 var currentLevel;
 var waveOverride = 0;
 
 var levelOfDifficulty = MEDIUM_DIFFICULTY;
-var patchRecoveryCycle = 5;
+var resourceRecoveryCycle = 5;
 var interval = 20;
 
 var levelDelayCounter = 0;
@@ -64,12 +78,11 @@ var numAgents = 1;
 
 var agents;
 var oldTiles = new Array();
-var patches = new Array();
-var economicPatchCount = 0;
-var environmentalPatchCount = 0;
-var socialPatchCount = 0;
+var resources = new Array();
+var economicResourceCount = 0;
+var environmentalResourceCount = 0;
+var socialResourceCount = 0;
 var cells = {};
-//var cells = new Hash();
 var counter = 0;
 var counterLoops = 0;
 
@@ -82,10 +95,11 @@ var expiredAgentCount = 0;
 var savedAgentCount = 0;
 var savedAgentThisWaveCount = 0;
 
+
 var worldSize = 11;
 var cellWidth = 400 / worldSize;
 var pieceWidth = cellWidth * 0.5;
-var currentPatch = null;
+var currentResource = null;
 
 
 var scrollingImage = new Image(); // City image
@@ -100,6 +114,7 @@ var $completeGame;
 var $levelSetup;
 var $levelList;
 var $upgradeDelete;
+var $resourceGallery;
 
 
 /* Initialisation code: start game and dialog boxes */
@@ -119,7 +134,18 @@ $(document).ready(function() {
     else level1.getImage().onload= reloadGame;
 
 
-    // Dialogs 
+    // Dialogs
+    $statsDialog = $('<div></div>')
+		.dialog({
+			autoOpen: false,
+            modal: true,
+			title: 'Vital Statistics',
+            buttons: {
+                "OK": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+		});
 	$gameOver = $('<div></div>')
 		.html('Game Over!')
 		.dialog({
@@ -128,6 +154,7 @@ $(document).ready(function() {
 			title: 'Game Over!',
             buttons: {
                 "OK": function() {
+                    newGame();
                     $( this ).dialog( "close" );
                 }
             }
@@ -154,6 +181,7 @@ $(document).ready(function() {
 			title: 'Fierce Planet Complete!',
             buttons: {
                 "OK": function() {
+                    newGame();
                     $( this ).dialog( "close" );
                 }
             }
@@ -187,17 +215,33 @@ $(document).ready(function() {
                 }
             }
 		});
-    $('#del-button')[0].addEventListener('click', function(e) {deleteCurrentPatch(); $upgradeDelete.dialog('close'); } );
-    $('#upg-button')[0].addEventListener('click', function(e) {upgradeCurrentPatch(); $upgradeDelete.dialog('close'); } );
+    $('#del-button')[0].addEventListener('click', function(e) {deleteCurrentResource(); $upgradeDelete.dialog('close'); } );
+    $('#upg-button')[0].addEventListener('click', function(e) {upgradeCurrentResource(); $upgradeDelete.dialog('close'); } );
 
+    $resourceGallery = $('#resource-gallery')
+        .dialog({
+            width: 460,
+            autoOpen: false,
+            modal: true,
+            title: 'Resource Gallery',
+            buttons: {
+                "OK": function() {
+                    refreshSwatch();
+                    saveCapabilities();
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
 
+    // Set up resource types
+    setupResourceTypes();
 
     
 
     var canvas = $('#c2')[0];
     var msie = /*@cc_on!@*/0;
 
-    var links = $('#swatch > div'), el = null;
+    var links = $('.eco, .env, .soc'), el = null;
     for (var i = 0; i < links.length; i++) {
       el = links[i];
 
@@ -205,10 +249,10 @@ $(document).ready(function() {
       el.addEventListener('dragstart', function (e) {
         e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
         e.dataTransfer.setData('Text', this.id); // required otherwise doesn't work
-          currentPatchTypeId = this.id;
+          currentResourceId = this.id;
       }, false);
       el.addEventListener('click', function (e) {
-          currentPatchTypeId = this.id;
+          currentResourceId = this.id;
       }, false);
     }
 
@@ -216,7 +260,6 @@ $(document).ready(function() {
 
     world.addEventListener('click', function (e) {
         if (e.preventDefault) e.preventDefault(); // allows us to drop
-//    showPatch(e);
         if (! inDesignMode)
             showUpgradeDeleteDialog(e);
         return false;
@@ -252,139 +295,149 @@ $(document).ready(function() {
 
 
 
+
+
 /* UI functions */
 
-// Delete the current patch
-function deleteCurrentPatch() {
-    var foundPatch = getCurrentPatchIndex();
-    if (foundPatch > -1) {
+
+// Delete the current resource
+function deleteCurrentResource() {
+    var foundResource = getCurrentResourceIndex();
+    if (foundResource > -1) {
         resourcesInStore += 5;
         resourcesSpent -= 5;
-        patches.splice(foundPatch, 1);
+        resources.splice(foundResource, 1);
         drawResourcesInStore();
         clearCanvas('c2');
-        drawPatches();
+        drawResources();
     }
 }
 
 // Upgrade the current page (NOTE: SHOULD BE TIED TO PROFILE CAPABILITIES
-function upgradeCurrentPatch() {
-    var foundPatch = getCurrentPatchIndex();
-    if (foundPatch > -1) {
-        var p = patches[i];
+function upgradeCurrentResource() {
+    var foundResource = getCurrentResourceIndex();
+    if (foundResource > -1) {
+        var p = resources[i];
         if (p.getUpgradeLevel() <= 4 && resourcesInStore >= p.getUpgradeCost()) {
             resourcesInStore -= p.getUpgradeCost();
             resourcesSpent += p.getUpgradeCost();
             p.setUpgradeLevel(p.getUpgradeLevel() + 1);
-            drawPatch(p);
+            drawResource(p);
             drawResourcesInStore();
         }
     }
 }
 
-// Handle the drop event, by placing a patch
+// Handle the drop event, by placing a resource
 function dropItem(e) {
     var canvas = $('#c2')[0];;
     var ctx = canvas.getContext('2d');
-    var __ret = getPatchPosition(e, canvas);
+    var __ret = getResourcePosition(e, canvas);
     var posX = __ret.posX;
     var posY = __ret.posY;
-    if (cells[[posX, posY]] == undefined && ! currentLevel.getAllowPatchesOnPath())
+    if (cells[[posX, posY]] == undefined && ! currentLevel.getAllowResourcesOnPath())
         return;
-    for (var i = 0; i < patches.length; i++) {
-        var p = patches[i];
+    for (var i = 0; i < resources.length; i++) {
+        var p = resources[i];
         if (p.getX() == posX && p.getY() == posY) {
             return;
         }
     }
 
-    var patchType = currentPatchTypeId;
+    var resourceName = currentResourceId;
     if (e.dataTransfer)
-        patchType = $("#" + e.dataTransfer.getData('Text'))[0].id;
+        resourceName = e.dataTransfer.getData('Text');
+    var resourceType = resourceTypes[resourceName];
+
     var c = "0f0";
     var totalYield = 0, perAgentYield = 0, cost = 0, upgradeCost = 0;
-    if (patchType == 'eco') {
+    if (resourceType == 'eco') {
         c = "99ccff";
         totalYield = 100;
         perAgentYield = 20;
-        cost = PATCH_GOODNESS;
-        upgradeCost = PATCH_GOODNESS * 2;
+        cost = RESOURCE_STORE;
+        upgradeCost = RESOURCE_STORE * 2;
     }
-    else if (patchType == 'env') {
+    else if (resourceType == 'env') {
         c = "00ff00";
         totalYield = 100;
         perAgentYield = 10;
-        cost = PATCH_GOODNESS;
-        upgradeCost = PATCH_GOODNESS * 2;
+        cost = RESOURCE_STORE;
+        upgradeCost = RESOURCE_STORE * 2;
     }
-    else if (patchType == 'soc') {
+    else if (resourceType == 'soc') {
         c = "ff3300";
         totalYield = 100;
         perAgentYield = 5;
-        cost = PATCH_GOODNESS;
-        upgradeCost = PATCH_GOODNESS * 2;
+        cost = RESOURCE_STORE;
+        upgradeCost = RESOURCE_STORE * 2;
     }
 
-    var patch = new Patch(patchType, c, posX, posY);
-    patch.setInitialTotalYield(totalYield);
-    patch.setPerAgentYield(perAgentYield);
-    patch.setCost(cost);
-    patch.setUpgradeCost(upgradeCost);
-    if (resourcesInStore < PATCH_GOODNESS) {
+    var resource = new Resource(resourceName, resourceType, c, posX, posY);
+    resource.setInitialTotalYield(totalYield);
+    resource.setPerAgentYield(perAgentYield);
+    resource.setCost(cost);
+    resource.setUpgradeCost(upgradeCost);
+    
+    if (resourcesInStore < RESOURCE_STORE) {
         notify('Not enough goodness for now - save some more agents!');
         return;
     }
     else {
-        resourcesInStore -= patch.getCost();
-        resourcesSpent += patch.getCost();
-        patches.push(patch);
-        if (patchType == 'eco') {
-            economicPatchCount += 1;
+        resourcesInStore -= resource.getCost();
+        resourcesSpent += resource.getCost();
+        resources.push(resource);
+        if (resourceType == 'eco') {
+            economicResourceCount += 1;
         }
-        else if (patchType == 'env') {
-            environmentalPatchCount += 1;
+        else if (resourceType == 'env') {
+            environmentalResourceCount += 1;
         }
-        else if (patchType == 'soc') {
-            socialPatchCount += 1;
+        else if (resourceType == 'soc') {
+            socialResourceCount += 1;
         }
-    //        cells.set([posX, posY], patch);
-        cells[[posX, posY]] = patch;
+        cells[[posX, posY]] = resource;
 
-        drawPatch(patch);
+        drawResource(resource);
         drawResourcesInStore();
     }
-    // Should we do this?
-//    currentPatchTypeId = null;
 }
 
 /* End UI Methods */
 
 
-/* Patch Methods */
+/* Resource Methods */
 
-// Find the current patch index
-function getCurrentPatchIndex() {
-    for (var i = 0; i < patches.length; i++) {
-        var p = patches[i];
-        if (p == currentPatch) {
+function setupResourceTypes() {
+    resourceTypes['farm'] = 'eco';
+    resourceTypes['factory'] = 'eco';
+    resourceTypes['water'] = 'env';
+    resourceTypes['community'] = 'soc';
+}
+
+// Find the current resource index
+function getCurrentResourceIndex() {
+    for (var i = 0; i < resources.length; i++) {
+        var p = resources[i];
+        if (p == currentResource) {
             return i;
         }
     }
     return -1;
 }
 
-// Show the current patch
-function showPatch(e) {
+// Show the current resource
+function showResource(e) {
     var canvas = document.getElementById('c2');
-    var __ret = getPatchPosition(e, canvas);
+    var __ret = getResourcePosition(e, canvas);
     var posX = __ret.posX;
     var posY = __ret.posY;
     alert(e.x + " : " + e.y);
     alert(posX + " : " + posY);
 }
 
-// Get the patch associated with an event
-function getPatchPosition(e, canvas) {
+// Get the resource associated with an event
+function getResourcePosition(e, canvas) {
     var cellX = 0;
     var cellY = 0;
 
@@ -409,7 +462,7 @@ function getPatchPosition(e, canvas) {
     return {posX:posX, posY:posY};
 }
 
-/* End Patch Methods */
+/* End Resource Methods */
 
 
 /* Draw Methods */
@@ -508,13 +561,13 @@ function drawEntryPoint() {
     ctx.fill();
 }
 
-function drawPatches() {
-    for (var i = 0; i < patches.length; i+= 1) {
-        drawPatch(patches[i]);
+function drawResources() {
+    for (var i = 0; i < resources.length; i+= 1) {
+        drawResource(resources[i]);
     }
 }
 
-function drawPatch(p) {
+function drawResource(p) {
     var canvas = $('#c2')[0];
     var ctx = canvas.getContext('2d');
 
@@ -522,7 +575,7 @@ function drawPatch(p) {
     var y = p.getY() * cellWidth;
     var s = p.getTotalYield() / p.getInitialTotalYield() * 100;
     var c = p.getColor();
-    var newColor = diluteColour(s, c);
+    var newColor = diluteColour(s, s, s, c);
     ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellWidth - 1);
     ctx.fillStyle = "#" + newColor;
 
@@ -548,10 +601,35 @@ function drawPatch(p) {
             ctx.fillRect(x + 8, y + 8, cellWidth - 16, cellWidth - 16);
             break;
     }
+
     ctx.lineWidth = 1;
     ctx.strokeStyle = "#ccc";
     ctx.strokeRect(x, y, cellWidth, cellWidth);
 //    ctx.strokeText(p.getUpgradeLevel(), x + 10, y + 10);
+
+    // Draw resource-specific representation here
+    if (p.getName() == "farm") {
+        ctx.beginPath();
+        for (var i = y + 4; i < y + 4 + cellWidth - 8; i+= 4) {
+            ctx.moveTo(x + 4, i);
+            ctx.lineTo(x + 4 + cellWidth - 8, i);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+    else if (p.getName() == "factory"){
+        ctx.beginPath();
+        for (var i = x + 4; i < x + 4 + cellWidth - 8; i+= 4) {
+            ctx.moveTo(i, y + 4);
+            ctx.lineTo(i, y + 4 + cellWidth - 8);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
 }
 
 
@@ -581,7 +659,7 @@ function clearAgents() {
 }
 
 /* Dilutes (whitens) the colour of an element, given its strength (some value between 0 and 100) */
-function diluteColour(strength, colour) {
+function diluteColour(rStrength, gStrength, bStrength, colour) {
     var charOffset = (colour.length == 3 ? 1 : 2);
     var multiplier = (charOffset == 1 ? 1 : 16)
     var dilutionBase = 10;
@@ -590,9 +668,9 @@ function diluteColour(strength, colour) {
     var g = parseInt(colour.slice(1 * charOffset, 2 * charOffset), 16);
     var b = parseInt(colour.slice(2 * charOffset, 3 * charOffset), 16);
 
-    var ro = Math.floor((100 - strength) / 100 * (maxValue - r));
-    var go = Math.floor((100 - strength) / 100 * (maxValue - g));
-    var bo = Math.floor((100 - strength) / 100 * (maxValue - b));
+    var ro = Math.floor((100 - rStrength) / 100 * (maxValue - r));
+    var go = Math.floor((100 - gStrength) / 100 * (maxValue - g));
+    var bo = Math.floor((100 - bStrength) / 100 * (maxValue - b));
     var rOffset = (r + ro < maxValue ? r + ro : maxValue - 1).toString(16);
     var gOffset = (g + go < maxValue ? g + go : maxValue - 1).toString(16);
     var bOffset = (b + bo < maxValue ? b + bo : maxValue - 1).toString(16);
@@ -686,9 +764,11 @@ function drawAgents() {
         ctx.closePath();
         ctx.strokeStyle = "#ccc";
         ctx.stroke();
-        var health = agent.getHealth();
+        var ecoH = agent.getEconomicHealth();
+        var envH = agent.getEnvironmentalHealth();
+        var socH = agent.getSocialHealth();
         var c = agent.getColor().toString();
-        var newColor = diluteColour(health, c);
+        var newColor = diluteColour(socH, envH, ecoH, c);
         ctx.fillStyle = "#" + newColor;
         ctx.fill();
 
@@ -724,6 +804,9 @@ function drawAgents() {
         ctx.strokeStyle = "#" + newColor;
         ctx.lineWidth = 2;
         ctx.stroke();
+
+//        ctx.fillText(agent.getHealth(),  intX, intY);
+//        ctx.fillText(agent.getEconomicHealth(),  intX, intY + 20);
     }
 }
 
@@ -891,12 +974,12 @@ function findPosition(agent, withNoRepeat, withNoCollision, withOffscreenCycling
             candidatesNotInHistory.push(candidate);
     }
 
-    // Try to find a neighbouring patch, if it exists
+    // Try to find a neighbouring resource, if it exists
     if (candidatesNotInHistory.length > 0) {
         var bestCandidate = candidatesNotInHistory[0];
         for (var i = 0; i < candidatesNotInHistory.length; i++) {
             var candidate = candidatesNotInHistory[i];
-            var neighbour = hasNeighbouringPatches(candidate[0], candidate[1]);
+            var neighbour = hasNeighbouringResources(candidate[0], candidate[1]);
             if (neighbour != null)
                 bestCandidate = candidate;
         }
@@ -906,7 +989,7 @@ function findPosition(agent, withNoRepeat, withNoCollision, withOffscreenCycling
         var bestCandidate = candidateCells[0];
         for (var i = 0; i < candidateCells.length; i++) {
             var candidate = candidateCells[i];
-            var neighbour = hasNeighbouringPatches(candidate[0], candidate[1]);
+            var neighbour = hasNeighbouringResources(candidate[0], candidate[1]);
             if (neighbour != null)
                 bestCandidate = candidate;
         }
@@ -977,13 +1060,13 @@ function moveAgentsRandomly() {
                 (newY == worldSize - 1) ? newY = 0 : newY = newY + 1;
                 break;
         }
-        if (!checkPatches(newX, newY))
+        if (!checkResources(newX, newY))
             agent.setPosition(newX, newY);
     }
 }
 
 
-function checkPatches(newX, newY) {
+function checkResources(newX, newY) {
     var isPatch = false;
     var tiles = currentLevel.getTiles();
     for (var j = 0; j < tiles.length; j+= 1) {
@@ -1047,12 +1130,9 @@ function processAgents() {
                 expiredAgentCount++;
                 drawExpired();
             }
-//            else if (agent.getX() < 0 || agent.getX() >=  worldSize || agent.getY() < 0 || agent.getY() >= worldSize) {
-//                nullifiedAgents.push(i);
-//            }
             else
                 // Hook for detecting 'active' patches
-                processNeighbouringPatches(agent);
+                processNeighbouringResources(agent);
         }
     }
 
@@ -1081,29 +1161,51 @@ function processAgents() {
         }
     }
     else {
-        if (counter % patchRecoveryCycle == 0)
-            recoverPatches();
+        if (counter % resourceRecoveryCycle == 0)
+            recoverResources();
         drawAgents();
     }
 }
 
-function processNeighbouringPatches(agent) {
+function processNeighbouringResources(agent) {
     var x = agent.getX();
     var y = agent.getY();
-    for (var j = 0; j < patches.length; j++) {
-        var p = patches[j];
+    for (var j = 0; j < resources.length; j++) {
+        var p = resources[j];
         var px = p.getX();
         var py = p.getY();
         if (Math.abs(px - x) <= 1 && Math.abs(py - y) <= 1) {
-            p.provideYield(agent);
-            drawPatch(p);
+            var resourceEffect = calculateResourceEffect(p.getType());
+            p.provideYield(agent, resourceEffect);
+            drawResource(p);
         }
     }
 }
 
-function hasNeighbouringPatches(x, y) {
-    for (var j = 0; j < patches.length; j++) {
-        var p = patches[j];
+/*
+Calculates the proportion of a particular patch type, relative to the overall number of patches, then returns a log derivative (so minor variations have minimal impact).
+ */
+function calculateResourceEffect(patchType) {
+    var patchTypeCount = 0;
+    var totalPatches = resources.length;
+    if (totalPatches == 1)
+        return 1;
+    if (patchType == "eco")
+        patchTypeCount = economicResourceCount;
+    else if (patchType == "env")
+        patchTypeCount = environmentalResourceCount;
+    else if (patchType == "soc")
+        patchTypeCount = socialResourceCount;
+    var patchTypeProportion = patchTypeCount / totalPatches;
+    var idealProportion = 1 / 3;
+    var percentageOfIdeal = (patchTypeProportion <= idealProportion) ? (patchTypeProportion / idealProportion) : ((1 - patchTypeProportion) / (1 - idealProportion));
+    var logEffect = 1 + Math.log(percentageOfIdeal) / Math.E;
+    return logEffect;
+}
+
+function hasNeighbouringResources(x, y) {
+    for (var j = 0; j < resources.length; j++) {
+        var p = resources[j];
         var px = p.getX();
         var py = p.getY();
         if (Math.abs(px - x) <= 1 && Math.abs(py - y) <= 1) {
@@ -1126,22 +1228,22 @@ function getAbsoluteDistanceFromGoal(x, y){
     return (Math.abs(gx - x) + Math.abs(gy - y));
 }
 
-function recoverPatches() {
-    for (var j = 0; j < patches.length; j++) {
-        var p = patches[j];
+function recoverResources() {
+    for (var j = 0; j < resources.length; j++) {
+        var p = resources[j];
         /* Test code for restoring patch health, as opposed to resetting at the end of each wave */
         if (p.getTotalYield() < p.getInitialTotalYield()) {
             /* Overly generous... */
 //            p.setTotalYield(p.getTotalYield() + p.getPerAgentYield());
             p.setTotalYield(p.getTotalYield() + 1);
-            drawPatch(p);
+            drawResource(p);
         }
     }
 }
 
-function resetPatchYields() {
-    for (var i = 0; i < patches.length; i++) {
-        var p = patches[i];
+function resetResourceYields() {
+    for (var i = 0; i < resources.length; i++) {
+        var p = resources[i];
         p.setTotalYield(p.getInitialTotalYield());
     }
 }
@@ -1165,7 +1267,7 @@ function completeLevel() {
 function newLevel() {
     currentLevelNumber++;
     previousLevelScore = score;
-    patches = new Array();
+    resources = new Array();
     redrawWorld();
 
     levelInfo(currentLevel.getNotice());
@@ -1214,7 +1316,7 @@ function restartLevel() {
 //    var diffSelect = $("#difficultyInput")[0];
 //    levelOfDifficulty = checkInteger(diffSelect[diffSelect.selectedIndex].value);
     score = previousLevelScore;
-    patches = new Array();
+    resources = new Array();
     redrawWorld();
 }
 
@@ -1231,8 +1333,8 @@ function redrawWorld() {
     // Initialise the world
     initWorld();
 
-    // Reset existing patches
-    resetPatchYields();
+    // Reset existing resources
+    resetResourceYields();
 
     // Draw basic elements
     drawGrid();
@@ -1240,7 +1342,7 @@ function redrawWorld() {
     drawBackgroundImage();
     drawEntryPoint();
     drawGoal();
-    drawPatches();
+    drawResources();
     drawScrollingLayer();
     drawScoreboard();
 
@@ -1257,23 +1359,21 @@ function reloadGame() {
 function initWorld() {
     log("Initialising world...");
 
-    // Keep active patches for now
-//    activePatches = new Array();
     agents = new Array();
     cells = {};
 //    cells = new Hash();
 
 
 //    score = 0;
-    economicPatchCount = 0;
-    environmentalPatchCount = 0;
-    socialPatchCount = 0;
+    economicResourceCount = 0;
+    environmentalResourceCount = 0;
+    socialResourceCount = 0;
     expiredAgentCount = 0;
     savedAgentCount = 0;
     waves = 1;
     numAgents = 1;
 
-    patchRecoveryCycle = Math.pow(DEFAULT_PATCH_RECOVERY, levelOfDifficulty - 1);
+    resourceRecoveryCycle = Math.pow(DEFAULT_RESOURCE_RECOVERY, levelOfDifficulty - 1);
 
     try {
         currentLevel = eval("level" + currentLevelNumber.toString());
@@ -1287,7 +1387,7 @@ function initWorld() {
     }
     resourcesInStore = currentLevel.getInitialResourceStore();
     if (resourcesInStore == undefined || resourcesInStore == null) {
-        resourcesInStore = STARTING_GOODNESS;
+        resourcesInStore = STARTING_STORE;
     }
 
 
@@ -1326,45 +1426,28 @@ function resetSpeed() {
 }
 
 
-/* Utility functions */
 
-/* Uses local storage to store highest scores and levels */
-function storeData() {
-    localStorage.currentScore = previousLevelScore;
-    localStorage.currentLevelNumber = currentLevelNumber;
-    if (localStorage.highestScore == undefined || score > localStorage.highestScore)
-        localStorage.highestScore = score;
-    if (localStorage.highestLevel == undefined || currentLevelNumber > localStorage.highestLevel)
-        localStorage.highestLevel = currentLevelNumber;
-}
-function storeCurrentLevelData() {
-    localStorage.currentScore = previousLevelScore;
-    localStorage.currentLevelNumber = currentLevelNumber;
+
+/* Dialog functions */
+function updateStats(func) {
+    var stats = compileStats();
+    $.post("/profiles/" + PROFILE_ID + "/update_stats", stats, func);
+
 }
 
-
-function checkInteger(value) {
-    return Math.floor(value);
-}
-
-function log(message) {
-    console.log(message);
-}
-
-function notify(notice) {
-    $("#notifications")[0].innerHTML = notice;
-}
-
-function levelInfo(notice) {
-    $("#level-info")[0].innerHTML = notice;
-}
-
-/* End utility functions */
-
-
-
-/* Dialog editor functions */
 function showGameOverDialog() {
+    // Try to save results to the server
+    if (PROFILE_ID != undefined) {
+        updateStats(function(data) {
+               openGameOverDialog();
+           });
+    }
+    else {
+        openGameOverDialog();
+    }
+}
+
+function openGameOverDialog() {
     $gameOver
             .html(
             "Unfortunately Fierce Planet has gotten the better of its citizens! Click 'Restart Level' or 'New Game' to try again." +
@@ -1374,10 +1457,24 @@ function showGameOverDialog() {
 }
 
 function showCompleteGameDialog() {
+    // Try to save results to the server
+    if (PROFILE_ID != undefined) {
+        var stats = compileStats();
+        $.post("/profiles/" + PROFILE_ID + "/update_stats", stats,
+           function(data) {
+               openCompleteGameDialog();
+           });
+    }
+    else {
+        openCompleteGameDialog();
+    }
+}
+
+function openCompleteGameDialog() {
     $completeGame
             .html(
             "Congratulations! In spite of challenges ahead, the citizens of Fierce Planet look forward to a bright and sustainable future!" +
-            generateStats())
+                    generateStats())
             .dialog('open');
 }
 
@@ -1385,44 +1482,174 @@ function showCompleteGameDialog() {
 function showCompleteLevelDialog() {
     // Try to save results to the server
     if (PROFILE_ID != undefined) {
-        var patchCount = patches.length;
-        var credits = 0;
-        var profileClass = 0;
-        var progressTowardsNextClass = 0;
-        var stats = {
-            "profile[current_level]": currentLevelNumber,
-            "profile[current_score]": score,
-            waves_survived: waves,
-            saved_agent_count: savedAgentCount,
-            expired_agent_count: expiredAgentCount,
-            resources_spent: resourcesSpent,
-            resources_in_store: resourcesInStore,
-            patches: patchCount,
-            economic_patches: economicPatchCount,
-            environmental_patches: environmentalPatchCount,
-            social_patches: socialPatchCount,
-            credits: credits,
-            profile_class: profileClass,
-            progress_towards_next_class: progressTowardsNextClass
-        };
+        var stats = compileStats();
         $.post("/profiles/" + PROFILE_ID + "/update_stats", stats,
            function(data) {
-               $completeLevel
-                       .html(
-                           "<p>Congratulations! You have completed level " + currentLevelNumber + ". </p>" +
-                            generateStats() +
-                           "<p>Click 'OK' to start the next level.</p>")
-                       .dialog('open');
+               openCompleteLevelDialog();
            });
     }
     else {
-        $completeLevel
-                .html(
-                    "<p>Congratulations! You have completed level " + currentLevelNumber + ". </p>" +
-                     generateStats() +
-                    "<p>Click 'OK' to start the next level.</p>")
-                .dialog('open');
+        openCompleteLevelDialog();
     }
+}
+
+function openCompleteLevelDialog() {
+    $completeLevel
+            .html(
+                "<p>Congratulations! You have completed level " + currentLevelNumber + ". </p>" +
+                 generateStats() +
+                "<p>Click 'OK' to start the next level.</p>")
+            .dialog('open');
+}
+
+
+
+function showUpgradeDeleteDialog(e) {
+    var canvas = document.getElementById('c2');
+    var __ret = getResourcePosition(e, canvas);
+    var posX = __ret.posX;
+    var posY = __ret.posY;
+    var foundResource = false;
+    for (var i = 0; i < resources.length; i++) {
+        var p = resources[i];
+        if (p.getX() == posX && p.getY() == posY) {
+            currentResource = p;
+            $upgradeDelete.dialog('open');
+            return;
+        }
+    }
+    if (!foundResource && currentResourceId != null) {
+        dropItem(e);
+    }
+}
+
+function showResourceGalleryDialog() {
+    // Try to save results to the server
+    $('#current-profile-class')[0].innerHTML = profileClass;
+    $('#current-credits')[0].innerHTML = credits;
+    $('#current-capabilities')[0].innerHTML = capabilities.join(", ");
+
+    var accessibleCapabilities = new Array();
+    var purchasableItems = new Array();
+
+    if (profileClass == "Novice") {
+        accessibleCapabilities = NOVICE_CAPABILITIES;
+    }
+    else if (profileClass == "Planner") {
+        accessibleCapabilities = PLANNER_CAPABILITIES;
+    }
+    else if (profileClass == "Expert") {
+        accessibleCapabilities = EXPERT_CAPABILITIES;
+    }
+    else if (profileClass == "Visionary") {
+        accessibleCapabilities = VISIONARY_CAPABILITIES;
+    }
+    else if (profileClass == "Genius") {
+        accessibleCapabilities = GENIUS_CAPABILITIES;
+    }
+
+    // Evaluate available capabilities
+    var links = $('.purchase');
+    for (var i = 0; i < links.length; i++) {
+        var purchasableItem = links[i];
+        var id = purchasableItem.id;
+        var itemName = id.split("-purchase")[0];
+        var cost = 0;
+        if ($.inArray(itemName, PLANNER_CAPABILITIES)) {
+            cost = CAPABILITY_COSTS [1];
+        }
+        else if ($.inArray(itemName, EXPERT_CAPABILITIES)) {
+            cost = CAPABILITY_COSTS [2];
+        }
+        else if ($.inArray(itemName, VISIONARY_CAPABILITIES)) {
+            cost = CAPABILITY_COSTS [3];
+        }
+        else if ($.inArray(itemName, GENIUS_CAPABILITIES)) {
+            cost = CAPABILITY_COSTS [4];
+        }
+        // Make item available for purchase if: (1) the player's level permits it; (2) it is not among existing capabilities and (3) there is enough money
+        if ($.inArray(itemName, accessibleCapabilities) > -1 && $.inArray(itemName, capabilities) == -1 && cost < credits) {
+            // Make item purchasable
+            purchasableItems.push(purchasableItem);
+        }
+        // Remove any existing event listeners
+        purchasableItem.removeEventListener('click');
+    }
+    for (var i = 0; i < purchasableItems.length; i++) {
+        var purchasableItem = purchasableItems[i];
+        var id = purchasableItem.id;
+        var itemName = id.split("-purchase")[0];
+        var cost = 0;
+        if ($.inArray(itemName, PLANNER_CAPABILITIES)) {
+            cost = CAPABILITY_COSTS [1];
+        }
+        else if ($.inArray(itemName, EXPERT_CAPABILITIES)) {
+            cost = CAPABILITY_COSTS [2];
+        }
+        else if ($.inArray(itemName, VISIONARY_CAPABILITIES)) {
+            cost = CAPABILITY_COSTS [3];
+        }
+        else if ($.inArray(itemName, GENIUS_CAPABILITIES)) {
+            cost = CAPABILITY_COSTS [4];
+        }
+
+        purchasableItem.addEventListener('click', function(e) {
+            var id = this.id;
+            var swatchId = id.split("-purchase")[0];
+            var itemName = $('#' + id + ' > a')[0].innerHTML;
+            var purchase = confirm('Purchase item "' + itemName + '"?');
+            if (purchase) {
+                credits -= cost;
+                capabilities.push(swatchId);
+                $('#current-credits')[0].innerHTML = credits;
+                $('#current-capabilities')[0].innerHTML = capabilities.join(", ");
+            }
+        }, false);
+//        purchasableItem.css("border","9px solid red");
+        $('#' + purchasableItem.id).css("border","3px solid black");
+    }
+
+    $resourceGallery.dialog('open');
+}
+
+function refreshSwatch() {
+    for (var i = 0; i < capabilities.length; i++) {
+        var capability = capabilities[i];
+        $('#' + capability)[0].style.display = 'block';
+    }
+}
+function saveCapabilities() {
+    if (PROFILE_ID != undefined) {
+        updateStats(function(data) {});
+    }
+
+}
+
+/* End Dialog functions */
+
+
+/* Stats functions  */
+function compileStats() {
+    var resourceCount = resources.length;
+    var progressTowardsNextClass = 0;
+    var stats = {
+        "profile[current_level]": currentLevelNumber,
+        "profile[current_score]": score,
+        "profile[profile_class]": profileClass,
+        "profile[credits]": credits,
+        "profile[capabilities]": capabilities,
+        waves_survived: waves,
+        saved_agent_count: savedAgentCount,
+        expired_agent_count: expiredAgentCount,
+        resources_spent: resourcesSpent,
+        resources_in_store: resourcesInStore,
+        resources: resourceCount,
+        economic_resources: economicResourceCount,
+        environmental_resources: environmentalResourceCount,
+        social_resources: socialResourceCount,
+        progress_towards_next_class: progressTowardsNextClass
+    };
+    return stats;
 }
 
 function generateStats() {
@@ -1458,34 +1685,43 @@ function generateStats() {
             "</table>";
     return stats;
 }
+/* End Stats functions  */
 
 
-function showUpgradeDeleteDialog(e) {
-    var canvas = document.getElementById('c2');
-    var __ret = getPatchPosition(e, canvas);
-    var posX = __ret.posX;
-    var posY = __ret.posY;
-    var foundPatch = false;
-    for (var i = 0; i < patches.length; i++) {
-        var p = patches[i];
-        if (p.getX() == posX && p.getY() == posY) {
-            currentPatch = p;
-            $upgradeDelete.dialog('open');
-            return;
-        }
-    }
-    if (!foundPatch && currentPatchTypeId != null) {
-        dropItem(e);
-    }
+/* Utility functions */
+
+/* Uses local storage to store highest scores and levels */
+function storeData() {
+    localStorage.currentScore = previousLevelScore;
+    localStorage.currentLevelNumber = currentLevelNumber;
+    if (localStorage.highestScore == undefined || score > localStorage.highestScore)
+        localStorage.highestScore = score;
+    if (localStorage.highestLevel == undefined || currentLevelNumber > localStorage.highestLevel)
+        localStorage.highestLevel = currentLevelNumber;
+}
+function storeCurrentLevelData() {
+    localStorage.currentScore = previousLevelScore;
+    localStorage.currentLevelNumber = currentLevelNumber;
 }
 
 
-function showLevelProperties() {
-    $editProperties.dialog('open');
+function checkInteger(value) {
+    return Math.floor(value);
 }
 
-/* End Dialog editor functions */
+function log(message) {
+    console.log(message);
+}
 
+function notify(notice) {
+    $("#notifications")[0].innerHTML = notice;
+}
+
+function levelInfo(notice) {
+    $("#level-info")[0].innerHTML = notice;
+}
+
+/* End utility functions */
 
 
 /* Experimental Pan and Zoom functions */

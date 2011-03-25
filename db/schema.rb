@@ -42,15 +42,19 @@ ActiveRecord::Schema.define(:version => 20110324105609) do
     t.text     "capabilities"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "total_saved",                 :default => 0
-    t.integer  "total_expired",               :default => 0
-    t.integer  "total_patches",               :default => 0
-    t.integer  "total_economic_patches",      :default => 0
-    t.integer  "total_environmental_patches", :default => 0
-    t.integer  "total_social_patches",        :default => 0
-    t.integer  "credits",                     :default => 0
-    t.integer  "profile_class",               :default => 0
-    t.integer  "progress_towards_next_class", :default => 0
+    t.integer  "total_patches",                 :default => 0
+    t.integer  "total_economic_patches",        :default => 0
+    t.integer  "total_environmental_patches",   :default => 0
+    t.integer  "total_social_patches",          :default => 0
+    t.integer  "total_saved",                   :default => 0
+    t.integer  "total_expired",                 :default => 0
+    t.integer  "total_resources",               :default => 0
+    t.integer  "total_economic_resources",      :default => 0
+    t.integer  "total_environmental_resources", :default => 0
+    t.integer  "total_social_resources",        :default => 0
+    t.integer  "credits",                       :default => 0
+    t.integer  "profile_class",                 :default => 0
+    t.integer  "progress_towards_next_class",   :default => 0
   end
 
   create_table "users", :force => true do |t|

@@ -19,7 +19,7 @@ function Level(id) {
     this._goalY = 0;
     this._initialResourceStore = 100;
     this._allowOffscreenCycling = false;
-    this._allowPatchesOnPath = false;
+    this._allowResouresOnPath = false;
     this._notice = "";
     this._image;
     this._soundSrc;
@@ -53,8 +53,8 @@ Level.prototype.getGoalY = function() { return this._goalY; }
 Level.prototype.setGoalY = function(goalY) { this._goalY = goalY; }
 Level.prototype.getAllowOffscreenCycling = function() { return this._allowOffscreenCycling; }
 Level.prototype.setAllowOffscreenCycling = function(allowOffscreenCycling) { this._allowOffscreenCycling = allowOffscreenCycling; }
-Level.prototype.getAllowPatchesOnPath = function() { return this._allowPatchesOnPath; }
-Level.prototype.setAllowPatchesOnPath = function(allowPatchesOnPath) { this._allowPatchesOnPath = allowPatchesOnPath; }
+Level.prototype.getAllowResourcesOnPath = function() { return this._allowResouresOnPath; }
+Level.prototype.setAllowResourcesOnPath = function(allowResourcesOnPath) { this._allowResouresOnPath = allowResourcesOnPath; }
 Level.prototype.getNotice = function() { return this._notice; }
 Level.prototype.setNotice = function(notice) { this._notice = notice; }
 Level.prototype.getImage = function() { return this._image; }
@@ -120,13 +120,37 @@ Agent.prototype.setEnvironmentalHealth = function(environmentalHealth) { this._e
 Agent.prototype.getSocialHealth = function() { return this._socialHealth; }
 Agent.prototype.setSocialHealth = function(socialHealth) { this._socialHealth = socialHealth; }
 Agent.prototype.adjustHealth = function(adjustment) {
-    var newHealth = this._health + adjustment;
+    this._economicHealth = this.makeHealthAdjustment(this._economicHealth, adjustment);
+    this._environmentalHealth = this.makeHealthAdjustment(this._environmentalHealth, adjustment);
+    this._socialHealth = this.makeHealthAdjustment(this._socialHealth, adjustment);
+    this.recalibrateOverallHealth();
+}
+Agent.prototype.adjustEconomicHealth = function(adjustment) {
+    this._economicHealth = this.makeHealthAdjustment(this._economicHealth, adjustment);
+    this.recalibrateOverallHealth();
+}
+Agent.prototype.adjustEnvironmentalHealth = function(adjustment) {
+    this._environmentalHealth = this.makeHealthAdjustment(this._environmentalHealth, adjustment);
+    this.recalibrateOverallHealth();
+}
+Agent.prototype.adjustSocialHealth = function(adjustment) {
+    this._socialHealth = this.makeHealthAdjustment(this._socialHealth, adjustment);
+    this.recalibrateOverallHealth();
+}
+Agent.prototype.makeHealthAdjustment = function(existingHealthValue, adjustment) {
+    var newHealth = existingHealthValue + adjustment;
     if (newHealth > 0 && newHealth < INITIAL_HEALTH)
-        this._health = newHealth;
+        return newHealth;
     else if (newHealth > 0)
-        this._health = INITIAL_HEALTH;
+        return INITIAL_HEALTH;
     else
-        this._health = 0;
+        return 0;
+}
+Agent.prototype.recalibrateOverallHealth = function() {
+    var overallHealth = Math.floor((this._economicHealth + this._environmentalHealth + this._socialHealth) / 3);
+    // Set health to zero if any of the specific types of health are zero
+    overallHealth = (this._economicHealth == 0 || this._environmentalHealth == 0 || this._socialHealth == 0) ? 0 : overallHealth;
+    this._health = overallHealth;
 }
 Agent.prototype.getWanderX = function() { return this._wanderX; }
 Agent.prototype.getWanderY = function() { return this._wanderY; }
@@ -181,16 +205,19 @@ Agent.prototype.adjustSpeed = function() {
 }
 
 
-/* Patch class definition */
-function Patch(patchType, color) {
-    this._patchType = patchType;
+/* Resource class definition */
+// Three types currently: soc, env, eco
+function Resource(resourceName, resourceType, color) {
+    this._resourceName = resourceName;
+    this._resourceType = resourceType;
     this._color = color;
     this._initialTotalYield = 0;
     this._totalYield = 0;
     this._perAgentYield = 0;
 }
-function Patch(patchType, color, x, y) {
-    this._patchType = patchType;
+function Resource(resourceName, resourceType, color, x, y) {
+    this._resourceName = resourceName;
+    this._resourceType = resourceType;
     this._color = color;
     this.setPosition(x, y);
     this._initialTotalYield = 0;
@@ -201,29 +228,36 @@ function Patch(patchType, color, x, y) {
     this._upgradeCost = 0;
     this._upgradeLevel = 1;
 }
-Patch.prototype.getType = function() { return this._patchType;}
-Patch.prototype.getColor = function() { return this._color;}
-Patch.prototype.getPosition = function() { return [this._x, this._y]; }
-Patch.prototype.setPosition = function(x, y) { this._x =x; this._y = y; }
-Patch.prototype.getX = function() { return this._x; }
-Patch.prototype.setX = function(x) { this._x = x; }
-Patch.prototype.getY = function() { return this._y; }
-Patch.prototype.setY = function(y) { this._y = y; }
-Patch.prototype.getCost = function() { return this._cost; }
-Patch.prototype.setCost = function(cost) { this._cost = cost; }
-Patch.prototype.getUpgradeCost = function() { return this._upgradeCost; }
-Patch.prototype.setUpgradeCost = function(upgradeCost) { this._upgradeCost = upgradeCost; }
-Patch.prototype.getUpgradeLevel = function() { return this._upgradeLevel; }
-Patch.prototype.setUpgradeLevel = function(upgradeLevel) { this._upgradeLevel = upgradeLevel; }
-Patch.prototype.getInitialTotalYield = function() { return this._initialTotalYield; }
-Patch.prototype.setInitialTotalYield = function(initialTotalYield) { this._initialTotalYield = initialTotalYield; this._totalYield = initialTotalYield; }
-Patch.prototype.getTotalYield = function() { return this._totalYield; }
-Patch.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; }
-Patch.prototype.getPerAgentYield = function() { return this._perAgentYield; }
-Patch.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; }
-Patch.prototype.provideYield = function(agent) {
+Resource.prototype.getName = function() { return this._resourceName; }
+Resource.prototype.getType = function() { return this._resourceType;}
+Resource.prototype.getColor = function() { return this._color;}
+Resource.prototype.getPosition = function() { return [this._x, this._y]; }
+Resource.prototype.setPosition = function(x, y) { this._x =x; this._y = y; }
+Resource.prototype.getX = function() { return this._x; }
+Resource.prototype.setX = function(x) { this._x = x; }
+Resource.prototype.getY = function() { return this._y; }
+Resource.prototype.setY = function(y) { this._y = y; }
+Resource.prototype.getCost = function() { return this._cost; }
+Resource.prototype.setCost = function(cost) { this._cost = cost; }
+Resource.prototype.getUpgradeCost = function() { return this._upgradeCost; }
+Resource.prototype.setUpgradeCost = function(upgradeCost) { this._upgradeCost = upgradeCost; }
+Resource.prototype.getUpgradeLevel = function() { return this._upgradeLevel; }
+Resource.prototype.setUpgradeLevel = function(upgradeLevel) { this._upgradeLevel = upgradeLevel; }
+Resource.prototype.getInitialTotalYield = function() { return this._initialTotalYield; }
+Resource.prototype.setInitialTotalYield = function(initialTotalYield) { this._initialTotalYield = initialTotalYield; this._totalYield = initialTotalYield; }
+Resource.prototype.getTotalYield = function() { return this._totalYield; }
+Resource.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; }
+Resource.prototype.getPerAgentYield = function() { return this._perAgentYield; }
+Resource.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; }
+Resource.prototype.provideYield = function(agent, resourceEffect) {
     if (this._totalYield > this._perAgentYield && agent.getHealth() < 100) {
-        agent.adjustHealth(this._perAgentYield * this._upgradeLevel);
+        var adjustment = this._perAgentYield * this._upgradeLevel * 3 * resourceEffect;
+        if (this._resourceType == "eco")
+            agent.adjustEconomicHealth(adjustment);
+        else if (this._resourceType == "env")
+            agent.adjustEnvironmentalHealth(adjustment);
+        else if (this._resourceType == "soc")
+            agent.adjustSocialHealth(adjustment);
         agent.setSpeed(this._perAgentYield);
         this._totalYield -= this._perAgentYield;
     }
@@ -247,3 +281,14 @@ Tile.prototype.setX = function(x) { this._x = x; }
 Tile.prototype.getY = function() { return this._y; }
 Tile.prototype.setY = function(y) { this._y = y; }
 
+
+
+/* Player Class class definition */
+function PlayerClass(name, savesRequired) {
+    this._name = name;
+    this._savesRequired = savesRequired;
+}
+PlayerClass.prototype.getName = function() { return this._name; }
+PlayerClass.prototype.setName = function(name) { this._name = name; }
+PlayerClass.prototype.getSavesRequired = function() { return this._savesRequired; }
+PlayerClass.prototype.setSavesRequired = function(savesRequired) { this._savesRequired = savesRequired; }

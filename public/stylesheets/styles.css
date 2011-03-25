@@ -61,7 +61,7 @@ body {
     top:0px;
 }
 
-#swatch, #delete-upgrade, #level-editor {
+#swatch, #level-editor {
     margin-top: 20px;
     clear: both;
     position:absolute;
@@ -90,30 +90,37 @@ ul, li {
     padding: 0px;
 }
 
-#swatch div, #delete-upgrade div, #level-editor div {
+#swatch > div, #gallery-items > div, #level-editor > div {
     float: left;
     position: relative;
   text-decoration: none;
   color: #000;
   width: 110px;
-  border: 3px dashed #999;
+  border: 1px solid #999;
   padding: 4px;
     margin-right: 10px;
 }
-#swatch div a, #delete-upgrade div a, #level-editor div a {
+#swatch div a, #gallery-items div a, #level-editor div a {
   color: #000;
   text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+.eco, .env, .soc {
+    padding: 4px;
+    margin: 2px;
+    border: solid 1px #000;
 }
 
-#swatch div#env {
-  background: #00ff00;
-}
-
-#swatch div#eco {
+#swatch div.eco, #gallery-items div.eco {
     background: #99ccff;
 }
 
-#swatch div#soc {
+#swatch div.env, #gallery-items div.env {
+  background: #00ff00;
+}
+
+#swatch div.soc, #gallery-items div.soc {
     background: #ff3300;
 }
 
