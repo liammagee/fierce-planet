@@ -9,7 +9,7 @@ var LEVELS = 10;
 
 var MOVE_INCREMENTS = 5;
 var INITIAL_HEALTH = 100;
-var MOVE_HEALTH_COST = -3;
+var MOVE_HEALTH_COST = -2;
 var SURVIVAL_SCORE = 10;
 var STARTING_STORE = 100;
 
@@ -154,7 +154,11 @@ $(document).ready(function() {
             modal: true,
 			title: 'Game Over!',
             buttons: {
-                "OK": function() {
+                "Restart Level": function() {
+                    restartLevel();
+                    $( this ).dialog( "close" );
+                },
+                "New Game": function() {
                     newGame();
                     $( this ).dialog( "close" );
                 }
