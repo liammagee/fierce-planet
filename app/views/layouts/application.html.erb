@@ -19,8 +19,8 @@
       <script>
         profileClass = '<%= current_user.profile.profile_class ? current_user.profile.profile_class : "Novice" %>';
         credits = parseInt('<%= current_user.profile.credits ? current_user.profile.credits : 0 %>');
-        capabilities = '<%= current_user.profile.capabilities ? current_user.profile.capabilities : capabilities %>'.split(',');
-        totalSaved = parseInt('<%= current_user.profile.total_saved ? current_user.profile.total_saved : totalSaved %>');
+        capabilities = '<%= current_user.profile.capabilities ? current_user.profile.capabilities : "farm.water,clinic" %>'.split(',');
+        totalSaved = parseInt('<%= current_user.profile.total_saved ? current_user.profile.total_saved : 0 %>');
         $(document).ready(function() {
             refreshSwatch();
         });
