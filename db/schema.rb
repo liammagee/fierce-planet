@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(:version => 20110324105609) do
     t.integer  "total_environmental_resources", :default => 0
     t.integer  "total_social_resources",        :default => 0
     t.integer  "credits",                       :default => 0
-    t.integer  "profile_class",                 :default => 0
+    t.string   "profile_class",                 :default => "0"
     t.integer  "progress_towards_next_class",   :default => 0
   end
 

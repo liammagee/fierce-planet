@@ -7,7 +7,7 @@ class AddStatsToProfile < ActiveRecord::Migration
     add_column :profiles, :total_environmental_resources, :integer, :default => 0
     add_column :profiles, :total_social_resources, :integer, :default => 0
     add_column :profiles, :credits, :integer, :default => 0
-    add_column :profiles, :profile_class, :integer, :default => 0
+    add_column :profiles, :profile_class, :string, :default => 0
     add_column :profiles, :progress_towards_next_class, :integer, :default => 0
   end
 

@@ -9,7 +9,7 @@ var LEVELS = 10;
 
 var MOVE_INCREMENTS = 5;
 var INITIAL_HEALTH = 100;
-var MOVE_HEALTH_COST = -2;
+var MOVE_HEALTH_COST = -4;
 var SURVIVAL_SCORE = 10;
 var STARTING_STORE = 100;
 
@@ -46,12 +46,13 @@ var VISIONARY_CAPABILITIES = EXPERT_CAPABILITIES.concat(["factory", "renewable-e
 var GENIUS_CAPABILITIES = VISIONARY_CAPABILITIES.concat(["stockmarket", "biodiversity", "festival"]);
 
 var capabilities = ["farm", "water", "clinic"];
-//var credits = 0;
-//var profileClass = "Novice";
-var credits = 10000;
-var profileClass = "Genius";
+var credits = 0;
+var profileClass = "Novice";
+//var credits = 10000;
+//var profileClass = "Genius";
+var totalSaved = 0;
 
-
+var PROFILE_ID;
 var godMode = false;
 var inDesignMode = false;
 var inPlay = false;
@@ -328,7 +329,7 @@ function upgradeCurrentResource() {
     }
 }
 
-// Handle the drop event, by placing a resource
+
 function dropItem(e) {
     var canvas = $('#c2')[0];;
     var ctx = canvas.getContext('2d');
@@ -349,28 +350,22 @@ function dropItem(e) {
         resourceName = e.dataTransfer.getData('Text');
     var resourceType = resourceTypes[resourceName];
 
-    var c = "0f0";
     var totalYield = 0, perAgentYield = 0, cost = 0, upgradeCost = 0;
+    var __ret = determineResourceCostAndYield(resourceName, resourceType);
+    perAgentYield = __ret.perAgentYield;
+    cost = __ret.cost;
+    totalYield = __ret.totalYield;
+    upgradeCost = __ret.upgradeCost;
+
+    var c = "0f0";
     if (resourceType == 'eco') {
         c = "99ccff";
-        totalYield = 100;
-        perAgentYield = 20;
-        cost = RESOURCE_STORE;
-        upgradeCost = RESOURCE_STORE * 2;
     }
     else if (resourceType == 'env') {
         c = "00ff00";
-        totalYield = 100;
-        perAgentYield = 10;
-        cost = RESOURCE_STORE;
-        upgradeCost = RESOURCE_STORE * 2;
     }
     else if (resourceType == 'soc') {
         c = "ff3300";
-        totalYield = 100;
-        perAgentYield = 5;
-        cost = RESOURCE_STORE;
-        upgradeCost = RESOURCE_STORE * 2;
     }
 
     var resource = new Resource(resourceName, resourceType, c, posX, posY);
@@ -379,7 +374,7 @@ function dropItem(e) {
     resource.setCost(cost);
     resource.setUpgradeCost(upgradeCost);
     
-    if (resourcesInStore < RESOURCE_STORE) {
+    if (resourcesInStore < cost) {
         notify('Not enough goodness for now - save some more agents!');
         return;
     }
@@ -403,6 +398,82 @@ function dropItem(e) {
     }
 }
 
+// Refactor into ResourceType
+function determineResourceCostAndYield(resourceName, resourceType) {
+    var totalYield = 0, perAgentYield = 0, cost = 0, upgradeCost = 0;
+    if ($.inArray(resourceName, NOVICE_CAPABILITIES) > -1) {
+        cost = 10;
+        upgradeCost = 20;
+        totalYield = 100;
+        if (resourceType == "eco") {
+            perAgentYield = 20;
+        }
+        else if (resourceType == "env") {
+            perAgentYield = 10;
+        }
+        else if (resourceType == "soc") {
+            perAgentYield = 5;
+        }
+    }
+    else if ($.inArray(resourceName, PLANNER_CAPABILITIES) > -1) {
+        cost = 15;
+        upgradeCost = 25;
+        totalYield = 150;
+        if (resourceType == "eco") {
+            perAgentYield = 30;
+        }
+        else if (resourceType == "env") {
+            perAgentYield = 15;
+        }
+        else if (resourceType == "soc") {
+            perAgentYield = 8;
+        }
+    }
+    else if ($.inArray(resourceName, EXPERT_CAPABILITIES) > -1) {
+        cost = 20;
+        upgradeCost = 30;
+        totalYield = 200;
+        if (resourceType == "eco") {
+            perAgentYield = 50;
+        }
+        else if (resourceType == "env") {
+            perAgentYield = 25;
+        }
+        else if (resourceType == "soc") {
+            perAgentYield = 15;
+        }
+    }
+    else if ($.inArray(resourceName, VISIONARY_CAPABILITIES) > -1) {
+        cost = 25;
+        upgradeCost = 35;
+        totalYield = 250;
+        if (resourceType == "eco") {
+            perAgentYield = 70;
+        }
+        else if (resourceType == "env") {
+            perAgentYield = 35;
+        }
+        else if (resourceType == "soc") {
+            perAgentYield = 20;
+        }
+    }
+    else if ($.inArray(resourceName, GENIUS_CAPABILITIES) > -1) {
+        cost = 30;
+        upgradeCost = 40;
+        totalYield = 300;
+        if (resourceType == "eco") {
+            perAgentYield = 90;
+        }
+        else if (resourceType == "env") {
+            perAgentYield = 45;
+        }
+        else if (resourceType == "soc") {
+            perAgentYield = 25;
+        }
+    }
+    return {perAgentYield:perAgentYield, cost:cost, totalYield:totalYield, upgradeCost:upgradeCost};
+}
+
 /* End UI Methods */
 
 
@@ -410,9 +481,20 @@ function dropItem(e) {
 
 function setupResourceTypes() {
     resourceTypes['farm'] = 'eco';
+    resourceTypes['shop'] = 'eco';
+    resourceTypes['bank'] = 'eco';
     resourceTypes['factory'] = 'eco';
+    resourceTypes['stockmarket'] = 'eco';
     resourceTypes['water'] = 'env';
-    resourceTypes['community'] = 'soc';
+    resourceTypes['sanctuary'] = 'env';
+    resourceTypes['air'] = 'env';
+    resourceTypes['renewable-energy'] = 'env';
+    resourceTypes['biodiversity'] = 'env';
+    resourceTypes['clinic'] = 'soc';
+    resourceTypes['school'] = 'soc';
+    resourceTypes['legal-system'] = 'soc';
+    resourceTypes['democracy'] = 'soc';
+    resourceTypes['festival'] = 'soc';
 }
 
 // Find the current resource index
@@ -608,6 +690,7 @@ function drawResource(p) {
 //    ctx.strokeText(p.getUpgradeLevel(), x + 10, y + 10);
 
     // Draw resource-specific representation here
+    /*
     if (p.getName() == "farm") {
         ctx.beginPath();
         for (var i = y + 4; i < y + 4 + cellWidth - 8; i+= 4) {
@@ -630,6 +713,7 @@ function drawResource(p) {
         ctx.lineWidth = 1;
         ctx.stroke();
     }
+    */
 }
 
 
@@ -1353,6 +1437,10 @@ function reloadGame() {
 
     currentLevelNumber = (localStorage.currentLevelNumber != undefined ? parseInt(localStorage.currentLevelNumber) : currentLevelNumber);
     score = (localStorage.currentScore != undefined ? parseInt(localStorage.currentScore) : score);
+//    totalSaved = (localStorage.totalSaved != undefined ? parseInt(localStorage.totalSaved) : totalSaved);
+//    profileClass = (localStorage.profileClass != undefined ? localStorage.profileClass : profileClass);
+//    credits = (localStorage.credits != undefined ? parseInt(localStorage.credits) : credits);
+//    capabilities = (localStorage.capabilities != undefined ? localStorage.capabilities : capabilities);
     redrawWorld();
 }
 
@@ -1436,6 +1524,7 @@ function updateStats(func) {
 }
 
 function showGameOverDialog() {
+    determineCreditsAndClass();
     // Try to save results to the server
     if (PROFILE_ID != undefined) {
         updateStats(function(data) {
@@ -1457,6 +1546,7 @@ function openGameOverDialog() {
 }
 
 function showCompleteGameDialog() {
+    determineCreditsAndClass();
     // Try to save results to the server
     if (PROFILE_ID != undefined) {
         var stats = compileStats();
@@ -1481,6 +1571,7 @@ function openCompleteGameDialog() {
 // Show the completed level dialog
 function showCompleteLevelDialog() {
     // Try to save results to the server
+    determineCreditsAndClass();
     if (PROFILE_ID != undefined) {
         var stats = compileStats();
         $.post("/profiles/" + PROFILE_ID + "/update_stats", stats,
@@ -1572,6 +1663,9 @@ function showResourceGalleryDialog() {
             // Make item purchasable
             purchasableItems.push(purchasableItem);
         }
+        else {
+            $('#' + purchasableItem.id).css("border","1px solid black");
+        }
         // Remove any existing event listeners
         purchasableItem.removeEventListener('click');
     }
@@ -1598,7 +1692,7 @@ function showResourceGalleryDialog() {
             var swatchId = id.split("-purchase")[0];
             var itemName = $('#' + id + ' > a')[0].innerHTML;
             var purchase = confirm('Purchase item "' + itemName + '"?');
-            if (purchase) {
+            if (purchase && $.inArray(swatchId, capabilities) == -1) {
                 credits -= cost;
                 capabilities.push(swatchId);
                 $('#current-credits')[0].innerHTML = credits;
@@ -1629,6 +1723,24 @@ function saveCapabilities() {
 
 
 /* Stats functions  */
+function determineCreditsAndClass() {
+    credits += resourcesInStore;
+    totalSaved += savedAgentCount;
+    if (totalSaved > 5000) {
+        profileClass = "Genius";
+    }
+    else if (totalSaved > 2500) {
+        profileClass = "Visionary";
+    }
+    else if (totalSaved > 1000) {
+        profileClass = "Expert";
+    }
+    else if (totalSaved > 500) {
+        profileClass = "Planner";
+    }
+}
+
+
 function compileStats() {
     var resourceCount = resources.length;
     var progressTowardsNextClass = 0;
@@ -1637,7 +1749,7 @@ function compileStats() {
         "profile[current_score]": score,
         "profile[profile_class]": profileClass,
         "profile[credits]": credits,
-        "profile[capabilities]": capabilities,
+        "profile[capabilities]": capabilities.join(','),
         waves_survived: waves,
         saved_agent_count: savedAgentCount,
         expired_agent_count: expiredAgentCount,
@@ -1682,6 +1794,22 @@ function generateStats() {
             "<td>Resources remaining:</td>" +
             "<td>" + resourcesInStore + "</td>" +
             "</tr>" +
+            "<tr>" +
+            "<td></td>" +
+            "<td></td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>Total saved:</td>" +
+            "<td>" + totalSaved + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>Profile class:</td>" +
+            "<td>" + profileClass + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>Credits:</td>" +
+            "<td>" + credits + "</td>" +
+            "</tr>" +
             "</table>";
     return stats;
 }
@@ -1694,6 +1822,10 @@ function generateStats() {
 function storeData() {
     localStorage.currentScore = previousLevelScore;
     localStorage.currentLevelNumber = currentLevelNumber;
+    localStorage.totalSaved = totalSaved;
+    localStorage.profileClass = profileClass;
+    localStorage.credits = credits;
+    localStorage.capabilities = capabilities;
     if (localStorage.highestScore == undefined || score > localStorage.highestScore)
         localStorage.highestScore = score;
     if (localStorage.highestLevel == undefined || currentLevelNumber > localStorage.highestLevel)
@@ -1702,6 +1834,10 @@ function storeData() {
 function storeCurrentLevelData() {
     localStorage.currentScore = previousLevelScore;
     localStorage.currentLevelNumber = currentLevelNumber;
+    localStorage.totalSaved = totalSaved;
+    localStorage.profileClass = profileClass;
+    localStorage.credits = credits;
+    localStorage.capabilities = capabilities;
 }
 
 
