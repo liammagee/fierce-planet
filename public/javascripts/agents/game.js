@@ -21,14 +21,10 @@ var WAVE_GOODNESS_BONUS = 5;
 var NEW_LEVEL_DELAY = 3000;
 var NEW_WAVE_DELAY = 1000;
 
-
 var EASY_DIFFICULTY = 1;
 var MEDIUM_DIFFICULTY = 2;
 var HARD_DIFFICULTY = 3;
 var EXTREME_DIFFICULTY = 4;
-
-
-
 
 
 
@@ -135,6 +131,29 @@ $(document).ready(function() {
     else level1.getImage().onload= reloadGame;
 
 
+
+    // Set up dialogs
+    setupDialogs();
+
+    // Set up resource types
+    setupResourceTypes();
+
+
+    // Handle resource drag and drop and click interactions
+    setupResourceInteraction();
+
+
+
+    // Add general event listeners
+   hookUpUIEventListeners()
+});
+
+
+
+
+/* UI functions */
+// Setup dialogs
+function setupDialogs() {
     // Dialogs
     $statsDialog = $('<div></div>')
 		.dialog({
@@ -238,11 +257,10 @@ $(document).ready(function() {
             }
         });
 
-    // Set up resource types
-    setupResourceTypes();
+}
 
-    
-
+// Handle various resource-related interactions
+function setupResourceInteraction() {
     var canvas = $('#c2')[0];
     var msie = /*@cc_on!@*/0;
 
@@ -262,6 +280,7 @@ $(document).ready(function() {
     }
 
     var world = $('#c4')[0];
+
 
     world.addEventListener('click', function (e) {
         if (e.preventDefault) e.preventDefault(); // allows us to drop
@@ -295,15 +314,34 @@ $(document).ready(function() {
         dropItem(e);
       }, false);
 
-    
-});
+}
 
+// Add general event listeners
+function hookUpUIEventListeners() {
+    // Control panel functions
+   $('#slowDown')[0].addEventListener('click', function() { slowDown();}, false);
+   $('#speedUp')[0].addEventListener('click', function() { speedUp();}, false);
+   $('#startAgents')[0].addEventListener('click', function() { startAgents();}, false);
+   $('#stopAgents')[0].addEventListener('click', function() { stopAgents();}, false);
+   $('#restartLevel')[0].addEventListener('click', function() { restartLevel();}, false);
+   $('#newGame')[0].addEventListener('click', function() { newGame();}, false);
+   $('#showResourceGallery')[0].addEventListener('click', function() { showResourceGallery();}, false);
 
+    // Admin functions
+    $('#debug')[0].addEventListener('click', function() { processAgents();}, false);
+    $('#pan')[0].addEventListener('click', function() { pan();}, false);
+    $('#zoom')[0].addEventListener('click', function() { zoom();}, false);
 
+    // Level editor functions
+   $('#makeTile')[0].addEventListener('click', function() { makeTile();}, false);
+   $('#addGoal')[0].addEventListener('click', function() { addGoal();}, false);
+   $('#addAgentStartingPoint')[0].addEventListener('click', function() { addAgentStartingPoint();}, false);
+   $('#showLevelProperties')[0].addEventListener('click', function() { showLevelProperties();}, false);
+   $('#refreshTiles')[0].addEventListener('click', function() { refreshTiles();}, false);
+   $('#undoAction')[0].addEventListener('click', function() { undoAction();}, false);
+   $('#cancelLevelEditor')[0].addEventListener('click', function() { cancelLevelEditor();}, false);
 
-
-/* UI functions */
-
+}
 
 // Delete the current resource
 function deleteCurrentResource() {
@@ -333,7 +371,6 @@ function upgradeCurrentResource() {
     }
 }
 
-
 function dropItem(e) {
     var canvas = $('#c2')[0];;
     var ctx = canvas.getContext('2d');
@@ -349,13 +386,19 @@ function dropItem(e) {
         }
     }
 
-    var resourceName = currentResourceId;
+    var resourceCode = currentResourceId;
     if (e.dataTransfer)
-        resourceName = e.dataTransfer.getData('Text');
-    var resourceType = resourceTypes[resourceName];
+        resourceCode = e.dataTransfer.getData('Text');
+
+    var kind = resolveResourceKind(resourceCode);
+    var resource = new Resource(kind, posX, posY);
+
+    /*
+
+    var resourceType = resourceTypes[resourceCode];
 
     var totalYield = 0, perAgentYield = 0, cost = 0, upgradeCost = 0;
-    var __ret = determineResourceCostAndYield(resourceName, resourceType);
+    var __ret = determineResourceCostAndYield(resourceCode, resourceType);
     perAgentYield = __ret.perAgentYield;
     cost = __ret.cost;
     totalYield = __ret.totalYield;
@@ -377,8 +420,9 @@ function dropItem(e) {
     resource.setPerAgentYield(perAgentYield);
     resource.setCost(cost);
     resource.setUpgradeCost(upgradeCost);
+    */
     
-    if (resourcesInStore < cost) {
+    if (resourcesInStore < resource.getCost()) {
         notify('Not enough goodness for now - save some more agents!');
         return;
     }
@@ -386,13 +430,13 @@ function dropItem(e) {
         resourcesInStore -= resource.getCost();
         resourcesSpent += resource.getCost();
         resources.push(resource);
-        if (resourceType == 'eco') {
+        if (resource.getType() == 'eco') {
             economicResourceCount += 1;
         }
-        else if (resourceType == 'env') {
+        else if (resource.getType() == 'env') {
             environmentalResourceCount += 1;
         }
-        else if (resourceType == 'soc') {
+        else if (resource.getType() == 'soc') {
             socialResourceCount += 1;
         }
         cells[[posX, posY]] = resource;
@@ -477,12 +521,10 @@ function determineResourceCostAndYield(resourceName, resourceType) {
     }
     return {perAgentYield:perAgentYield, cost:cost, totalYield:totalYield, upgradeCost:upgradeCost};
 }
-
 /* End UI Methods */
 
 
 /* Resource Methods */
-
 function setupResourceTypes() {
     resourceTypes['farm'] = 'eco';
     resourceTypes['shop'] = 'eco';
@@ -552,8 +594,6 @@ function getResourcePosition(e, canvas) {
 
 
 /* Draw Methods */
-
-
 function drawGrid() {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
@@ -586,8 +626,6 @@ function drawTiles() {
     }
 }
 
-
-
 function drawTile(p) {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
@@ -609,6 +647,7 @@ function drawBackgroundImage() {
         ctx.drawImage(currentLevel.getImage(), 0, 0);
     }
 }
+
 function drawGoal() {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
@@ -720,7 +759,6 @@ function drawResource(p) {
     */
 }
 
-
 function clearCanvas(canvasID) {
     var canvas = $('#' + canvasID)[0];
     var ctx = canvas.getContext('2d');
@@ -745,6 +783,7 @@ function clearAgents() {
         }
     }
 }
+
 
 /* Dilutes (whitens) the colour of an element, given its strength (some value between 0 and 100) */
 function diluteColour(rStrength, gStrength, bStrength, colour) {
@@ -916,6 +955,7 @@ function drawLevel() {
     var e = $('#level-display')[0];
     e.innerHTML = currentLevelNumber.toString();
 }
+
 function drawHighestLevel() {
     var e = $('#highest-level-display')[0];
     var hl = localStorage.highestLevel;
@@ -923,10 +963,12 @@ function drawHighestLevel() {
         hl = 0;
     e.innerHTML = hl.toString();
 }
+
 function drawScore() {
     var e = $('#score-display')[0];
     e.innerHTML = score.toString();
 }
+
 function drawHighestScore() {
     var e = $('#highest-score-display')[0];
     var hs = localStorage.highestScore;
@@ -939,10 +981,12 @@ function drawResourcesInStore() {
     var e = $('#goodness-display')[0];
     e.innerHTML = resourcesInStore.toString();
 }
+
 function drawExpired() {
     var e = $('#expired-display')[0];
     e.innerHTML = expiredAgentCount.toString() + " out of " + currentLevel.getExpiryLimit();
 }
+
 function drawSaved() {
     var e = $('#saved-display')[0];
     e.innerHTML = savedAgentCount.toString();
@@ -952,8 +996,6 @@ function drawWaves() {
     var e = $('#waves-display')[0];
     e.innerHTML = waves.toString() + " out of " + currentLevel.getWaveNumber();
 }
-
-
 
 function drawScoreboard() {
     drawLevel();
@@ -965,16 +1007,12 @@ function drawScoreboard() {
     drawExpired();
     drawResourcesInStore();
 }
-
-
-
 /* End Drawing Methods */
 
 
 
 
 /* Move Strategies */
-
 function moveAgent(agent, withNoRepeat, withNoCollision) {
     var x = agent.getX();
     var y = agent.getY();
@@ -1153,7 +1191,6 @@ function moveAgentsRandomly() {
     }
 }
 
-
 function checkResources(newX, newY) {
     var isPatch = false;
     var tiles = currentLevel.getTiles();
@@ -1164,7 +1201,6 @@ function checkResources(newX, newY) {
     }
     return isPatch;
 }
-
 /* End Move Strategies */
 
 
@@ -1310,6 +1346,7 @@ function isGoalCell(x, y) {
     var gy = currentLevel.getGoalY();
     return (gx == x && gy == y);
 }
+
 function getAbsoluteDistanceFromGoal(x, y){
     var gx = currentLevel.getGoalX();
     var gy = currentLevel.getGoalY();
@@ -1335,7 +1372,6 @@ function resetResourceYields() {
         p.setTotalYield(p.getInitialTotalYield());
     }
 }
-
 
 function newWave() {
     counter = 0;
@@ -1382,9 +1418,6 @@ function completeGame() {
 
 
 /* Set up code */
-
-
-
 function newGame() {
     inDesignMode = false;
     currentLevelNumber = 1;
@@ -1398,7 +1431,6 @@ function restartLevel() {
     inDesignMode = false;
     if ($("#godModeInput")[0] != undefined)
         godMode = $("#godModeInput")[0].checked;
-//    interval = checkInteger(1000 / $("#intervalInput")[0].value);
 //    currentLevelNumber = checkInteger($("#levelInput")[0].value);
 //    waveOverride = checkInteger($("#levelInput")[0].value);
 //    var diffSelect = $("#difficultyInput")[0];
@@ -1494,7 +1526,6 @@ function initWorld() {
     postSetupLevel(currentLevel);
 }
 
-
 function startAgents() {
     log("Starting agents...");
 
@@ -1503,7 +1534,6 @@ function startAgents() {
     inPlay = true;
 }
 
-
 function stopAgents() {
     log("Stopping agents...");
 
@@ -1511,12 +1541,20 @@ function stopAgents() {
     inPlay = false;
 }
 
-function resetSpeed() {
-    interval = checkInteger(1000 / $("#intervalInput")[0].value);
-    if (inPlay) 
+function slowDown() {
+    if (interval < 100)
+        interval += 10;
+    if (inPlay)
         startAgents();
 }
 
+function speedUp() {
+    if (interval > 10)
+        interval -= 10;
+    if (inPlay)
+        startAgents();
+}
+/* End Set up code */
 
 
 
@@ -1597,8 +1635,6 @@ function openCompleteLevelDialog() {
             .dialog('open');
 }
 
-
-
 function showUpgradeDeleteDialog(e) {
     var canvas = document.getElementById('c2');
     var __ret = getResourcePosition(e, canvas);
@@ -1618,7 +1654,7 @@ function showUpgradeDeleteDialog(e) {
     }
 }
 
-function showResourceGalleryDialog() {
+function showResourceGallery() {
     // Try to save results to the server
     $('#current-profile-class')[0].innerHTML = profileClass;
     $('#current-credits')[0].innerHTML = credits;
@@ -1716,13 +1752,13 @@ function refreshSwatch() {
         $('#' + capability)[0].style.display = 'block';
     }
 }
+
 function saveCapabilities() {
     if (PROFILE_ID != undefined) {
         updateStats(function(data) {});
     }
 
 }
-
 /* End Dialog functions */
 
 
@@ -1743,7 +1779,6 @@ function determineCreditsAndClass() {
         profileClass = "Planner";
     }
 }
-
 
 function compileStats() {
     var resourceCount = resources.length;
@@ -1835,6 +1870,7 @@ function storeData() {
     if (localStorage.highestLevel == undefined || currentLevelNumber > localStorage.highestLevel)
         localStorage.highestLevel = currentLevelNumber;
 }
+
 function storeCurrentLevelData() {
     localStorage.currentScore = previousLevelScore;
     localStorage.currentLevelNumber = currentLevelNumber;
@@ -1843,7 +1879,6 @@ function storeCurrentLevelData() {
     localStorage.credits = credits;
     localStorage.capabilities = capabilities;
 }
-
 
 function checkInteger(value) {
     return Math.floor(value);
@@ -1860,7 +1895,6 @@ function notify(notice) {
 function levelInfo(notice) {
     $("#level-info")[0].innerHTML = notice;
 }
-
 /* End utility functions */
 
 
@@ -1875,6 +1909,7 @@ function pan() {
     }
     redrawWorld();
 }
+
 function zoom() {
     var canvases = $('canvas');
     for (var i = 0; i < canvases.length; i++) {

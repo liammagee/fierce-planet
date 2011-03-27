@@ -4,26 +4,27 @@
   <title>Fierce Planet</title>
   <%= stylesheet_link_tag "styles" %>
   <%= stylesheet_link_tag "smoothness/jquery-ui-1.8.11.custom" %>
-    <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? -%>
-    <%= javascript_tag "var PROFILE_ID;" -%>
-    <%= javascript_tag "PROFILE_ID = #{current_user.profile.id};" if current_user -%>
+  <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? -%>
+  <%= javascript_tag "var PROFILE_ID;" -%>
+  <%= javascript_tag "PROFILE_ID = #{current_user.profile.id};" if current_user -%>
   <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" %>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js" %>
   <%= javascript_include_tag "jquery.json-2.2.min.js" %>
   <%= javascript_include_tag "rails" %>
   <%= javascript_include_tag "agents/classes" %>
   <%= javascript_include_tag "agents/levels" %>
+  <%= javascript_include_tag "agents/resource_kinds" %>
   <%= javascript_include_tag "agents/player_classes" %>
   <%= javascript_include_tag "agents/game" %>
   <% if current_user %>
       <script>
-        profileClass = '<%= current_user.profile.profile_class ? current_user.profile.profile_class : "Novice" %>';
-        credits = parseInt('<%= current_user.profile.credits ? current_user.profile.credits : 0 %>');
-        capabilities = '<%= current_user.profile.capabilities ? current_user.profile.capabilities : "farm.water,clinic" %>'.split(',');
-        totalSaved = parseInt('<%= current_user.profile.total_saved ? current_user.profile.total_saved : 0 %>');
-        $(document).ready(function() {
-            refreshSwatch();
-        });
+          profileClass = '<%= current_user.profile.profile_class ? current_user.profile.profile_class : "Novice" %>';
+          credits = parseInt('<%= current_user.profile.credits ? current_user.profile.credits : 0 %>');
+          capabilities = '<%= current_user.profile.capabilities ? current_user.profile.capabilities : "farm.water,clinic" %>'.split(',');
+          totalSaved = parseInt('<%= current_user.profile.total_saved ? current_user.profile.total_saved : 0 %>');
+          $(document).ready(function() {
+              refreshSwatch();
+          });
       </script>
   <% end %>
   <%= javascript_include_tag "agents/level_editor" %>

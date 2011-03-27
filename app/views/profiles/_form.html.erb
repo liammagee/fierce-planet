@@ -1,86 +1,93 @@
 <%= form_for(@profile) do |f| %>
-  <% if @profile.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@profile.errors.count, "error") %> prohibited this profile from being saved:</h2>
+    <% if @profile.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@profile.errors.count, "error") %> prohibited this profile from being saved:</h2>
 
-      <ul>
-      <% @profile.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+          <ul>
+            <% @profile.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
 
-  <div class="field">
-    <%= f.label :nickname %><br />
-    <%= f.text_field :nickname %>
-  </div>
-  <div class="field">
-    <%= f.label :profile_class %>:
-    <%= @profile.profile_class %>
-  </div>
-  <div class="field">
-    <%= f.label :progress_towards_next_class %>:
-    <%= @profile.progress_towards_next_class %>
-  </div>
-  <div class="field">
-    <%= f.label :credits %>:
-    <%= @profile.credits %>
-  </div>
     <div class="field">
-      <%= f.label :status %><br />
+      <%= f.label :nickname %>
+      <br/>
+      <%= f.text_field :nickname %>
+    </div>
+    <div class="field">
+      <%= f.label :profile_class %>:
+      <%= @profile.profile_class %>
+    </div>
+    <div class="field">
+      <%= f.label :progress_towards_next_class %>:
+      <%= @profile.progress_towards_next_class %>
+    </div>
+    <div class="field">
+      <%= f.label :credits %>:
+      <%= @profile.credits %>
+    </div>
+    <div class="field">
+      <%= f.label :status %>
+      <br/>
       <%= @profile.status %>
     </div>
     <div class="field">
-      <%= f.label :capabilities %><br />
+      <%= f.label :capabilities %>
+      <br/>
       <%= @profile.capabilities %>
     </div>
 
     <h2>Vital statistics</h2>
 
-  <div class="field">
-    <%= f.label :total_saved %>:
-    <%= @profile.total_saved %>
-  </div>
-  <div class="field">
-    <%= f.label :total_expired %>:
-    <%= @profile.total_expired %>
-  </div>
-  <div class="field">
-    <%= f.label :total_patches %>:
-    <%= @profile.total_patches %>
-  </div>
-  <div class="field">
-    <%= f.label :total_economic_patches %>:
-    <%= @profile.total_economic_patches %>
-  </div>
-  <div class="field">
-    <%= f.label :total_environmental_patches %>:
-    <%= @profile.total_environmental_patches %>
-  </div>
-  <div class="field">
-    <%= f.label :total_social_patches %>:
-    <%= @profile.total_social_patches %>
-  </div>
+    <div class="field">
+      <%= f.label :total_saved %>:
+      <%= @profile.total_saved %>
+    </div>
+    <div class="field">
+      <%= f.label :total_expired %>:
+      <%= @profile.total_expired %>
+    </div>
+    <div class="field">
+      <%= f.label :total_patches %>:
+      <%= @profile.total_patches %>
+    </div>
+    <div class="field">
+      <%= f.label :total_economic_patches %>:
+      <%= @profile.total_economic_patches %>
+    </div>
+    <div class="field">
+      <%= f.label :total_environmental_patches %>:
+      <%= @profile.total_environmental_patches %>
+    </div>
+    <div class="field">
+      <%= f.label :total_social_patches %>:
+      <%= @profile.total_social_patches %>
+    </div>
 
-  <div class="field">
-    <%= f.label :current_score %><br />
-    <%= @profile.current_score %>
-  </div>
-  <div class="field">
-    <%= f.label :highest_score %><br />
-    <%= @profile.highest_score %>
-  </div>
-  <div class="field">
-    <%= f.label :current_level %><br />
-    <%= @profile.current_level %>
-  </div>
-  <div class="field">
-    <%= f.label :highest_level %><br />
-    <%= @profile.highest_level %>
-  </div>
+    <div class="field">
+      <%= f.label :current_score %>
+      <br/>
+      <%= @profile.current_score %>
+    </div>
+    <div class="field">
+      <%= f.label :highest_score %>
+      <br/>
+      <%= @profile.highest_score %>
+    </div>
+    <div class="field">
+      <%= f.label :current_level %>
+      <br/>
+      <%= @profile.current_level %>
+    </div>
+    <div class="field">
+      <%= f.label :highest_level %>
+      <br/>
+      <%= @profile.highest_level %>
+    </div>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
 <% end %>

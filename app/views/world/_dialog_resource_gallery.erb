@@ -1,0 +1,67 @@
+<div id="resource-gallery" style="display: none;">
+  <div>
+    Profile details
+    <br/>
+    Current class: <span id="current-profile-class"><%= current_user.profile.profile_class if current_user %></span>
+    <br/>
+    Credits: <span id="current-credits"><%= current_user.profile.credits if current_user %></span>
+    <br/>
+    Capabilities: <span id="current-capabilities"><%= current_user.profile.capabilities if current_user %></span>
+  </div>
+  <div id="gallery-items">
+    <div>
+      <div>Economic</div>
+      <div class="purchase eco" id="farm-purchase" title="Cost: 10; PAY: 20">
+        <a href="#">Farm</a>
+      </div>
+      <div class="purchase eco" id="shop-purchase" title="Cost: 15; PAY: 30">
+        <a href="#">Shop</a>
+      </div>
+      <div class="purchase eco" id="bank-purchase" title="Cost: 20; PAY: 50">
+        <a href="#">Bank</a>
+      </div>
+      <div class="purchase eco" id="factory-purchase" title="Cost: 25; PAY: 70">
+        <a href="#">Factory</a>
+      </div>
+      <div class="purchase eco" id="stockmarket-purchase" title="Cost: 30; PAY: 90">
+        <a href="#">Stockmarket</a>
+      </div>
+    </div>
+    <div>
+      <div>Environmental</div>
+      <div class="purchase env" id="water-purchase" title="Cost: 10; PAY: 10">
+        <a href="#">Fresh Water</a>
+      </div>
+      <div class="purchase env" id="sanctuary-purchase" title="Cost: 15; PAY: 15">
+        <a href="#">Sanctuary</a>
+      </div>
+      <div class="purchase env" id="air-purchase" title="Cost: 20; PAY: 25">
+        <a href="#">Clean Air</a>
+      </div>
+      <div class="purchase env" id="renewable-energy-purchase" title="Cost: 25; PAY: 35">
+        <a href="#">Green Energy</a>
+      </div>
+      <div class="purchase env" id="biodiversity-purchase" title="Cost: 30; PAY: 45">
+        <a href="#">Biodiversity</a>
+      </div>
+    </div>
+    <div>
+      <div>Social</div>
+      <div class="purchase soc" id="clinic-purchase" title="Cost: 10; PAY: 5">
+        <a href="#">Clinic</a>
+      </div>
+      <div class="purchase soc" id="school-purchase" title="Cost: 15; PAY: 8">
+        <a href="#">School</a>
+      </div>
+      <div class="purchase soc" id="legal-system-purchase" title="Cost: 20; PAY: 15">
+        <a href="#">Legal System</a>
+      </div>
+      <div class="purchase soc" id="democracy-purchase" title="Cost: 25; PAY: 20">
+        <a href="#">Democracy</a>
+      </div>
+      <div class="purchase soc" id="festival-purchase" title="Cost: 30; PAY: 25">
+        <a href="#">Festival</a>
+      </div>
+    </div>
+  </div>
+</div>

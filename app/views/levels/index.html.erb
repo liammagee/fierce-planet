@@ -21,29 +21,29 @@
     <th></th>
   </tr>
 
-<% @levels.each do |level| %>
-  <tr>
-    <td><%= level.name %></td>
-    <td><%= level.world_width %></td>
-    <td><%= level.world_height %></td>
-    <td><%= level.initial_agent_x %></td>
-    <td><%= level.initial_agent_y %></td>
-    <td><%= level.initial_agent_number %></td>
-    <td><%= level.goal_x %></td>
-    <td><%= level.goal_y %></td>
-    <td><%= level.wave_number %></td>
-    <td><%= level.expiry_limit %></td>
-    <td><%= level.allow_offscreen_cycling %></td>
-    <td><%= level.allow_patches_on_path %></td>
-    <td><%= level.notice %></td>
-    <td><%= level.tiles %></td>
-    <td><%= link_to 'Show', level %></td>
-    <td><%= link_to 'Edit', edit_level_path(level) %></td>
-    <td><%= link_to 'Destroy', level, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <% @levels.each do |level| %>
+      <tr>
+        <td><%= level.name %></td>
+        <td><%= level.world_width %></td>
+        <td><%= level.world_height %></td>
+        <td><%= level.initial_agent_x %></td>
+        <td><%= level.initial_agent_y %></td>
+        <td><%= level.initial_agent_number %></td>
+        <td><%= level.goal_x %></td>
+        <td><%= level.goal_y %></td>
+        <td><%= level.wave_number %></td>
+        <td><%= level.expiry_limit %></td>
+        <td><%= level.allow_offscreen_cycling %></td>
+        <td><%= level.allow_patches_on_path %></td>
+        <td><%= level.notice %></td>
+        <td><%= level.tiles %></td>
+        <td><%= link_to 'Show', level %></td>
+        <td><%= link_to 'Edit', edit_level_path(level) %></td>
+        <td><%= link_to 'Destroy', level, :confirm => 'Are you sure?', :method => :delete %></td>
+      </tr>
+  <% end %>
 </table>
 
-<br />
+<br/>
 
 <%= link_to 'New Level', new_level_path %>

@@ -9,8 +9,8 @@
     <%= f.submit 'Save' %>
 <% end %>
 <script>
-// attach a submit handler to the form
-  $('.edit_level')[0].addEventListener('submit', function(event) {
+    // attach a submit handler to the form
+    $('.edit_level')[0].addEventListener('submit', function(event) {
         $('#level_tiles')[0].value = $.toJSON(currentLevel.getTiles());
         $('#level_world_width')[0].value = currentLevel.getWorldWidth();
         $('#level_world_height')[0].value = currentLevel.getWorldHeight();
@@ -20,6 +20,6 @@
         $('#level_goal_y')[0].value = currentLevel.getGoalY();
 
         alert(currentLevel.getTiles().length);
-  });
+    });
 </script>
 

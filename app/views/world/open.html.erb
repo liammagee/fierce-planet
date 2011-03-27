@@ -10,6 +10,7 @@
   <div id="main-panel">
     <%= render "score_board" %>
 
+
     <div id="gameworld">
       <div id="world">
         <canvas id="c1" width="401" height="401" style="z-index: 1;">A Canvas</canvas>
@@ -17,88 +18,23 @@
         <canvas id="c3" width="401" height="401" style="z-index: 3;">A Canvas</canvas>
         <canvas id="c4" width="401" height="401" style="z-index: 4;">A Canvas</canvas>
       </div>
-
-
     </div>
+
     <div id="info">
       <div id="level-info">
       </div>
       <div id="global-info">
       </div>
     </div>
-    <div id="swatch">
-      <div>
-        <div>Economic</div>
-        <div class="eco" id="farm" title="Cost: 10; PAY: 20">
-          <a href="#">Farm</a>
-        </div>
-        <div class="eco" id="shop" title="Cost: 15; PAY: 30" style="display: none">
-          <a href="#">Shop</a>
-        </div>
-        <div class="eco" id="bank" title="Cost: 20; PAY: 50" style="display: none">
-          <a href="#">Bank</a>
-        </div>
-        <div class="eco" id="factory" title="Cost: 25; PAY: 70" style="display: none">
-          <a href="#">Factory</a>
-        </div>
-        <div class="eco" id="stockmarket" title="Cost: 30; PAY: 90" style="display: none">
-          <a href="#">Stockmarket</a>
-        </div>
-      </div>
-      <div>
-        <div>Environmental</div>
-        <div class="env" id="water" title="Cost: 10; PAY: 10">
-          <a href="#">Fresh Water</a>
-        </div>
-        <div class="env" id="sanctuary" title="Cost: 15; PAY: 15" style="display: none">
-          <a href="#">Wildlife Sanctuary</a>
-        </div>
-        <div class="env" id="air" title="Cost: 20; PAY: 25" style="display: none">
-          <a href="#">Clean Air</a>
-        </div>
-        <div class="env" id="renewable-energy" title="Cost: 25; PAY: 35" style="display: none">
-          <a href="#">Renewable Energy</a>
-        </div>
-        <div class="env" id="biodiversity" title="Cost: 30; PAY: 45" style="display: none">
-          <a href="#">Biodiversity</a>
-        </div>
-      </div>
-      <div>
-        <div>Social</div>
-        <div class="soc" id="clinic" title="Cost: 10; PAY: 5">
-          <a href="#">Clinic</a>
-        </div>
-        <div class="soc" id="school" title="Cost: 15; PAY: 8" style="display: none">
-          <a href="#">School</a>
-        </div>
-        <div class="soc" id="legal-system" title="Cost: 20; PAY: 15" style="display: none">
-          <a href="#">Legal System</a>
-        </div>
-        <div class="soc" id="democracy" title="Cost: 25; PAY: 20" style="display: none">
-          <a href="#">Democracy</a>
-        </div>
-        <div class="soc" id="festival" title="Cost: 30; PAY: 25" style="display: none">
-          <a href="#">Festival</a>
-        </div>
-      </div>
-    </div>
-    <div id="level-features" style="display: none;">
-      <div><a href="#" id="makeTile" onclick="makeTile();">Add Tile</a></div>
-      <div><a href="#" id="addGoal" onclick="addGoal(); ">Set Goal</a></div>
-      <div><a href="#" id="addAgentStartingPoint" onclick="addAgentStartingPoint(); ">Set Entry Point</a></div>
-    </div>
-    <div id="level-editor" style="display: none;">
-      <div><a href="#" id="levelProperties" onclick="showLevelProperties();">Properties</a></div>
-      <div><a href="#" id="refreshTiles" onclick="currentLevel.setTiles(fillWithTiles()); redrawWorld();">Clear all</a>
-      </div>
-      <div><a href="#" id="undo" onclick="undoAction();">Undo (last action only)</a></div>
-      <div style="clear: both"><a href="#" id="cancelLevelEditor" onclick="cancelLevelEditor();">Cancel</a></div>
 
-      <div id="level-editor-form"></div>
-    </div>
-
-
+    <!-- Should always be visible -->
     <%= render "control_panel" %>
+
+    <!-- Should only be visible when NOT in design mode -->
+    <%= render 'swatch' %>
+
+    <!-- Should only be visible when in design mode -->
+    <%= render 'level_editor' %>
   </div>
 
 </div>
@@ -108,84 +44,9 @@
 
 
 
-<div id="level-list">
-</div>
 
-<!-- Dialog boxes -->
-<div id="delete-upgrade-dialog" style="display: none;">
-  <div><a href="#" id="del-button">Delete <br/>
-    <small>(Revenue: 5)</small>
-  </a></div>
-  <div><a href="#" id="upg-button">Upgrade <br/>
-    <small>(Cost: 20; PAY: 20)</small>
-  </a></div>
-</div>
+<!-- Dialog boxes - should only be visible when explicitly invoked -->
+<%= render 'dialog_level_list' %>
+<%= render 'dialog_delete_upgrade' %>
+<%= render 'dialog_resource_gallery' %>
 
-<!-- Dialog boxes -->
-<div id="resource-gallery" style="display: none;">
-  <div>
-    Profile details
-    <br/>
-    Current class: <span id="current-profile-class"><%= current_user.profile.profile_class if current_user %></span>
-    <br/>
-    Credits: <span id="current-credits"><%= current_user.profile.credits if current_user %></span>
-    <br/>
-    Capabilities: <span id="current-capabilities"><%= current_user.profile.capabilities if current_user %></span>
-  </div>
-  <div id="gallery-items">
-    <div>
-      <div>Economic</div>
-      <div class="purchase eco" id="farm-purchase" title="Cost: 10; PAY: 20">
-        <a href="#">Farm</a>
-      </div>
-      <div class="purchase eco" id="shop-purchase" title="Cost: 15; PAY: 30">
-        <a href="#">Shop</a>
-      </div>
-      <div class="purchase eco" id="bank-purchase" title="Cost: 20; PAY: 50">
-        <a href="#">Bank</a>
-      </div>
-      <div class="purchase eco" id="factory-purchase" title="Cost: 25; PAY: 70">
-        <a href="#">Factory</a>
-      </div>
-      <div class="purchase eco" id="stockmarket-purchase" title="Cost: 30; PAY: 90">
-        <a href="#">Stockmarket</a>
-      </div>
-    </div>
-    <div>
-      <div>Environmental</div>
-      <div class="purchase env" id="water-purchase" title="Cost: 10; PAY: 10">
-        <a href="#">Fresh Water</a>
-      </div>
-      <div class="purchase env" id="sanctuary-purchase" title="Cost: 15; PAY: 15">
-        <a href="#">Wildlife Sanctuary</a>
-      </div>
-      <div class="purchase env" id="air-purchase" title="Cost: 20; PAY: 25">
-        <a href="#">Clean Air</a>
-      </div>
-      <div class="purchase env" id="renewable-energy-purchase" title="Cost: 25; PAY: 35">
-        <a href="#">Renewable Energy</a>
-      </div>
-      <div class="purchase env" id="biodiversity-purchase" title="Cost: 30; PAY: 45">
-        <a href="#">Biodiversity</a>
-      </div>
-    </div>
-    <div>
-      <div>Social</div>
-      <div class="purchase soc" id="clinic-purchase" title="Cost: 10; PAY: 5">
-        <a href="#">Clinic</a>
-      </div>
-      <div class="purchase soc" id="school-purchase" title="Cost: 15; PAY: 8">
-        <a href="#">School</a>
-      </div>
-      <div class="purchase soc" id="legal-system-purchase" title="Cost: 20; PAY: 15">
-        <a href="#">Legal System</a>
-      </div>
-      <div class="purchase soc" id="democracy-purchase" title="Cost: 25; PAY: 20">
-        <a href="#">Democracy</a>
-      </div>
-      <div class="purchase soc" id="festival-purchase" title="Cost: 30; PAY: 25">
-        <a href="#">Festival</a>
-      </div>
-    </div>
-  </div>
-</div>

@@ -1,38 +1,45 @@
 <div id="controls">
-  <h3>Control Panel</h3>
+  <h2>Control Panel</h2>
   <br/>
 
+
+  <button id="startAgents">Start</button>
+  <br/>
+  <button id="stopAgents">Pause</button>
+  <br/>
   Speed:
+  <button id="slowDown">-</button>
+  <button id="speedUp">+</button>
   <br/>
-  <input id="intervalInput" name="intervalInput" type="range" min="10" max="100" value="50" step="10" onchange="resetSpeed()" />
   <br/>
-
-  <button id="startAgents" onclick="startAgents();">Start</button>
+  <button id="restartLevel">Restart Level</button>
   <br/>
-  <button id="stopAgents" onclick="stopAgents();">Pause</button>
+  <button id="newGame">New Game</button>
   <br/>
-  <button id="restartLevel" onclick="restartLevel();">Restart Level</button>
+  <button id="showResourceGallery">Resource Gallery</button>
   <br/>
-  <button id="fullResetWorld" onclick="newGame();">New Game</button>
-  <br/>
-  <%= button_to "Level gallery", gallery_levels_path, :method => :get, :remote => true %>
+  <%= button_to "Level Gallery", gallery_levels_path, :method => :get, :remote => true %>
   <br/>
   <%
-    if current_user.try(:admin?)
+     if current_user.try(:admin?)
   %>
-      Admin functions:
+      <h3>Admin functions:</h3>
       <br/>
-      God mode: <input id="godModeInput" name="intervalInput" type="checkbox" />
-      <br/>
-      <button id="resourceGallery" onclick="showResourceGalleryDialog();">Resource Gallery</button>
-      <br/>
-      <button id="cells" onclick="processAgents();">Debug</button>
-      <br/>
-
       <%= button_to "Level Editor", levels_path, :method => :get, :remote => true %>
-      <button id="pan" onclick="pan();">Pan</button>
       <br/>
-      <button id="zoom" onclick="zoom();">Zoom</button>
-<% end %>
+      <strong>Developmental:</strong>
+      <br/>
+      God mode: <input id="godModeInput" name="godModeInput" type="checkbox"/>
+      <br/>
+      (then click 'New game', and 'Start')
+      <br/>
+      <button id="debug">Debug</button>
+      <br/>
+      <strong>Experimental:</strong>
+      <br/>
+      <button id="pan">Pan</button>
+      <br/>
+      <button id="zoom">Zoom</button>
+  <% end %>
   <br/>
 </div>

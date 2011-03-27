@@ -8,15 +8,15 @@
     <th></th>
   </tr>
 
-<% @levels.each do |level| %>
-  <tr>
-    <td><%= level.name %></td>
-    <td><%= link_to 'Edit', edit_level_path(level), :remote => true %></td>
-    <td><%= link_to 'Destroy', level, :confirm => 'Are you sure?', :method => :delete, :remote => true %></td>
-  </tr>
-<% end %>
+  <% @levels.each do |level| %>
+      <tr>
+        <td><%= level.name %></td>
+        <td><%= link_to 'Edit', edit_level_path(level), :remote => true %></td>
+        <td><%= link_to 'Destroy', level, :confirm => 'Are you sure?', :method => :delete, :remote => true %></td>
+      </tr>
+  <% end %>
 </table>
 
-<br />
+<br/>
 
 <%= link_to 'New Level', new_level_path, :remote => true %>

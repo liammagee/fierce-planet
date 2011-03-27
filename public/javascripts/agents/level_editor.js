@@ -213,4 +213,9 @@ function showLevelProperties() {
     $editProperties.dialog('open');
 }
 
+function refreshTiles() {
+    currentLevel.setTiles(fillWithTiles());
+    redrawWorld();
+}
+
 /* End Level editor functions */

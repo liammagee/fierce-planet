@@ -59,6 +59,7 @@ body {
     position:relative;
     left:0px;
     top:0px;
+    padding-right: 1em;
 }
 
 #swatch, #level-editor {

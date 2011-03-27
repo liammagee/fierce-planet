@@ -27,13 +27,13 @@
 
   <div id="user-links" style="clear:both; float: right; position: relative; width: 25%; color: blue; padding: 0; text-align: right">
     <p>
-<% if user_signed_in? %>
-<%=  'Welcome, ' + current_user.profile.nickname if current_user and current_user.profile.nickname %>
-  <%= link_to('Profile', edit_profile_path(current_user.profile)) %>
-  <%= link_to('Logout', destroy_user_session_path) %>
-<% else %>
-  <%= link_to('Login', new_user_session_path)  %>
-<% end %>
+      <% if user_signed_in? %>
+          <%= 'Welcome, ' + current_user.profile.nickname if current_user and current_user.profile.nickname %>
+          <%= link_to('Profile', edit_profile_path(current_user.profile)) %>
+          <%= link_to('Logout', destroy_user_session_path) %>
+      <% else %>
+          <%= link_to('Login', new_user_session_path) %>
+      <% end %>
     </p>
   </div>
   <div id="notifications" style="float: left; position: relative; width: 75%; color: blue; padding: 0">

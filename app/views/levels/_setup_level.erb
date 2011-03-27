@@ -18,7 +18,7 @@ currentLevelNumber = parseInt("<%= @level.id %>");
 var arr = fillWithTiles();
 var jsonArray = '<%= raw @level.tiles %>';
 try {
-    arr = $.evalJSON(jsonArray);
+arr = $.evalJSON(jsonArray);
 }
 catch (err) {
 }
