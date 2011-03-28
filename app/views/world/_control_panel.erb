@@ -20,9 +20,7 @@
   <br/>
   <%= button_to "Level Gallery", gallery_levels_path, :method => :get, :remote => true %>
   <br/>
-  <%
-     if current_user.try(:admin?)
-  %>
+  <div id="admin-controls" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
       <h3>Admin functions:</h3>
       <br/>
       <%= button_to "Level Editor", levels_path, :method => :get, :remote => true %>
@@ -40,6 +38,6 @@
       <button id="pan">Pan</button>
       <br/>
       <button id="zoom">Zoom</button>
-  <% end %>
+  </div>
   <br/>
 </div>

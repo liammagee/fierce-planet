@@ -239,8 +239,8 @@ function setupDialogs() {
                 }
             }
 		});
-    $('#del-button')[0].addEventListener('click', function(e) {deleteCurrentResource(); $upgradeDelete.dialog('close'); } );
-    $('#upg-button')[0].addEventListener('click', function(e) {upgradeCurrentResource(); $upgradeDelete.dialog('close'); } );
+    $('#del-button')[0].addEventListener('click', function(e) {deleteCurrentResource(); $upgradeDelete.dialog('close'); }, false );
+    $('#upg-button')[0].addEventListener('click', function(e) {upgradeCurrentResource(); $upgradeDelete.dialog('close'); }, false    );
 
     $resourceGallery = $('#resource-gallery')
         .dialog({
