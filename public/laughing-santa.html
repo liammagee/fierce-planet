@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function() {
+            $('#generate')[0].addEventListener('click', makeSantaLaugh, false);
+        });
+
+    var currentState = 1;
+
+    function makeSantaLaugh(e) {
+        if (e.preventDefault)
+            e.preventDefault();
+
+        // Reset the current state
+        currentState = 1;
+        
+        $('#laugh')[0].innerHTML = generateLaugh();
+    }
+
+    function generateLaugh() {
+        var laugh = '';
+        // Generate a random number of laughs between 1 and 21.
+        var numberOfLaughs = Math.floor(Math.random() * 20) + 1;
+
+        for (var i = 0; i < numberOfLaughs * 2; i++) {
+            laugh += generateCharacterAndTransitionState();
+        }
+
+        // Double-check: make sure we are in an appropriate state to make the final transition
+        if (currentState != 3)
+            laugh += generateCharacterAndTransitionState();
+
+        // Double-check: make sure we are in an appropriate state to make the final transition
+        if (currentState == 3)
+            laugh += makeFinalTransitionState();
+
+        // Now return the laugh...
+        return laugh;
+    }
+
+    function generateCharacterAndTransitionState() {
+        var generatedCharacter;
+        switch (currentState) {
+            case 1:
+                generatedCharacter = 'h';
+                currentState = 2;
+                break;
+            case 2:
+                if (Math.random() < 0.5)
+                    generatedCharacter = 'o';
+                else
+                    generatedCharacter = 'a';
+                currentState = 3;
+                break;
+            // Same as state 1
+            case 3:
+                generatedCharacter = 'h';
+                currentState = 2;
+                break;
+        }
+        return generatedCharacter;
+    }
+
+    function makeFinalTransitionState() {
+        currentState = 4;
+        return '!';
+    }
+    </script>
+</head>
+<body>
+
+
+
+<img src="http://static.blogcritics.org/09/12/05/120543/LaughingSanta.jpg"/>
+
+<form>
+    <button id="generate">Generate a laugh...</button>
+</form>
+<div id="laugh"/>
+
+</body>
+</html>
