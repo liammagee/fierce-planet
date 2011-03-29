@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  after_create :create_profile
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
   devise :database_authenticatable, :registerable,
@@ -9,7 +11,7 @@ class User < ActiveRecord::Base
 
   has_one :profile
 
-  def self.after_save
+  def create_profile
     if profile.nil?
       p = Profile.new
       p.user = self
