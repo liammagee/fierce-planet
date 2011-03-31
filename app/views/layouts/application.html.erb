@@ -2,20 +2,32 @@
 <html>
 <head>
   <title>Fierce Planet</title>
+  <link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
   <%= stylesheet_link_tag "styles" %>
   <%= stylesheet_link_tag "smoothness/jquery-ui-1.8.11.custom" %>
-  <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? -%>
-  <%= javascript_tag "var PROFILE_ID;" -%>
-  <%= javascript_tag "PROFILE_ID = #{current_user.profile.id};" if current_user -%>
+
   <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" %>
   <%= javascript_include_tag "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js" %>
   <%= javascript_include_tag "jquery.json-2.2.min.js" %>
+  <%= javascript_include_tag "http://www.google.com/jsapi" %>
+  <%= javascript_include_tag "http://maps.google.com/maps/api/js?sensor=true" %>
+
+  <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? -%>
+  <%= javascript_tag "var PROFILE_ID;" -%>
+  <%= javascript_tag "PROFILE_ID = #{current_user.profile.id};" if current_user -%>
+
   <%= javascript_include_tag "rails" %>
   <%= javascript_include_tag "agents/classes" %>
   <%= javascript_include_tag "agents/levels" %>
   <%= javascript_include_tag "agents/resource_kinds" %>
   <%= javascript_include_tag "agents/player_classes" %>
   <%= javascript_include_tag "agents/game" %>
+
+  <%= javascript_include_tag "agents/maps" %>
+
+  <script type="text/javascript">
+  </script>
+
   <% if current_user %>
       <script>
           profileClass = '<%= current_user.profile.profile_class ? current_user.profile.profile_class : "Novice" %>';
@@ -29,6 +41,7 @@
   <% end %>
   <%= javascript_include_tag "agents/level_editor" %>
   <%= csrf_meta_tag %>
+
 </head>
 <body>
 

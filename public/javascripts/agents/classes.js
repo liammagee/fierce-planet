@@ -24,6 +24,8 @@ function Level(id) {
     this._image;
     this._soundSrc;
     this._tiles;
+    this._mapOptions;
+    this._mapURL;
 }
 Level.prototype.getId = function() { return this._id; }
 Level.prototype.setId = function(id) { this._id = id; }
@@ -63,6 +65,30 @@ Level.prototype.getSoundSrc = function() { return this._soundSrc; }
 Level.prototype.setSoundSrc = function(soundSrc) { this._soundSrc = soundSrc; }
 Level.prototype.getTiles = function() { return this._tiles; }
 Level.prototype.setTiles = function(tiles) { this._tiles = tiles; }
+Level.prototype.getMapOptions = function() { return this._mapOptions; }
+Level.prototype.setMapOptions = function(mapOptions) { this._mapOptions = mapOptions; }
+Level.prototype.getMapURL = function() { return this._mapURL; }
+Level.prototype.setMapURL = function(mapURL) { this._mapURL = mapURL; }
+Level.prototype.getPath = function() {
+    var pathCells = new Array();
+    for (var i = 0; i < this._worldWidth; i++) {
+        for (var j = 0; j < this._worldWidth; j++) {
+            var found  = false;
+            for (var k = 0; k < this._tiles.length; k++) {
+                var tile = this._tiles[k];
+                if (tile._x == i && tile._y == j) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                pathCells.push([i, j]);
+        }
+
+    }
+    return pathCells;
+}
+
 
 
 

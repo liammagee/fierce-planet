@@ -12,7 +12,7 @@ currentLevel.setGoalY(<%= @level.goal_y %>);
 currentLevel.setWaveNumber(<%= @level.wave_number %>);
 currentLevel.setExpiryLimit(<%= @level.expiry_limit %>);
 currentLevel.setAllowOffscreenCycling(<%= @level.allow_offscreen_cycling %>);
-currentLevel.setAllowPatchesOnPath(<%= @level.allow_patches_on_path %>);
+currentLevel.setAllowResourcesOnPath(<%= @level.allow_patches_on_path %>);
 currentLevel.setupLevel = function() {};
 currentLevelNumber = parseInt("<%= @level.id %>");
 var arr = fillWithTiles();

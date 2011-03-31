@@ -58,6 +58,39 @@ Level.prototype.postSetupLevel = new function() {
 */
 
 
+/* Level 0 Definition */
+
+var level0 = new Level(1);
+level0.setInitialAgentX(0);
+level0.setInitialAgentY(0);
+level0.setGoalX(4);
+level0.setGoalY(4);
+level0.setWorldSize(5);
+level0.setInitialAgentNumber(1);
+level0.setWaveNumber(3);
+//level1.setWaveNumber(1);
+level0.setExpiryLimit(20);
+//level0.setImage("/images/Background_Level1.png");
+level0.setNotice("<h2>Tutorial</h2> " +
+        "<p>The aim of Fierce Planet is to help citizens survive as they move towards their goal (the yellow disc in the bottom right corner).</p> " +
+        "<p>You can do this by placing <em>resources</em> on the grey squares. Your resources are the blue, green and red rectangles below. You can click or drag resources onto any grey square on the game map.</p> " +
+        "<p>Resources come in three kinds: economic, environmental and social. Your citizens need all of these, so you will need to supply a mix of resources along their path.</p> " +
+        "<p>Notice that if you don't provide enough resources of a particular kind, your citizens will start to turn into that colour. That's a dangerous sign, which indicates you need to place some resources quickly.</p> " +
+        "<p>During game play, you spend resources from your store, indicated in the top left corner of the scoreboard. Saving citizens will increase your store.</p> " +
+        "<p>Start by placing some resources on the map. When you are ready, click the 'Start' button in the Control Panel on the left. A small number of citizens will make their way along the path.</p> "
+        );
+
+level0.setupLevel = function() {
+    var tiles = fillWithTiles();
+    tiles.splice(20, 5);
+    tiles.splice(15, 1);
+    tiles.splice(10, 5);
+    tiles.splice(9, 1);
+    tiles.splice(0, 5);
+    this.setTiles(tiles);
+};
+
+
 /* Level 1 Definition */
 
 var level1 = new Level(1);
@@ -75,6 +108,7 @@ level1.setNotice("<h2>Level 1: Welcome to Fierce Planet!</h2> " +
         "<p>The citizens of Fierce Planet are under threat. They are migrating in ever increasing numbers, seeking a promised land of peace and prosperity.</p>" +
         "<p>Help them by placing 'Economic', 'Environmental' and 'Social' resources beside their path before they expire! Drag or click the blue, green and red swatches onto the grey patches of the maze.</p> " +
         "<p><em>Tip: Keep watch on your resource and expired levels - once the maximum number of citizens have expired, it's Game Over!</em></p> ");
+//level1.setMapOptions({ lat: 30.9376, long: 79.4292, zoom: 10});
 
 level1.setupLevel = function() {
     var tiles = fillWithTiles();
@@ -700,3 +734,15 @@ level10.setupLevel = function() {
     tiles.splice(21, 18);
     this.setTiles(tiles);
 };
+
+/* Google Map links */
+level1.setMapURL("http://maps.google.com/maps/api/staticmap?center=30.9376,79.4292&zoom=10&size=601x601&maptype=satellite&sensor=false");
+level2.setMapURL("http://maps.google.com/maps/api/staticmap?center=32.3939,78.2345&zoom=13&size=601x601&maptype=satellite&sensor=false");
+level3.setMapURL("http://maps.google.com/maps/api/staticmap?center=-63.1748,-56.6296&zoom=13&size=601x601&maptype=satellite&sensor=false");
+level4.setMapURL("http://maps.google.com/maps/api/staticmap?center=-25.34340,131.03644&zoom=14&size=601x601&maptype=satellite&sensor=false");
+level5.setMapURL("http://maps.google.com/maps/api/staticmap?center=25.088,12.201&zoom=10&size=601x601&maptype=satellite&sensor=false");
+level6.setMapURL("http://maps.google.com/maps/api/staticmap?center=-9.8691,-37.2139&zoom=10&size=601x601&maptype=satellite&sensor=false");
+level7.setMapURL("http://maps.google.com/maps/api/staticmap?center=-13.182,167.705&zoom=10&size=601x601&maptype=satellite&sensor=false");
+level8.setMapURL("http://maps.google.com/maps/api/staticmap?center=41.890260,12.492220&zoom=20&size=601x601&maptype=satellite&sensor=false");
+level9.setMapURL("http://maps.google.com/maps/api/staticmap?center=43.07646,-79.07158&zoom=18&size=601x601&maptype=satellite&sensor=false");
+level10.setMapURL("http://maps.google.com/maps/api/staticmap?center=-41.81182,146.98923&zoom=14&size=601x601&maptype=satellite&sensor=false");

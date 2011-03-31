@@ -26,6 +26,8 @@ var MEDIUM_DIFFICULTY = 2;
 var HARD_DIFFICULTY = 3;
 var EXTREME_DIFFICULTY = 4;
 
+var WORLD_WIDTH = 600;
+
 
 
 
@@ -94,7 +96,7 @@ var savedAgentThisWaveCount = 0;
 
 
 var worldSize = 11;
-var cellWidth = 400 / worldSize;
+var cellWidth = WORLD_WIDTH / worldSize;
 var pieceWidth = cellWidth * 0.5;
 var currentResource = null;
 
@@ -129,7 +131,6 @@ $(document).ready(function() {
     // Reload the game when the level 1 image is loaded (TODO: how should other levels be handled?)
     if(level1.getImage().complete) reloadGame()
     else level1.getImage().onload= reloadGame;
-
 
 
     // Set up dialogs
@@ -257,6 +258,7 @@ function setupDialogs() {
             }
         });
 
+    $('#tutorial')[0].addEventListener('click', function(e) { currentLevelNumber = 0; restartLevel(); }, false    );
 }
 
 // Handle various resource-related interactions
@@ -329,8 +331,15 @@ function hookUpUIEventListeners() {
 
     // Admin functions
     $('#debug')[0].addEventListener('click', function() { processAgents();}, false);
-    $('#pan')[0].addEventListener('click', function() { pan();}, false);
-    $('#zoom')[0].addEventListener('click', function() { zoom();}, false);
+
+    // Pan/zoomFunctions
+    $('#panUp')[0].addEventListener('click', function() { pan(0);}, false);
+    $('#panDown')[0].addEventListener('click', function() { pan(1);}, false);
+    $('#panLeft')[0].addEventListener('click', function() { pan(2);}, false);
+    $('#panRight')[0].addEventListener('click', function() { pan(3);}, false);
+    $('#zoomIn')[0].addEventListener('click', function() { zoom(0);}, false);
+    $('#zoomOut')[0].addEventListener('click', function() { zoom(1);}, false);
+    $('#zoomReset')[0].addEventListener('click', function() { zoom(-1);}, false);
 
     // Level editor functions
    $('#makeTile')[0].addEventListener('click', function() { makeTile();}, false);
@@ -640,6 +649,23 @@ function drawTile(p) {
     ctx.strokeRect(x, y, cellWidth, cellWidth);
 }
 
+function drawPath() {
+    var canvas = $('#c1')[0];
+    var ctx = canvas.getContext('2d');
+    var pathCells = currentLevel.getPath();
+    for (var i = 0; i < pathCells.length; i+= 1) {
+        var pathCell = pathCells[i];
+        var x = pathCell[0] * cellWidth;
+        var y = pathCell[1] * cellWidth;
+        ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellWidth - 1);
+//        ctx.fillStyle = "#fff";
+        ctx.fillStyle = "#fafafa";
+        ctx.fillRect(x, y, cellWidth, cellWidth);
+        ctx.strokeStyle = "#ccc";
+        ctx.strokeRect(x, y, cellWidth, cellWidth);
+    }
+}
+
 function drawBackgroundImage() {
     if (currentLevel.getImage() != undefined) {
         var canvas = $('#c1')[0];
@@ -647,6 +673,36 @@ function drawBackgroundImage() {
         ctx.drawImage(currentLevel.getImage(), 0, 0);
     }
 }
+
+function handleApiReady() {
+    var map;
+    var mapOptions = {
+      center: new google.maps.LatLng(30.9376, 79.4292),
+      disableDefaultUI: true,
+      zoom: 10,
+      mapTypeId: 'satellite'
+    };
+    if (currentLevel.getMapOptions()['lat'] != undefined && currentLevel.getMapOptions()['long'] != undefined)
+        mapOptions['center'] = new google.maps.LatLng(currentLevel.getMapOptions()['lat'], currentLevel.getMapOptions()['long']);
+    if (currentLevel.getMapOptions()['zoom'] != undefined)
+        mapOptions['zoom'] = currentLevel.getMapOptions()['zoom'];
+
+    map = new google.maps.Map($("#map_canvas")[0], mapOptions);
+    map.setTilt(45);
+}
+function drawMap() {
+    if (currentLevel.getMapURL() != undefined) {
+        $("#map_canvas").prepend('<img src="' + currentLevel.getMapURL() + '"/>').css('image-orientation: 135deg');
+    }
+    else if (currentLevel.getMapOptions() != undefined) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=handleApiReady";
+        document.body.appendChild(script);
+    }
+}
+
+
 
 function drawGoal() {
     var canvas = $('#c1')[0];
@@ -703,6 +759,7 @@ function drawResource(p) {
     var newColor = diluteColour(s, s, s, c);
     ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellWidth - 1);
     ctx.fillStyle = "#" + newColor;
+    ctx.strokeStyle = "#333";
 
     // Fill whole square
 //    ctx.fillRect(x, y, cellWidth, cellWidth);
@@ -727,9 +784,10 @@ function drawResource(p) {
             break;
     }
 
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "#ccc";
-    ctx.strokeRect(x, y, cellWidth, cellWidth);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#333";
+//    ctx.strokeRect(x, y, cellWidth, cellWidth);
+    ctx.strokeRect(x + 4, y + 4, cellWidth - 8, cellWidth - 8);
 //    ctx.strokeText(p.getUpgradeLevel(), x + 10, y + 10);
 
     // Draw resource-specific representation here
@@ -1446,6 +1504,7 @@ function redrawWorld() {
     stopAgents();
 
     // Clear canvases
+    $('#map_canvas').empty();
     clearCanvas('c2');
     clearCanvas('c3');
     clearCanvas('c4');
@@ -1457,9 +1516,16 @@ function redrawWorld() {
     resetResourceYields();
 
     // Draw basic elements
-    drawGrid();
-    drawTiles();
-    drawBackgroundImage();
+    if (currentLevel.getMapOptions() != undefined || currentLevel.getMapURL() != undefined) {
+        drawMap();
+        drawGrid();
+        drawPath();
+    }
+    else {
+        drawGrid();
+        drawTiles();
+        drawBackgroundImage();
+    }
     drawEntryPoint();
     drawGoal();
     drawResources();
@@ -1516,7 +1582,7 @@ function initWorld() {
 
 
     worldSize = currentLevel.getWorldSize();
-    cellWidth = 400 / worldSize;
+    cellWidth = WORLD_WIDTH / worldSize;
     pieceWidth = cellWidth * 0.5;
     scrollingImage.src = "/images/yellow-rain.png";
 
@@ -1899,25 +1965,56 @@ function levelInfo(notice) {
 
 
 /* Experimental Pan and Zoom functions */
-function pan() {
+function pan(direction) {
     var canvases = $('canvas');
     for (var i = 0; i < canvases.length; i++) {
         var canvas = canvases[i];
         var ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width,canvas.height);
-        ctx.translate(10, 10);
+        switch (direction) {
+            case 0:
+                ctx.translate(0, 10);
+                break;
+            case 1:
+                ctx.translate(0, -10);
+                break;
+            case 2:
+                ctx.translate(-10, 0);
+                break;
+            case 3:
+                ctx.translate(10, 0);
+                break;
+        }
     }
     redrawWorld();
 }
 
-function zoom() {
+function saveContexts() {
     var canvases = $('canvas');
     for (var i = 0; i < canvases.length; i++) {
         var canvas = canvases[i];
         var ctx = canvas.getContext('2d');
-//        ctx.save();
-        ctx.scale(1.5, 1.5);
-//        ctx.restore();
+        ctx.save();
+    }
+}
+
+function zoom(direction) {
+    var canvases = $('canvas');
+    for (var i = 0; i < canvases.length; i++) {
+        var canvas = canvases[i];
+        var ctx = canvas.getContext('2d');
+        switch (direction) {
+            case -1:
+//                ctx.restore();
+                ctx.scale(1, 1);
+                break;
+            case 0:
+                ctx.scale(1.5, 1.5);
+                break;
+            case 1:
+                ctx.scale(1 / 1.5, 1 / 1.5);
+                break;
+        }
     }
     redrawWorld();
 }
