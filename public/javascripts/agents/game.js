@@ -18,15 +18,15 @@ var DEFAULT_RESOURCE_RECOVERY = 2;
 var WAVE_GOODNESS_BONUS = 5;
 
 
-var NEW_LEVEL_DELAY = 3000;
-var NEW_WAVE_DELAY = 1000;
+var NEW_LEVEL_DELAY = 1000;
+var NEW_WAVE_DELAY = 200;
 
 var EASY_DIFFICULTY = 1;
 var MEDIUM_DIFFICULTY = 2;
 var HARD_DIFFICULTY = 3;
 var EXTREME_DIFFICULTY = 4;
 
-var WORLD_WIDTH = 600;
+var WORLD_WIDTH = 400;
 
 
 
@@ -104,6 +104,10 @@ var currentResource = null;
 var scrollingImage = new Image(); // City image
 var scrollingImageX = 0;
 var scrollingImageOffset = 1;
+
+var zoomLevel = 1;
+var panLeftOffset = 0;
+var panTopOffset = 0;
 
 
 /* Dialogs */
@@ -337,9 +341,10 @@ function hookUpUIEventListeners() {
     $('#panDown')[0].addEventListener('click', function() { pan(1);}, false);
     $('#panLeft')[0].addEventListener('click', function() { pan(2);}, false);
     $('#panRight')[0].addEventListener('click', function() { pan(3);}, false);
-    $('#zoomIn')[0].addEventListener('click', function() { zoom(0);}, false);
-    $('#zoomOut')[0].addEventListener('click', function() { zoom(1);}, false);
-    $('#zoomReset')[0].addEventListener('click', function() { zoom(-1);}, false);
+    $('#panReset')[0].addEventListener('click', function() { pan(4);}, false);
+    $('#zoomIn')[0].addEventListener('click', function() { zoom(1);}, false);
+    $('#zoomOut')[0].addEventListener('click', function() { zoom(-1);}, false);
+    $('#zoomReset')[0].addEventListener('click', function() { zoom(0);}, false);
 
     // Level editor functions
    $('#makeTile')[0].addEventListener('click', function() { makeTile();}, false);
@@ -1503,17 +1508,22 @@ function redrawWorld() {
     // Stop any existing timers
     stopAgents();
 
-    // Clear canvases
-    $('#map_canvas').empty();
-    clearCanvas('c2');
-    clearCanvas('c3');
-    clearCanvas('c4');
 
     // Initialise the world
     initWorld();
 
     // Reset existing resources
     resetResourceYields();
+
+    drawWorld();
+}
+
+function drawWorld() {
+    // Clear canvases
+    $('#map_canvas').empty();
+    clearCanvas('c2');
+    clearCanvas('c3');
+    clearCanvas('c4');
 
     // Draw basic elements
     if (currentLevel.getMapOptions() != undefined || currentLevel.getMapURL() != undefined) {
@@ -1533,6 +1543,7 @@ function redrawWorld() {
     drawScoreboard();
 
     levelInfo(currentLevel.getNotice());
+
 }
 
 function reloadGame() {
@@ -1608,7 +1619,9 @@ function stopAgents() {
 }
 
 function slowDown() {
-    if (interval < 100)
+    if (interval < 10)
+        interval += 1;
+    else if (interval < 100)
         interval += 10;
     if (inPlay)
         startAgents();
@@ -1617,6 +1630,8 @@ function slowDown() {
 function speedUp() {
     if (interval > 10)
         interval -= 10;
+    else if (interval > 0)
+        interval -= 1;
     if (inPlay)
         startAgents();
 }
@@ -1967,26 +1982,48 @@ function levelInfo(notice) {
 /* Experimental Pan and Zoom functions */
 function pan(direction) {
     var canvases = $('canvas');
+    var offset = 10;
     for (var i = 0; i < canvases.length; i++) {
         var canvas = canvases[i];
         var ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width,canvas.height);
         switch (direction) {
             case 0:
-                ctx.translate(0, 10);
+                ctx.translate(0, offset);
                 break;
             case 1:
-                ctx.translate(0, -10);
+                ctx.translate(0, -offset);
                 break;
             case 2:
-                ctx.translate(-10, 0);
+                ctx.translate(offset, 0);
                 break;
             case 3:
-                ctx.translate(10, 0);
+                ctx.translate(-offset, 0);
+                break;
+            case 4:
+                ctx.translate(- panLeftOffset, - panTopOffset);
                 break;
         }
     }
-    redrawWorld();
+    switch (direction) {
+        case 0:
+            panTopOffset += offset;
+            break;
+        case 1:
+            panTopOffset += -offset;
+            break;
+        case 2:
+            panLeftOffset += offset;
+            break;
+        case 3:
+            panLeftOffset += -offset;
+            break;
+        case 4:
+            panLeftOffset = 0;
+            panTopOffset = 0;
+            break;
+    }
+    drawWorld();
 }
 
 function saveContexts() {
@@ -2000,23 +2037,42 @@ function saveContexts() {
 
 function zoom(direction) {
     var canvases = $('canvas');
+    var magnify = 1.5;
     for (var i = 0; i < canvases.length; i++) {
         var canvas = canvases[i];
         var ctx = canvas.getContext('2d');
         switch (direction) {
             case -1:
-//                ctx.restore();
-                ctx.scale(1, 1);
+                if (zoomLevel > 1) {
+                    ctx.scale(1 / magnify, 1 / magnify);
+                }
                 break;
             case 0:
-                ctx.scale(1.5, 1.5);
+                ctx.scale(1 / zoomLevel, 1 / zoomLevel);
                 break;
             case 1:
-                ctx.scale(1 / 1.5, 1 / 1.5);
+                if (zoomLevel < 20) {
+                    ctx.scale(magnify, magnify);
+                }
                 break;
         }
     }
-    redrawWorld();
+    switch (direction) {
+        case -1:
+            if (zoomLevel > 1) {
+                zoomLevel *= 1 / magnify;
+            }
+            break;
+        case 0:
+            zoomLevel = 1;
+            break;
+        case 1:
+            if (zoomLevel < 20) {
+                zoomLevel *= magnify;
+            }
+            break;
+    }
+    drawWorld();
 }
 /* End Experimental Pan and Zoom functions */
 

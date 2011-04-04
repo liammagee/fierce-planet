@@ -37,7 +37,7 @@ body {
 #info {
     float: left;
     position:absolute;
-    left:861px;
+    left:661px;
 }
 #gameworld {
     margin-top: 20px;
@@ -62,13 +62,17 @@ body {
     width:180px;
     padding-right: 1em;
 }
+/*#controls img {*/
+    /*width: 16px;*/
+    /*height: 16px;*/
+/*}*/
 
 #swatch, #level-editor {
     margin-top: 20px;
     clear: both;
     position:absolute;
     left:200px;
-    top: 691px;
+    top: 491px;
 }
 
 canvas {
@@ -76,8 +80,8 @@ canvas {
 }
 
 #map_canvas {
-    height: 601px;
-    width: 601px;
+    height: 401px;
+    width: 401px;
   position: absolute;
   bottom:0;
   left:0;
@@ -85,7 +89,7 @@ canvas {
   top:0;
 }
 
-#c1, #c2, #c3, #c4 {
+#c1, #c2, #c3, #c4, #map_canvas img {
   border: #ccc 3px solid;
 }
 

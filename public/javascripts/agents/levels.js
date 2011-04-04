@@ -736,13 +736,13 @@ level10.setupLevel = function() {
 };
 
 /* Google Map links */
-level1.setMapURL("http://maps.google.com/maps/api/staticmap?center=30.9376,79.4292&zoom=10&size=601x601&maptype=satellite&sensor=false");
-level2.setMapURL("http://maps.google.com/maps/api/staticmap?center=32.3939,78.2345&zoom=13&size=601x601&maptype=satellite&sensor=false");
-level3.setMapURL("http://maps.google.com/maps/api/staticmap?center=-63.1748,-56.6296&zoom=13&size=601x601&maptype=satellite&sensor=false");
-level4.setMapURL("http://maps.google.com/maps/api/staticmap?center=-25.34340,131.03644&zoom=14&size=601x601&maptype=satellite&sensor=false");
-level5.setMapURL("http://maps.google.com/maps/api/staticmap?center=25.088,12.201&zoom=10&size=601x601&maptype=satellite&sensor=false");
-level6.setMapURL("http://maps.google.com/maps/api/staticmap?center=-9.8691,-37.2139&zoom=10&size=601x601&maptype=satellite&sensor=false");
-level7.setMapURL("http://maps.google.com/maps/api/staticmap?center=-13.182,167.705&zoom=10&size=601x601&maptype=satellite&sensor=false");
-level8.setMapURL("http://maps.google.com/maps/api/staticmap?center=41.890260,12.492220&zoom=20&size=601x601&maptype=satellite&sensor=false");
-level9.setMapURL("http://maps.google.com/maps/api/staticmap?center=43.07646,-79.07158&zoom=18&size=601x601&maptype=satellite&sensor=false");
-level10.setMapURL("http://maps.google.com/maps/api/staticmap?center=-41.81182,146.98923&zoom=14&size=601x601&maptype=satellite&sensor=false");
+level1.setMapURL("http://maps.google.com/maps/api/staticmap?center=30.9376,79.4292&zoom=10&size=401x401&maptype=satellite&sensor=false");
+level2.setMapURL("http://maps.google.com/maps/api/staticmap?center=32.3939,78.2345&zoom=13&size=401x401&maptype=satellite&sensor=false");
+level3.setMapURL("http://maps.google.com/maps/api/staticmap?center=-63.1748,-56.6296&zoom=13&size=401x401&maptype=satellite&sensor=false");
+level4.setMapURL("http://maps.google.com/maps/api/staticmap?center=-25.34340,131.03644&zoom=14&size=401x401&maptype=satellite&sensor=false");
+level5.setMapURL("http://maps.google.com/maps/api/staticmap?center=25.088,12.201&zoom=10&size=401x401&maptype=satellite&sensor=false");
+level6.setMapURL("http://maps.google.com/maps/api/staticmap?center=-9.8691,-37.2139&zoom=10&size=401x401&maptype=satellite&sensor=false");
+level7.setMapURL("http://maps.google.com/maps/api/staticmap?center=-13.182,167.705&zoom=10&size=401x401&maptype=satellite&sensor=false");
+level8.setMapURL("http://maps.google.com/maps/api/staticmap?center=41.890260,12.492220&zoom=20&size=401x401&maptype=satellite&sensor=false");
+level9.setMapURL("http://maps.google.com/maps/api/staticmap?center=43.07646,-79.07158&zoom=18&size=401x401&maptype=satellite&sensor=false");
+level10.setMapURL("http://maps.google.com/maps/api/staticmap?center=-41.81182,146.98923&zoom=14&size=401x401&maptype=satellite&sensor=false");
