@@ -17,8 +17,7 @@ var $editProperties;
 
 $(document).ready(function() {
 
-	$designFeatures = $('<div></div>')
-		.html('Add design features')
+	$designFeatures = $('#level-features')
 		.dialog({
 			autoOpen: false,
             modal: true,
@@ -67,7 +66,12 @@ function spliceTiles(e, canvas) {
     }
 }
 function redrawBaseCanvas() {
+
+    $('#map_canvas').empty();
     clearCanvas('c1');
+    clearCanvas('c2');
+    clearCanvas('c3');
+    clearCanvas('c4');
 
     // Draw basic elements
     drawGrid();
@@ -89,44 +93,42 @@ function showDesignFeaturesDialog(e) {
         var tile = new Tile("ddd", currentX, currentY);
         currentLevel.getTiles().push(tile);
         $designFeatures.dialog('close');
-        redrawWorld();
+        redrawBaseCanvas();
     }, false);
 
     $("#addGoal")[0].addEventListener('click', function(e) {
         currentLevel.setGoalX(currentX);
         currentLevel.setGoalY(currentY);
         $designFeatures.dialog('close');
-        $designFeatures.dialog('close');
-        redrawWorld();
+        redrawBaseCanvas();
     }, false);
 
     $("#addAgentStartingPoint")[0].addEventListener('click', function(e) {
         currentLevel.setInitialAgentX(currentX);
         currentLevel.setInitialAgentY(currentY);
         $designFeatures.dialog('close');
+        redrawBaseCanvas();
     }, false);
-    $designFeatures
-            .html($('#level-features')[0].innerHTML)
-            .dialog('open');
+    $designFeatures.dialog('open');
 }
 function makeTile() {
     var tile = new Tile("ccc", currentX, currentY);
     currentLevel.getTiles().push(tile);
     $designFeatures.dialog('close');
-    redrawWorld();
+    redrawBaseCanvas();
 }
 
 function addGoal() {
     currentLevel.setGoalX(currentX);
     currentLevel.setGoalY(currentY);
+    redrawBaseCanvas();
     $designFeatures.dialog('close');
-    $designFeatures.dialog('close');
-    redrawWorld();
 }
 
 function addAgentStartingPoint() {
     currentLevel.setInitialAgentX(currentX);
     currentLevel.setInitialAgentY(currentY);
+    redrawBaseCanvas();
     $designFeatures.dialog('close');
 }
 
@@ -183,7 +185,7 @@ function setupLevelEditor() {
 
 
 
-    redrawWorld();
+    redrawBaseCanvas();
     inDesignMode = true;
 }
 
@@ -198,11 +200,13 @@ function saveLevel() {
     $('#level_tiles')[0].value = $.toJSON(currentLevel.getTiles());
     $('#level_world_width')[0].value = worldSize;
     $('#level_world_height')[0].value = worldSize;
+
+//    redrawWorld();
 }
 
 function cancelLevelEditor() {
     inDesignMode = false;
-    currentLevelNumber = 1;
+//    currentLevelNumber = 1;
     $('#level-editor').hide();
     $('#swatch').show();
     redrawWorld();
@@ -215,7 +219,11 @@ function showLevelProperties() {
 
 function refreshTiles() {
     currentLevel.setTiles(fillWithTiles());
-    redrawWorld();
+    currentLevel.setInitialAgentX(0);
+    currentLevel.setInitialAgentY(0);
+    currentLevel.setGoalX(0);
+    currentLevel.setGoalY(0);
+    redrawBaseCanvas();
 }
 
 /* End Level editor functions */

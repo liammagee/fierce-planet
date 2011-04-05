@@ -6,7 +6,8 @@ $levelList = $('<div></div>')
                     modal: true,
                     title: 'Level Setup',
                     buttons: {
-                        "Cancel": function() {
+                        "OK": function() {
+                            redrawWorld();
                             $(this).dialog("close");
                         }
                     }

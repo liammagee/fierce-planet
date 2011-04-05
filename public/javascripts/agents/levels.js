@@ -24,7 +24,7 @@ function randomAgents(number, limit) {
     for (var i = 0; i < number; i ++) {
         var x = Math.floor(Math.random() * limit);
         var y = Math.floor(Math.random() * limit);
-        var agent = new Agent("basic", "888", x, y);
+        var agent = new Agent("Citizen", "888", x, y);
         agents.push(agent);
     }
     return agents;
@@ -32,7 +32,7 @@ function randomAgents(number, limit) {
 function presetAgents(number, cellX, cellY) {
     agents = new Array();
     for (var i = 0; i < number; i ++) {
-        var agent = new Agent("basic", "000", cellX, cellY);
+        var agent = new Agent("Citizen", "000", cellX, cellY);
         var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
         agent.setDelay(delay);
         agents.push(agent);
@@ -482,6 +482,10 @@ level7.setupLevel = function() {
     tiles.splice(8, 1);
     this.setTiles(tiles);
 };
+
+// EXPERIMENTAL: Add predator
+level7.addPredator(new Agent("Predator", "#000", 8, 4));
+
 
 
 /* Level 8 Definition */

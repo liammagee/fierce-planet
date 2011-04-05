@@ -26,6 +26,7 @@ function Level(id) {
     this._tiles;
     this._mapOptions;
     this._mapURL;
+    this._predators = new Array();
 }
 Level.prototype.getId = function() { return this._id; }
 Level.prototype.setId = function(id) { this._id = id; }
@@ -88,7 +89,11 @@ Level.prototype.getPath = function() {
     }
     return pathCells;
 }
-
+Level.prototype.addPredator = function(predator) {
+    this._predators.push(predator);
+}
+Level.prototype.getPredators = function() { return this._predators; }
+Level.prototype.setPredators = function(predators) { this._predators = predators; }
 
 
 
@@ -387,3 +392,6 @@ PlayerClass.prototype.getName = function() { return this._name; }
 PlayerClass.prototype.setName = function(name) { this._name = name; }
 PlayerClass.prototype.getSavesRequired = function() { return this._savesRequired; }
 PlayerClass.prototype.setSavesRequired = function(savesRequired) { this._savesRequired = savesRequired; }
+
+
+

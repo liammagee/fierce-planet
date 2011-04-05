@@ -31,6 +31,8 @@ var WORLD_WIDTH = 400;
 
 
 
+
+
 /* Global variables */
 
 
@@ -896,7 +898,7 @@ function getDrawingPosition(agent, count) {
             }
             else {
                 offsetX = 1 - increment;
-                intX = offset;
+                intX = offsetX;
             }
         }
         else if (x == 0 && lastX == worldSize - 1) {
@@ -916,17 +918,19 @@ function getDrawingPosition(agent, count) {
             }
             else {
                 offsetY = 1 - increment;
-                intY = offset;
-            }
-        }
-        else if (y == worldSize - 1 && lastY == 0) {
-            if (halfWay) {
-                offsetY = increment;
                 intY = offsetY;
             }
+        }
+        else if (y == 0 && lastY == worldSize - 1) {
+            if (halfWay) {
+                offsetY = increment;
+                intY = (0 - offsetY);
+            }
             else {
-                offsetY = (lastY - worldSize) * (increment);
-                intY = (lastY - offsetY);
+                offsetY = (worldSize - lastY) * (increment);
+                intY = (worldSize - offsetY);
+//                offsetY = (lastY - worldSize) * (increment);
+//                intY = (lastY - offsetY);
             }
         }
     }
@@ -992,6 +996,68 @@ function drawAgents() {
         }
         ctx.closePath();
         ctx.strokeStyle = "#" + newColor;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+//        ctx.fillText(agent.getHealth(),  intX, intY);
+//        ctx.fillText(agent.getEconomicHealth(),  intX, intY + 20);
+    }
+}
+function drawPredators() {
+    var canvas = $('#c4')[0];
+    var ctx = canvas.getContext('2d');
+
+    var predators = currentLevel.getPredators();
+    for (var i = 0; i < predators.length; i ++) {
+        var predator = predators[i];
+        var intX = predator.getX();
+        var intY = predator.getY();
+        var wx = 0;
+        var wy = 0;
+        var intX = intX * cellWidth + wx + cellWidth / 2;
+        var intY = intY * cellWidth + wy + cellWidth / 2;
+
+        var radius = (pieceWidth / 4);
+        var bodyLength = (pieceWidth / 2);
+
+        ctx.clearRect(intX - cellWidth / 2, intY- cellWidth / 2 , cellWidth, cellWidth);
+
+        ctx.beginPath();
+        ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
+        ctx.closePath();
+        ctx.fillStyle = "#000";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(intX, intY + radius);
+        ctx.lineTo(intX, intY + radius + bodyLength / 2);
+        if (counter % 2 == 0) {
+            // Legs
+            var xOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
+            var yOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
+            ctx.moveTo(intX, intY + radius + bodyLength / 2);
+            ctx.lineTo(intX - xOffset, intY + radius + bodyLength / 2 + yOffset);
+            ctx.moveTo(intX, intY + radius + bodyLength / 2);
+            ctx.lineTo(intX + xOffset, intY + radius + bodyLength / 2 + yOffset);
+            // Arms - 90 degrees
+            ctx.moveTo(intX - bodyLength / 2, intY + radius + bodyLength / 6);
+            ctx.lineTo(intX + bodyLength / 2, intY + radius + bodyLength / 6);
+        }
+        else {
+            // Legs - straight
+            ctx.moveTo(intX, intY + radius + bodyLength / 2);
+            ctx.lineTo(intX, intY + radius + bodyLength);
+            // Arms - 45 degrees
+            var xOffset = Math.sin(45 * Math.PI/180) * bodyLength / 2;
+            var yOffset = Math.cos(45 * Math.PI/180) * bodyLength / 2;
+            ctx.moveTo(intX - xOffset, intY + radius + bodyLength / 6 + yOffset);
+            ctx.lineTo(intX, intY + radius + bodyLength / 6);
+            ctx.moveTo(intX + xOffset, intY + radius + bodyLength / 6 + yOffset);
+            ctx.lineTo(intX, intY + radius + bodyLength / 6);
+
+        }
+        ctx.closePath();
+        ctx.strokeStyle = "#000";
         ctx.lineWidth = 2;
         ctx.stroke();
 
@@ -1351,6 +1417,7 @@ function processAgents() {
         if (counter % resourceRecoveryCycle == 0)
             recoverResources();
         drawAgents();
+        drawPredators();
     }
 }
 
@@ -1980,6 +2047,7 @@ function levelInfo(notice) {
 
 
 /* Experimental Pan and Zoom functions */
+
 function pan(direction) {
     var canvases = $('canvas');
     var offset = 10;
@@ -2001,22 +2069,22 @@ function pan(direction) {
                 ctx.translate(-offset, 0);
                 break;
             case 4:
-                ctx.translate(- panLeftOffset, - panTopOffset);
+                ctx.translate(- panLeftOffset / zoomLevel, - panTopOffset / zoomLevel);
                 break;
         }
     }
     switch (direction) {
         case 0:
-            panTopOffset += offset;
+            panTopOffset += offset * zoomLevel;
             break;
         case 1:
-            panTopOffset += -offset;
+            panTopOffset += -offset * zoomLevel;
             break;
         case 2:
-            panLeftOffset += offset;
+            panLeftOffset += offset * zoomLevel;
             break;
         case 3:
-            panLeftOffset += -offset;
+            panLeftOffset += -offset * zoomLevel;
             break;
         case 4:
             panLeftOffset = 0;
@@ -2051,7 +2119,7 @@ function zoom(direction) {
                 ctx.scale(1 / zoomLevel, 1 / zoomLevel);
                 break;
             case 1:
-                if (zoomLevel < 20) {
+                if (zoomLevel < 10) {
                     ctx.scale(magnify, magnify);
                 }
                 break;
@@ -2060,14 +2128,20 @@ function zoom(direction) {
     switch (direction) {
         case -1:
             if (zoomLevel > 1) {
+//                panLeftOffset *= 1 / magnify;
+//                panTopOffset *= 1 / magnify;
                 zoomLevel *= 1 / magnify;
             }
             break;
         case 0:
+//            panLeftOffset = panLeftOffset / zoomLevel;
+//            panTopOffset = panTopOffset / zoomLevel;
             zoomLevel = 1;
             break;
         case 1:
-            if (zoomLevel < 20) {
+            if (zoomLevel < 10) {
+//                panLeftOffset *= magnify;
+//                panTopOffset *= magnify;
                 zoomLevel *= magnify;
             }
             break;

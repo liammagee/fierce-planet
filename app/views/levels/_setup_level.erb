@@ -14,7 +14,7 @@ currentLevel.setExpiryLimit(<%= @level.expiry_limit %>);
 currentLevel.setAllowOffscreenCycling(<%= @level.allow_offscreen_cycling %>);
 currentLevel.setAllowResourcesOnPath(<%= @level.allow_patches_on_path %>);
 currentLevel.setupLevel = function() {};
-currentLevelNumber = parseInt("<%= @level.id %>");
+currentLevelNumber = parseInt("<%= @level.id + 10 %>");
 var arr = fillWithTiles();
 var jsonArray = '<%= raw @level.tiles %>';
 try {
