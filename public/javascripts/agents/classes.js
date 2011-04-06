@@ -26,7 +26,6 @@ function Level(id) {
     this._tiles;
     this._mapOptions;
     this._mapURL;
-    this._predators = new Array();
 }
 Level.prototype.getId = function() { return this._id; }
 Level.prototype.setId = function(id) { this._id = id; }
@@ -89,18 +88,32 @@ Level.prototype.getPath = function() {
     }
     return pathCells;
 }
-Level.prototype.addPredator = function(predator) {
-    this._predators.push(predator);
+
+
+
+/* Agent type class definition */
+function AgentType(name, color) {
+    this._name = name;
+    this._color = color;
+    this._speed = MOVE_INCREMENTS;
+    this._health = INITIAL_HEALTH;
+    this._economicHealth = INITIAL_HEALTH;
+    this._environmentalHealth = INITIAL_HEALTH;
+    this._socialHealth = INITIAL_HEALTH;
 }
-Level.prototype.getPredators = function() { return this._predators; }
-Level.prototype.setPredators = function(predators) { this._predators = predators; }
+AgentType.prototype.getName = function() { return this._name;}
+AgentType.prototype.getColor = function() { return this._color;}
+AgentType.prototype.getHealth = function() { return this._health; }
+AgentType.prototype.getEconomicHealth = function() { return this._economicHealth; }
+AgentType.prototype.getEnvironmentalHealth = function() { return this._environmentalHealth; }
+AgentType.prototype.getSocialHealth = function() { return this._socialHealth; }
 
 
 
 /* Agent class definition */
-function Agent(agentType, color, x, y) {
+function Agent(agentType, x, y) {
     this._agentType = agentType;
-    this._color = color;
+    this._color = agentType.getColor();
     this._x = x;
     this._y = y;
     this._history = new Array();

@@ -1,6 +1,9 @@
 
 /* NB: Level is defined in classes.js */
 
+var CITIZEN_AGENT_TYPE = "Citizen";
+var PREDATOR_AGENT_TYPE = "Predator";
+
 
 /* Level setup methods - this should be moved to the Level class when refactored. */
 function assignCells() {
@@ -30,9 +33,9 @@ function randomAgents(number, limit) {
     return agents;
 };
 function presetAgents(number, cellX, cellY) {
-    agents = new Array();
+//    agents = new Array();
     for (var i = 0; i < number; i ++) {
-        var agent = new Agent("Citizen", "000", cellX, cellY);
+        var agent = new Agent(CITIZEN_AGENT_TYPE, cellX, cellY);
         var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
         agent.setDelay(delay);
         agents.push(agent);
@@ -56,6 +59,12 @@ Level.prototype.postSetupLevel = new function() {
     assignCells();
 };
 */
+
+/*
+Agent Type setup
+ */
+var CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000");
+var PREDATOR_AGENT_TYPE = new AgentType("Predator", "fbe53b");
 
 
 /* Level 0 Definition */
@@ -481,10 +490,10 @@ level7.setupLevel = function() {
     tiles.splice(24, 3);
     tiles.splice(8, 1);
     this.setTiles(tiles);
+    predator = new Agent(PREDATOR_AGENT_TYPE, 8, 4);
+    agents.push(predator);
 };
 
-// EXPERIMENTAL: Add predator
-level7.addPredator(new Agent("Predator", "#000", 8, 4));
 
 
 

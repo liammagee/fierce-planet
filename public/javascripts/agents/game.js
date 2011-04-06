@@ -18,7 +18,7 @@ var DEFAULT_RESOURCE_RECOVERY = 2;
 var WAVE_GOODNESS_BONUS = 5;
 
 
-var NEW_LEVEL_DELAY = 1000;
+var NEW_LEVEL_DELAY = 3000;
 var NEW_WAVE_DELAY = 200;
 
 var EASY_DIFFICULTY = 1;
@@ -227,6 +227,7 @@ function setupDialogs() {
 			title: 'Level Setup',
             buttons: {
                 "OK": function() {
+                    redrawWorld();
                     $( this ).dialog( "close" );
                 }
             }
@@ -365,6 +366,7 @@ function deleteCurrentResource() {
     if (foundResource > -1) {
         resourcesInStore += 5;
         resourcesSpent -= 5;
+        cells[[currentResource.getX(), currentResource.getY()]] = null;
         resources.splice(foundResource, 1);
         drawResourcesInStore();
         clearCanvas('c2');
@@ -1003,68 +1005,6 @@ function drawAgents() {
 //        ctx.fillText(agent.getEconomicHealth(),  intX, intY + 20);
     }
 }
-function drawPredators() {
-    var canvas = $('#c4')[0];
-    var ctx = canvas.getContext('2d');
-
-    var predators = currentLevel.getPredators();
-    for (var i = 0; i < predators.length; i ++) {
-        var predator = predators[i];
-        var intX = predator.getX();
-        var intY = predator.getY();
-        var wx = 0;
-        var wy = 0;
-        var intX = intX * cellWidth + wx + cellWidth / 2;
-        var intY = intY * cellWidth + wy + cellWidth / 2;
-
-        var radius = (pieceWidth / 4);
-        var bodyLength = (pieceWidth / 2);
-
-        ctx.clearRect(intX - cellWidth / 2, intY- cellWidth / 2 , cellWidth, cellWidth);
-
-        ctx.beginPath();
-        ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
-        ctx.closePath();
-        ctx.fillStyle = "#000";
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.moveTo(intX, intY + radius);
-        ctx.lineTo(intX, intY + radius + bodyLength / 2);
-        if (counter % 2 == 0) {
-            // Legs
-            var xOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
-            var yOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
-            ctx.moveTo(intX, intY + radius + bodyLength / 2);
-            ctx.lineTo(intX - xOffset, intY + radius + bodyLength / 2 + yOffset);
-            ctx.moveTo(intX, intY + radius + bodyLength / 2);
-            ctx.lineTo(intX + xOffset, intY + radius + bodyLength / 2 + yOffset);
-            // Arms - 90 degrees
-            ctx.moveTo(intX - bodyLength / 2, intY + radius + bodyLength / 6);
-            ctx.lineTo(intX + bodyLength / 2, intY + radius + bodyLength / 6);
-        }
-        else {
-            // Legs - straight
-            ctx.moveTo(intX, intY + radius + bodyLength / 2);
-            ctx.lineTo(intX, intY + radius + bodyLength);
-            // Arms - 45 degrees
-            var xOffset = Math.sin(45 * Math.PI/180) * bodyLength / 2;
-            var yOffset = Math.cos(45 * Math.PI/180) * bodyLength / 2;
-            ctx.moveTo(intX - xOffset, intY + radius + bodyLength / 6 + yOffset);
-            ctx.lineTo(intX, intY + radius + bodyLength / 6);
-            ctx.moveTo(intX + xOffset, intY + radius + bodyLength / 6 + yOffset);
-            ctx.lineTo(intX, intY + radius + bodyLength / 6);
-
-        }
-        ctx.closePath();
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-//        ctx.fillText(agent.getHealth(),  intX, intY);
-//        ctx.fillText(agent.getEconomicHealth(),  intX, intY + 20);
-    }
-}
 
 function drawScrollingLayer() {
     clearCanvas('c3');
@@ -1357,35 +1297,50 @@ function processAgents() {
 
 
     clearAgents();
+
     var nullifiedAgents = new Array();
+    var citizenCount = 0;
     for (var i = 0; i < agents.length; i+= 1) {
         var agent = agents[i];
         var speed = agent.getSpeed();
+        if (agent.getType() == CITIZEN_AGENT_TYPE)
+            citizenCount++;
         if (counter >= agent.getDelay() && (counter - agent.getDelay()) % speed == 0) {
-            if (agent.getX() == currentLevel.getGoalX() && agent.getY() == currentLevel.getGoalY()) {
-                score += SURVIVAL_SCORE;
-                savedAgentCount++;
-                savedAgentThisWaveCount++;
-                nullifiedAgents.push(i);
-                var multiplier = (waves < 5 ? 4 : (waves < 10 ? 3 : (waves < 20 ? 2 : 1)));
-                resourcesInStore += multiplier; //WAVE_GOODNESS_BONUS;
-                drawScore();
-                drawResourcesInStore();
-                drawSaved();
+            if (agent.getType() == CITIZEN_AGENT_TYPE) {
+                if (agent.getX() == currentLevel.getGoalX() && agent.getY() == currentLevel.getGoalY()) {
+                    score += SURVIVAL_SCORE;
+                    savedAgentCount++;
+                    savedAgentThisWaveCount++;
+                    nullifiedAgents.push(i);
+                    var multiplier = (waves < 5 ? 4 : (waves < 10 ? 3 : (waves < 20 ? 2 : 1)));
+                    resourcesInStore += multiplier; //WAVE_GOODNESS_BONUS;
+                    drawScore();
+                    drawResourcesInStore();
+                    drawSaved();
+                }
             }
+
+            // Do for all agents
             moveAgent(agent, true, false);
             agent.adjustSpeed();
             agent.adjustWander();
-            if (!godMode)
-                agent.adjustHealth(MOVE_HEALTH_COST);
-            if (agent.getHealth() <= 0) {
-                nullifiedAgents.push(i);
-                expiredAgentCount++;
-                drawExpired();
+
+            if (agent.getType() == CITIZEN_AGENT_TYPE) {
+                if (!godMode)
+                    agent.adjustHealth(MOVE_HEALTH_COST);
+                if (agent.getHealth() <= 0) {
+                    nullifiedAgents.push(i);
+                    expiredAgentCount++;
+                    drawExpired();
+                }
+                else {
+                    // Hook for detecting 'active' patches
+                    processNeighbouringResources(agent);
+
+                    // Hook for detecting other agents
+                    processNeighbouringAgents(agent);
+                }
             }
-            else
-                // Hook for detecting 'active' patches
-                processNeighbouringResources(agent);
         }
     }
 
@@ -1398,7 +1353,7 @@ function processAgents() {
         agents.splice(nullifiedAgents[i], 1);
     }
     // No agents left? End of wave
-    if (agents.length == 0) {
+    if (citizenCount == 0) {
         // Start a new wave
         if (waves < currentLevel.getWaveNumber()) {
             newWave();
@@ -1417,10 +1372,12 @@ function processAgents() {
         if (counter % resourceRecoveryCycle == 0)
             recoverResources();
         drawAgents();
-        drawPredators();
     }
 }
 
+/*
+ * Processes neighbouring resources
+ */
 function processNeighbouringResources(agent) {
     var x = agent.getX();
     var y = agent.getY();
@@ -1432,6 +1389,22 @@ function processNeighbouringResources(agent) {
             var resourceEffect = calculateResourceEffect(p.getType());
             p.provideYield(agent, resourceEffect);
             drawResource(p);
+        }
+    }
+}
+
+/*
+ * Processes neighbouring agents
+ */
+function processNeighbouringAgents(agent) {
+    var x = agent.getX();
+    var y = agent.getY();
+    for (var j = 0; j < agents.length; j++) {
+        var a = agents[j];
+        var ax = a.getX();
+        var ay = a.getY();
+        if (Math.abs(ax - x) <= 1 && Math.abs(ay - y) <= 1) {
+            // Do something
         }
     }
 }

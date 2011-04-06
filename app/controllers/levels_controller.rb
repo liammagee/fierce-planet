@@ -93,9 +93,11 @@ class LevelsController < ApplicationController
       if @level.update_attributes(params[:level])
         format.html { redirect_to(@level, :notice => 'Level was successfully updated.') }
         format.xml  { head :ok }
+        format.js
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @level.errors, :status => :unprocessable_entity }
+        format.js
       end
     end
   end
