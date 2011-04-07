@@ -6,6 +6,7 @@
     <%= f.hidden_field :initial_agent_y %>
     <%= f.hidden_field :goal_x %>
     <%= f.hidden_field :goal_y %>
+    <%= f.hidden_field :image_src %>
     <%= f.submit 'Save' %>
 <% end %>
 <script>
@@ -18,6 +19,7 @@
         $('#level_initial_agent_y')[0].value = currentLevel.getInitialAgentY();
         $('#level_goal_x')[0].value = currentLevel.getGoalX();
         $('#level_goal_y')[0].value = currentLevel.getGoalY();
+        $('#image_src')[0].value = currentLevel.getMapURL();
 
     });
 </script>

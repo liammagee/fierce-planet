@@ -13,9 +13,10 @@ currentLevel.setWaveNumber(<%= @level.wave_number %>);
 currentLevel.setExpiryLimit(<%= @level.expiry_limit %>);
 currentLevel.setAllowOffscreenCycling(<%= @level.allow_offscreen_cycling %>);
 currentLevel.setAllowResourcesOnPath(<%= @level.allow_patches_on_path %>);
+currentLevel.setMapURL("<%= @level.image_src %>");
 currentLevel.setCustomLevel(true);
 currentLevel.setupLevel = function() {};
-//currentLevelNumber = parseInt("<%= @level.id + 10 %>");
+currentLevelNumber = -1;
 var arr = fillWithTiles();
 var jsonArray = '<%= raw @level.tiles %>';
 try {

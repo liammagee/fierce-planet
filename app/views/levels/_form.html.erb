@@ -58,6 +58,21 @@
       <br/>
       <%= f.text_area :notice, :rows => 5 %>
     </div>
+    <div class="field">
+      <%= f.label :image_src, "Level Background" %>
+      <br/>
+      <%= f.text_field :image_src, { :size => 60 } %>
+    </div>
+    <p>
+      Note: you can include a Google Map as the background image.
+      See the <a href="http://code.google.com/apis/maps/documentation/staticmaps/"> Google Maps documentation</a> for more information.
+    </p>
+    <p>
+      An example of a Google Map reference is included below.
+    </p>
+    <textarea>
+      http://maps.google.com/maps/api/staticmap?center=30.9376,79.4292&zoom=10&size=401x401&maptype=satellite&sensor=false
+    </textarea>
 
 
     <div class="actions">
