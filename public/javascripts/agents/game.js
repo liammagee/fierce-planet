@@ -1566,7 +1566,7 @@ function drawWorld() {
     clearCanvas('c4');
 
     // Draw basic elements
-    if (currentLevel.getMapOptions() != undefined || currentLevel.getMapURL() != undefined) {
+    if (currentLevel.getMapOptions() != undefined || (currentLevel.getMapURL() != undefined && $.trim(currentLevel.getMapURL()).length > 0)) {
         drawMap();
         drawGrid();
         drawPath();
