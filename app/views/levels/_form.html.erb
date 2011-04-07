@@ -16,30 +16,32 @@
       <br/>
       <%= f.text_field :name %>
     </div>
+    <% unless @level.id %>
     <div class="field">
       <%= f.label :world_width %>
       <br/>
-      <%= f.text_field :world_width %>
+      <%= f.select :world_width, 5.upto(20) %>
     </div>
     <div class="field">
       <%= f.label :world_height %>
       <br/>
-      <%= f.text_field :world_height %>
+      <%= f.select :world_height, 5.upto(20) %>
     </div>
+    <% end %>
     <div class="field">
       <%= f.label :initial_agent_number %>
       <br/>
-      <%= f.text_field :initial_agent_number %>
+      <%= f.select :initial_agent_number, 1.upto(20) %>
     </div>
     <div class="field">
       <%= f.label :wave_number %>
       <br/>
-      <%= f.text_field :wave_number %>
+      <%= f.select :wave_number, 1.upto(20) %>
     </div>
     <div class="field">
       <%= f.label :expiry_limit %>
       <br/>
-      <%= f.text_field :expiry_limit %>
+      <%= f.select :expiry_limit, 1.upto(20) %>
     </div>
     <div class="field">
       <%= f.label :allow_offscreen_cycling %>

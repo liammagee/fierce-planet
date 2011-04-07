@@ -141,52 +141,72 @@ function setupLevelEditor() {
     canvas.addEventListener('click', function(e) {
         return false;
     }, false);
-    canvas.addEventListener("mousedown", function(e) {
-        oldTiles = currentLevel.getTiles().slice();
-        mouseDown = true;
-        return false;
-    }, false);
-    canvas.addEventListener("mousemove", function(e) {
-        if (mouseDown) {
-            mouseMoving = true;
-            spliceTiles(e, canvas);
-            redrawBaseCanvas();
-        }
-        return false;
-    }, false);
-    canvas.addEventListener("mouseup", function(e) {
-        var __ret = getResourcePosition(e, canvas);
-        currentX = __ret.posX;
-        currentY = __ret.posY;
-        var foundTile = false;
-        var tiles = currentLevel.getTiles();
-        var currentTile;
-        for (var i = 0; i < tiles.length; i++) {
-            var tile = tiles[i];
-            if (tile._x == currentX && tile._y == currentY) {
-                currentTile = tile;
-                break;
-            }
-        }
-        if (currentTile == undefined && !mouseMoving) {
-            showDesignFeaturesDialog(e);
-        }
-        else {
-            spliceTiles(e, canvas);
-            redrawBaseCanvas();
-        }
-        mouseDown = false;
-        mouseMoving = false;
+    canvas.addEventListener("mousedown", handleEditorMouseDown, false);
+    canvas.addEventListener("mousemove", handleEditorMouseMove, false);
+    canvas.addEventListener("mouseup", handleEditorMouseUp, false);
 
+    redrawWorld();
 
-        redrawBaseCanvas();
-        return false;
-    }, false);
-
-
-
-    redrawBaseCanvas();
     inDesignMode = true;
+}
+
+function handleEditorMouseDown(e) {
+    oldTiles = currentLevel.getTiles().slice();
+    mouseDown = true;
+    return false;
+}
+
+function handleEditorMouseMove(e) {
+    if (mouseDown) {
+        var canvas = $('#c4')[0];
+        mouseMoving = true;
+        spliceTiles(e, canvas);
+        redrawBaseCanvas();
+    }
+    return false;
+}
+
+function handleEditorMouseUp(e) {
+    var canvas = $('#c4')[0];
+    var __ret = getResourcePosition(e, canvas);
+    currentX = __ret.posX;
+    currentY = __ret.posY;
+    var foundTile = false;
+    var tiles = currentLevel.getTiles();
+    var currentTile;
+    for (var i = 0; i < tiles.length; i++) {
+        var tile = tiles[i];
+        if (tile._x == currentX && tile._y == currentY) {
+            currentTile = tile;
+            break;
+        }
+    }
+    if (currentTile == undefined && !mouseMoving) {
+        showDesignFeaturesDialog(e);
+    }
+    else {
+        spliceTiles(e, canvas);
+        redrawBaseCanvas();
+    }
+    mouseDown = false;
+    mouseMoving = false;
+
+
+    return false;
+
+}
+
+function cancelLevelEditor() {
+    inDesignMode = false;
+    var canvas = $('#c4')[0];
+    canvas.removeEventListener('mousedown', handleEditorMouseDown, false);
+    canvas.removeEventListener('mousemove', handleEditorMouseMove, false);
+    canvas.removeEventListener('mouseup', handleEditorMouseUp, false);
+//    setupResourceInteraction();
+//    currentLevelNumber = 1;
+    $('#level-editor').hide();
+    $('#swatch').show();
+    redrawWorld();
 }
 
 function undoAction() {
@@ -204,13 +224,6 @@ function saveLevel() {
 //    redrawWorld();
 }
 
-function cancelLevelEditor() {
-    inDesignMode = false;
-//    currentLevelNumber = 1;
-    $('#level-editor').hide();
-    $('#swatch').show();
-    redrawWorld();
-}
 
 
 function showLevelProperties() {

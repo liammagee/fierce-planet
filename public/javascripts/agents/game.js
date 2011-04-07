@@ -40,7 +40,7 @@ var WORLD_WIDTH = 400;
 var PROFILE_CLASSES = ["Novice", "Planner", "Expert", "Visionary", "Genius"];
 var CAPABILITY_COSTS = [0, 100, 200, 300, 500];
 var NOVICE_CAPABILITIES = ["farm", "water", "clinic"];
-var PLANNER_CAPABILITIES = NOVICE_CAPABILITIES.concat(["shop", "sanctuary", "school"]);
+var PLANNER_CAPABILITIES = NOVICE_CAPABILITIES.concat(["shop", "park", "school"]);
 var EXPERT_CAPABILITIES = PLANNER_CAPABILITIES.concat(["bank", "air", "legal-system"]);
 var VISIONARY_CAPABILITIES = EXPERT_CAPABILITIES.concat(["factory", "renewable-energy", "democracy"]);
 var GENIUS_CAPABILITIES = VISIONARY_CAPABILITIES.concat(["stockmarket", "biodiversity", "festival"]);
@@ -328,16 +328,16 @@ function setupResourceInteraction() {
 // Add general event listeners
 function hookUpUIEventListeners() {
     // Control panel functions
-   $('#slowDown')[0].addEventListener('click', function() { slowDown();}, false);
-   $('#speedUp')[0].addEventListener('click', function() { speedUp();}, false);
-   $('#startAgents')[0].addEventListener('click', function() { startAgents();}, false);
-   $('#stopAgents')[0].addEventListener('click', function() { stopAgents();}, false);
-   $('#restartLevel')[0].addEventListener('click', function() { restartLevel();}, false);
-   $('#newGame')[0].addEventListener('click', function() { newGame();}, false);
-   $('#showResourceGallery')[0].addEventListener('click', function() { showResourceGallery();}, false);
+   $('#slowDown')[0].addEventListener('click', slowDown, false);
+   $('#speedUp')[0].addEventListener('click', speedUp, false);
+   $('#startAgents')[0].addEventListener('click', startAgents, false);
+   $('#stopAgents')[0].addEventListener('click', stopAgents, false);
+   $('#restartLevel')[0].addEventListener('click', restartLevel, false);
+   $('#newGame')[0].addEventListener('click', newGame, false);
+   $('#showResourceGallery')[0].addEventListener('click', showResourceGallery, false);
 
     // Admin functions
-    $('#debug')[0].addEventListener('click', function() { processAgents();}, false);
+    $('#debug')[0].addEventListener('click', processAgents, false);
 
     // Pan/zoomFunctions
     $('#panUp')[0].addEventListener('click', function() { pan(0);}, false);
@@ -350,13 +350,13 @@ function hookUpUIEventListeners() {
     $('#zoomReset')[0].addEventListener('click', function() { zoom(0);}, false);
 
     // Level editor functions
-   $('#makeTile')[0].addEventListener('click', function() { makeTile();}, false);
-   $('#addGoal')[0].addEventListener('click', function() { addGoal();}, false);
-   $('#addAgentStartingPoint')[0].addEventListener('click', function() { addAgentStartingPoint();}, false);
-   $('#showLevelProperties')[0].addEventListener('click', function() { showLevelProperties();}, false);
-   $('#refreshTiles')[0].addEventListener('click', function() { refreshTiles();}, false);
-   $('#undoAction')[0].addEventListener('click', function() { undoAction();}, false);
-   $('#cancelLevelEditor')[0].addEventListener('click', function() { cancelLevelEditor();}, false);
+   $('#makeTile')[0].addEventListener('click', makeTile, false);
+   $('#addGoal')[0].addEventListener('click', addGoal, false);
+   $('#addAgentStartingPoint')[0].addEventListener('click', addAgentStartingPoint, false);
+   $('#showLevelProperties')[0].addEventListener('click', showLevelProperties, false);
+   $('#refreshTiles')[0].addEventListener('click', refreshTiles, false);
+   $('#undoAction')[0].addEventListener('click', undoAction, false);
+   $('#cancelLevelEditor')[0].addEventListener('click', cancelLevelEditor, false);
 
 }
 
@@ -550,7 +550,7 @@ function setupResourceTypes() {
     resourceTypes['factory'] = 'eco';
     resourceTypes['stockmarket'] = 'eco';
     resourceTypes['water'] = 'env';
-    resourceTypes['sanctuary'] = 'env';
+    resourceTypes['park'] = 'env';
     resourceTypes['air'] = 'env';
     resourceTypes['renewable-energy'] = 'env';
     resourceTypes['biodiversity'] = 'env';
@@ -1601,6 +1601,7 @@ function initWorld() {
     log("Initialising world...");
 
     agents = new Array();
+    resources = new Array();
     cells = {};
 //    cells = new Hash();
 
@@ -1612,7 +1613,6 @@ function initWorld() {
     expiredAgentCount = 0;
     savedAgentCount = 0;
     waves = 1;
-    numAgents = 1;
 
     resourceRecoveryCycle = Math.pow(DEFAULT_RESOURCE_RECOVERY, levelOfDifficulty - 1);
 
@@ -1632,6 +1632,7 @@ function initWorld() {
     }
 
 
+    numAgents = currentLevel.getInitialAgentNumber();
     worldSize = currentLevel.getWorldSize();
     cellWidth = WORLD_WIDTH / worldSize;
     pieceWidth = cellWidth * 0.5;
@@ -1652,7 +1653,7 @@ function startAgents() {
 }
 
 function stopAgents() {
-    log("Stopping agents...");
+    log("Pausing agents...");
 
     clearInterval(agentTimerId);
     inPlay = false;
@@ -1779,7 +1780,7 @@ function showResourceGallery() {
     // Try to save results to the server
     $('#current-profile-class')[0].innerHTML = profileClass;
     $('#current-credits')[0].innerHTML = credits;
-    $('#current-capabilities')[0].innerHTML = capabilities.join(", ");
+    $('#current-capabilities')[0].innerHTML = capabilities.join(",");
 
     var accessibleCapabilities = new Array();
     var purchasableItems = new Array();
@@ -1869,7 +1870,7 @@ function showResourceGallery() {
 
 function refreshSwatch() {
     for (var i = 0; i < capabilities.length; i++) {
-        var capability = capabilities[i];
+        var capability = $.trim(capabilities[i]);
         $('#' + capability)[0].style.display = 'block';
     }
 }
@@ -1981,7 +1982,8 @@ function generateStats() {
 /* Uses local storage to store highest scores and levels */
 function storeData() {
     localStorage.currentScore = previousLevelScore;
-    localStorage.currentLevelNumber = currentLevelNumber;
+    if (currentLevelNumber > 0 && currentLevelNumber <= 10)
+        localStorage.currentLevelNumber = currentLevelNumber;
     localStorage.totalSaved = totalSaved;
     localStorage.profileClass = profileClass;
     localStorage.credits = credits;
@@ -1994,7 +1996,8 @@ function storeData() {
 
 function storeCurrentLevelData() {
     localStorage.currentScore = previousLevelScore;
-    localStorage.currentLevelNumber = currentLevelNumber;
+    if (currentLevelNumber > 0 && currentLevelNumber <= 10)
+        localStorage.currentLevelNumber = currentLevelNumber;
     localStorage.totalSaved = totalSaved;
     localStorage.profileClass = profileClass;
     localStorage.credits = credits;

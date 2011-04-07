@@ -2,8 +2,9 @@
  $('body').html("<h1><%= @level.id %></h1>").append("<%= @level.world_width %>");
  */
 $levelList.dialog('close');
-$('#notifications').html("<p><%= @level.id %> successfully saved.</p>");
+$('#notifications').html("<p><%= @level.name %> successfully saved.</p>");
 <%=  render('levels/setup_level', :locals => { :level => @level}) %>
 $('#level-editor-form').html("<%=  escape_javascript(render('levels/inline_form', :locals => { :level => @level})) %>");
-$editProperties.html("<%=  escape_javascript(render('levels/new', :locals => { :level => @level})) %>");
+$editProperties.html("<%=  escape_javascript(render('levels/edit', :locals => { :level => @level})) %>");
+currentLevelNumber = parseInt("<%= @level.id + 10 %>");
 setupLevelEditor();

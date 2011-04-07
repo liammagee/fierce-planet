@@ -26,6 +26,7 @@ function Level(id) {
     this._tiles;
     this._mapOptions;
     this._mapURL;
+    this._customLevel = false;
 }
 Level.prototype.getId = function() { return this._id; }
 Level.prototype.setId = function(id) { this._id = id; }
@@ -69,6 +70,8 @@ Level.prototype.getMapOptions = function() { return this._mapOptions; }
 Level.prototype.setMapOptions = function(mapOptions) { this._mapOptions = mapOptions; }
 Level.prototype.getMapURL = function() { return this._mapURL; }
 Level.prototype.setMapURL = function(mapURL) { this._mapURL = mapURL; }
+Level.prototype.isCustomLevel = function() { return this._customLevel; }
+Level.prototype.setCustomLevel = function(customLevel) { this._customLevel = customLevel; }
 Level.prototype.getPath = function() {
     var pathCells = new Array();
     for (var i = 0; i < this._worldWidth; i++) {
