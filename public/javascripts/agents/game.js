@@ -53,11 +53,24 @@ var profileClass = "Novice";
 var totalSaved = 0;
 
 var PROFILE_ID;
-var godMode = false;
+
+// Toggleable values
 var inDesignMode = false;
 var inPlay = false;
 var mouseDown = false;
 var mouseMoving = false;
+
+// Toggleable parameter values
+var godMode = false;
+var soundsPlayable = false;
+var resourcesInTension = false;
+var resourceBonus = false;
+var predatorsVisible = false;
+var rivalsVisible = false;
+var backgroundIconsVisible = false;
+var applyGeneralHealth = false;
+var ignoreResourceBalance = false;
+
 
 var agentTimerId = 0;
 
@@ -67,6 +80,8 @@ var resourceTypes = {};
 var currentLevelNumber = 1;
 var currentLevel;
 var waveOverride = 0;
+var maxWaveMoves = 0;
+var maxLevelMoves = 0;
 
 var levelOfDifficulty = MEDIUM_DIFFICULTY;
 var resourceRecoveryCycle = 5;
@@ -944,6 +959,14 @@ function drawAgents() {
     var ctx = canvas.getContext('2d');
     for (var i = 0; i < agents.length; i += 1) {
         var agent = agents[i];
+
+        // Don't process agents we want to block
+        if (! rivalsVisible && agent.getType() == RIVAL_AGENT_TYPE)
+            continue;
+        if (! predatorsVisible && agent.getType() == PREDATOR_AGENT_TYPE)
+            continue;
+
+        // Get co-ordinates
         var wx = agent.getWanderX();
         var wy = agent.getWanderY();
         var __ret = getDrawingPosition(agent, counter);
@@ -952,54 +975,54 @@ function drawAgents() {
 
 
 
-        var radius = (pieceWidth / 4);
-        var bodyLength = (pieceWidth / 2);
-
-        ctx.beginPath();
-        ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
-        ctx.closePath();
-        ctx.strokeStyle = "#ccc";
-        ctx.stroke();
         var ecoH = agent.getEconomicHealth();
         var envH = agent.getEnvironmentalHealth();
         var socH = agent.getSocialHealth();
         var c = agent.getColor().toString();
         var newColor = diluteColour(socH, envH, ecoH, c);
-        ctx.fillStyle = "#" + newColor;
-        ctx.fill();
 
-        ctx.beginPath();
-        ctx.moveTo(intX, intY + radius);
-        ctx.lineTo(intX, intY + radius + bodyLength / 2);
-        if (counter % 2 == 0) {
-            // Legs
-            var xOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
-            var yOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
-            ctx.moveTo(intX, intY + radius + bodyLength / 2);
-            ctx.lineTo(intX - xOffset, intY + radius + bodyLength / 2 + yOffset);
-            ctx.moveTo(intX, intY + radius + bodyLength / 2);
-            ctx.lineTo(intX + xOffset, intY + radius + bodyLength / 2 + yOffset);
-            // Arms - 90 degrees
-            ctx.moveTo(intX - bodyLength / 2, intY + radius + bodyLength / 6);
-            ctx.lineTo(intX + bodyLength / 2, intY + radius + bodyLength / 6);
-        }
-        else {
-            // Legs - straight
-            ctx.moveTo(intX, intY + radius + bodyLength / 2);
-            ctx.lineTo(intX, intY + radius + bodyLength);
-            // Arms - 45 degrees
-            var xOffset = Math.sin(45 * Math.PI/180) * bodyLength / 2;
-            var yOffset = Math.cos(45 * Math.PI/180) * bodyLength / 2;
-            ctx.moveTo(intX - xOffset, intY + radius + bodyLength / 6 + yOffset);
-            ctx.lineTo(intX, intY + radius + bodyLength / 6);
-            ctx.moveTo(intX + xOffset, intY + radius + bodyLength / 6 + yOffset);
-            ctx.lineTo(intX, intY + radius + bodyLength / 6);
+        eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, pieceWidth, newColor, counter);
 
-        }
-        ctx.closePath();
-        ctx.strokeStyle = "#" + newColor;
-        ctx.lineWidth = 2;
-        ctx.stroke();
+//        ctx.beginPath();
+//        ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
+//        ctx.closePath();
+//        ctx.strokeStyle = "#ccc";
+//        ctx.stroke();
+//        ctx.fillStyle = "#" + newColor;
+//        ctx.fill();
+//
+//        ctx.beginPath();
+//        ctx.moveTo(intX, intY + radius);
+//        ctx.lineTo(intX, intY + radius + bodyLength / 2);
+//        if (counter % 2 == 0) {
+//            // Legs
+//            var xOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
+//            var yOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
+//            ctx.moveTo(intX, intY + radius + bodyLength / 2);
+//            ctx.lineTo(intX - xOffset, intY + radius + bodyLength / 2 + yOffset);
+//            ctx.moveTo(intX, intY + radius + bodyLength / 2);
+//            ctx.lineTo(intX + xOffset, intY + radius + bodyLength / 2 + yOffset);
+//            // Arms - 90 degrees
+//            ctx.moveTo(intX - bodyLength / 2, intY + radius + bodyLength / 6);
+//            ctx.lineTo(intX + bodyLength / 2, intY + radius + bodyLength / 6);
+//        }
+//        else {
+//            // Legs - straight
+//            ctx.moveTo(intX, intY + radius + bodyLength / 2);
+//            ctx.lineTo(intX, intY + radius + bodyLength);
+//            // Arms - 45 degrees
+//            var xOffset = Math.sin(45 * Math.PI/180) * bodyLength / 2;
+//            var yOffset = Math.cos(45 * Math.PI/180) * bodyLength / 2;
+//            ctx.moveTo(intX - xOffset, intY + radius + bodyLength / 6 + yOffset);
+//            ctx.lineTo(intX, intY + radius + bodyLength / 6);
+//            ctx.moveTo(intX + xOffset, intY + radius + bodyLength / 6 + yOffset);
+//            ctx.lineTo(intX, intY + radius + bodyLength / 6);
+//
+//        }
+//        ctx.closePath();
+//        ctx.strokeStyle = "#" + newColor;
+//        ctx.lineWidth = 2;
+//        ctx.stroke();
 
 //        ctx.fillText(agent.getHealth(),  intX, intY);
 //        ctx.fillText(agent.getEconomicHealth(),  intX, intY + 20);
@@ -1094,6 +1117,7 @@ function moveAgent(agent, withNoRepeat, withNoCollision) {
     var position = findPosition(agent, withNoRepeat, withNoCollision, currentLevel.getAllowOffscreenCycling(), currentLevel.getAllowOffscreenCycling());
 //    if ((position[0] != x || position[1] != y) && (position[0] != lastX || position[1] != lastY))
         agent.setPosition(position[0], position[1]);
+    agent.incrementMoves();
 }
 
 function moveAgents(withNoRepeat, withNoCollision) {
@@ -1261,14 +1285,14 @@ function moveAgentsRandomly() {
 }
 
 function checkResources(newX, newY) {
-    var isPatch = false;
+    var isResource = false;
     var tiles = currentLevel.getTiles();
     for (var j = 0; j < tiles.length; j+= 1) {
-        var patch = tiles[j];
-        if (patch.getX() == newX && patch.getY() == newY)
+        var resource = tiles[j];
+        if (resource.getX() == newX && resource.getY() == newY)
             return true;
     }
-    return isPatch;
+    return isResource;
 }
 /* End Move Strategies */
 
@@ -1302,6 +1326,13 @@ function processAgents() {
     var citizenCount = 0;
     for (var i = 0; i < agents.length; i+= 1) {
         var agent = agents[i];
+
+        // Don't process agents we want to block
+        if (! rivalsVisible && agent.getType() == RIVAL_AGENT_TYPE)
+            continue;
+        if (! predatorsVisible && agent.getType() == PREDATOR_AGENT_TYPE)
+            continue;
+
         var speed = agent.getSpeed();
         if (agent.getType() == CITIZEN_AGENT_TYPE)
             citizenCount++;
@@ -1324,17 +1355,23 @@ function processAgents() {
             moveAgent(agent, true, false);
             agent.adjustSpeed();
             agent.adjustWander();
+            if (agent.getMoves() > maxWaveMoves)
+                maxWaveMoves = agent.getMoves();
+            if (agent.getMoves() > maxLevelMoves)
+                maxLevelMoves = agent.getMoves();
 
-            if (agent.getType() == CITIZEN_AGENT_TYPE) {
+
+            if (agent.getType() == CITIZEN_AGENT_TYPE || agent.getType() == RIVAL_AGENT_TYPE) {
                 if (!godMode)
                     agent.adjustHealth(MOVE_HEALTH_COST);
                 if (agent.getHealth() <= 0) {
                     nullifiedAgents.push(i);
-                    expiredAgentCount++;
+                    if (agent.getType() == CITIZEN_AGENT_TYPE)
+                        expiredAgentCount++;
                     drawExpired();
                 }
                 else {
-                    // Hook for detecting 'active' patches
+                    // Hook for detecting 'active' resources
                     processNeighbouringResources(agent);
 
                     // Hook for detecting other agents
@@ -1356,6 +1393,7 @@ function processAgents() {
     if (citizenCount == 0) {
         // Start a new wave
         if (waves < currentLevel.getWaveNumber()) {
+//            alert(maxWaveMoves);
             newWave();
             drawScoreboard();
             waveDelayCounter = 0;
@@ -1382,13 +1420,13 @@ function processNeighbouringResources(agent) {
     var x = agent.getX();
     var y = agent.getY();
     for (var j = 0; j < resources.length; j++) {
-        var p = resources[j];
-        var px = p.getX();
-        var py = p.getY();
-        if (Math.abs(px - x) <= 1 && Math.abs(py - y) <= 1) {
-            var resourceEffect = calculateResourceEffect(p.getType());
-            p.provideYield(agent, resourceEffect);
-            drawResource(p);
+        var resource = resources[j];
+        var rx = resource.getX();
+        var ry = resource.getY();
+        if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
+            var resourceEffect = calculateResourceEffect(resource);
+            resource.provideYield(agent, resourceEffect, applyGeneralHealth);
+            drawResource(resource);
         }
     }
 }
@@ -1410,24 +1448,91 @@ function processNeighbouringAgents(agent) {
 }
 
 /*
-Calculates the proportion of a particular patch type, relative to the overall number of patches, then returns a log derivative (so minor variations have minimal impact).
+Calculates the proportion of a particular resource type, relative to the overall number of resources, then returns a log derivative (so minor variations have minimal impact).
+If the global variable ignoreResourceBalance is true, this calculation is ignored.
+If the global variable resourcesInTension is true, this calculation is further adjusted by the proximity of other resources.
  */
-function calculateResourceEffect(patchType) {
-    var patchTypeCount = 0;
-    var totalPatches = resources.length;
-    if (totalPatches == 1)
+function calculateResourceEffect(resource) {
+    // Allow this calculation to be ignored
+    if (ignoreResourceBalance)
         return 1;
-    if (patchType == "eco")
-        patchTypeCount = economicResourceCount;
-    else if (patchType == "env")
-        patchTypeCount = environmentalResourceCount;
-    else if (patchType == "soc")
-        patchTypeCount = socialResourceCount;
-    var patchTypeProportion = patchTypeCount / totalPatches;
+
+    var resourceType = resource.getType();
+    var resourceTypeCount = 0;
+    var totalResources = resources.length;
+    if (totalResources == 1)
+        return 1;
+    if (resourceType == "eco") {
+        resourceTypeCount = economicResourceCount;
+    }
+    else if (resourceType == "env") {
+        resourceTypeCount = environmentalResourceCount;
+    }
+    else if (resourceType == "soc") {
+        resourceTypeCount = socialResourceCount;
+    }
+    var resourceTypeProportion = resourceTypeCount / totalResources;
     var idealProportion = 1 / 3;
-    var percentageOfIdeal = (patchTypeProportion <= idealProportion) ? (patchTypeProportion / idealProportion) : ((1 - patchTypeProportion) / (1 - idealProportion));
+    var percentageOfIdeal = (resourceTypeProportion <= idealProportion) ? (resourceTypeProportion / idealProportion) : ((1 - resourceTypeProportion) / (1 - idealProportion));
     var logEffect = 1 + Math.log(percentageOfIdeal) / Math.E;
+
+    // Further adjustment based on surrounding resources
+    if (resourcesInTension) {
+        logEffect *= calculateSurroundingResourcesEffects(resource);
+    }
     return logEffect;
+}
+
+/*
+Calculates the effect of surrounding resources
+ */
+function calculateSurroundingResourcesEffects(resource) {
+    var x = resource.getX();
+    var y = resource.getY();
+    var resourceType = resource.getType();
+    var baseEffect = 1;
+    for (var j = 0; j < resources.length; j++) {
+        var neighbour = resources[j];
+        var nx = neighbour.getX();
+        var ny = neighbour.getY();
+        var nType = neighbour.getType();
+        if (Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
+            if (resourceType == "eco") {
+                if (nType == "eco") {
+                    baseEffect *= 1.2;
+                }
+                else if (nType == "env") {
+                    baseEffect *= 1.0;
+                }
+                else if (nType == "soc") {
+                    baseEffect *= 1.0;
+                }
+            }
+            else if (resourceType == "env") {
+                if (nType == "eco") {
+                    baseEffect *= 0.5;
+                }
+                else if (nType == "env") {
+                    baseEffect *= 1.2;
+                }
+                else if (nType == "soc") {
+                    baseEffect *= 1.0;
+                }
+            }
+            else if (resourceType == "soc") {
+                if (nType == "eco") {
+                    baseEffect *= 0.5;
+                }
+                else if (nType == "env") {
+                    baseEffect *= 1.0;
+                }
+                else if (nType == "soc") {
+                    baseEffect *= 1.2;
+                }
+            }
+        }
+    }
+    return baseEffect;
 }
 
 function hasNeighbouringResources(x, y) {
@@ -1436,7 +1541,7 @@ function hasNeighbouringResources(x, y) {
         var px = p.getX();
         var py = p.getY();
         if (Math.abs(px - x) <= 1 && Math.abs(py - y) <= 1) {
-            // Add hook here for evaluating relative health of neighbouring patches
+            // Add hook here for evaluating relative health of neighbouring resources
 //            var h = p.getHealth();
             return p;
         }
@@ -1459,7 +1564,7 @@ function getAbsoluteDistanceFromGoal(x, y){
 function recoverResources() {
     for (var j = 0; j < resources.length; j++) {
         var p = resources[j];
-        /* Test code for restoring patch health, as opposed to resetting at the end of each wave */
+        /* Test code for restoring resource health, as opposed to resetting at the end of each wave */
         if (p.getTotalYield() < p.getInitialTotalYield()) {
             /* Overly generous... */
 //            p.setTotalYield(p.getTotalYield() + p.getPerAgentYield());
@@ -1477,10 +1582,15 @@ function resetResourceYields() {
 }
 
 function newWave() {
+    maxWaveMoves = 0;
     counter = 0;
     savedAgentThisWaveCount = 0;
     waves ++;
     presetAgents(++numAgents, currentLevel.getInitialAgentX(), currentLevel.getInitialAgentY());
+
+    // Add generated agents
+    $.merge(agents, currentLevel.generateWaveAgents());
+
     notify("New wave coming...");
 }
 
@@ -1492,6 +1602,7 @@ function completeLevel() {
 }
 
 function newLevel() {
+    maxLevelMoves = 0;
     currentLevelNumber++;
     previousLevelScore = score;
     resources = new Array();
@@ -1527,6 +1638,8 @@ function newGame() {
     score = 0;
     previousLevelScore = 0;
     storeCurrentLevelData();
+    var radius = (pieceWidth / 4);
+    var bodyLength = (pieceWidth / 2);
     restartLevel();
 }
 
@@ -1534,6 +1647,27 @@ function restartLevel() {
     inDesignMode = false;
     if ($("#godModeInput")[0] != undefined)
         godMode = $("#godModeInput")[0].checked;
+    if ($("#rivalsVisibleInput")[0] != undefined)
+        rivalsVisible = $("#rivalsVisibleInput")[0].checked;
+    if ($("#predatorsVisibleInput")[0] != undefined)
+        predatorsVisible = $("#predatorsVisibleInput")[0].checked;
+
+    if ($("#soundsPlayableInput")[0] != undefined)
+        soundsPlayable = $("#soundsPlayableInput")[0].checked;
+    if ($("#backgroundIconsVisibleInput")[0] != undefined)
+        backgroundIconsVisible = $("#backgroundIconsVisibleInput")[0].checked;
+
+    if ($("#resourcesInTensionInput")[0] != undefined)
+        resourcesInTension = $("#resourcesInTensionInput")[0].checked;
+    if ($("#resourceBonusInput")[0] != undefined)
+        resourceBonus = $("#resourceBonusInput")[0].checked;
+    if ($("#applyGeneralHealthInput")[0] != undefined)
+        applyGeneralHealth = $("#applyGeneralHealthInput")[0].checked;
+    if ($("#ignoreResourceBalanceInput")[0] != undefined)
+        ignoreResourceBalance = $("#ignoreResourceBalanceInput")[0].checked;
+
+
+
 //    currentLevelNumber = checkInteger($("#levelInput")[0].value);
 //    waveOverride = checkInteger($("#levelInput")[0].value);
 //    var diffSelect = $("#difficultyInput")[0];
@@ -2125,4 +2259,5 @@ function zoom(direction) {
     drawWorld();
 }
 /* End Experimental Pan and Zoom functions */
+
 

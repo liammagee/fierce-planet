@@ -27,6 +27,8 @@ function Level(id) {
     this._mapOptions;
     this._mapURL;
     this._customLevel = false;
+    this._levelAgents = new Array();
+    this._waveAgents = new Array();
 }
 Level.prototype.getId = function() { return this._id; }
 Level.prototype.setId = function(id) { this._id = id; }
@@ -72,6 +74,20 @@ Level.prototype.getMapURL = function() { return this._mapURL; }
 Level.prototype.setMapURL = function(mapURL) { this._mapURL = mapURL; }
 Level.prototype.isCustomLevel = function() { return this._customLevel; }
 Level.prototype.setCustomLevel = function(customLevel) { this._customLevel = customLevel; }
+Level.prototype.getLevelAgents = function() { return this._levelAgents; }
+Level.prototype.setLevelAgents = function(levelAgents) { this._levelAgents = levelAgents; }
+Level.prototype.addLevelAgent = function(agent) { this._levelAgents.push(agent); }
+Level.prototype.getWaveAgents = function() { return this._waveAgents; }
+Level.prototype.setWaveAgents = function(waveAgents) { this._waveAgents = waveAgents; }
+Level.prototype.addWaveAgent = function(agent) { this._waveAgents.push(agent); }
+Level.prototype.generateWaveAgents = function() {
+    var newAgents = [];
+    for (var i = 0; i < this._waveAgents.length; i++) {
+        var waveAgent = this._waveAgents[i];
+        newAgents.push(new Agent(waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
+    }
+    return newAgents;
+}
 Level.prototype.getPath = function() {
     var pathCells = new Array();
     for (var i = 0; i < this._worldWidth; i++) {
@@ -103,6 +119,7 @@ function AgentType(name, color) {
     this._economicHealth = INITIAL_HEALTH;
     this._environmentalHealth = INITIAL_HEALTH;
     this._socialHealth = INITIAL_HEALTH;
+    this._drawFunction;
 }
 AgentType.prototype.getName = function() { return this._name;}
 AgentType.prototype.getColor = function() { return this._color;}
@@ -110,6 +127,8 @@ AgentType.prototype.getHealth = function() { return this._health; }
 AgentType.prototype.getEconomicHealth = function() { return this._economicHealth; }
 AgentType.prototype.getEnvironmentalHealth = function() { return this._environmentalHealth; }
 AgentType.prototype.getSocialHealth = function() { return this._socialHealth; }
+AgentType.prototype.getDrawFunction = function() { return this._drawFunction; }
+AgentType.prototype.setDrawFunction = function(drawFunction) { this._drawFunction = drawFunction; }
 
 
 
@@ -144,6 +163,7 @@ function Agent(agentType, x, y) {
     this._economicHealth = INITIAL_HEALTH;
     this._environmentalHealth = INITIAL_HEALTH;
     this._socialHealth = INITIAL_HEALTH;
+    this._moves = 0;
 }
 Agent.prototype.getPosition = function() { return [this._x, this._y]; }
 Agent.prototype.setPosition = function(x, y) { this._history.push([this._x, this._y]); this._x =x; this._y = y; }
@@ -218,6 +238,9 @@ Agent.prototype.adjustWander = function() {
 }
 Agent.prototype.getSpeed = function() { return this._speed; }
 Agent.prototype.setSpeed = function(speed) { this._speed = speed; }
+Agent.prototype.getMoves = function() { return this._moves; }
+Agent.prototype.setMoves = function(moves) { this._moves = moves; }
+Agent.prototype.incrementMoves = function() { this._moves++; }
 /* Change the speed, but sparingly as the speed moves away from the standard speed: MOVE_INCREMENTS */
 Agent.prototype.adjustSpeed = function() {
     var tmpSpeed = this._speed;
@@ -363,17 +386,25 @@ Resource.prototype.getX = function() { return this._x; }
 Resource.prototype.setX = function(x) { this._x = x; }
 Resource.prototype.getY = function() { return this._y; }
 Resource.prototype.setY = function(y) { this._y = y; }
-Resource.prototype.provideYield = function(agent, resourceEffect) {
+Resource.prototype.provideYield = function(agent, resourceEffect, applyGeneralHealth) {
     if (this._totalYield > this._perAgentYield && agent.getHealth() < 100) {
-        var adjustment = this._perAgentYield * this._upgradeLevel * 3 * resourceEffect;
-        if (this._resourceType == "eco")
-            agent.adjustEconomicHealth(adjustment);
-        else if (this._resourceType == "env")
-            agent.adjustEnvironmentalHealth(adjustment);
-        else if (this._resourceType == "soc")
-            agent.adjustSocialHealth(adjustment);
-        agent.setSpeed(this._perAgentYield);
-        this._totalYield -= this._perAgentYield;
+        if (applyGeneralHealth) {
+            var adjustment = this._perAgentYield * this._upgradeLevel * resourceEffect;
+            agent.adjustHealth(adjustment);
+            agent.setSpeed(this._perAgentYield);
+            this._totalYield -= this._perAgentYield;
+        }
+        else {
+            var adjustment = this._perAgentYield * this._upgradeLevel * 3 * resourceEffect;
+            if (this._resourceType == "eco")
+                agent.adjustEconomicHealth(adjustment);
+            else if (this._resourceType == "env")
+                agent.adjustEnvironmentalHealth(adjustment);
+            else if (this._resourceType == "soc")
+                agent.adjustSocialHealth(adjustment);
+            agent.setSpeed(this._perAgentYield);
+            this._totalYield -= this._perAgentYield;
+        }
     }
 }
 

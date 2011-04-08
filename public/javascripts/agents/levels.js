@@ -1,8 +1,6 @@
 
 /* NB: Level is defined in classes.js */
 
-var CITIZEN_AGENT_TYPE = "Citizen";
-var PREDATOR_AGENT_TYPE = "Predator";
 
 
 /* Level setup methods - this should be moved to the Level class when refactored. */
@@ -33,19 +31,23 @@ function randomAgents(number, limit) {
     return agents;
 };
 function presetAgents(number, cellX, cellY) {
-//    agents = new Array();
     for (var i = 0; i < number; i ++) {
         var agent = new Agent(CITIZEN_AGENT_TYPE, cellX, cellY);
         var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
         agent.setDelay(delay);
         agents.push(agent);
     }
+
 };
 function preSetupLevel(level) {
     if (level.getTiles() == undefined) 
         level.setTiles(fillWithTiles());
 
     presetAgents(level.getInitialAgentNumber(), level.getInitialAgentX(), level.getInitialAgentY());
+
+    // Add generated agents
+    $.merge(agents, level.generateWaveAgents());
+    $.merge(agents, level.getLevelAgents());
 };
 function postSetupLevel(level) {
     assignCells();
@@ -64,7 +66,146 @@ Level.prototype.postSetupLevel = new function() {
 Agent Type setup
  */
 var CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000");
+CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, newColor, counter) {
+    var radius = (pieceWidth / 4);
+    var bodyLength = (pieceWidth / 2);
+
+    ctx.beginPath();
+    ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
+    ctx.closePath();
+    ctx.strokeStyle = "#ccc";
+    ctx.stroke();
+    ctx.fillStyle = "#" + newColor;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(intX, intY + radius);
+    ctx.lineTo(intX, intY + radius + bodyLength / 2);
+    if (counter % 2 == 0) {
+        // Legs
+        var xOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
+        var yOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
+        ctx.moveTo(intX, intY + radius + bodyLength / 2);
+        ctx.lineTo(intX - xOffset, intY + radius + bodyLength / 2 + yOffset);
+        ctx.moveTo(intX, intY + radius + bodyLength / 2);
+        ctx.lineTo(intX + xOffset, intY + radius + bodyLength / 2 + yOffset);
+        // Arms - 90 degrees
+        ctx.moveTo(intX - bodyLength / 2, intY + radius + bodyLength / 6);
+        ctx.lineTo(intX + bodyLength / 2, intY + radius + bodyLength / 6);
+    }
+    else {
+        // Legs - straight
+        ctx.moveTo(intX, intY + radius + bodyLength / 2);
+        ctx.lineTo(intX, intY + radius + bodyLength);
+        // Arms - 45 degrees
+        var xOffset = Math.sin(45 * Math.PI/180) * bodyLength / 2;
+        var yOffset = Math.cos(45 * Math.PI/180) * bodyLength / 2;
+        ctx.moveTo(intX - xOffset, intY + radius + bodyLength / 6 + yOffset);
+        ctx.lineTo(intX, intY + radius + bodyLength / 6);
+        ctx.moveTo(intX + xOffset, intY + radius + bodyLength / 6 + yOffset);
+        ctx.lineTo(intX, intY + radius + bodyLength / 6);
+
+    }
+    ctx.closePath();
+    ctx.strokeStyle = "#" + newColor;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+});
 var PREDATOR_AGENT_TYPE = new AgentType("Predator", "fbe53b");
+PREDATOR_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, newColor, counter) {
+    var radius = (pieceWidth / 4);
+    var bodyLength = (pieceWidth / 2);
+
+    ctx.beginPath();
+    ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
+    ctx.closePath();
+    ctx.strokeStyle = "#ccc";
+    ctx.stroke();
+    ctx.fillStyle = "#" + newColor;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(intX, intY + radius);
+    ctx.lineTo(intX, intY + radius + bodyLength / 2);
+    if (counter % 2 == 0) {
+        // Legs
+        var xOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
+        var yOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
+        ctx.moveTo(intX, intY + radius + bodyLength / 2);
+        ctx.lineTo(intX - xOffset, intY + radius + bodyLength / 2 + yOffset);
+        ctx.moveTo(intX, intY + radius + bodyLength / 2);
+        ctx.lineTo(intX + xOffset, intY + radius + bodyLength / 2 + yOffset);
+        // Arms - 90 degrees
+        ctx.moveTo(intX - bodyLength / 2, intY + radius + bodyLength / 6);
+        ctx.lineTo(intX + bodyLength / 2, intY + radius + bodyLength / 6);
+    }
+    else {
+        // Legs - straight
+        ctx.moveTo(intX, intY + radius + bodyLength / 2);
+        ctx.lineTo(intX, intY + radius + bodyLength);
+        // Arms - 45 degrees
+        var xOffset = Math.sin(45 * Math.PI/180) * bodyLength / 2;
+        var yOffset = Math.cos(45 * Math.PI/180) * bodyLength / 2;
+        ctx.moveTo(intX - xOffset, intY + radius + bodyLength / 6 + yOffset);
+        ctx.lineTo(intX, intY + radius + bodyLength / 6);
+        ctx.moveTo(intX + xOffset, intY + radius + bodyLength / 6 + yOffset);
+        ctx.lineTo(intX, intY + radius + bodyLength / 6);
+
+    }
+    ctx.closePath();
+    ctx.strokeStyle = "#" + newColor;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+});
+var RIVAL_AGENT_TYPE = new AgentType("Rival", "3be5fb");
+RIVAL_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, newColor, counter) {
+    var radius = (pieceWidth / 4);
+    var bodyLength = (pieceWidth / 2);
+
+    ctx.beginPath();
+    ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
+    ctx.closePath();
+    ctx.strokeStyle = "#ccc";
+    ctx.stroke();
+    ctx.fillStyle = "#" + newColor;
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(intX, intY + radius);
+    ctx.lineTo(intX, intY + radius + bodyLength / 2);
+    if (counter % 2 == 0) {
+        // Legs
+        var xOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
+        var yOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
+        ctx.moveTo(intX, intY + radius + bodyLength / 2);
+        ctx.lineTo(intX - xOffset, intY + radius + bodyLength / 2 + yOffset);
+        ctx.moveTo(intX, intY + radius + bodyLength / 2);
+        ctx.lineTo(intX + xOffset, intY + radius + bodyLength / 2 + yOffset);
+        // Arms - 90 degrees
+        ctx.moveTo(intX - bodyLength / 2, intY + radius + bodyLength / 6);
+        ctx.lineTo(intX + bodyLength / 2, intY + radius + bodyLength / 6);
+    }
+    else {
+        // Legs - straight
+        ctx.moveTo(intX, intY + radius + bodyLength / 2);
+        ctx.lineTo(intX, intY + radius + bodyLength);
+        // Arms - 45 degrees
+        var xOffset = Math.sin(45 * Math.PI/180) * bodyLength / 2;
+        var yOffset = Math.cos(45 * Math.PI/180) * bodyLength / 2;
+        ctx.moveTo(intX - xOffset, intY + radius + bodyLength / 6 + yOffset);
+        ctx.lineTo(intX, intY + radius + bodyLength / 6);
+        ctx.moveTo(intX + xOffset, intY + radius + bodyLength / 6 + yOffset);
+        ctx.lineTo(intX, intY + radius + bodyLength / 6);
+
+    }
+    ctx.closePath();
+    ctx.strokeStyle = "#" + newColor;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+});
 
 
 /* Level 0 Definition */
@@ -131,6 +272,10 @@ level1.setupLevel = function() {
     tiles.splice(23, 1);
     tiles.splice(12, 10);
     this.setTiles(tiles);
+
+    // Add predators and rivals
+    this.setLevelAgents([new Agent(PREDATOR_AGENT_TYPE, 0, 9)]);
+    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 0, 9), new Agent(RIVAL_AGENT_TYPE, 7, 6)]);
 };
 
 
@@ -464,7 +609,7 @@ level7.setInitialAgentNumber(1);
 level7.setWaveNumber(10);
 level7.setExpiryLimit(10);
 level7.setAllowResourcesOnPath(true);
-level7.setInitialResourceStore(200);
+level7.setInitialResourceStore(150);
 //level7.setImage("/images/Background_Level7.png");
 level7.setNotice("<h2>Level 7: Like, Totally Random...</h2>" +
         "<p>Ahead lies a vast and empty expanse. The citizens are understandably nervous. Left unaided, they will try not to backtrack, but could still find themselves hopelessly lost without your aid.</p>" +
@@ -490,8 +635,11 @@ level7.setupLevel = function() {
     tiles.splice(24, 3);
     tiles.splice(8, 1);
     this.setTiles(tiles);
-    predator = new Agent(PREDATOR_AGENT_TYPE, 8, 4);
-    agents.push(predator);
+
+
+    // Add predators and rivals
+    this.addLevelAgent(new Agent(PREDATOR_AGENT_TYPE, 8, 4));
+    this.addWaveAgent(new Agent(RIVAL_AGENT_TYPE, 9, 4));
 };
 
 
