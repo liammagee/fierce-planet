@@ -150,8 +150,7 @@ $(document).ajaxSend(function(event, request, settings) {
 $(document).ready(function() {
 
     // Reload the game when the level 1 image is loaded (TODO: how should other levels be handled?)
-    if(level1.getImage().complete) reloadGame()
-    else level1.getImage().onload= reloadGame;
+    reloadGame();
 
 
     // Set up dialogs
@@ -165,9 +164,8 @@ $(document).ready(function() {
     setupResourceInteraction();
 
 
-
     // Add general event listeners
-   hookUpUIEventListeners()
+    hookUpUIEventListeners();
 });
 
 
@@ -381,7 +379,7 @@ function deleteCurrentResource() {
     if (foundResource > -1) {
         resourcesInStore += 5;
         resourcesSpent -= 5;
-        cells[[currentResource.getX(), currentResource.getY()]] = null;
+//        cells[[currentResource.getX(), currentResource.getY()]] = null;
         resources.splice(foundResource, 1);
         drawResourcesInStore();
         clearCanvas('c2');
@@ -1454,7 +1452,7 @@ If the global variable resourcesInTension is true, this calculation is further a
  */
 function calculateResourceEffect(resource) {
     // Allow this calculation to be ignored
-    if (ignoreResourceBalance)
+    if (ignoreResourceBalance || applyGeneralHealth)
         return 1;
 
     var resourceType = resource.getType();
@@ -1471,16 +1469,15 @@ function calculateResourceEffect(resource) {
     else if (resourceType == "soc") {
         resourceTypeCount = socialResourceCount;
     }
-    var resourceTypeProportion = resourceTypeCount / totalResources;
-    var idealProportion = 1 / 3;
-    var percentageOfIdeal = (resourceTypeProportion <= idealProportion) ? (resourceTypeProportion / idealProportion) : ((1 - resourceTypeProportion) / (1 - idealProportion));
-    var logEffect = 1 + Math.log(percentageOfIdeal) / Math.E;
+    var resourceTypeProportion = (resourceTypeCount / totalResources) * totalResources;
+    var proportionOfIdeal = (resourceTypeProportion <= 1) ? resourceTypeProportion : ((totalResources - resourceTypeProportion) / (totalResources - 1));
+    var effect = proportionOfIdeal * proportionOfIdeal;
 
     // Further adjustment based on surrounding resources
     if (resourcesInTension) {
-        logEffect *= calculateSurroundingResourcesEffects(resource);
+        effect *= calculateSurroundingResourcesEffects(resource);
     }
-    return logEffect;
+    return effect;
 }
 
 /*
@@ -2005,7 +2002,13 @@ function showResourceGallery() {
 function refreshSwatch() {
     for (var i = 0; i < capabilities.length; i++) {
         var capability = $.trim(capabilities[i]);
-        $('#' + capability)[0].style.display = 'block';
+        try {
+            $('#' + capability)[0].style.display = 'block';
+        }
+        catch (err) {
+            console.log(err);
+            console.log(capability);
+        }
     }
 }
 
@@ -2156,7 +2159,7 @@ function levelInfo(notice) {
 /* End utility functions */
 
 
-/* Experimental Pan and Zoom functions */
+/* Pan and Zoom functions */
 
 function pan(direction) {
     var canvases = $('canvas');
@@ -2258,6 +2261,6 @@ function zoom(direction) {
     }
     drawWorld();
 }
-/* End Experimental Pan and Zoom functions */
+/* End Pan and Zoom functions */
 
 
