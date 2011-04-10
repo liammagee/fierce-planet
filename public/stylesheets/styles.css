@@ -107,11 +107,14 @@ ul, li {
 }
 
 #swatch > div, #gallery-items > div, #level-editor > div {
+  width: 110px;
+}
+#swatch > div, #gallery-items > div, #level-editor > div {
     float: left;
     position: relative;
   text-decoration: none;
   color: #000;
-  width: 110px;
+
   border: 1px solid #999;
   padding: 4px;
     margin-right: 10px;
@@ -125,19 +128,22 @@ ul, li {
 .eco, .env, .soc {
     padding: 4px;
     margin: 2px;
-    border: solid 1px #000;
+
 }
 
 #swatch div.eco, #gallery-items div.eco {
     background: #99ccff;
+    border: solid 2px #99ccff;
 }
 
 #swatch div.env, #gallery-items div.env {
-  background: #00ff00;
+    background: #00ff00;
+    border: solid 2px #00ff00;
 }
 
 #swatch div.soc, #gallery-items div.soc {
     background: #ff3300;
+    border: solid 2px #ff3300;
 }
 
 *[draggable=true] {

@@ -41,7 +41,7 @@ var PROFILE_CLASSES = ["Novice", "Planner", "Expert", "Visionary", "Genius"];
 var CAPABILITY_COSTS = [0, 100, 200, 300, 500];
 var NOVICE_CAPABILITIES = ["farm", "water", "clinic"];
 var PLANNER_CAPABILITIES = NOVICE_CAPABILITIES.concat(["shop", "park", "school"]);
-var EXPERT_CAPABILITIES = PLANNER_CAPABILITIES.concat(["bank", "air", "legal-system"]);
+var EXPERT_CAPABILITIES = PLANNER_CAPABILITIES.concat(["bank", "air", "legal"]);
 var VISIONARY_CAPABILITIES = EXPERT_CAPABILITIES.concat(["factory", "renewable-energy", "democracy"]);
 var GENIUS_CAPABILITIES = VISIONARY_CAPABILITIES.concat(["stockmarket", "biodiversity", "festival"]);
 
@@ -783,6 +783,7 @@ function drawResource(p) {
     ctx.fillStyle = "#" + newColor;
     ctx.strokeStyle = "#333";
 
+
     // Fill whole square
 //    ctx.fillRect(x, y, cellWidth, cellWidth);
     // Fill smaller square
@@ -807,12 +808,15 @@ function drawResource(p) {
     }
 
     ctx.lineWidth = 2;
-    ctx.strokeStyle = "#333";
+    ctx.strokeStyle = "#" + newColor;
 //    ctx.strokeRect(x, y, cellWidth, cellWidth);
-    ctx.strokeRect(x + 4, y + 4, cellWidth - 8, cellWidth - 8);
+    ctx.strokeRect(x + 2, y + 2, cellWidth - 4, cellWidth - 4);
 //    ctx.strokeText(p.getUpgradeLevel(), x + 10, y + 10);
 
     // Draw resource-specific representation here
+    var resImage = new Image();
+    resImage.src = "/images/" + p.getName() + ".gif";
+    ctx.drawImage(resImage, x + 4, y + 4, cellWidth - 8, cellWidth - 8);
     /*
     if (p.getName() == "farm") {
         ctx.beginPath();
@@ -1932,11 +1936,13 @@ function showResourceGallery() {
         accessibleCapabilities = GENIUS_CAPABILITIES;
     }
 
+
     // Evaluate available capabilities
     var links = $('.purchase');
     for (var i = 0; i < links.length; i++) {
         var purchasableItem = links[i];
         var id = purchasableItem.id;
+        console.log(id);
         var itemName = id.split("-purchase")[0];
         var cost = 0;
         if ($.inArray(itemName, PLANNER_CAPABILITIES)) {
@@ -1951,6 +1957,10 @@ function showResourceGallery() {
         else if ($.inArray(itemName, GENIUS_CAPABILITIES)) {
             cost = CAPABILITY_COSTS [4];
         }
+        console.log("got here");
+        console.log($.inArray(itemName, accessibleCapabilities));
+        console.log($.inArray(itemName, capabilities));
+        console.log($.inArray(itemName, capabilities));
         // Make item available for purchase if: (1) the player's level permits it; (2) it is not among existing capabilities and (3) there is enough money
         if ($.inArray(itemName, accessibleCapabilities) > -1 && $.inArray(itemName, capabilities) == -1 && cost < credits) {
             // Make item purchasable
@@ -1960,7 +1970,7 @@ function showResourceGallery() {
             $('#' + purchasableItem.id).css("border","1px solid black");
         }
         // Remove any existing event listeners
-        purchasableItem.removeEventListener('click');
+//        purchasableItem.removeEventListener('click', handler, false);
     }
     for (var i = 0; i < purchasableItems.length; i++) {
         var purchasableItem = purchasableItems[i];
@@ -1984,14 +1994,19 @@ function showResourceGallery() {
             var id = this.id;
             var swatchId = id.split("-purchase")[0];
             var itemName = $('#' + id + ' > a')[0].innerHTML;
-            var purchase = confirm('Purchase item "' + itemName + '"?');
-            if (purchase && $.inArray(swatchId, capabilities) == -1) {
-                credits -= cost;
-                capabilities.push(swatchId);
-                $('#current-credits')[0].innerHTML = credits;
-                $('#current-capabilities')[0].innerHTML = capabilities.join(", ");
+            if ($.inArray(swatchId, capabilities) == -1) {
+                var purchase = confirm('Purchase item "' + itemName + '"?');
+                if (purchase) {
+                    credits -= cost;
+                    capabilities.push(swatchId);
+                    $('#current-credits')[0].innerHTML = credits;
+                    $('#current-capabilities')[0].innerHTML = capabilities.join(", ");
+                    $('#' + id).css("border","1px solid black");
+                }
             }
-        }, false);
+            e.stopPropagation();
+            return false;
+        }, true );
 //        purchasableItem.css("border","9px solid red");
         $('#' + purchasableItem.id).css("border","3px solid black");
     }
