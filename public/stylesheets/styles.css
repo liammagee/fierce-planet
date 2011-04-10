@@ -37,7 +37,7 @@ body {
 #info {
     float: left;
     position:absolute;
-    left:661px;
+    left:761px;
 }
 #gameworld {
     margin-top: 20px;
@@ -72,7 +72,7 @@ body {
     clear: both;
     position:absolute;
     left:200px;
-    top: 491px;
+    top: 591px;
 }
 
 canvas {
@@ -80,8 +80,8 @@ canvas {
 }
 
 #map_canvas {
-    height: 401px;
-    width: 401px;
+    height: 501px;
+    width: 501px;
   position: absolute;
   bottom:0;
   left:0;
