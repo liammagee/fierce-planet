@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Level:</b>
+  <%= @entry_point.level_id %>
+</p>
+
+<p>
+  <b>Agent type:</b>
+  <%= @entry_point.agent_type %>
+</p>
+
+<p>
+  <b>X:</b>
+  <%= @entry_point.x %>
+</p>
+
+<p>
+  <b>Y:</b>
+  <%= @entry_point.y %>
+</p>
+
+<p>
+  <b>Renew each wave:</b>
+  <%= @entry_point.renew_each_wave %>
+</p>
+
+<p>
+  <b>Initial number:</b>
+  <%= @entry_point.initial_number %>
+</p>
+
+
+<%= link_to 'Edit', edit_entry_point_path(@entry_point) %> |
+<%= link_to 'Back', entry_points_path %>

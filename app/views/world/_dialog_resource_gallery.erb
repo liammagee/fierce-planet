@@ -1,17 +1,18 @@
 <div id="resource-gallery" style="display: none;">
   <div>
-    Profile details
-    <br/>
     Current class: <span id="current-profile-class"><%= current_user.profile.profile_class if current_user %></span>
     <br/>
     Credits: <span id="current-credits"><%= current_user.profile.credits if current_user %></span>
     <br/>
     Capabilities: <span id="current-capabilities"><%= current_user.profile.capabilities if current_user %></span>
+    <br/>
+    <em>Click on a resource to purchase:</em>
+    <br/>
   </div>
   <div id="gallery-items">
     <div>
       <div>Economic</div>
-      <div class="purchase eco" id="farm-purchase" title="Cost: 10; PAY: 20">
+      <div class="purchase eco" id="farm-purchase" title="Farm (Cost: 10; PAY: 20)">
         <a href="#"><img src="/images/farm.gif" title="Farm (Cost: 10; PAY: 20)"></a>
       </div>
       <div class="purchase eco" id="shop-purchase" title="Cost: 15; PAY: 30">

@@ -31,14 +31,15 @@ function randomAgents(number, limit) {
     return agents;
 };
 function presetAgents(number, cellX, cellY) {
+    agents = new Array();
     for (var i = 0; i < number; i ++) {
         var agent = new Agent(CITIZEN_AGENT_TYPE, cellX, cellY);
         var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
         agent.setDelay(delay);
         agents.push(agent);
     }
-
 };
+
 function preSetupLevel(level) {
     if (level.getTiles() == undefined) 
         level.setTiles(fillWithTiles());
@@ -117,47 +118,17 @@ PREDATOR_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth,
     var radius = (pieceWidth / 4);
     var bodyLength = (pieceWidth / 2);
 
-    ctx.beginPath();
-    ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
-    ctx.closePath();
-    ctx.strokeStyle = "#ccc";
-    ctx.stroke();
-    ctx.fillStyle = "#" + newColor;
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(intX, intY + radius);
-    ctx.lineTo(intX, intY + radius + bodyLength / 2);
-    if (counter % 2 == 0) {
-        // Legs
-        var xOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
-        var yOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
-        ctx.moveTo(intX, intY + radius + bodyLength / 2);
-        ctx.lineTo(intX - xOffset, intY + radius + bodyLength / 2 + yOffset);
-        ctx.moveTo(intX, intY + radius + bodyLength / 2);
-        ctx.lineTo(intX + xOffset, intY + radius + bodyLength / 2 + yOffset);
-        // Arms - 90 degrees
-        ctx.moveTo(intX - bodyLength / 2, intY + radius + bodyLength / 6);
-        ctx.lineTo(intX + bodyLength / 2, intY + radius + bodyLength / 6);
+    var img = new Image();
+    if (counter % 3 == 0) {
+        img.src = "/images/agents/predator1.jpg";
+    }
+    else if (counter % 3 == 1) {
+        img.src = "/images/agents/predator2.jpg";
     }
     else {
-        // Legs - straight
-        ctx.moveTo(intX, intY + radius + bodyLength / 2);
-        ctx.lineTo(intX, intY + radius + bodyLength);
-        // Arms - 45 degrees
-        var xOffset = Math.sin(45 * Math.PI/180) * bodyLength / 2;
-        var yOffset = Math.cos(45 * Math.PI/180) * bodyLength / 2;
-        ctx.moveTo(intX - xOffset, intY + radius + bodyLength / 6 + yOffset);
-        ctx.lineTo(intX, intY + radius + bodyLength / 6);
-        ctx.moveTo(intX + xOffset, intY + radius + bodyLength / 6 + yOffset);
-        ctx.lineTo(intX, intY + radius + bodyLength / 6);
-
+        img.src = "/images/agents/predator3.jpg";
     }
-    ctx.closePath();
-    ctx.strokeStyle = "#" + newColor;
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
+    ctx.drawImage(img, intX - pieceWidth / 2, intY - pieceWidth / 2, pieceWidth, pieceWidth);
 });
 var RIVAL_AGENT_TYPE = new AgentType("Rival", "3be5fb");
 RIVAL_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, newColor, counter) {
@@ -275,7 +246,7 @@ level1.setupLevel = function() {
 
     // Add predators and rivals
     this.setLevelAgents([new Agent(PREDATOR_AGENT_TYPE, 0, 9)]);
-    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 0, 9), new Agent(RIVAL_AGENT_TYPE, 7, 6)]);
+    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 7, 6)]);
 };
 
 

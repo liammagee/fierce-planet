@@ -1,6 +1,6 @@
 <div id="global-info-panel">
   <div style="width: 25%;; float: left; color: green">
-    Resource Store: <span id="goodness-display">100</span>
+    Resource Levels: <span id="goodness-display">100</span>
   </div>
   <div style="width: 25%;; float: left">
     Waves: <span id="waves-display">1 out of 20</span>
@@ -22,7 +22,7 @@
     Highest Score: <span id="highest-score-display">0</span>
   </div>
   <div style="width: 25%; float: left">
-    Highest Level: <span id="highest-level-display">0</span>
+    Profile Class: <span id="profile-class-display"></span>
   </div>
 
   <div id="user-links" style="clear:both; float: right; position: relative; width: 35%; color: blue; padding: 0; text-align: right">
@@ -31,6 +31,7 @@
           <%= 'Welcome, ' + current_user.profile.nickname + ' | '  if current_user and current_user.profile.nickname %>
           <%= link_to('Profile', edit_profile_path(current_user.profile)) %> |
           <a href="#" id="tutorial">Tutorial</a> |
+          <%= link_to('Feedback', new_feedback_path) %> |
           <%= link_to('Logout', destroy_user_session_path) %>
       <% else %>
           <a href="#" id="tutorial">Tutorial</a> |

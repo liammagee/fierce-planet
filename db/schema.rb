@@ -10,7 +10,39 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110407012115) do
+ActiveRecord::Schema.define(:version => 20110412044010) do
+
+  create_table "capabilities", :force => true do |t|
+    t.integer  "capability_type"
+    t.string   "name"
+    t.string   "code"
+    t.text     "description"
+    t.string   "icon"
+    t.integer  "resource_level_cost"
+    t.integer  "agent_pay_out"
+    t.integer  "required_credits"
+    t.integer  "required_level"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "entry_points", :force => true do |t|
+    t.integer  "level_id"
+    t.integer  "agent_type"
+    t.integer  "x"
+    t.integer  "y"
+    t.boolean  "renew_each_wave"
+    t.integer  "initial_number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "feedbacks", :force => true do |t|
+    t.integer  "user_id"
+    t.text     "comments"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "levels", :force => true do |t|
     t.string   "name"
@@ -30,6 +62,13 @@ ActiveRecord::Schema.define(:version => 20110407012115) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "image_src"
+  end
+
+  create_table "profile_capabilities", :force => true do |t|
+    t.integer  "profile_id"
+    t.integer  "capability_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "profiles", :force => true do |t|

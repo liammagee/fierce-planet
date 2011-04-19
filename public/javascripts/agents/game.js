@@ -817,30 +817,6 @@ function drawResource(p) {
     var resImage = new Image();
     resImage.src = "/images/" + p.getName() + ".gif";
     ctx.drawImage(resImage, x + 4, y + 4, cellWidth - 8, cellWidth - 8);
-    /*
-    if (p.getName() == "farm") {
-        ctx.beginPath();
-        for (var i = y + 4; i < y + 4 + cellWidth - 8; i+= 4) {
-            ctx.moveTo(x + 4, i);
-            ctx.lineTo(x + 4 + cellWidth - 8, i);
-        }
-        ctx.closePath();
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-    }
-    else if (p.getName() == "factory"){
-        ctx.beginPath();
-        for (var i = x + 4; i < x + 4 + cellWidth - 8; i+= 4) {
-            ctx.moveTo(i, y + 4);
-            ctx.lineTo(i, y + 4 + cellWidth - 8);
-        }
-        ctx.closePath();
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-    }
-    */
 }
 
 function clearCanvas(canvasID) {
@@ -982,6 +958,8 @@ function drawAgents() {
         var socH = agent.getSocialHealth();
         var c = agent.getColor().toString();
         var newColor = diluteColour(socH, envH, ecoH, c);
+        if (agent.getIsHit())
+            newColor = "f00";
 
         eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, pieceWidth, newColor, counter);
 
@@ -1050,12 +1028,9 @@ function drawLevel() {
     e.innerHTML = currentLevelNumber.toString();
 }
 
-function drawHighestLevel() {
-    var e = $('#highest-level-display')[0];
-    var hl = localStorage.highestLevel;
-    if (hl == undefined)
-        hl = 0;
-    e.innerHTML = hl.toString();
+function drawProfileClass() {
+    var e = $('#profile-class-display')[0];
+    e.innerHTML = profileClass;
 }
 
 function drawScore() {
@@ -1093,7 +1068,7 @@ function drawWaves() {
 
 function drawScoreboard() {
     drawLevel();
-    drawHighestLevel();
+    drawProfileClass();
     drawScore();
     drawHighestScore();
     drawWaves();
@@ -1439,14 +1414,19 @@ function processNeighbouringResources(agent) {
 function processNeighbouringAgents(agent) {
     var x = agent.getX();
     var y = agent.getY();
+    agent.setIsHit(false);
     for (var j = 0; j < agents.length; j++) {
         var a = agents[j];
         var ax = a.getX();
         var ay = a.getY();
         if (Math.abs(ax - x) <= 1 && Math.abs(ay - y) <= 1) {
-            // Do something
+            if (agent.getType() == CITIZEN_AGENT_TYPE && a.getType() == PREDATOR_AGENT_TYPE) {
+                agent.setIsHit(true);
+            }
         }
     }
+    if (agent.getIsHit())
+        agent.adjustHealth(-10);
 }
 
 /*
@@ -1587,10 +1567,12 @@ function newWave() {
     counter = 0;
     savedAgentThisWaveCount = 0;
     waves ++;
+
     presetAgents(++numAgents, currentLevel.getInitialAgentX(), currentLevel.getInitialAgentY());
 
     // Add generated agents
-    $.merge(agents, currentLevel.generateWaveAgents());
+    $.merge(agents, currentLevel.generateWaveAgents(numAgents));
+    $.merge(agents, currentLevel.getLevelAgents());
 
     notify("New wave coming...");
 }
@@ -1957,10 +1939,6 @@ function showResourceGallery() {
         else if ($.inArray(itemName, GENIUS_CAPABILITIES)) {
             cost = CAPABILITY_COSTS [4];
         }
-        console.log("got here");
-        console.log($.inArray(itemName, accessibleCapabilities));
-        console.log($.inArray(itemName, capabilities));
-        console.log($.inArray(itemName, capabilities));
         // Make item available for purchase if: (1) the player's level permits it; (2) it is not among existing capabilities and (3) there is enough money
         if ($.inArray(itemName, accessibleCapabilities) > -1 && $.inArray(itemName, capabilities) == -1 && cost < credits) {
             // Make item purchasable

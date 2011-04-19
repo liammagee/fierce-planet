@@ -80,11 +80,13 @@ Level.prototype.addLevelAgent = function(agent) { this._levelAgents.push(agent);
 Level.prototype.getWaveAgents = function() { return this._waveAgents; }
 Level.prototype.setWaveAgents = function(waveAgents) { this._waveAgents = waveAgents; }
 Level.prototype.addWaveAgent = function(agent) { this._waveAgents.push(agent); }
-Level.prototype.generateWaveAgents = function() {
+Level.prototype.generateWaveAgents = function(numAgents) {
     var newAgents = [];
-    for (var i = 0; i < this._waveAgents.length; i++) {
-        var waveAgent = this._waveAgents[i];
-        newAgents.push(new Agent(waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
+    for (var j = 0; j < numAgents; j++) {
+        for (var i = 0; i < this._waveAgents.length; i++) {
+            var waveAgent = this._waveAgents[i];
+            newAgents.push(new Agent(waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
+        }
     }
     return newAgents;
 }
@@ -164,6 +166,7 @@ function Agent(agentType, x, y) {
     this._environmentalHealth = INITIAL_HEALTH;
     this._socialHealth = INITIAL_HEALTH;
     this._moves = 0;
+    this._isHit = false;
 }
 Agent.prototype.getPosition = function() { return [this._x, this._y]; }
 Agent.prototype.setPosition = function(x, y) { this._history.push([this._x, this._y]); this._x =x; this._y = y; }
@@ -186,6 +189,8 @@ Agent.prototype.getEnvironmentalHealth = function() { return this._environmental
 Agent.prototype.setEnvironmentalHealth = function(environmentalHealth) { this._environmentalHealth = environmentalHealth; }
 Agent.prototype.getSocialHealth = function() { return this._socialHealth; }
 Agent.prototype.setSocialHealth = function(socialHealth) { this._socialHealth = socialHealth; }
+Agent.prototype.getIsHit = function() { return this._isHit; }
+Agent.prototype.setIsHit = function(isHit) { this._isHit = isHit; }
 Agent.prototype.adjustHealth = function(adjustment) {
     this._economicHealth = this.makeHealthAdjustment(this._economicHealth, adjustment);
     this._environmentalHealth = this.makeHealthAdjustment(this._environmentalHealth, adjustment);

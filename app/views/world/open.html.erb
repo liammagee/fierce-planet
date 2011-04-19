@@ -1,12 +1,4 @@
-<header>
-  <!--Heading-->
-</header>
 
-
-<div id="left-pane">
-  <p></p>
-</div>
-<div id="content-pane">
   <div id="main-panel">
     <%= render "score_board" %>
 
@@ -36,18 +28,15 @@
 
     <!-- Should only be visible when in design mode -->
     <%= render 'level_editor' %>
+
+    <!-- Dialog boxes - should only be visible when explicitly invoked -->
+    <%= render 'dialog_level_list' %>
+    <%= render 'dialog_delete_upgrade' %>
+    <%= render 'dialog_resource_gallery' %>
+
   </div>
 
-</div>
-<div id="right-pane">
-  <p></p>
-</div>
 
 
 
-
-<!-- Dialog boxes - should only be visible when explicitly invoked -->
-<%= render 'dialog_level_list' %>
-<%= render 'dialog_delete_upgrade' %>
-<%= render 'dialog_resource_gallery' %>
 

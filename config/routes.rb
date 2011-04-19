@@ -1,5 +1,9 @@
 Sustagency::Application.routes.draw do
 
+  resources :entry_points
+
+  resources :feedbacks
+
   resources :profiles do
     member do
       post 'update_stats'
