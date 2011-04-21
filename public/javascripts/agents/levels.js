@@ -15,7 +15,7 @@ function fillWithTiles() {
     var tiles = new Array();
     for (var i = 0; i < currentLevel.getWorldWidth(); i++) {
         for (var j = 0; j < currentLevel.getWorldHeight(); j++) {
-            tiles.push(new Tile("ddd", j, i));
+            tiles.push(new Tile(TILE_COLOR, j, i));
         }
     }
     return tiles;
@@ -67,10 +67,74 @@ Level.prototype.postSetupLevel = new function() {
 Agent Type setup
  */
 var CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000");
-CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, newColor, counter) {
+CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, newColor, counter, direction) {
     var radius = (pieceWidth / 4);
     var bodyLength = (pieceWidth / 2);
 
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(x - radius + 2, y - radius);
+    ctx.lineTo(x + radius - 2, y - radius);
+    ctx.lineTo(x + radius - 2, y - radius + 2);
+    ctx.lineTo(x + radius, y - radius + 2);
+    ctx.lineTo(x + radius, y - radius + 6);
+    ctx.lineTo(x + radius - 2, y - radius + 6);
+    ctx.lineTo(x + radius - 2, y - radius + 8);
+    ctx.lineTo(x - radius + 2, y - radius + 8);
+    ctx.lineTo(x - radius + 2, y - radius + 6);
+    ctx.lineTo(x - radius, y - radius + 6);
+    ctx.lineTo(x - radius, y - radius + 2);
+    ctx.lineTo(x - radius + 2, y - radius + 2);
+    ctx.lineTo(x - radius + 2, y - radius);
+    ctx.moveTo(x - 1, y - radius + 8);
+    ctx.lineTo(x - 1, y - radius + 8 + bodyLength);
+    ctx.lineTo(x + 1, y - radius + 8 + bodyLength);
+    ctx.lineTo(x + 1, y - radius + 8);
+    if (counter % 2 == 0) {
+        var start = (direction == 0 ? -1 : 1);
+        var end = (direction == 0 ? -6 : 6);
+
+        // Arms
+        ctx.moveTo(x + 6, y + 8 + 2);
+        ctx.lineTo(x - 6, y + 8 - 2);
+
+        // 1st leg
+        ctx.moveTo(x + start, y - radius + 8 + bodyLength);
+        ctx.lineTo(x + end, y - radius + 8 + bodyLength + Math.abs(end));
+
+        // 2nd leg
+        ctx.moveTo(x - start, y + 8);
+        ctx.lineTo(x - end, y + 8 + Math.abs(end) / 2);
+        ctx.moveTo(x - end, y + 8 + Math.abs(end) / 2);
+        ctx.lineTo(x - start, y + 8 + Math.abs(end));
+    }
+    else {
+        var start = (direction == 0 ? 1 : -1);
+        var end = (direction == 0 ? 4 : -4);
+
+        // Arms
+        ctx.moveTo(x + 6, y + 8 - 2);
+        ctx.lineTo(x - 6, y + 8 + 2);
+
+        // 1st leg
+        ctx.moveTo(x + start, y - radius + 8 + bodyLength);
+        ctx.lineTo(x + end, y  - radius + 8 + bodyLength);
+        ctx.moveTo(x + end, y - radius + 8 + bodyLength);
+        ctx.lineTo(x + end, y - radius + 8 + bodyLength + Math.abs(end));
+
+        // 2nd leg
+        ctx.moveTo(x - start, y - radius + 8 + bodyLength);
+        ctx.lineTo(x - start, y - radius + 8 + bodyLength + Math.abs(end));
+        ctx.moveTo(x - start, y - radius + 8 + bodyLength + Math.abs(end));
+        ctx.lineTo(x - start - end, y - radius + 8 + bodyLength + Math.abs(end));
+    }
+    ctx.closePath();
+    ctx.strokeStyle = "#" + newColor;
+    ctx.stroke();
+    ctx.fillStyle = "#" + newColor;
+    ctx.fill();
+
+    /*
     ctx.beginPath();
     ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
     ctx.closePath();
@@ -111,27 +175,32 @@ CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, 
     ctx.strokeStyle = "#" + newColor;
     ctx.lineWidth = 2;
     ctx.stroke();
-
+    */
 });
 var PREDATOR_AGENT_TYPE = new AgentType("Predator", "fbe53b");
-PREDATOR_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, newColor, counter) {
+PREDATOR_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, newColor, counter, direction) {
     var radius = (pieceWidth / 4);
     var bodyLength = (pieceWidth / 2);
 
     var img = new Image();
-    if (counter % 3 == 0) {
-        img.src = "/images/agents/predator1.jpg";
+//    img.src = "/images/agents/fierce_planet_monster1.png";
+
+    if (counter % 4 == 0) {
+        img.src = "/images/agents/monster1.png";
     }
-    else if (counter % 3 == 1) {
-        img.src = "/images/agents/predator2.jpg";
+    else if (counter % 4 == 1) {
+        img.src = "/images/agents/monster2.png";
+    }
+    else if (counter % 4 == 2) {
+        img.src = "/images/agents/monster1.png";
     }
     else {
-        img.src = "/images/agents/predator3.jpg";
+        img.src = "/images/agents/monster3.png";
     }
     ctx.drawImage(img, intX - pieceWidth / 2, intY - pieceWidth / 2, pieceWidth, pieceWidth);
 });
 var RIVAL_AGENT_TYPE = new AgentType("Rival", "3be5fb");
-RIVAL_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, newColor, counter) {
+RIVAL_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, newColor, counter, direction) {
     var radius = (pieceWidth / 4);
     var bodyLength = (pieceWidth / 2);
 
@@ -224,7 +293,7 @@ level1.setInitialAgentNumber(1);
 level1.setWaveNumber(20);
 //level1.setWaveNumber(1);
 level1.setExpiryLimit(20);
-level1.setImage("/images/Background_Level1.png");
+//level1.setImage("/images/Background_Level1.png");
 level1.setNotice("<h2>Level 1: Welcome to Fierce Planet!</h2> " +
         "<p>The citizens of Fierce Planet are under threat. They are migrating in ever increasing numbers, seeking a promised land of peace and prosperity.</p>" +
         "<p>Help them by placing 'Economic', 'Environmental' and 'Social' resources beside their path before they expire! Drag or click the blue, green and red swatches onto the grey patches of the maze.</p> " +
@@ -262,7 +331,7 @@ level2.setInitialAgentNumber(1);
 level2.setWaveNumber(20);
 level2.setExpiryLimit(20);
 level2.setInitialResourceStore(120);
-level2.setImage("/images/Background_Level2.png");
+//level2.setImage("/images/Background_Level2.png");
 level2.setNotice("<h2>Level 2: Twists and Turns</h2>" +
         "<p>Congratulations! You successfully navigated Level 1!</p>" +
         "<p>The citizens of Fierce Planet now face a greater challenge... Can you supply them with resources to reach their goal?</p>" +
@@ -887,7 +956,8 @@ for(var i = 0; i < GOOGLE_MAPS.length; i++) {
     tempImg[i] = new Image();
     tempImg[i].src = GOOGLE_MAPS[i];
 }
-level1.setMapURL(GOOGLE_MAPS[0]);
+level1.setMapURL("/images/bg_level1a.png");
+//level1.setMapURL(GOOGLE_MAPS[0]);
 level2.setMapURL(GOOGLE_MAPS[1]);
 level3.setMapURL(GOOGLE_MAPS[2]);
 level4.setMapURL(GOOGLE_MAPS[3]);

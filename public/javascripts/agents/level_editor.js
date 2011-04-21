@@ -76,7 +76,7 @@ function redrawBaseCanvas() {
     // Draw basic elements
     drawGrid();
     drawTiles();
-    drawEntryPoint();
+    drawEntryPoints();
     drawGoal();
 }
 function showLevelEditor() {
@@ -90,7 +90,7 @@ function showLevelEditor() {
 }
 function showDesignFeaturesDialog(e) {
     $("#makeTile")[0].addEventListener('click', function(e) {
-        var tile = new Tile("ddd", currentX, currentY);
+        var tile = new Tile(TILE_COLOR, currentX, currentY);
         currentLevel.getTiles().push(tile);
         $designFeatures.dialog('close');
         redrawBaseCanvas();
@@ -112,7 +112,7 @@ function showDesignFeaturesDialog(e) {
     $designFeatures.dialog('open');
 }
 function makeTile() {
-    var tile = new Tile("ccc", currentX, currentY);
+    var tile = new Tile(TILE_COLOR, currentX, currentY);
     currentLevel.getTiles().push(tile);
     $designFeatures.dialog('close');
     redrawBaseCanvas();

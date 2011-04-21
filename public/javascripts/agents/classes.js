@@ -1,5 +1,9 @@
 
 
+/* Default parameters */
+var TILE_COLOR = "0FFF1F";
+
+
 /* Class definitions */
 
 
@@ -274,6 +278,7 @@ Agent.prototype.adjustSpeed = function() {
     var s = this._speed;
 
     tmpSpeed = this._speed + change * multiplier;
+    console.log(tmpSpeed);
 
     if (tmpSpeed > 0)
         this._speed = tmpSpeed;

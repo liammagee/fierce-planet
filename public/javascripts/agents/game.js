@@ -645,7 +645,7 @@ function drawGrid() {
 
     }
     ctx.closePath();
-    ctx.strokeStyle = "#ccc";
+    ctx.strokeStyle = "#fff";
     ctx.stroke();
 
 }
@@ -667,7 +667,7 @@ function drawTile(p) {
     ctx.fillStyle = "#" + p._color;
     ctx.fillRect(x, y, cellWidth, cellWidth);
     ctx.strokeStyle = "#" + p._color;
-    ctx.strokeStyle = "#ccc";
+    ctx.strokeStyle = "#fff";
     ctx.strokeRect(x, y, cellWidth, cellWidth);
 }
 
@@ -732,10 +732,15 @@ function drawGoal() {
 
     var x = currentLevel.getGoalX() * cellWidth + cellWidth / 2;
     var y = currentLevel.getGoalY() * cellWidth + cellWidth / 2;
+    var width = (pieceWidth / 2);
+
+    ctx.fillStyle = "#fbe53b";
+    ctx.strokeStyle = "#ccc";
+    ctx.fillRect(x - width, y - width, width * 2, width * 2);
 
 
-    var radius = (pieceWidth / 2);
 
+    /*
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2, false);
     ctx.closePath();
@@ -743,25 +748,30 @@ function drawGoal() {
     ctx.stroke();
     ctx.fillStyle = "#fbe53b";
     ctx.fill();
+    */
 }
 
-function drawEntryPoint() {
+function drawEntryPoints() {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
     var x = currentLevel.getInitialAgentX() * cellWidth + cellWidth / 2;
     var y = currentLevel.getInitialAgentY() * cellWidth + cellWidth / 2;
+    var width = (pieceWidth / 2);
 
+    ctx.fillStyle = "#ddd";
+    ctx.fillRect(x - width, y - width, width * 2, width * 2);
 
-    var radius = (pieceWidth / 2);
-
+    // Draw circle
+    /*
     ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    ctx.arc(x, y, width, 0, Math.PI * 2, false);
     ctx.closePath();
     ctx.strokeStyle = "#ddd";
     ctx.stroke();
     ctx.fillStyle = "#ddd";
     ctx.fill();
+    */
 }
 
 function drawResources() {
@@ -868,6 +878,19 @@ function diluteColour(rStrength, gStrength, bStrength, colour) {
     return newColor;
 }
 
+function getAgentDirection(agent) {
+    var lastX = agent.lastPosition()[0];
+    var lastY = agent.lastPosition()[1];
+    var x = agent.getPosition()[0];
+    var y = agent.getPosition()[1];
+    if (lastX < x) {
+        return 0;
+    }
+    else {
+        return 1;
+    }
+}
+
 function getDrawingPosition(agent, count) {
     var lastX = agent.lastPosition()[0];
     var lastY = agent.lastPosition()[1];
@@ -949,8 +972,8 @@ function drawAgents() {
         var wy = agent.getWanderY();
         var __ret = getDrawingPosition(agent, counter);
         var intX = __ret.intX * cellWidth + wx + cellWidth / 2;
-        var intY = __ret.intY * cellWidth + wy + cellWidth / 2;
-
+        var intY = __ret.intY * cellWidth + wy + cellWidth / 4;
+        var direction = getAgentDirection(agent);
 
 
         var ecoH = agent.getEconomicHealth();
@@ -961,51 +984,9 @@ function drawAgents() {
         if (agent.getIsHit())
             newColor = "f00";
 
-        eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, pieceWidth, newColor, counter);
+        eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, pieceWidth, newColor, counter, direction);
 
-//        ctx.beginPath();
-//        ctx.arc(intX, intY, radius, 0, Math.PI * 2, false);
-//        ctx.closePath();
-//        ctx.strokeStyle = "#ccc";
-//        ctx.stroke();
-//        ctx.fillStyle = "#" + newColor;
-//        ctx.fill();
-//
-//        ctx.beginPath();
-//        ctx.moveTo(intX, intY + radius);
-//        ctx.lineTo(intX, intY + radius + bodyLength / 2);
-//        if (counter % 2 == 0) {
-//            // Legs
-//            var xOffset = Math.sin(30 * Math.PI/180) * bodyLength / 2;
-//            var yOffset = Math.cos(30 * Math.PI/180) * bodyLength / 2;
-//            ctx.moveTo(intX, intY + radius + bodyLength / 2);
-//            ctx.lineTo(intX - xOffset, intY + radius + bodyLength / 2 + yOffset);
-//            ctx.moveTo(intX, intY + radius + bodyLength / 2);
-//            ctx.lineTo(intX + xOffset, intY + radius + bodyLength / 2 + yOffset);
-//            // Arms - 90 degrees
-//            ctx.moveTo(intX - bodyLength / 2, intY + radius + bodyLength / 6);
-//            ctx.lineTo(intX + bodyLength / 2, intY + radius + bodyLength / 6);
-//        }
-//        else {
-//            // Legs - straight
-//            ctx.moveTo(intX, intY + radius + bodyLength / 2);
-//            ctx.lineTo(intX, intY + radius + bodyLength);
-//            // Arms - 45 degrees
-//            var xOffset = Math.sin(45 * Math.PI/180) * bodyLength / 2;
-//            var yOffset = Math.cos(45 * Math.PI/180) * bodyLength / 2;
-//            ctx.moveTo(intX - xOffset, intY + radius + bodyLength / 6 + yOffset);
-//            ctx.lineTo(intX, intY + radius + bodyLength / 6);
-//            ctx.moveTo(intX + xOffset, intY + radius + bodyLength / 6 + yOffset);
-//            ctx.lineTo(intX, intY + radius + bodyLength / 6);
-//
-//        }
-//        ctx.closePath();
-//        ctx.strokeStyle = "#" + newColor;
-//        ctx.lineWidth = 2;
-//        ctx.stroke();
 
-//        ctx.fillText(agent.getHealth(),  intX, intY);
-//        ctx.fillText(agent.getEconomicHealth(),  intX, intY + 20);
     }
 }
 
@@ -1014,13 +995,13 @@ function drawScrollingLayer() {
     var canvas = $('#c3')[0];
     var ctx = canvas.getContext('2d');
     
-    if ((scrollingImageX + scrollingImageOffset) < (400 - scrollingImageOffset)){
+    if ((scrollingImageX + scrollingImageOffset) < (500 - scrollingImageOffset)){
         scrollingImageX += scrollingImageOffset;
     }
     else {
         scrollingImageX = 0;
     }
-    ctx.drawImage(scrollingImage, scrollingImageX, 0, 400, 400, 0, 0, 400, 400);
+    ctx.drawImage(scrollingImage, scrollingImageX, 0, 500, 500, 0, 0, 500, 500);
 }
 
 function drawLevel() {
@@ -1330,8 +1311,12 @@ function processAgents() {
 
             // Do for all agents
             moveAgent(agent, true, false);
-            agent.adjustSpeed();
-            agent.adjustWander();
+
+            if (agent.getType() == CITIZEN_AGENT_TYPE) {
+//                agent.adjustSpeed();
+                agent.adjustWander();
+            }
+
             if (agent.getMoves() > maxWaveMoves)
                 maxWaveMoves = agent.getMoves();
             if (agent.getMoves() > maxLevelMoves)
@@ -1420,7 +1405,7 @@ function processNeighbouringAgents(agent) {
         var ax = a.getX();
         var ay = a.getY();
         if (Math.abs(ax - x) <= 1 && Math.abs(ay - y) <= 1) {
-            if (agent.getType() == CITIZEN_AGENT_TYPE && a.getType() == PREDATOR_AGENT_TYPE) {
+            if (predatorsVisible && agent.getType() == CITIZEN_AGENT_TYPE && a.getType() == PREDATOR_AGENT_TYPE) {
                 agent.setIsHit(true);
             }
         }
@@ -1692,8 +1677,9 @@ function drawWorld() {
         drawGrid();
         drawTiles();
         drawBackgroundImage();
+        drawPath();
     }
-    drawEntryPoint();
+    drawEntryPoints();
     drawGoal();
     drawResources();
     drawScrollingLayer();
@@ -1971,7 +1957,7 @@ function showResourceGallery() {
         purchasableItem.addEventListener('click', function(e) {
             var id = this.id;
             var swatchId = id.split("-purchase")[0];
-            var itemName = $('#' + id + ' > a')[0].innerHTML;
+            var itemName = $('#' + id + ' > a > img')[0].title;
             if ($.inArray(swatchId, capabilities) == -1) {
                 var purchase = confirm('Purchase item "' + itemName + '"?');
                 if (purchase) {
