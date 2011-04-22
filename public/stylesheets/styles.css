@@ -14,27 +14,27 @@ body {
 #left-pane {
     position:relative;
     float: left;
-    width:10%;
+    width: 0%;
 }
 #content-pane {
     position:relative;
     float: left;
-    width:80%;
-    border: 1px solid #fff;
+    width: 97%;
+    border: 5px solid #fff;
+    margin: 4px;
+    padding: 8px;
+    height: 761px;
 }
 #right-pane {
     position:relative;
     float: left;
-    width:10%;
+    width: 0%;
 }
 #main-panel {
     position:relative;
 }
 #global-info-panel {
-    height:60px;
     position:relative;
-    border: #ccc 3px solid;
-    padding: 4px;
 }
 
 
@@ -77,11 +77,15 @@ body {
     clear: both;
     position:absolute;
     left:200px;
-    top: 591px;
+    top: 561px;
 }
 
 canvas {
     position:absolute;
+}
+a {
+    color: #fff;
+
 }
 
 #map_canvas {
@@ -119,7 +123,7 @@ ul, li {
     position: relative;
   text-decoration: none;
 
-  border: 1px solid #999;
+  border: 2px solid #fff;
   padding: 4px;
   margin-right: 10px;
 }
@@ -131,14 +135,13 @@ ul, li {
     margin: 2px;
 }
 .title {
-    border: solid 1px #666;
+    border: solid 2px #fff;
    float: left;
-     width: 100px;
-    height: 38px;
+     width: 160px;
+    height: 28px;
     font-size: 0.9em;
-    padding: 1px;
+    padding: 4px;
     margin: 2px;
-    padding-left: 4px;
 }
 
 #swatch div.eco, #gallery-items div.eco {
@@ -188,12 +191,6 @@ li.over {
   background: #ccc;
 }
 
-footer {
-    clear: both;
-    position:absolute;
-    left:0px;
-    top:621px;
-}
 
 #info h2 {
     margin-top: 0px;

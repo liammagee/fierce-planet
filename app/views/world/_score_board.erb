@@ -25,7 +25,7 @@
     Profile Class: <span id="profile-class-display"></span>
   </div>
 
-  <div id="user-links" style="clear:both; float: right; position: relative; width: 35%; color: blue; padding: 0; text-align: right">
+  <div id="user-links" style="clear:both; float: right; position: relative; width: 35%; padding: 0; text-align: right">
     <p>
       <% if user_signed_in? %>
           <%= 'Welcome, ' + current_user.profile.nickname + ' | '  if current_user and current_user.profile.nickname %>

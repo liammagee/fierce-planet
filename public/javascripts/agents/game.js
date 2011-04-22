@@ -631,6 +631,8 @@ function drawGrid() {
     var w = canvas.width;
     var h = canvas.height;
 
+    ctx.lineWidth = 2;
+
     ctx.clearRect(0, 0, w, h);
 
     ctx.beginPath();
@@ -1313,7 +1315,7 @@ function processAgents() {
             moveAgent(agent, true, false);
 
             if (agent.getType() == CITIZEN_AGENT_TYPE) {
-//                agent.adjustSpeed();
+                agent.adjustSpeed();
                 agent.adjustWander();
             }
 
