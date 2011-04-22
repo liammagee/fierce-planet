@@ -35,6 +35,7 @@ body {
 }
 #global-info-panel {
     position:relative;
+    padding-bottom: 20px;
 }
 
 
@@ -77,15 +78,11 @@ body {
     clear: both;
     position:absolute;
     left:200px;
-    top: 561px;
+    top: 541px;
 }
 
 canvas {
     position:absolute;
-}
-a {
-    color: #fff;
-
 }
 
 #map_canvas {
@@ -99,14 +96,18 @@ a {
 }
 
 #c1, #c2, #c3, #c4, #map_canvas img {
-  border: #ccc 3px solid;
+  border: #fff 6px solid;
 }
 
 #c1.over, #c2.over, #c3.over, #c4.over {
-  border: #333 3px solid;
+  border: #fff 6px solid;
 }
 
 
+a {
+    color: #add8e6;
+
+}
 li {
   list-style: none;
 }
@@ -123,8 +124,7 @@ ul, li {
     position: relative;
   text-decoration: none;
 
-  border: 2px solid #fff;
-  padding: 4px;
+  padding: 2px;
   margin-right: 10px;
 }
 #swatch > div > div {
@@ -135,7 +135,7 @@ ul, li {
     margin: 2px;
 }
 .title {
-    border: solid 2px #fff;
+    border: solid 4px #fff;
    float: left;
      width: 160px;
     height: 28px;
@@ -146,20 +146,17 @@ ul, li {
 
 #swatch div.eco, #gallery-items div.eco {
     float: left;
-    border: solid 2px #99ccff;
+    border: solid 4px #99ccff;
 }
 
 #swatch div.env, #gallery-items div.env {
     float: left;
-    border: solid 2px #00ff00;
+    border: solid 4px #00ff00;
 }
 
 #swatch div.soc, #gallery-items div.soc {
     float: left;
-    border: solid 2px #ff3300;
-}
-#swatch > div > div {
-
+    border: solid 4px #ff3300;
 }
 
 

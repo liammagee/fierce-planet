@@ -956,8 +956,8 @@ for(var i = 0; i < GOOGLE_MAPS.length; i++) {
     tempImg[i] = new Image();
     tempImg[i].src = GOOGLE_MAPS[i];
 }
-level1.setMapURL("/images/bg_level1a.png");
-//level1.setMapURL(GOOGLE_MAPS[0]);
+//level1.setMapURL("/images/bg_level1a.png");
+level1.setMapURL(GOOGLE_MAPS[0]);
 level2.setMapURL(GOOGLE_MAPS[1]);
 level3.setMapURL(GOOGLE_MAPS[2]);
 level4.setMapURL(GOOGLE_MAPS[3]);

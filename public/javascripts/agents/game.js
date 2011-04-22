@@ -819,7 +819,7 @@ function drawResource(p) {
             break;
     }
 
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 4;
     ctx.strokeStyle = "#" + newColor;
 //    ctx.strokeRect(x, y, cellWidth, cellWidth);
     ctx.strokeRect(x + 2, y + 2, cellWidth - 4, cellWidth - 4);
@@ -1665,6 +1665,7 @@ function redrawWorld() {
 function drawWorld() {
     // Clear canvases
     $('#map_canvas').empty();
+    clearCanvas('c1');
     clearCanvas('c2');
     clearCanvas('c3');
     clearCanvas('c4');
@@ -1672,11 +1673,11 @@ function drawWorld() {
     // Draw basic elements
     if (currentLevel.getMapOptions() != undefined || (currentLevel.getMapURL() != undefined && $.trim(currentLevel.getMapURL()).length > 0)) {
         drawMap();
-        drawGrid();
+        //drawGrid();
         drawPath();
     }
     else {
-        drawGrid();
+        //drawGrid();
         drawTiles();
         drawBackgroundImage();
         drawPath();
