@@ -343,16 +343,13 @@ function setupResourceInteraction() {
 // Add general event listeners
 function hookUpUIEventListeners() {
     // Control panel functions
+    $('#startAgents')[0].addEventListener('click', startAgents, false);
+    $('#stopAgents')[0].addEventListener('click', stopAgents, false);
    $('#slowDown')[0].addEventListener('click', slowDown, false);
    $('#speedUp')[0].addEventListener('click', speedUp, false);
-   $('#startAgents')[0].addEventListener('click', startAgents, false);
-   $('#stopAgents')[0].addEventListener('click', stopAgents, false);
+    $('#newGame')[0].addEventListener('click', newGame, false);
    $('#restartLevel')[0].addEventListener('click', restartLevel, false);
-   $('#newGame')[0].addEventListener('click', newGame, false);
    $('#showResourceGallery')[0].addEventListener('click', showResourceGallery, false);
-
-    // Admin functions
-    $('#debug')[0].addEventListener('click', processAgents, false);
 
     // Pan/zoomFunctions
     $('#panUp')[0].addEventListener('click', function() { pan(0);}, false);
@@ -364,6 +361,27 @@ function hookUpUIEventListeners() {
     $('#zoomOut')[0].addEventListener('click', function() { zoom(-1);}, false);
     $('#zoomReset')[0].addEventListener('click', function() { zoom(0);}, false);
 
+    addButtonEffects($('#startAgents')[0]);
+    addButtonEffects($('#stopAgents')[0]);
+    addButtonEffects($('#slowDown')[0]);
+    addButtonEffects($('#speedUp')[0]);
+    addButtonEffects($('#newGame')[0]);
+    addButtonEffects($('#restartLevel')[0]);
+    addButtonEffects($('#showResourceGallery')[0]);
+    addButtonEffects($('#showLevelGallery')[0]);
+    addButtonEffects($('#panUp')[0]);
+    addButtonEffects($('#panDown')[0]);
+    addButtonEffects($('#panLeft')[0]);
+    addButtonEffects($('#panRight')[0]);
+    addButtonEffects($('#panReset')[0]);
+    addButtonEffects($('#zoomIn')[0]);
+    addButtonEffects($('#zoomOut')[0]);
+    addButtonEffects($('#zoomReset')[0]);
+
+
+    // Admin functions
+    $('#debug')[0].addEventListener('click', processAgents, false);
+
     // Level editor functions
    $('#makeTile')[0].addEventListener('click', makeTile, false);
    $('#addGoal')[0].addEventListener('click', addGoal, false);
@@ -373,6 +391,19 @@ function hookUpUIEventListeners() {
    $('#undoAction')[0].addEventListener('click', undoAction, false);
    $('#cancelLevelEditor')[0].addEventListener('click', cancelLevelEditor, false);
 
+
+}
+
+/* Add button effects */
+function addButtonEffects(e) {
+    var imgSrc = e.src;
+    var tmp = imgSrc.split('.');
+    tmp.splice(1, 0, "_down.");
+    var imgSrcDown = tmp.join("");
+//    e.addEventListener('mouseover', function() { e.src = imgSrcDown;}, false);
+//    e.addEventListener('mouseout', function() { e.src = imgSrc;}, false);
+    e.addEventListener('mousedown', function() { e.src = imgSrcDown;}, false);
+    e.addEventListener('mouseup', function() { e.src = imgSrc;}, false);
 }
 
 // Delete the current resource

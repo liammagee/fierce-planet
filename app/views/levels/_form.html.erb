@@ -44,19 +44,20 @@
       <%= f.select :expiry_limit, 1.upto(20) %>
     </div>
     <div class="field">
-      <%= f.label :allow_offscreen_cycling %>
-      <br/>
-      <%= f.check_box :allow_offscreen_cycling %>
+      <%= f.check_box :allow_offscreen_cycling %> <%= f.label :allow_offscreen_cycling %>
     </div>
     <div class="field">
-      <%= f.label :allow_patches_on_path %>
-      <br/>
-      <%= f.check_box :allow_patches_on_path %>
+      <%= f.check_box :allow_patches_on_path %> <%= f.label :allow_patches_on_path %>
     </div>
     <div class="field">
       <%= f.label :notice %>
       <br/>
       <%= f.text_area :notice, :rows => 5 %>
+    </div>
+    <div class="field">
+      <%= f.label :sound_src, "Level Sound" %>
+      <br/>
+      <%= f.text_field :sound_src, { :size => 60 } %>
     </div>
     <div class="field">
       <%= f.label :image_src, "Level Background" %>

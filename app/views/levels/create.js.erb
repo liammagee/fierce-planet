@@ -5,4 +5,5 @@ $levelList.dialog('close');
 $('#notifications').html("<p><%= @level.id %> successfully saved.</p>");
 <%=  render('levels/setup_level', :locals => { :level => @level}) %>
 $('#level-editor-form').html("<%=  escape_javascript(render('levels/inline_form', :locals => { :level => @level})) %>");
+$editProperties.html("<%=  escape_javascript(render('levels/edit', :locals => { :level => @level})) %>");
 setupLevelEditor();
