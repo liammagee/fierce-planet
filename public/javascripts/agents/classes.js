@@ -14,6 +14,9 @@ function Level(id) {
     this._initialAgentNumber = 1;
     this._initialAgentX = 0;
     this._initialAgentY = 0;
+    this._initialPoints = new Array();
+//    this._initialPoints.push([this._initialAgentX, this._initialAgentY]);
+    
     this._worldSize = 11;
     this._worldWidth = 11;
     this._worldHeight = 11;
@@ -44,6 +47,27 @@ Level.prototype.getInitialAgentX = function() { return this._initialAgentX; }
 Level.prototype.setInitialAgentX = function(initialAgentX) { this._initialAgentX = initialAgentX; }
 Level.prototype.getInitialAgentY = function() { return this._initialAgentY; }
 Level.prototype.setInitialAgentY = function(initialAgentY) { this._initialAgentY = initialAgentY; }
+Level.prototype.getInitialPoints = function() { return this._initialPoints; }
+Level.prototype.setInitialPoints = function(initialPoints) { this._initialPoints = initialPoints; }
+Level.prototype.addInitialPoint = function(x, y) {
+    if (this._initialPoints.length == 0) {
+        this.setInitialAgentX(x);
+        this.setInitialAgentY(y);
+    }
+    this._initialPoints.push([x, y]);
+}
+Level.prototype.removeInitialPoint = function(x, y) {
+    var position = -1;
+    for (var i = 0; i < this._initialPoints.length; i++) {
+        var point = this._initialPoints[i];
+        if (point[0] == x && point[1] == y)
+            position == i;
+    }
+    if (position > -1) {
+        this._initialPoints.splice(position, 1);
+    }
+}
+Level.prototype.getFirstInitialPoint = function() { this._initialPoints[0]; }
 Level.prototype.getInitialResourceStore = function() { return this._initialResourceStore; }
 Level.prototype.setInitialResourceStore = function(initialResourceStore) { this._initialResourceStore = initialResourceStore; }
 Level.prototype.getWorldSize = function() { return this._worldSize; }
@@ -278,7 +302,6 @@ Agent.prototype.adjustSpeed = function() {
     var s = this._speed;
 
     tmpSpeed = this._speed + change * multiplier;
-    console.log(tmpSpeed);
 
     if (tmpSpeed > 0)
         this._speed = tmpSpeed;

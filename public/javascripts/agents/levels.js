@@ -1,6 +1,7 @@
 
 /* NB: Level is defined in classes.js */
 
+var MAX_DEFAULT_LEVELS = 11;
 
 
 /* Level setup methods - this should be moved to the Level class when refactored. */
@@ -30,13 +31,18 @@ function randomAgents(number, limit) {
     }
     return agents;
 };
-function presetAgents(number, cellX, cellY) {
+function presetAgents(number, points) {
     agents = new Array();
-    for (var i = 0; i < number; i ++) {
-        var agent = new Agent(CITIZEN_AGENT_TYPE, cellX, cellY);
-        var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
-        agent.setDelay(delay);
-        agents.push(agent);
+    for (var j = 0; j < points.length; j++) {
+        var point = points[j];
+        var x = point[0];
+        var y = point[1];
+        for (var i = 0; i < number; i ++) {
+            var agent = new Agent(CITIZEN_AGENT_TYPE, x, y);
+            var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
+            agent.setDelay(delay);
+            agents.push(agent);
+        }
     }
 };
 
@@ -44,7 +50,7 @@ function preSetupLevel(level) {
     if (level.getTiles() == undefined) 
         level.setTiles(fillWithTiles());
 
-    presetAgents(level.getInitialAgentNumber(), level.getInitialAgentX(), level.getInitialAgentY());
+    presetAgents(level.getInitialAgentNumber(), level.getInitialPoints());
 
     // Add generated agents
     $.merge(agents, level.generateWaveAgents());
@@ -56,7 +62,7 @@ function postSetupLevel(level) {
 /*
 Level.prototype.preSetupLevel = new function() {
     fillWithTiles();
-    presetAgents(this.getInitialAgentNumber(), this.getInitialAgentX(), this.getInitialAgentY());
+    presetAgents(this.getInitialAgentNumber(), level.getInitialPoints());
 };
 Level.prototype.postSetupLevel = new function() {
     assignCells();
@@ -71,7 +77,16 @@ CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, newCol
     var radius = (pieceWidth / 4);
     var bodyLength = (pieceWidth / 2);
 
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    ctx.closePath();
+    ctx.strokeStyle = "#ccc";
+    ctx.stroke();
+    ctx.fillStyle = "#" + newColor;
+    ctx.fill();
+
+    /*
     ctx.beginPath();
     ctx.moveTo(x - radius + 2, y - radius);
     ctx.lineTo(x + radius - 2, y - radius);
@@ -86,47 +101,49 @@ CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, newCol
     ctx.lineTo(x - radius, y - radius + 2);
     ctx.lineTo(x - radius + 2, y - radius + 2);
     ctx.lineTo(x - radius + 2, y - radius);
-    ctx.moveTo(x - 1, y - radius + 8);
+    ctx.closePath();
+    */
+    ctx.beginPath();
+    ctx.moveTo(x, y - radius + 8);
     ctx.lineTo(x - 1, y - radius + 8 + bodyLength);
-    ctx.lineTo(x + 1, y - radius + 8 + bodyLength);
-    ctx.lineTo(x + 1, y - radius + 8);
+
     if (counter % 2 == 0) {
         var start = (direction == 0 ? -1 : 1);
         var end = (direction == 0 ? -6 : 6);
 
         // Arms
-        ctx.moveTo(x + 6, y + 8 + 2);
-        ctx.lineTo(x - 6, y + 8 - 2);
+        ctx.moveTo(x + 4, y + 8 + 2 * start);
+        ctx.lineTo(x - 4, y + 8 - 2 * start);
 
         // 1st leg
         ctx.moveTo(x + start, y - radius + 8 + bodyLength);
-        ctx.lineTo(x + end, y - radius + 8 + bodyLength + Math.abs(end));
-
-        // 2nd leg
-        ctx.moveTo(x - start, y + 8);
-        ctx.lineTo(x - end, y + 8 + Math.abs(end) / 2);
-        ctx.moveTo(x - end, y + 8 + Math.abs(end) / 2);
-        ctx.lineTo(x - start, y + 8 + Math.abs(end));
-    }
-    else {
-        var start = (direction == 0 ? 1 : -1);
-        var end = (direction == 0 ? 4 : -4);
-
-        // Arms
-        ctx.moveTo(x + 6, y + 8 - 2);
-        ctx.lineTo(x - 6, y + 8 + 2);
-
-        // 1st leg
-        ctx.moveTo(x + start, y - radius + 8 + bodyLength);
-        ctx.lineTo(x + end, y  - radius + 8 + bodyLength);
-        ctx.moveTo(x + end, y - radius + 8 + bodyLength);
-        ctx.lineTo(x + end, y - radius + 8 + bodyLength + Math.abs(end));
+        ctx.lineTo(x + start + end, y - radius + 8 + bodyLength + Math.abs(end));
 
         // 2nd leg
         ctx.moveTo(x - start, y - radius + 8 + bodyLength);
-        ctx.lineTo(x - start, y - radius + 8 + bodyLength + Math.abs(end));
-        ctx.moveTo(x - start, y - radius + 8 + bodyLength + Math.abs(end));
-        ctx.lineTo(x - start - end, y - radius + 8 + bodyLength + Math.abs(end));
+        ctx.lineTo(x - start - end / 2, y - radius + 8 + bodyLength);
+        ctx.moveTo(x - start - end / 2, y - radius + 8 + bodyLength);
+        ctx.lineTo(x - start - end / 2, y - radius + 8 + bodyLength + Math.abs(end) / 2);
+    }
+    else {
+        var start = (direction == 0 ? 1 : -1);
+        var end = (direction == 0 ? 6 : -6);
+
+        // Arms
+        ctx.moveTo(x + 4, y + 8 + 2 * start);
+        ctx.lineTo(x - 4, y + 8 - 2 * start);
+
+        // 1st leg
+        ctx.moveTo(x, y - radius + 8 + bodyLength);
+//        ctx.lineTo(x + end, y  - radius + 8 + bodyLength);
+//        ctx.moveTo(x + end, y - radius + 8 + bodyLength);
+        ctx.lineTo(x + end, y - radius + 8 + bodyLength + Math.abs(end));
+
+        // 2nd leg
+        ctx.moveTo(x, y - radius + 8 + bodyLength);
+        ctx.lineTo(x - end / 2, y - radius + 8 + bodyLength + Math.abs(end) / 2);
+        ctx.moveTo(x - end / 2, y - radius + 8 + bodyLength + Math.abs(end) / 2);
+        ctx.lineTo(x - end, y - radius + 8 + bodyLength);
     }
     ctx.closePath();
     ctx.strokeStyle = "#" + newColor;
@@ -251,8 +268,7 @@ RIVAL_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, ne
 /* Level 0 Definition */
 
 var level0 = new Level(1);
-level0.setInitialAgentX(0);
-level0.setInitialAgentY(0);
+level0.addInitialPoint(0, 0);
 level0.setGoalX(4);
 level0.setGoalY(4);
 level0.setWorldSize(5);
@@ -284,8 +300,7 @@ level0.setupLevel = function() {
 /* Level 1 Definition */
 
 var level1 = new Level(1);
-level1.setInitialAgentX(0);
-level1.setInitialAgentY(9);
+level1.addInitialPoint(0, 9);
 level1.setGoalX(10);
 level1.setGoalY(1);
 level1.setWorldSize(11);
@@ -293,6 +308,8 @@ level1.setInitialAgentNumber(1);
 level1.setWaveNumber(20);
 //level1.setWaveNumber(1);
 level1.setExpiryLimit(20);
+//level1.setSoundSrc("http://forestmist.org/wp-content/uploads/2010/04/html5-audio-loop.mp3");
+//level1.setSoundSrc("/creepy1.wav");
 //level1.setImage("/images/Background_Level1.png");
 level1.setNotice("<h2>Level 1: Welcome to Fierce Planet!</h2> " +
         "<p>The citizens of Fierce Planet are under threat. They are migrating in ever increasing numbers, seeking a promised land of peace and prosperity.</p>" +
@@ -315,15 +332,14 @@ level1.setupLevel = function() {
 
     // Add predators and rivals
     this.setLevelAgents([new Agent(PREDATOR_AGENT_TYPE, 0, 9)]);
-    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 7, 6)]);
+    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 10, 1)]);
 };
 
 
 /* Level 2 Definition */
 
 var level2 = new Level(2);
-level2.setInitialAgentX(0);
-level2.setInitialAgentY(0);
+level2.addInitialPoint(0, 0);
 level2.setGoalX(11);
 level2.setGoalY(1);
 level2.setWorldSize(12);
@@ -369,8 +385,7 @@ level2.setupLevel = function() {
 /* Level 3 Definition */
 
 var level3 = new Level(3);
-level3.setInitialAgentX(5);
-level3.setInitialAgentY(12);
+level3.addInitialPoint(5, 12);
 level3.setGoalX(3);
 level3.setGoalY(3);
 level3.setWorldSize(13);
@@ -427,8 +442,7 @@ level3.setupLevel = function() {
 /* Level 4 Definition */
 
 var level4 = new Level(1);
-level4.setInitialAgentX(6);
-level4.setInitialAgentY(6);
+level4.addInitialPoint(6, 6);
 level4.setGoalX(0);
 level4.setGoalY(0);
 level4.setWorldSize(14);
@@ -500,8 +514,7 @@ level4.setupLevel = function() {
 /* Level 5 Definition */
 
 var level5 = new Level(1);
-level5.setInitialAgentX(13);
-level5.setInitialAgentY(0);
+level5.addInitialPoint(13, 0);
 level5.setGoalX(0);
 level5.setGoalY(1);
 level5.setWorldSize(15);
@@ -596,8 +609,7 @@ level5.setupLevel = function() {
 /* Level 6 Definition */
 
 var level6 = new Level(1);
-level6.setInitialAgentX(0);
-level6.setInitialAgentY(1);
+level6.addInitialPoint(0, 1);
 level6.setGoalX(2);
 level6.setGoalY(14);
 level6.setWorldSize(16);
@@ -641,8 +653,7 @@ level6.setupLevel = function() {
 
 var level7 = new Level(7);
 level7.setWorldSize(17);
-level7.setInitialAgentX(0);
-level7.setInitialAgentY(8);
+level7.addInitialPoint(0, 8);
 level7.setGoalX(16);
 level7.setGoalY(8);
 level7.setInitialAgentNumber(1);
@@ -688,8 +699,7 @@ level7.setupLevel = function() {
 /* Level 8 Definition */
 
 var level8 = new Level(8);
-level8.setInitialAgentX(0);
-level8.setInitialAgentY(0);
+level8.addInitialPoint(0, 0);
 level8.setGoalX(17);
 level8.setGoalY(17);
 level8.setWorldSize(18);
@@ -783,8 +793,7 @@ level8.setupLevel = function() {
 /* Level 9 Definition */
 
 var level9 = new Level(9);
-level9.setInitialAgentX(9);
-level9.setInitialAgentY(0);
+level9.addInitialPoint(9, 0);
 level9.setGoalX(9);
 level9.setGoalY(18);
 level9.setWorldSize(19);
@@ -840,8 +849,7 @@ level9.setupLevel = function() {
 /* Level 10 Definition */
 
 var level10 = new Level(10);
-level10.setInitialAgentX(18);
-level10.setInitialAgentY(19);
+level10.addInitialPoint(18, 19);
 level10.setGoalX(16);
 level10.setGoalY(19);
 level10.setWorldSize(20);
@@ -936,6 +944,110 @@ level10.setupLevel = function() {
     this.setTiles(tiles);
 };
 
+
+
+/* Level 10 Definition */
+
+var level11 = new Level(10);
+level11.addInitialPoint(18, 19);
+level11.addInitialPoint(1, 1);
+level11.setGoalX(16);
+level11.setGoalY(19);
+level11.setWorldSize(20);
+level11.setInitialAgentNumber(10);
+level11.setWaveNumber(5);
+level11.setExpiryLimit(100);
+level11.setInitialResourceStore(250);
+level11.setNotice("<h2>Level 11: A Very Testing Level</h2>" +
+        "<p>Experimental features are added here. Play at your own risk!</p>");
+
+level11.setupLevel = function() {
+    var tiles = fillWithTiles();
+    tiles.splice(398, 1);
+    tiles.splice(396, 1);
+    tiles.splice(378, 1);
+    tiles.splice(361, 16);
+    tiles.splice(358, 1);
+    tiles.splice(356, 1);
+    tiles.splice(345, 1);
+    tiles.splice(341, 1);
+    tiles.splice(338, 1);
+    tiles.splice(334, 3);
+    tiles.splice(325, 8);
+    tiles.splice(323, 1);
+    tiles.splice(321, 1);
+    tiles.splice(318, 1);
+    tiles.splice(312, 1);
+    tiles.splice(305, 1);
+    tiles.splice(303, 1);
+    tiles.splice(301, 1);
+    tiles.splice(298, 1);
+    tiles.splice(292, 5);
+    tiles.splice(287, 4);
+    tiles.splice(285, 1);
+    tiles.splice(281, 3);
+    tiles.splice(278, 1);
+    tiles.splice(267, 1);
+    tiles.splice(265, 1);
+    tiles.splice(247, 12);
+    tiles.splice(241, 5);
+    tiles.splice(238, 1);
+    tiles.splice(221, 1);
+    tiles.splice(218, 1);
+    tiles.splice(211, 5);
+//    tiles.splice(215, 1);
+//    tiles.splice(211, 3);
+    tiles.splice(207, 3);
+    tiles.splice(205, 1);
+    tiles.splice(203, 1);
+    tiles.splice(201, 1);
+    tiles.splice(195, 4);
+    tiles.splice(193, 1);
+    tiles.splice(189, 3);
+    tiles.splice(183, 5);
+    tiles.splice(181, 1);
+    tiles.splice(178, 1);
+    tiles.splice(173, 1);
+    tiles.splice(164, 1);
+    tiles.splice(161, 1);
+    tiles.splice(158, 1);
+    tiles.splice(153, 4);
+    tiles.splice(146, 6);
+    tiles.splice(141, 4);
+    tiles.splice(138, 1);
+    tiles.splice(136, 1);
+    tiles.splice(131, 1);
+    tiles.splice(126, 1);
+    tiles.splice(118, 1);
+    tiles.splice(114, 3);
+    tiles.splice(108, 5);
+    tiles.splice(106, 1);
+    tiles.splice(101, 4);
+    tiles.splice(98, 1);
+    tiles.splice(94, 1);
+    tiles.splice(91, 1);
+    tiles.splice(88, 1);
+    tiles.splice(86, 1);
+    tiles.splice(84, 1);
+    tiles.splice(81, 1);
+    tiles.splice(78, 1);
+    tiles.splice(76, 1);
+    tiles.splice(71, 4);
+    tiles.splice(68, 2);
+    tiles.splice(63, 4);
+    tiles.splice(61, 1);
+    tiles.splice(58, 1);
+    tiles.splice(56, 1);
+    tiles.splice(41, 1);
+    tiles.splice(21, 18);
+    this.setTiles(tiles);
+
+//    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 16, 19)]);
+    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 9, 3)]);
+    this.setLevelAgents([new Agent(PREDATOR_AGENT_TYPE, 3, 16)]);
+};
+
+
 /* Google Map links */
 var GOOGLE_MAPS = [
     "http://maps.google.com/maps/api/staticmap?center=30.9376,79.4292&zoom=10&size=501x501&maptype=satellite&sensor=false",
@@ -947,7 +1059,8 @@ var GOOGLE_MAPS = [
         "http://maps.google.com/maps/api/staticmap?center=-13.182,167.705&zoom=10&size=501x501&maptype=satellite&sensor=false",
         "http://maps.google.com/maps/api/staticmap?center=41.890260,12.492220&zoom=20&size=501x501&maptype=satellite&sensor=false",
         "http://maps.google.com/maps/api/staticmap?center=43.07646,-79.07158&zoom=18&size=501x501&maptype=satellite&sensor=false",
-        "http://maps.google.com/maps/api/staticmap?center=-41.81182,146.98923&zoom=14&size=501x501&maptype=satellite&sensor=false"
+        "http://maps.google.com/maps/api/staticmap?center=-41.81182,146.98923&zoom=14&size=501x501&maptype=satellite&sensor=false",
+        "http://maps.google.com/maps/api/staticmap?center=40.75259,-73.98030&zoom=15&size=501x501&maptype=satellite&sensor=false"
 ];
 
 var tempImg = new Array();
@@ -967,3 +1080,4 @@ level7.setMapURL(GOOGLE_MAPS[6]);
 level8.setMapURL(GOOGLE_MAPS[7]);
 level9.setMapURL(GOOGLE_MAPS[8]);
 level10.setMapURL(GOOGLE_MAPS[9]);
+level11.setMapURL(GOOGLE_MAPS[10]);

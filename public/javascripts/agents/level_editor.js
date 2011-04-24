@@ -15,6 +15,7 @@ var $designFeatures;
 var $editProperties;
 
 
+
 $(document).ready(function() {
 
 	$designFeatures = $('#level-features')
@@ -66,7 +67,8 @@ function spliceTiles(e, canvas) {
     }
 }
 function redrawBaseCanvas() {
-
+    drawWorld();
+    /*
     $('#map_canvas').empty();
     clearCanvas('c1');
     clearCanvas('c2');
@@ -78,11 +80,12 @@ function redrawBaseCanvas() {
     drawTiles();
     drawEntryPoints();
     drawGoal();
+    */
 }
 function showLevelEditor() {
-    var proposedWorldSize = 10; //checkInteger(prompt("Enter a size for your level: ", "10"));
-    currentLevelNumber = 11;
-    currentLevel = new Level(11);
+    var proposedWorldSize = 10;
+    currentLevelNumber = MAX_DEFAULT_LEVELS + 1;
+    currentLevel = new Level(currentLevelNumber);
     currentLevel.setWorldSize(proposedWorldSize);
     currentLevel.setupLevel = function(){};
     fillWithTiles();
@@ -104,8 +107,10 @@ function showDesignFeaturesDialog(e) {
     }, false);
 
     $("#addAgentStartingPoint")[0].addEventListener('click', function(e) {
-        currentLevel.setInitialAgentX(currentX);
-        currentLevel.setInitialAgentY(currentY);
+        currentLevel.removeInitialPoint(0, 0);
+        currentLevel.addInitialPoint(currentX, currentY);
+//        currentLevel.setInitialAgentX(currentX);
+//        currentLevel.setInitialAgentY(currentY);
         $designFeatures.dialog('close');
         redrawBaseCanvas();
     }, false);
@@ -206,7 +211,7 @@ function cancelLevelEditor() {
 //    currentLevelNumber = 1;
     $('#level-editor').hide();
     $('#swatch').show();
-    redrawWorld();
+    restartLevel();
 }
 
 function undoAction() {
@@ -232,8 +237,7 @@ function showLevelProperties() {
 
 function refreshTiles() {
     currentLevel.setTiles(fillWithTiles());
-    currentLevel.setInitialAgentX(0);
-    currentLevel.setInitialAgentY(0);
+    currentLevel.addInitialPoint(0, 0);
     currentLevel.setGoalX(0);
     currentLevel.setGoalY(0);
     redrawBaseCanvas();

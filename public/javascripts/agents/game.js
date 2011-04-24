@@ -136,6 +136,8 @@ var $levelList;
 var $upgradeDelete;
 var $resourceGallery;
 
+var audio;
+
 
 /* Initialisation code: start game and dialog boxes */
 
@@ -736,44 +738,48 @@ function drawGoal() {
     var y = currentLevel.getGoalY() * cellWidth + cellWidth / 2;
     var width = (pieceWidth / 2);
 
+    /*
     ctx.fillStyle = "#fbe53b";
     ctx.strokeStyle = "#ccc";
     ctx.fillRect(x - width, y - width, width * 2, width * 2);
+    */
 
 
 
-    /*
     ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    ctx.arc(x, y, width, 0, Math.PI * 2, false);
     ctx.closePath();
     ctx.strokeStyle = "#ccc";
     ctx.stroke();
     ctx.fillStyle = "#fbe53b";
     ctx.fill();
-    */
 }
 
 function drawEntryPoints() {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
-    var x = currentLevel.getInitialAgentX() * cellWidth + cellWidth / 2;
-    var y = currentLevel.getInitialAgentY() * cellWidth + cellWidth / 2;
-    var width = (pieceWidth / 2);
+    for (var i = 0; i < currentLevel.getInitialPoints().length; i++) {
+        var point = currentLevel.getInitialPoints()[i];
+        var x = point[0] * cellWidth + cellWidth / 2;
+        var y = point[1] * cellWidth + cellWidth / 2;
+        var width = (pieceWidth / 2);
 
-    ctx.fillStyle = "#ddd";
-    ctx.fillRect(x - width, y - width, width * 2, width * 2);
+        /*
+        ctx.fillStyle = "#ddd";
+        ctx.fillRect(x - width, y - width, width * 2, width * 2);
+        */
 
-    // Draw circle
-    /*
-    ctx.beginPath();
-    ctx.arc(x, y, width, 0, Math.PI * 2, false);
-    ctx.closePath();
-    ctx.strokeStyle = "#ddd";
-    ctx.stroke();
-    ctx.fillStyle = "#ddd";
-    ctx.fill();
-    */
+        // Draw circle
+        ctx.beginPath();
+        ctx.arc(x, y, width, 0, Math.PI * 2, false);
+        ctx.closePath();
+        ctx.strokeStyle = "#ddd";
+        ctx.stroke();
+        ctx.fillStyle = "#ddd";
+        ctx.fill();
+    }
+
 }
 
 function drawResources() {
@@ -1555,7 +1561,7 @@ function newWave() {
     savedAgentThisWaveCount = 0;
     waves ++;
 
-    presetAgents(++numAgents, currentLevel.getInitialAgentX(), currentLevel.getInitialAgentY());
+    presetAgents(++numAgents, currentLevel.getInitialPoints());
 
     // Add generated agents
     $.merge(agents, currentLevel.generateWaveAgents(numAgents));
@@ -1600,7 +1606,6 @@ function completeGame() {
 }
 
 
-
 /* Set up code */
 function newGame() {
     inDesignMode = false;
@@ -1611,6 +1616,7 @@ function newGame() {
     var radius = (pieceWidth / 4);
     var bodyLength = (pieceWidth / 2);
     restartLevel();
+
 }
 
 function restartLevel() {
@@ -1658,6 +1664,7 @@ function redrawWorld() {
 
     // Reset existing resources
     resetResourceYields();
+
 
     drawWorld();
 }
@@ -1756,6 +1763,20 @@ function startAgents() {
     clearInterval(agentTimerId);
     agentTimerId = setInterval("processAgents()", interval);
     inPlay = true;
+
+
+    // Play sound, if any are set
+    if (audio != undefined)
+        audio.pause();
+    if (currentLevel.getSoundSrc() != undefined) {
+//        var audio = $("background-sound")[0];
+//        audio.src = currentLevel.getSoundSrc();
+
+        audio = new Audio(currentLevel.getSoundSrc());
+        audio.loop = true;
+        audio.addEventListener("ended", function(){audio.currentTime = 0; audio.play();}, false);
+        audio.play();
+    }
 }
 
 function stopAgents() {
@@ -1763,6 +1784,9 @@ function stopAgents() {
 
     clearInterval(agentTimerId);
     inPlay = false;
+
+    if (audio != undefined)
+        audio.pause();
 }
 
 function slowDown() {
@@ -1913,7 +1937,6 @@ function showResourceGallery() {
     for (var i = 0; i < links.length; i++) {
         var purchasableItem = links[i];
         var id = purchasableItem.id;
-        console.log(id);
         var itemName = id.split("-purchase")[0];
         var cost = 0;
         if ($.inArray(itemName, PLANNER_CAPABILITIES)) {
@@ -2101,7 +2124,7 @@ function generateStats() {
 /* Uses local storage to store highest scores and levels */
 function storeData() {
     localStorage.currentScore = previousLevelScore;
-    if (currentLevelNumber > 0 && currentLevelNumber <= 10)
+    if (currentLevelNumber > 0 && currentLevelNumber <= MAX_DEFAULT_LEVELS)
         localStorage.currentLevelNumber = currentLevelNumber;
     localStorage.totalSaved = totalSaved;
     localStorage.profileClass = profileClass;
@@ -2115,7 +2138,7 @@ function storeData() {
 
 function storeCurrentLevelData() {
     localStorage.currentScore = previousLevelScore;
-    if (currentLevelNumber > 0 && currentLevelNumber <= 10)
+    if (currentLevelNumber > 0 && currentLevelNumber <= MAX_DEFAULT_LEVELS)
         localStorage.currentLevelNumber = currentLevelNumber;
     localStorage.totalSaved = totalSaved;
     localStorage.profileClass = profileClass;
