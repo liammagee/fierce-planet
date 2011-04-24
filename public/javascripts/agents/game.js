@@ -7,8 +7,6 @@
 
 var LEVELS = 10;
 
-var MOVE_INCREMENTS = 5;
-var INITIAL_HEALTH = 100;
 var MOVE_HEALTH_COST = -2;
 var SURVIVAL_SCORE = 10;
 var STARTING_STORE = 100;
@@ -42,7 +40,7 @@ var CAPABILITY_COSTS = [0, 100, 200, 300, 500];
 var NOVICE_CAPABILITIES = ["farm", "water", "clinic"];
 var PLANNER_CAPABILITIES = NOVICE_CAPABILITIES.concat(["shop", "park", "school"]);
 var EXPERT_CAPABILITIES = PLANNER_CAPABILITIES.concat(["bank", "air", "legal"]);
-var VISIONARY_CAPABILITIES = EXPERT_CAPABILITIES.concat(["factory", "renewable-energy", "democracy"]);
+var VISIONARY_CAPABILITIES = EXPERT_CAPABILITIES.concat(["factory", "energy", "democracy"]);
 var GENIUS_CAPABILITIES = VISIONARY_CAPABILITIES.concat(["stockmarket", "biodiversity", "festival"]);
 
 var capabilities = ["farm", "water", "clinic"];

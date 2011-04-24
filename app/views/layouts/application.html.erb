@@ -17,17 +17,14 @@
   <%= javascript_tag "PROFILE_ID = #{current_user.profile.id};" if current_user -%>
 
   <%= javascript_include_tag "rails" %>
-  <%= javascript_include_tag "agents/classes" %>
-  <%= javascript_include_tag "agents/resource_kinds" %>
-  <%= javascript_include_tag "agents/player_classes" %>
+
+  <%= javascript_include_tag "agents/framework/classes" %>
+  <%= javascript_include_tag "agents/data/resource_kinds" %>
+  <%= javascript_include_tag "agents/data/player_classes" %>
+  <%= javascript_include_tag "agents/data/agent_types" %>
   <%= javascript_include_tag "agents/game" %>
-  <%= javascript_include_tag "agents/levels" %>
+  <%= javascript_include_tag "agents/data/levels" %>
   <%= javascript_include_tag "agents/level_editor" %>
-
-  <%= javascript_include_tag "agents/maps" %>
-
-  <script type="text/javascript">
-  </script>
 
   <% if current_user %>
       <script>
