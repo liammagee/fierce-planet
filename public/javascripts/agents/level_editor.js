@@ -49,23 +49,7 @@ $(document).ready(function() {
 });
 
 
-function spliceTiles(e, canvas) {
-    var __ret = getResourcePosition(e, canvas);
-    var posX = __ret.posX;
-    var posY = __ret.posY;
-    var tilePosition = -1;
-    var tiles = currentLevel.getTiles();
-    for (var i = 0; i < tiles.length; i++) {
-        var tile = tiles[i];
-        if (tile._x == posX && tile._y == posY) {
-            tilePosition = i;
-            break;
-        }
-    }
-    if (tilePosition > -1) {
-        tiles.splice(tilePosition, 1);
-    }
-}
+
 function redrawBaseCanvas() {
     drawWorld();
     /*
@@ -109,8 +93,6 @@ function showDesignFeaturesDialog(e) {
     $("#addAgentStartingPoint")[0].addEventListener('click', function(e) {
         currentLevel.removeInitialPoint(0, 0);
         currentLevel.addInitialPoint(currentX, currentY);
-//        currentLevel.setInitialAgentX(currentX);
-//        currentLevel.setInitialAgentY(currentY);
         $designFeatures.dialog('close');
         redrawBaseCanvas();
     }, false);
@@ -173,7 +155,7 @@ function handleEditorMouseMove(e) {
 
 function handleEditorMouseUp(e) {
     var canvas = $('#c4')[0];
-    var __ret = getResourcePosition(e, canvas);
+    var __ret = getCurrentPosition(e, canvas);
     currentX = __ret.posX;
     currentY = __ret.posY;
     var foundTile = false;

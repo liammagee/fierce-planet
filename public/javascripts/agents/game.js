@@ -70,7 +70,7 @@ var rivalsVisible = false;
 var backgroundIconsVisible = false;
 var applyGeneralHealth = false;
 var ignoreResourceBalance = false;
-
+var tilesMutable = false;
 
 var agentTimerId = 0;
 
@@ -407,7 +407,7 @@ function upgradeCurrentResource() {
 function dropItem(e) {
     var canvas = $('#c2')[0];;
     var ctx = canvas.getContext('2d');
-    var __ret = getResourcePosition(e, canvas);
+    var __ret = getCurrentPosition(e, canvas);
     var posX = __ret.posX;
     var posY = __ret.posY;
     if (cells[[posX, posY]] == undefined && ! currentLevel.getAllowResourcesOnPath())
@@ -590,7 +590,7 @@ function getCurrentResourceIndex() {
 // Show the current resource
 function showResource(e) {
     var canvas = document.getElementById('c2');
-    var __ret = getResourcePosition(e, canvas);
+    var __ret = getCurrentPosition(e, canvas);
     var posX = __ret.posX;
     var posY = __ret.posY;
     alert(e.x + " : " + e.y);
@@ -598,7 +598,7 @@ function showResource(e) {
 }
 
 // Get the resource associated with an event
-function getResourcePosition(e, canvas) {
+function getCurrentPosition(e, canvas) {
     var cellX = 0;
     var cellY = 0;
 
@@ -1413,7 +1413,7 @@ function processNeighbouringAgents(agent) {
         var ax = a.getX();
         var ay = a.getY();
         if (Math.abs(ax - x) <= 1 && Math.abs(ay - y) <= 1) {
-            if (predatorsVisible && agent.getType() == CITIZEN_AGENT_TYPE && a.getType() == PREDATOR_AGENT_TYPE) {
+            if (!godMode && predatorsVisible && agent.getType() == CITIZEN_AGENT_TYPE && a.getType() == PREDATOR_AGENT_TYPE) {
                 agent.setIsHit(true);
             }
         }
@@ -1627,6 +1627,8 @@ function restartLevel() {
         rivalsVisible = $("#rivalsVisibleInput")[0].checked;
     if ($("#predatorsVisibleInput")[0] != undefined)
         predatorsVisible = $("#predatorsVisibleInput")[0].checked;
+    if ($("#tilesMutableInput")[0] != undefined)
+        tilesMutable = $("#tilesMutableInput")[0].checked;
 
     if ($("#soundsPlayableInput")[0] != undefined)
         soundsPlayable = $("#soundsPlayableInput")[0].checked;
@@ -1889,7 +1891,7 @@ function openCompleteLevelDialog() {
 
 function showUpgradeDeleteDialog(e) {
     var canvas = document.getElementById('c2');
-    var __ret = getResourcePosition(e, canvas);
+    var __ret = getCurrentPosition(e, canvas);
     var posX = __ret.posX;
     var posY = __ret.posY;
     var foundResource = false;
@@ -1901,11 +1903,54 @@ function showUpgradeDeleteDialog(e) {
             return;
         }
     }
-    if (!foundResource && currentResourceId != null) {
+    var foundTile = false;
+    var tiles = currentLevel.getTiles();
+    var currentTile;
+    for (var i = 0; i < tiles.length; i++) {
+        var tile = tiles[i];
+        if (tile._x == posX && tile._y == posY) {
+            currentTile = tile;
+        }
+    }
+
+    if (tilesMutable) {
+        if (currentTile == undefined) {
+            var tile = new Tile(TILE_COLOR, posX, posY);
+            currentLevel.getTiles().push(tile);
+            cells[[posX, posY]] = tile;
+            drawWorld();
+        }
+        else if (!foundResource && currentResourceId != null) {
+            dropItem(e);
+        }
+        else {
+            cells[[posX, posY]] = null;
+            spliceTiles(e, canvas);
+            drawWorld();
+        }
+    }
+    else if (!foundResource && currentResourceId != null) {
         dropItem(e);
     }
 }
 
+function spliceTiles(e, canvas) {
+    var __ret = getCurrentPosition(e, canvas);
+    var posX = __ret.posX;
+    var posY = __ret.posY;
+    var tilePosition = -1;
+    var tiles = currentLevel.getTiles();
+    for (var i = 0; i < tiles.length; i++) {
+        var tile = tiles[i];
+        if (tile._x == posX && tile._y == posY) {
+            tilePosition = i;
+            break;
+        }
+    }
+    if (tilePosition > -1) {
+        tiles.splice(tilePosition, 1);
+    }
+}
 function showResourceGallery() {
     // Try to save results to the server
     $('#current-profile-class')[0].innerHTML = profileClass;
