@@ -396,10 +396,10 @@ function hookUpUIEventListeners() {
 function addButtonEffects(e) {
     var imgSrc = e.src;
     var tmp = imgSrc.split('.');
-    tmp.splice(1, 0, "_down.");
-    var imgSrcDown = tmp.join("");
-//    e.addEventListener('mouseover', function() { e.src = imgSrcDown;}, false);
-//    e.addEventListener('mouseout', function() { e.src = imgSrc;}, false);
+    tmp.splice(tmp.length - 1, 0, "down");
+    var imgSrcDown = tmp.join(".");
+    e.addEventListener('mouseover', function() { e.src = imgSrcDown;}, false);
+    e.addEventListener('mouseout', function() { e.src = imgSrc;}, false);
     e.addEventListener('mousedown', function() { e.src = imgSrcDown;}, false);
     e.addEventListener('mouseup', function() { e.src = imgSrc;}, false);
 }
