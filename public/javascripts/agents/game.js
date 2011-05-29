@@ -24,7 +24,8 @@ var MEDIUM_DIFFICULTY = 2;
 var HARD_DIFFICULTY = 3;
 var EXTREME_DIFFICULTY = 4;
 
-var WORLD_WIDTH = 500;
+var WORLD_WIDTH = 800;
+var WORLD_HEIGHT = 600;
 
 
 
@@ -90,13 +91,15 @@ var waveDelayCounter = 0;
 
 var numAgents = 1;
 
+
 var agents;
 var oldTiles = new Array();
 var resources = new Array();
+
+
 var economicResourceCount = 0;
 var environmentalResourceCount = 0;
 var socialResourceCount = 0;
-var cells = {};
 var counter = 0;
 var counterLoops = 0;
 
@@ -110,9 +113,12 @@ var savedAgentCount = 0;
 var savedAgentThisWaveCount = 0;
 
 
-var worldSize = 11;
-var cellWidth = WORLD_WIDTH / worldSize;
+var worldWidth = 14;
+var worldHeight = 11;
+var cellWidth = WORLD_WIDTH / worldWidth;
+var cellHeight = WORLD_HEIGHT / worldHeight;
 var pieceWidth = cellWidth * 0.5;
+var pieceHeight = cellHeight * 0.5;
 var currentResource = null;
 
 
@@ -410,7 +416,6 @@ function deleteCurrentResource() {
     if (foundResource > -1) {
         resourcesInStore += 5;
         resourcesSpent -= 5;
-//        cells[[currentResource.getX(), currentResource.getY()]] = null;
         resources.splice(foundResource, 1);
         drawResourcesInStore();
         clearCanvas('c2');
@@ -439,7 +444,7 @@ function dropItem(e) {
     var __ret = getCurrentPosition(e, canvas);
     var posX = __ret.posX;
     var posY = __ret.posY;
-    if (cells[[posX, posY]] == undefined && ! currentLevel.getAllowResourcesOnPath())
+    if (currentLevel.getCell(posX, posY) == undefined && ! currentLevel.getAllowResourcesOnPath())
         return;
     for (var i = 0; i < resources.length; i++) {
         var p = resources[i];
@@ -501,7 +506,7 @@ function dropItem(e) {
         else if (resource.getType() == 'soc') {
             socialResourceCount += 1;
         }
-        cells[[posX, posY]] = resource;
+        currentLevel.addCell(posX, posY, resource);
 
         drawResource(resource);
         drawResourcesInStore();
@@ -647,8 +652,15 @@ function getCurrentPosition(e, canvas) {
     var w = canvas.width;
     var h = canvas.height;
 
+    x -= panLeftOffset;
+    y -= panTopOffset;
+    x /= zoomLevel;
+    y /= zoomLevel;
+    // Compensate for border
+    x -= (6 / zoomLevel);
+    y -= (6 / zoomLevel);
     var posX = Math.floor(x / cellWidth);
-    var posY = Math.floor(y / cellWidth);
+    var posY = Math.floor(y / cellHeight);
     return {posX:posX, posY:posY};
 }
 
@@ -672,7 +684,7 @@ function drawGrid() {
         ctx.lineTo(i + 0.5, h);
 
     }
-    for (var j = 0; j < h; j+= cellWidth) {
+    for (var j = 0; j < h; j+= cellHeight) {
         ctx.moveTo(0, j + 0.5);
         ctx.lineTo(h, j + 0.5);
 
@@ -686,38 +698,50 @@ function drawGrid() {
 function drawTiles() {
     var tiles = currentLevel.getTiles();
     for (var i = 0; i < tiles.length; i+= 1) {
-        drawTile(tiles[i]);
+        if (tiles[i] != undefined)
+            drawTile(tiles[i]);
     }
 }
 
-function drawTile(p) {
+function drawTile(tile) {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
-    var x = p._x * cellWidth;
-    var y = p._y * cellWidth;
-    ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellWidth - 1);
-    ctx.fillStyle = "#" + p._color;
-    ctx.fillRect(x, y, cellWidth, cellWidth);
-    ctx.strokeStyle = "#" + p._color;
+    var x = tile._x * cellWidth;
+    var y = tile._y * cellHeight;
+    ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellHeight - 1);
+    ctx.fillStyle = "#" + tile._color;
+    ctx.fillRect(x, y, cellWidth, cellHeight);
+    ctx.strokeStyle = "#" + tile._color;
     ctx.strokeStyle = "#fff";
-    ctx.strokeRect(x, y, cellWidth, cellWidth);
+    ctx.strokeRect(x, y, cellWidth, cellHeight);
 }
 
 function drawPath() {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
-    var pathCells = currentLevel.getPath();
-    for (var i = 0; i < pathCells.length; i+= 1) {
-        var pathCell = pathCells[i];
-        var x = pathCell[0] * cellWidth;
-        var y = pathCell[1] * cellWidth;
-        ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellWidth - 1);
+    var pathTiles = currentLevel.getPath();
+    for (var i = 0; i < pathTiles.length; i+= 1) {
+        var pathTile = pathTiles[i];
+        var x = pathTile[0] * cellWidth;
+        var y = pathTile[1] * cellHeight;
+        ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellHeight - 1);
 //        ctx.fillStyle = "#fff";
+
+
+//        ctx.shadowOffsetX = 0;
+//        ctx.shadowOffsetY = -5;
+//        ctx.shadowBlur    = 4;
+//        ctx.shadowColor   = '#ccc';
+        ctx.border = "1px #ccc solid";
         ctx.fillStyle = "#fafafa";
-        ctx.fillRect(x, y, cellWidth, cellWidth);
+        ctx.fillRect(x, y, cellWidth, cellHeight);
         ctx.strokeStyle = "#ccc";
-        ctx.strokeRect(x, y, cellWidth, cellWidth);
+        ctx.strokeRect(x, y, cellWidth, cellHeight);
+//        ctx.shadowOffsetX = 2;
+//        ctx.shadowOffsetY = 2;
+//        ctx.shadowBlur    = 1;
+//        ctx.shadowColor   = '#ccc';
     }
 }
 
@@ -732,10 +756,11 @@ function drawBackgroundImage() {
 function handleApiReady() {
     var map;
     var mapOptions = {
-      center: new google.maps.LatLng(30.9376, 79.4292),
+      center: new google.maps.LatLng(47.5153, 19.0782),
+        mapTypeId: google.maps.MapTypeId.SATELLITE,
       disableDefaultUI: true,
-      zoom: 10,
-      mapTypeId: 'satellite'
+      zoom: 18,
+        tilt: 45
     };
     if (currentLevel.getMapOptions()['lat'] != undefined && currentLevel.getMapOptions()['long'] != undefined)
         mapOptions['center'] = new google.maps.LatLng(currentLevel.getMapOptions()['lat'], currentLevel.getMapOptions()['long']);
@@ -745,11 +770,13 @@ function handleApiReady() {
     map = new google.maps.Map($("#map_canvas")[0], mapOptions);
     map.setTilt(45);
 }
+
 function drawMap() {
     if (currentLevel.getMapURL() != undefined) {
         $("#map_canvas").prepend('<img src="' + currentLevel.getMapURL() + '"/>').css('image-orientation: 135deg');
     }
     else if (currentLevel.getMapOptions() != undefined) {
+//    else {
         var script = document.createElement("script");
         script.type = "text/javascript";
         script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=handleApiReady";
@@ -764,8 +791,9 @@ function drawGoal() {
     var ctx = canvas.getContext('2d');
 
     var x = currentLevel.getGoalX() * cellWidth + cellWidth / 2;
-    var y = currentLevel.getGoalY() * cellWidth + cellWidth / 2;
+    var y = currentLevel.getGoalY() * cellHeight + cellHeight / 2;
     var width = (pieceWidth / 2);
+    var height = (pieceHeight / 2);
 
     /*
     ctx.fillStyle = "#fbe53b";
@@ -788,11 +816,13 @@ function drawEntryPoints() {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
-    for (var i = 0; i < currentLevel.getInitialPoints().length; i++) {
-        var point = currentLevel.getInitialPoints()[i];
+    for (var i = 0; i < currentLevel.getEntryPoints().length; i++) {
+        var point = currentLevel.getEntryPoints()[i];
         var x = point[0] * cellWidth + cellWidth / 2;
-        var y = point[1] * cellWidth + cellWidth / 2;
+        var y = point[1] * cellHeight + cellHeight / 2;
+        console.log(x);
         var width = (pieceWidth / 2);
+        var height = (pieceHeight / 2);
 
         /*
         ctx.fillStyle = "#ddd";
@@ -822,48 +852,48 @@ function drawResource(p) {
     var ctx = canvas.getContext('2d');
 
     var x = p.getX() * cellWidth;
-    var y = p.getY() * cellWidth;
+    var y = p.getY() * cellHeight;
     var s = p.getTotalYield() / p.getInitialTotalYield() * 100;
     var c = p.getColor();
     var newColor = diluteColour(s, s, s, c);
-    ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellWidth - 1);
+    ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellHeight - 1);
     ctx.fillStyle = "#" + newColor;
     ctx.strokeStyle = "#333";
 
 
     // Fill whole square
-//    ctx.fillRect(x, y, cellWidth, cellWidth);
+//    ctx.fillRect(x, y, cellWidth, cellHeight);
     // Fill smaller square
-    ctx.fillRect(x + 4, y + 4, cellWidth - 8, cellWidth - 8);
+    ctx.fillRect(x + 4, y + 4, cellWidth - 8, cellHeight - 8);
     switch (p.getUpgradeLevel()) {
         case 1:
             break;
         case 2:
             ctx.lineWidth = 2;
             ctx.strokeStyle = "#666";
-            ctx.strokeRect(x + 4, y + 4, cellWidth - 8, cellWidth - 8);
+            ctx.strokeRect(x + 4, y + 4, cellWidth - 8, cellHeight - 8);
             break;
         case 3:
             ctx.lineWidth = 4;
             ctx.strokeStyle = "#666";
-            ctx.strokeRect(x + 6, y + 6, cellWidth - 12, cellWidth - 12);
+            ctx.strokeRect(x + 6, y + 6, cellWidth - 12, cellHeight - 12);
             break;
         case 4:
             ctx.fillStyle = "#666";
-            ctx.fillRect(x + 8, y + 8, cellWidth - 16, cellWidth - 16);
+            ctx.fillRect(x + 8, y + 8, cellWidth - 16, cellHeight - 16);
             break;
     }
 
     ctx.lineWidth = 4;
     ctx.strokeStyle = "#" + newColor;
-//    ctx.strokeRect(x, y, cellWidth, cellWidth);
-    ctx.strokeRect(x + 2, y + 2, cellWidth - 4, cellWidth - 4);
+//    ctx.strokeRect(x, y, cellWidth, cellHeight);
+    ctx.strokeRect(x + 2, y + 2, cellWidth - 4, cellHeight - 4);
 //    ctx.strokeText(p.getUpgradeLevel(), x + 10, y + 10);
 
     // Draw resource-specific representation here
     var resImage = new Image();
     resImage.src = "/images/" + p.getName() + ".gif";
-    ctx.drawImage(resImage, x + 4, y + 4, cellWidth - 8, cellWidth - 8);
+    ctx.drawImage(resImage, x + 4, y + 4, cellWidth - 8, cellHeight - 8);
 }
 
 function clearCanvas(canvasID) {
@@ -885,8 +915,8 @@ function clearAgents() {
             var wy = agent.getWanderY();
             var __ret = getDrawingPosition(agent, counter - 1);
             var intX = __ret.intX * cellWidth + wx + 1;
-            var intY = __ret.intY * cellWidth + wy + 1;
-            ctx.clearRect(intX, intY, cellWidth - 2, cellWidth - 2);
+            var intY = __ret.intY * cellHeight + wy + 1;
+            ctx.clearRect(intX, intY, cellWidth - 2, cellHeight - 2);
         }
     }
 }
@@ -946,9 +976,9 @@ function getDrawingPosition(agent, count) {
 
     if (currentLevel.getAllowOffscreenCycling()) {
         var halfWay = (increment < 0.5);
-        if (x == worldSize - 1 && lastX == 0) {
+        if (x == worldWidth - 1 && lastX == 0) {
             if (halfWay) {
-                offsetX = (x - worldSize) * (increment);
+                offsetX = (x - worldWidth) * (increment);
                 intX = (x - offsetX);
             }
             else {
@@ -956,19 +986,19 @@ function getDrawingPosition(agent, count) {
                 intX = offsetX;
             }
         }
-        else if (x == 0 && lastX == worldSize - 1) {
+        else if (x == 0 && lastX == worldWidth - 1) {
             if (halfWay) {
                 offsetX = increment;
                 intX = (0 - offsetX);
             }
             else {
-                offsetX = (worldSize - lastX) * (increment);
-                intX = (worldSize - offsetX);
+                offsetX = (worldWidth - lastX) * (increment);
+                intX = (worldWidth - offsetX);
             }
         }
-        else if (y == worldSize - 1 && lastY == 0) {
+        else if (y == worldWidth - 1 && lastY == 0) {
             if (halfWay) {
-                offsetY = (y - worldSize) * (increment);
+                offsetY = (y - worldWidth) * (increment);
                 intY = (y - offsetY);
             }
             else {
@@ -976,14 +1006,14 @@ function getDrawingPosition(agent, count) {
                 intY = offsetY;
             }
         }
-        else if (y == 0 && lastY == worldSize - 1) {
+        else if (y == 0 && lastY == worldWidth - 1) {
             if (halfWay) {
                 offsetY = increment;
                 intY = (0 - offsetY);
             }
             else {
-                offsetY = (worldSize - lastY) * (increment);
-                intY = (worldSize - offsetY);
+                offsetY = (worldWidth - lastY) * (increment);
+                intY = (worldWidth - offsetY);
 //                offsetY = (lastY - worldSize) * (increment);
 //                intY = (lastY - offsetY);
             }
@@ -1009,7 +1039,7 @@ function drawAgents() {
         var wy = agent.getWanderY();
         var __ret = getDrawingPosition(agent, counter);
         var intX = __ret.intX * cellWidth + wx + cellWidth / 2;
-        var intY = __ret.intY * cellWidth + wy + cellWidth / 4;
+        var intY = __ret.intY * cellHeight + wy + cellHeight / 4;
         var direction = getAgentDirection(agent);
 
 
@@ -1021,7 +1051,7 @@ function drawAgents() {
         if (agent.getIsHit())
             newColor = "f00";
 
-        eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, pieceWidth, newColor, counter, direction);
+        eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction);
 
 
     }
@@ -1140,30 +1170,28 @@ function findPosition(agent, withNoRepeat, withNoCollision, withOffscreenCycling
         var dir = directions[i];
 
         var offScreen1 = 0;
-        var offScreen2 = currentLevel.getWorldSize() - 1;
+        var offScreenWidth = currentLevel.getWorldWidth() - 1;
+        var offScreenHeight = currentLevel.getWorldHeight() - 1;
         var offset = 1;
         var toContinue = false;
         switch (dir) {
             case 0:
-                (newX == offScreen1 ? (withOffscreenCycling ? newX = offScreen2 : toContinue = true) : newX = newX - offset);
+                (newX == offScreen1 ? (withOffscreenCycling ? newX = offScreenWidth : toContinue = true) : newX = newX - offset);
                 break;
             case 1:
-                (newX == offScreen2 ? (withOffscreenCycling ? newX = offScreen1 : toContinue = true) : newX = newX + offset);
+                (newX == offScreenWidth ? (withOffscreenCycling ? newX = offScreen1 : toContinue = true) : newX = newX + offset);
                 break;
             case 2:
-                (newY == offScreen1 ? (withOffscreenCycling ? newY = offScreen2 : toContinue = true) : newY = newY - offset);
+                (newY == offScreen1 ? (withOffscreenCycling ? newY = offScreenHeight : toContinue = true) : newY = newY - offset);
                 break;
             case 3:
-                (newY == offScreen2 ? (withOffscreenCycling ? newY = offScreen1 : toContinue = true) : newY = newY + offset);
+                (newY == offScreenHeight ? (withOffscreenCycling ? newY = offScreen1 : toContinue = true) : newY = newY + offset);
                 break;
         }
         if ((withNoRepeat && lastX == newX && lastY == newY) || toContinue) {
             continue;
         }
-//        if (cells.get([newX, newY]) == undefined) {
-//            candidateCells.push([newX, newY]);
-//        }
-        if (cells[[newX, newY]] == undefined) {
+        if (currentLevel.getCell(newX, newY) == undefined) {
             candidateCells.push([newX, newY]);
         }
     }
@@ -1213,15 +1241,15 @@ function findPosition(agent, withNoRepeat, withNoCollision, withOffscreenCycling
 
     // Allow for movement off-screen, if no other option is available
     if (! withOffscreenCycling) {
-        if (x == offScreen2 || x == offScreen1 || y == offScreen2 || y == offScreen1) {
-            if (x == offScreen2) {
-                newX = offScreen2 + 1;
+        if (x == offScreenWidth || x == offScreen1 || y == offScreenHeight || y == offScreen1) {
+            if (x == offScreenWidth) {
+                newX = offScreenWidth + 1;
             }
             else if (x == offScreen1) {
                 newX = offScreen1 - 1;
             }
-            else if (y == offScreen2) {
-                newY = offScreen2 + 1;
+            else if (y == offScreenHeight) {
+                newY = offScreenHeight + 1;
             }
             else if (y == offScreen1) {
                 newY = offScreen1 - 1;
@@ -1250,8 +1278,7 @@ function randomDirectionOrder() {
 }
 
 function checkCollision(x, y) {
-//    return cells.get([x, y]) == undefined;
-    return cells[[x, y]] == undefined;
+    return currentLevel.getCell(x, y) == undefined;
 }
 
 function moveAgentsRandomly() {
@@ -1262,16 +1289,16 @@ function moveAgentsRandomly() {
         var newY = agent.getY();
         switch (dir) {
             case 0:
-                (newX == 0) ? newX = worldSize - 1 : newX = newX - 1;
+                (newX == 0) ? newX = worldWidth - 1 : newX = newX - 1;
                 break;
             case 1:
-                (newX == worldSize - 1) ? newX = 0 : newX = newX + 1;
+                (newX == worldWidth - 1) ? newX = 0 : newX = newX + 1;
                 break;
             case 2:
-                (newY == 0) ? newY = worldSize - 1 : newY = newY - 1;
+                (newY == 0) ? newY = worldWidth - 1 : newY = newY - 1;
                 break;
             case 3:
-                (newY == worldSize - 1) ? newY = 0 : newY = newY + 1;
+                (newY == worldWidth - 1) ? newY = 0 : newY = newY + 1;
                 break;
         }
         if (!checkResources(newX, newY))
@@ -1590,7 +1617,7 @@ function newWave() {
     savedAgentThisWaveCount = 0;
     waves ++;
 
-    presetAgents(++numAgents, currentLevel.getInitialPoints());
+    presetAgents(++numAgents, currentLevel.getEntryPoints());
 
     // Add generated agents
     $.merge(agents, currentLevel.generateWaveAgents(numAgents));
@@ -1746,8 +1773,6 @@ function initWorld() {
 
     agents = new Array();
     resources = new Array();
-    cells = {};
-//    cells = new Hash();
 
 
 //    score = 0;
@@ -1777,9 +1802,12 @@ function initWorld() {
 
 
     numAgents = currentLevel.getInitialAgentNumber();
-    worldSize = currentLevel.getWorldSize();
-    cellWidth = WORLD_WIDTH / worldSize;
+    worldWidth = currentLevel.getWorldWidth();
+    worldHeight = currentLevel.getWorldHeight();
+    cellWidth = WORLD_WIDTH / worldWidth;
+    cellHeight = WORLD_HEIGHT / worldHeight;
     pieceWidth = cellWidth * 0.5;
+    pieceHeight = cellHeight * 0.5;
     scrollingImage.src = "/images/yellow-rain.png";
 
     // Set up level
@@ -1944,16 +1972,14 @@ function showUpgradeDeleteDialog(e) {
 
     if (tilesMutable) {
         if (currentTile == undefined) {
-            var tile = new Tile(TILE_COLOR, posX, posY);
-            currentLevel.getTiles().push(tile);
-            cells[[posX, posY]] = tile;
+            currentLevel.addTile(new Tile(TILE_COLOR, posX, posY));
             drawWorld();
         }
         else if (!foundResource && currentResourceId != null) {
             dropItem(e);
         }
         else {
-            cells[[posX, posY]] = null;
+            currentLevel.annulCell(posX, posY);
             spliceTiles(e, canvas);
             drawWorld();
         }
@@ -1968,18 +1994,12 @@ function spliceTiles(e, canvas) {
     var posX = __ret.posX;
     var posY = __ret.posY;
     var tilePosition = -1;
-    var tiles = currentLevel.getTiles();
-    for (var i = 0; i < tiles.length; i++) {
-        var tile = tiles[i];
-        if (tile._x == posX && tile._y == posY) {
-            tilePosition = i;
-            break;
-        }
-    }
-    if (tilePosition > -1) {
-        tiles.splice(tilePosition, 1);
-    }
+    console.log(posX);
+    console.log(posY);
+    currentLevel.removeTile(posX, posY);
+
 }
+
 function showResourceGallery() {
     // Try to save results to the server
     $('#current-profile-class')[0].innerHTML = profileClass;

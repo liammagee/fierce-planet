@@ -16,7 +16,8 @@ function Level(id) {
     this._initialAgentNumber = 1;
     this._initialAgentX = 0;
     this._initialAgentY = 0;
-    this._initialPoints = new Array();
+    this._entryPoints = new Array();
+    this._exitPoints = new Array();
 //    this._initialPoints.push([this._initialAgentX, this._initialAgentY]);
     
     this._worldSize = 11;
@@ -32,12 +33,15 @@ function Level(id) {
     this._notice = "";
     this._image;
     this._soundSrc;
-    this._tiles;
+    this._tiles = new Array();
+    this._tileMap = new Array();
     this._mapOptions;
     this._mapURL;
     this._customLevel = false;
     this._levelAgents = new Array();
     this._waveAgents = new Array();
+    this._currentAgents = new Array();
+    this._cells = new Array();
 }
 Level.prototype.getId = function() { return this._id; }
 Level.prototype.setId = function(id) { this._id = id; }
@@ -49,31 +53,42 @@ Level.prototype.getInitialAgentX = function() { return this._initialAgentX; }
 Level.prototype.setInitialAgentX = function(initialAgentX) { this._initialAgentX = initialAgentX; }
 Level.prototype.getInitialAgentY = function() { return this._initialAgentY; }
 Level.prototype.setInitialAgentY = function(initialAgentY) { this._initialAgentY = initialAgentY; }
-Level.prototype.getInitialPoints = function() { return this._initialPoints; }
-Level.prototype.setInitialPoints = function(initialPoints) { this._initialPoints = initialPoints; }
-Level.prototype.addInitialPoint = function(x, y) {
-    if (this._initialPoints.length == 0) {
+Level.prototype.getEntryPoints = function() { return this._entryPoints; }
+Level.prototype.setEntryPoints = function(entryPoints) { this._entryPoints = entryPoints; }
+Level.prototype.addEntryPoint = function(x, y) {
+    if (this._entryPoints.length == 0) {
         this.setInitialAgentX(x);
         this.setInitialAgentY(y);
     }
-    this._initialPoints.push([x, y]);
+    var found = false;
+    for (var i = 0; i < this._entryPoints.length; i++) {
+        var point = this._entryPoints[i];
+        if (point[0] == x && point[1]== y) {
+            found = true;
+            break;
+        }
+    }
+    if (!found)
+        this._entryPoints.push([x, y]);
+}
+Level.prototype.resetEntryPoints = function() {
+    this._entryPoints = new Array();
+    this.addEntryPoint(0, 0);
 }
 Level.prototype.removeInitialPoint = function(x, y) {
     var position = -1;
-    for (var i = 0; i < this._initialPoints.length; i++) {
-        var point = this._initialPoints[i];
+    for (var i = 0; i < this._entryPoints.length; i++) {
+        var point = this._entryPoints[i];
         if (point[0] == x && point[1] == y)
             position == i;
     }
     if (position > -1) {
-        this._initialPoints.splice(position, 1);
+        this._entryPoints.splice(position, 1);
     }
 }
-Level.prototype.getFirstInitialPoint = function() { this._initialPoints[0]; }
+Level.prototype.getFirstInitialPoint = function() { this._entryPoints[0]; }
 Level.prototype.getInitialResourceStore = function() { return this._initialResourceStore; }
 Level.prototype.setInitialResourceStore = function(initialResourceStore) { this._initialResourceStore = initialResourceStore; }
-Level.prototype.getWorldSize = function() { return this._worldSize; }
-Level.prototype.setWorldSize = function(worldSize) { this._worldSize = worldSize; this.setWorldWidth(worldSize); this.setWorldHeight(worldSize);  }
 Level.prototype.getWorldWidth = function() { return this._worldWidth; }
 Level.prototype.setWorldWidth = function(worldWidth) { this._worldWidth = worldWidth; }
 Level.prototype.getWorldHeight = function() { return this._worldHeight; }
@@ -86,6 +101,8 @@ Level.prototype.getGoalX = function() { return this._goalX; }
 Level.prototype.setGoalX = function(goalX) { this._goalX = goalX; }
 Level.prototype.getGoalY = function() { return this._goalY; }
 Level.prototype.setGoalY = function(goalY) { this._goalY = goalY; }
+Level.prototype.getExitPoints = function() { return this._exitPoints; }
+Level.prototype.setExitPoints = function(exitPoints) { this._exitPoints = exitPoints; }
 Level.prototype.getAllowOffscreenCycling = function() { return this._allowOffscreenCycling; }
 Level.prototype.setAllowOffscreenCycling = function(allowOffscreenCycling) { this._allowOffscreenCycling = allowOffscreenCycling; }
 Level.prototype.getAllowResourcesOnPath = function() { return this._allowResouresOnPath; }
@@ -98,6 +115,15 @@ Level.prototype.getSoundSrc = function() { return this._soundSrc; }
 Level.prototype.setSoundSrc = function(soundSrc) { this._soundSrc = soundSrc; }
 Level.prototype.getTiles = function() { return this._tiles; }
 Level.prototype.setTiles = function(tiles) { this._tiles = tiles; }
+Level.prototype.addTile = function(tile) {
+    this._tiles[tile._y * this._worldWidth + tile._x] = tile;
+    this.addCell(tile._x, tile._y, tile);
+}
+Level.prototype.removeTile = function(x, y) {
+    var tilePosition = y * this.getWorldWidth() + x;
+    this._tiles[tilePosition] = undefined;
+    this.annulCell(x, y);
+}
 Level.prototype.getMapOptions = function() { return this._mapOptions; }
 Level.prototype.setMapOptions = function(mapOptions) { this._mapOptions = mapOptions; }
 Level.prototype.getMapURL = function() { return this._mapURL; }
@@ -110,6 +136,18 @@ Level.prototype.addLevelAgent = function(agent) { this._levelAgents.push(agent);
 Level.prototype.getWaveAgents = function() { return this._waveAgents; }
 Level.prototype.setWaveAgents = function(waveAgents) { this._waveAgents = waveAgents; }
 Level.prototype.addWaveAgent = function(agent) { this._waveAgents.push(agent); }
+Level.prototype.getCells = function() { return this._cells; }
+Level.prototype.getCell = function(x, y) { return this._cells[[x, y]]; }
+Level.prototype.setCells = function(cells) { this._cells = cells; }
+Level.prototype.addCell = function(x, y, value) { this._cells[[x, y]] = value; }
+Level.prototype.annulCell = function(x, y) { this._cells[[x, y]] = undefined; }
+Level.prototype.assignCells = function() {
+    for (var i = 0; i < this._tiles.length; i++) {
+        var tile = this._tiles[i];
+        if (tile != undefined)
+            this.addCell(tile._x, tile._y, tile);
+    }
+};
 Level.prototype.generateWaveAgents = function(numAgents) {
     var newAgents = [];
     for (var j = 0; j < numAgents; j++) {
@@ -122,8 +160,12 @@ Level.prototype.generateWaveAgents = function(numAgents) {
 }
 Level.prototype.getPath = function() {
     var pathCells = new Array();
-    for (var i = 0; i < this._worldWidth; i++) {
+    for (var i = 0; i < this._worldHeight; i++) {
         for (var j = 0; j < this._worldWidth; j++) {
+            var tilePosition = i * this._worldWidth + j;
+            if (this._tiles[tilePosition] == undefined)
+                pathCells.push([j, i]);
+            /*
             var found  = false;
             for (var k = 0; k < this._tiles.length; k++) {
                 var tile = this._tiles[k];
@@ -134,6 +176,7 @@ Level.prototype.getPath = function() {
             }
             if (!found)
                 pathCells.push([i, j]);
+                */
         }
 
     }
@@ -172,16 +215,16 @@ function Agent(agentType, x, y) {
     this._y = y;
     this._history = new Array();
     var tmpX = -1, tmpY = -1;
-    if (x == 0 || x == worldSize - 1 || y == 0 || y == worldSize - 1) {
+    if (x == 0 || x == worldWidth - 1 || y == 0 || y == worldHeight - 1) {
         var tmpX = x, tmpY = y;
         if (x == 0)
             tmpX = -1;
-        else if (x == worldSize - 1)
-            tmpX = worldSize;
+        else if (x == worldWidth - 1)
+            tmpX = worldWidth;
         else if (y == 0)
             tmpY = -1;
-        else if (y == worldSize - 1)
-            tmpY = worldSize;
+        else if (y == worldHeight - 1)
+            tmpY = worldHeight;
         this._history.push([tmpX, tmpY]);
     }
     else {

@@ -1,6 +1,5 @@
 currentLevel = new Level(<%= @level.id %>);
 currentLevel.setName("<%= @level.name %>");
-currentLevel.setWorldSize(<%= @level.world_width %>);
 currentLevel.setWorldWidth(<%= @level.world_width %>);
 currentLevel.setWorldHeight(<%= @level.world_height %>);
 currentLevel.setNotice("<%= @level.notice %>");
@@ -25,3 +24,21 @@ arr = $.evalJSON(jsonArray);
 catch (err) {
 }
 currentLevel.setTiles(arr);
+
+jsonArray = '<%= raw @level.entry_points %>';
+arr = [];
+try {
+arr = $.evalJSON(jsonArray);
+}
+catch (err) {
+}
+currentLevel.setEntryPoints(arr);
+
+jsonArray = '<%= raw @level.exit_points %>';
+arr = [];
+try {
+arr = $.evalJSON(jsonArray);
+}
+catch (err) {
+}
+currentLevel.setExitPoints(arr);

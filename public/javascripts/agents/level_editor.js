@@ -70,7 +70,8 @@ function showLevelEditor() {
     var proposedWorldSize = 10;
     currentLevelNumber = MAX_DEFAULT_LEVELS + 1;
     currentLevel = new Level(currentLevelNumber);
-    currentLevel.setWorldSize(proposedWorldSize);
+    currentLevel.setWorldWidth(proposedWorldSize);
+    currentLevel.setWorldHeight(proposedWorldSize);
     currentLevel.setupLevel = function(){};
     fillWithTiles();
     setupLevelEditor();
@@ -78,10 +79,15 @@ function showLevelEditor() {
 function showDesignFeaturesDialog(e) {
     $("#makeTile")[0].addEventListener('click', function(e) {
         var tile = new Tile(TILE_COLOR, currentX, currentY);
-        currentLevel.getTiles().push(tile);
+        currentLevel.addTile(tile);
         $designFeatures.dialog('close');
         redrawBaseCanvas();
     }, false);
+
+    $("#clearEntryPoint").click(function(e) {
+        currentLevel.resetEntryPoints();
+        redrawBaseCanvas();
+    });
 
     $("#addGoal")[0].addEventListener('click', function(e) {
         currentLevel.setGoalX(currentX);
@@ -91,8 +97,9 @@ function showDesignFeaturesDialog(e) {
     }, false);
 
     $("#addAgentStartingPoint")[0].addEventListener('click', function(e) {
+        console.log(currentX);
         currentLevel.removeInitialPoint(0, 0);
-        currentLevel.addInitialPoint(currentX, currentY);
+        currentLevel.addEntryPoint(currentX, currentY);
         $designFeatures.dialog('close');
         redrawBaseCanvas();
     }, false);
@@ -158,12 +165,14 @@ function handleEditorMouseUp(e) {
     var __ret = getCurrentPosition(e, canvas);
     currentX = __ret.posX;
     currentY = __ret.posY;
+
     var foundTile = false;
     var tiles = currentLevel.getTiles();
     var currentTile;
     for (var i = 0; i < tiles.length; i++) {
         var tile = tiles[i];
-        if (tile._x == currentX && tile._y == currentY) {
+
+        if (tile != undefined && tile._x == currentX && tile._y == currentY) {
             currentTile = tile;
             break;
         }
@@ -175,12 +184,11 @@ function handleEditorMouseUp(e) {
         spliceTiles(e, canvas);
         redrawBaseCanvas();
     }
+
     mouseDown = false;
     mouseMoving = false;
 
-
     return false;
-
 }
 
 function cancelLevelEditor() {
@@ -204,9 +212,11 @@ function undoAction() {
 function saveLevel() {
     // Save tiles to server
     var f = $('.edit_level')[0];
+    $('#level_entry_points')[0].value = $.toJSON(currentLevel.getEntryPoints());
+    $('#level_exit_points')[0].value = $.toJSON(currentLevel.getExitPoints());
     $('#level_tiles')[0].value = $.toJSON(currentLevel.getTiles());
-    $('#level_world_width')[0].value = worldSize;
-    $('#level_world_height')[0].value = worldSize;
+    $('#level_world_width')[0].value = worldWidth;
+    $('#level_world_height')[0].value = worldHeight;
 
 //    redrawWorld();
 }
@@ -219,7 +229,7 @@ function showLevelProperties() {
 
 function refreshTiles() {
     currentLevel.setTiles(fillWithTiles());
-    currentLevel.addInitialPoint(0, 0);
+    currentLevel.addEntryPoint(0, 0);
     currentLevel.setGoalX(0);
     currentLevel.setGoalY(0);
     redrawBaseCanvas();

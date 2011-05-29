@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110424121828) do
+ActiveRecord::Schema.define(:version => 20110424121829) do
 
   create_table "capabilities", :force => true do |t|
     t.integer  "capability_type"
@@ -63,6 +63,8 @@ ActiveRecord::Schema.define(:version => 20110424121828) do
     t.datetime "updated_at"
     t.string   "image_src"
     t.string   "sound_src"
+    t.string   "entry_points"
+    t.string   "exit_points"
   end
 
   create_table "profile_capabilities", :force => true do |t|

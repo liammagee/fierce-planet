@@ -23,7 +23,7 @@ body {
     border: 5px solid #fff;
     margin: 4px;
     padding: 8px;
-    height: 761px;
+    height: 861px;
 }
 #right-pane {
     position:relative;
@@ -43,7 +43,7 @@ body {
 #info {
     float: left;
     position:absolute;
-    left:761px;
+    left:1061px;
 }
 #gameworld {
     margin-top: 20px;
@@ -78,7 +78,7 @@ body {
     clear: both;
     position:absolute;
     left:200px;
-    top: 541px;
+    top: 641px;
 }
 
 canvas {
@@ -86,8 +86,8 @@ canvas {
 }
 
 #map_canvas {
-    height: 501px;
-    width: 501px;
+    height: 601px;
+    width: 801px;
   position: absolute;
   bottom:0;
   left:0;
