@@ -93,9 +93,10 @@ canvas {
   left:0;
   right:0;
   top:0;
+    border: #fff 6px solid;
 }
 
-#c1, #c2, #c3, #c4, #map_canvas img {
+#c1, #c2, #c3, #c4 {
   border: #fff 6px solid;
 }
 

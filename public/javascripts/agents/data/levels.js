@@ -30,8 +30,9 @@ function randomAgents(number, limit) {
     }
     return agents;
 };
+
 function presetAgents(number, points) {
-    agents = new Array();
+    var agents = new Array();
     for (var j = 0; j < points.length; j++) {
         var point = points[j];
         var x = point[0];
@@ -43,6 +44,7 @@ function presetAgents(number, points) {
             agents.push(agent);
         }
     }
+    currentLevel.setCurrentAgents(agents);
 };
 
 function preSetupLevel(level) {
@@ -52,8 +54,8 @@ function preSetupLevel(level) {
     presetAgents(level.getInitialAgentNumber(), level.getEntryPoints());
 
     // Add generated agents
-    $.merge(agents, level.generateWaveAgents());
-    $.merge(agents, level.getLevelAgents());
+    $.merge(currentLevel.getCurrentAgents(), level.generateWaveAgents());
+    $.merge(currentLevel.getCurrentAgents(), level.getLevelAgents());
 };
 function postSetupLevel(level) {
     level.assignCells();

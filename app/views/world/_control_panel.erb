@@ -2,172 +2,112 @@
   <table>
     <tr>
       <td>
-        <img src="/images/8bit/play.png" id="startAgents" title="Play"/>
-      </td>
-      <td>
-        <img src="/images/8bit/pause.png" id="stopAgents" title="Pause"/>
-      </td>
-      <td>
-        <img src="/images/8bit/backward.png" id="slowDown" title="Slow down"/>
-      </td>
-      <td>
-        <img src="/images/8bit/forward.png" id="speedUp" title="Speed up"/>
+        <img src="/images/8bit/play.png" id="startAgents" title="Play"/> Play
       </td>
     </tr>
     <tr>
       <td>
-        <img src="/images/8bit/new.png" id="newGame" title="New Game"/>
+        <img src="/images/8bit/pause.png" id="stopAgents" title="Pause"/> Pause
       </td>
+    </tr>
+    <tr>
       <td>
-        <img src="/images/8bit/restart.png" id="restartLevel" title="Restart Level"/>
+        <img src="/images/8bit/backward.png" id="slowDown" title="Slow down"/> Slower
       </td>
+    </tr>
+    <tr>
       <td>
-        <img src="/images/8bit/resource.png" id="showResourceGallery" title="Resource Gallery"/>
+        <img src="/images/8bit/forward.png" id="speedUp" title="Speed up"/> Faster
       </td>
+    </tr>
+    <tr>
       <td>
-        <%= link_to image_tag("/images/8bit/level.png", :id => "showLevelGallery", :title => "Level Gallery"), gallery_levels_path, :method => :get, :remote => true %>
+        <img src="/images/8bit/new.png" id="newGame" title="New Game"/> New
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <img src="/images/8bit/restart.png" id="restartLevel" title="Restart Level"/> Restart
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <img src="/images/8bit/resource.png" id="showResourceGallery" title="Resource Gallery"/> Resources
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= link_to image_tag("/images/8bit/level.png", :id => "showLevelGallery", :title => "Level Gallery"), gallery_levels_path, :method => :get, :remote => true %> Level Menu
       </td>
     </tr>
     <tr>
       <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+    </tr>
+    <tr>
+      <td>
+        <table>
+          <tr>
+            <td colspan="3">Pan
+            </td>
+          </tr>
+          <tr>
+            <td>
+            </td>
+            <td>
+              <img src="/images/8bit/up.png" id="panUp"/>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <img src="/images/8bit/left.png" id="panLeft"/>
+            </td>
+            <td>
+              <img src="/images/8bit/home.png" id="panReset"/>
+            </td>
+            <td>
+              <img src="/images/8bit/right.png" id="panRight"/>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <img src="/images/8bit/down.png" id="panDown"/>
+            </td>
+            <td></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <table>
+          <tr>
+            <td colspan="3">Zoom
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <img src="/images/8bit/out.png" id="zoomOut"/>
+            </td>
+            <td>
+              <img src="/images/8bit/zero.png" id="zoomReset"/>
+            </td>
+            <td>
+              <img src="/images/8bit/in.png" id="zoomIn"/>
+            </td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
-      <td></td>
       <td>
-        <img src="/images/8bit/up.png" id="panUp"/>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <img src="/images/8bit/left.png" id="panLeft"/>
-      </td>
-      <td>
-        <img src="/images/8bit/home.png" id="panReset"/>
-      </td>
-      <td>
-        <img src="/images/8bit/right.png" id="panRight"/>
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <img src="/images/8bit/down.png" id="panDown"/>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <img src="/images/8bit/out.png" id="zoomOut"/>
-      </td>
-      <td>
-        <img src="/images/8bit/zero.png" id="zoomReset"/>
-      </td>
-      <td>
-        <img src="/images/8bit/in.png" id="zoomIn"/>
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <td colspan="4">
-        <%= button_to "Level Editor", levels_path, :method => :get, :remote => true %>
+        <%= link_to "Level Editor", levels_path, :method => :get, :remote => true %>
       </td>
     </tr>
   </table>
 
-  <!--<table>-->
-    <!--<tr>-->
-      <!--<td>-->
-        <!--&lt;!&ndash;<img src="/images/32/media-playback-start-3.png" id="startAgents" title="Play"/>&ndash;&gt;-->
-        <!--<img src="/images/8bit/play.png" id="startAgents" title="Play"/>-->
-      <!--</td>-->
-      <!--<td>-->
-        <!--&lt;!&ndash;<img src="/images/32/media-playback-pause-3.png" id="stopAgents" title="Pause"/>&ndash;&gt;-->
-        <!--<img src="/images/8bit/pause.png" id="stopAgents" title="Pause"/>-->
-      <!--</td>-->
-      <!--<td>-->
-        <!--&lt;!&ndash;<img src="/images/32/media-seek-backward-3.png" id="slowDown" title="Slow down"/>&ndash;&gt;-->
-        <!--<img src="/images/8bit/backward.png" id="slowDown" title="Slow down"/>-->
-      <!--</td>-->
-      <!--<td>-->
-        <!--&lt;!&ndash;<img src="/images/32/media-seek-forward-3.png" id="speedUp" title="Speed up"/>&ndash;&gt;-->
-        <!--<img src="/images/8bit/forward.png" id="speedUp" title="Speed up"/>-->
-      <!--</td>-->
-    <!--</tr>-->
-    <!--<tr>-->
-      <!--<td>-->
-        <!--<img src="/images/32/document-new-5.png" id="newGame" title="New Game"/>-->
-      <!--</td>-->
-      <!--<td>-->
-        <!--<img src="/images/32/document-quick_restart.png" id="restartLevel" title="Restart Level"/>-->
-      <!--</td>-->
-      <!--<td>-->
-        <!--<img src="/images/32/games-config-theme.png" id="showResourceGallery" title="Resource Gallery"/>-->
-      <!--</td>-->
-      <!--<td>-->
-        <!--<%= link_to image_tag("/images/32/games-config-background.png", :title => "Level Gallery"), gallery_levels_path, :method => :get, :remote => true %>-->
-      <!--</td>-->
-    <!--</tr>-->
-    <!--<tr>-->
-      <!--<td></td>-->
-      <!--<td></td>-->
-      <!--<td></td>-->
-      <!--<td></td>-->
-    <!--</tr>-->
-
-    <!--<tr>-->
-      <!--<td></td>-->
-      <!--<td>-->
-        <!--<img src="/images/32/arrow-up-2.png" id="panUp"/>-->
-      <!--</td>-->
-      <!--<td></td>-->
-      <!--<td></td>-->
-    <!--</tr>-->
-    <!--<tr>-->
-      <!--<td>-->
-        <!--<img src="/images/32/arrow-left-2.png" id="panLeft"/>-->
-      <!--</td>-->
-      <!--<td>-->
-        <!--<img src="/images/32/go-home-4.png" id="panReset"/>-->
-      <!--</td>-->
-      <!--<td>-->
-        <!--<img src="/images/32/arrow-right-2.png" id="panRight"/>-->
-      <!--</td>-->
-      <!--<td></td>-->
-    <!--</tr>-->
-    <!--<tr>-->
-      <!--<td></td>-->
-      <!--<td>-->
-        <!--<img src="/images/32/arrow-down-2.png" id="panDown"/>-->
-      <!--</td>-->
-      <!--<td></td>-->
-      <!--<td></td>-->
-    <!--</tr>-->
-    <!--<tr>-->
-      <!--<td>-->
-        <!--<img src="/images/32/zoom-out-3.png" id="zoomOut"/>-->
-      <!--</td>-->
-      <!--<td>-->
-        <!--<img src="/images/32/zoom-original-2.png" id="zoomReset"/>-->
-      <!--</td>-->
-      <!--<td>-->
-        <!--<img src="/images/32/zoom-in-3.png" id="zoomIn"/>-->
-      <!--</td>-->
-      <!--<td></td>-->
-    <!--</tr>-->
-    <!--<tr>-->
-      <!--<td colspan="4">-->
-        <!--<%= button_to "Level Editor", levels_path, :method => :get, :remote => true %>-->
-      <!--</td>-->
-    <!--</tr>-->
-  <!--</table>-->
 
 
   <br/>

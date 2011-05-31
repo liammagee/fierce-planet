@@ -92,10 +92,6 @@ var waveDelayCounter = 0;
 var numAgents = 1;
 
 
-var agents;
-var oldTiles = new Array();
-var resources = new Array();
-
 
 var economicResourceCount = 0;
 var environmentalResourceCount = 0;
@@ -113,6 +109,10 @@ var savedAgentCount = 0;
 var savedAgentThisWaveCount = 0;
 
 
+var zoomLevel = 1;
+var panLeftOffset = 0;
+var panTopOffset = 0;
+
 var worldWidth = 14;
 var worldHeight = 11;
 var cellWidth = WORLD_WIDTH / worldWidth;
@@ -126,9 +126,6 @@ var scrollingImage = new Image(); // City image
 var scrollingImageX = 0;
 var scrollingImageOffset = 1;
 
-var zoomLevel = 1;
-var panLeftOffset = 0;
-var panTopOffset = 0;
 
 
 /* Dialogs */
@@ -416,7 +413,7 @@ function deleteCurrentResource() {
     if (foundResource > -1) {
         resourcesInStore += 5;
         resourcesSpent -= 5;
-        resources.splice(foundResource, 1);
+        currentLevel.getResources().splice(foundResource, 1);
         drawResourcesInStore();
         clearCanvas('c2');
         drawResources();
@@ -427,7 +424,7 @@ function deleteCurrentResource() {
 function upgradeCurrentResource() {
     var foundResource = getCurrentResourceIndex();
     if (foundResource > -1) {
-        var p = resources[i];
+        var p = currentLevel.getResources()[i];
         if (p.getUpgradeLevel() <= 4 && resourcesInStore >= p.getUpgradeCost()) {
             resourcesInStore -= p.getUpgradeCost();
             resourcesSpent += p.getUpgradeCost();
@@ -446,8 +443,8 @@ function dropItem(e) {
     var posY = __ret.posY;
     if (currentLevel.getCell(posX, posY) == undefined && ! currentLevel.getAllowResourcesOnPath())
         return;
-    for (var i = 0; i < resources.length; i++) {
-        var p = resources[i];
+    for (var i = 0; i < currentLevel.getResources().length; i++) {
+        var p = currentLevel.getResources()[i];
         if (p.getX() == posX && p.getY() == posY) {
             return;
         }
@@ -460,35 +457,6 @@ function dropItem(e) {
     var kind = resolveResourceKind(resourceCode);
     var resource = new Resource(kind, posX, posY);
 
-    /*
-
-    var resourceType = resourceTypes[resourceCode];
-
-    var totalYield = 0, perAgentYield = 0, cost = 0, upgradeCost = 0;
-    var __ret = determineResourceCostAndYield(resourceCode, resourceType);
-    perAgentYield = __ret.perAgentYield;
-    cost = __ret.cost;
-    totalYield = __ret.totalYield;
-    upgradeCost = __ret.upgradeCost;
-
-    var c = "0f0";
-    if (resourceType == 'eco') {
-        c = "99ccff";
-    }
-    else if (resourceType == 'env') {
-        c = "00ff00";
-    }
-    else if (resourceType == 'soc') {
-        c = "ff3300";
-    }
-
-    var resource = new Resource(resourceName, resourceType, c, posX, posY);
-    resource.setInitialTotalYield(totalYield);
-    resource.setPerAgentYield(perAgentYield);
-    resource.setCost(cost);
-    resource.setUpgradeCost(upgradeCost);
-    */
-    
     if (resourcesInStore < resource.getCost()) {
         notify('Not enough goodness for now - save some more agents!');
         return;
@@ -496,7 +464,7 @@ function dropItem(e) {
     else {
         resourcesInStore -= resource.getCost();
         resourcesSpent += resource.getCost();
-        resources.push(resource);
+        currentLevel.getResources().push(resource);
         if (resource.getType() == 'eco') {
             economicResourceCount += 1;
         }
@@ -612,23 +580,13 @@ function setupResourceTypes() {
 
 // Find the current resource index
 function getCurrentResourceIndex() {
-    for (var i = 0; i < resources.length; i++) {
+    for (var i = 0; i < currentLevel.getResources().length; i++) {
         var p = resources[i];
         if (p == currentResource) {
             return i;
         }
     }
     return -1;
-}
-
-// Show the current resource
-function showResource(e) {
-    var canvas = document.getElementById('c2');
-    var __ret = getCurrentPosition(e, canvas);
-    var posX = __ret.posX;
-    var posY = __ret.posY;
-    alert(e.x + " : " + e.y);
-    alert(posX + " : " + posY);
 }
 
 // Get the resource associated with an event
@@ -842,8 +800,8 @@ function drawEntryPoints() {
 }
 
 function drawResources() {
-    for (var i = 0; i < resources.length; i+= 1) {
-        drawResource(resources[i]);
+    for (var i = 0; i < currentLevel.getResources().length; i+= 1) {
+        drawResource(currentLevel.getResources()[i]);
     }
 }
 
@@ -908,6 +866,7 @@ function clearCanvas(canvasID) {
 function clearAgents() {
     var canvas = $('#c4')[0];
     var ctx = canvas.getContext('2d');
+    var agents = currentLevel.getCurrentAgents();
     if (counter > 0) {
         for (var i = 0; i < agents.length; i += 1) {
             var agent = agents[i];
@@ -1025,6 +984,7 @@ function getDrawingPosition(agent, count) {
 function drawAgents() {
     var canvas = $('#c4')[0];
     var ctx = canvas.getContext('2d');
+    var agents = currentLevel.getCurrentAgents();
     for (var i = 0; i < agents.length; i += 1) {
         var agent = agents[i];
 
@@ -1066,9 +1026,14 @@ function drawScrollingLayer() {
         scrollingImageX += scrollingImageOffset;
     }
     else {
-        scrollingImageX = 0;
+        scrollingImageX = 1;
     }
-    ctx.drawImage(scrollingImage, scrollingImageX, 0, 500, 500, 0, 0, 500, 500);
+    // Need exception handling for Safari
+    try {
+        ctx.drawImage(scrollingImage, scrollingImageX, 1, 800, 600, 0, 0, 800, 600);
+    }
+    catch(err) {
+    }
 }
 
 function drawLevel() {
@@ -1146,6 +1111,7 @@ function moveAgent(agent, withNoRepeat, withNoCollision) {
 }
 
 function moveAgents(withNoRepeat, withNoCollision) {
+    var agents = currentLevel.getCurrentAgents();
     for (var i = 0; i < agents.length; i+= 1) {
         var agent = agents[i];
         moveAgent(agent, withNoRepeat, withNoCollision);
@@ -1282,6 +1248,7 @@ function checkCollision(x, y) {
 }
 
 function moveAgentsRandomly() {
+    var agents = currentLevel.getCurrentAgents();
     for (var i = 0; i < agents.length; i+= 1) {
         var dir = Math.floor(Math.random() * 4);
         var agent = agents[i];
@@ -1301,20 +1268,20 @@ function moveAgentsRandomly() {
                 (newY == worldWidth - 1) ? newY = 0 : newY = newY + 1;
                 break;
         }
-        if (!checkResources(newX, newY))
+        if (!checkTiles(newX, newY))
             agent.setPosition(newX, newY);
     }
 }
 
-function checkResources(newX, newY) {
-    var isResource = false;
+function checkTiles(newX, newY) {
+    var isTile = false;
     var tiles = currentLevel.getTiles();
     for (var j = 0; j < tiles.length; j+= 1) {
-        var resource = tiles[j];
-        if (resource.getX() == newX && resource.getY() == newY)
+        var tile = tiles[j];
+        if (tile.getX() == newX && tile.getY() == newY)
             return true;
     }
-    return isResource;
+    return isTile;
 }
 /* End Move Strategies */
 
@@ -1346,6 +1313,7 @@ function processAgents() {
 
     var nullifiedAgents = new Array();
     var citizenCount = 0;
+    var agents = currentLevel.getCurrentAgents();
     for (var i = 0; i < agents.length; i+= 1) {
         var agent = agents[i];
 
@@ -1413,7 +1381,7 @@ function processAgents() {
 
     // Check whether we have too many
     for (var i = nullifiedAgents.length - 1; i >= 0; i-= 1) {
-        agents.splice(nullifiedAgents[i], 1);
+        currentLevel.getCurrentAgents().splice(nullifiedAgents[i], 1);
     }
     // No agents left? End of wave
     if (citizenCount == 0) {
@@ -1445,8 +1413,8 @@ function processAgents() {
 function processNeighbouringResources(agent) {
     var x = agent.getX();
     var y = agent.getY();
-    for (var j = 0; j < resources.length; j++) {
-        var resource = resources[j];
+    for (var j = 0; j < currentLevel.getResources().length; j++) {
+        var resource = currentLevel.getResources()[j];
         var rx = resource.getX();
         var ry = resource.getY();
         if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
@@ -1464,6 +1432,7 @@ function processNeighbouringAgents(agent) {
     var x = agent.getX();
     var y = agent.getY();
     agent.setIsHit(false);
+    var agents = currentLevel.getCurrentAgents();
     for (var j = 0; j < agents.length; j++) {
         var a = agents[j];
         var ax = a.getX();
@@ -1490,7 +1459,7 @@ function calculateResourceEffect(resource) {
 
     var resourceType = resource.getType();
     var resourceTypeCount = 0;
-    var totalResources = resources.length;
+    var totalResources = currentLevel.getResources().length;
     if (totalResources == 1)
         return 1;
     if (resourceType == "eco") {
@@ -1521,8 +1490,8 @@ function calculateSurroundingResourcesEffects(resource) {
     var y = resource.getY();
     var resourceType = resource.getType();
     var baseEffect = 1;
-    for (var j = 0; j < resources.length; j++) {
-        var neighbour = resources[j];
+    for (var j = 0; j < currentLevel.getResources().length; j++) {
+        var neighbour = currentLevel.getResources()[j];
         var nx = neighbour.getX();
         var ny = neighbour.getY();
         var nType = neighbour.getType();
@@ -1566,8 +1535,8 @@ function calculateSurroundingResourcesEffects(resource) {
 }
 
 function hasNeighbouringResources(x, y) {
-    for (var j = 0; j < resources.length; j++) {
-        var p = resources[j];
+    for (var j = 0; j < currentLevel.getResources().length; j++) {
+        var p = currentLevel.getResources()[j];
         var px = p.getX();
         var py = p.getY();
         if (Math.abs(px - x) <= 1 && Math.abs(py - y) <= 1) {
@@ -1592,8 +1561,8 @@ function getAbsoluteDistanceFromGoal(x, y){
 }
 
 function recoverResources() {
-    for (var j = 0; j < resources.length; j++) {
-        var p = resources[j];
+    for (var j = 0; j < currentLevel.getResources().length; j++) {
+        var p = currentLevel.getResources()[j];
         /* Test code for restoring resource health, as opposed to resetting at the end of each wave */
         if (p.getTotalYield() < p.getInitialTotalYield()) {
             /* Overly generous... */
@@ -1605,8 +1574,8 @@ function recoverResources() {
 }
 
 function resetResourceYields() {
-    for (var i = 0; i < resources.length; i++) {
-        var p = resources[i];
+    for (var i = 0; i < currentLevel.getResources().length; i++) {
+        var p = currentLevel.getResources()[i];
         p.setTotalYield(p.getInitialTotalYield());
     }
 }
@@ -1620,8 +1589,8 @@ function newWave() {
     presetAgents(++numAgents, currentLevel.getEntryPoints());
 
     // Add generated agents
-    $.merge(agents, currentLevel.generateWaveAgents(numAgents));
-    $.merge(agents, currentLevel.getLevelAgents());
+    $.merge(currentLevel.getCurrentAgents(), currentLevel.generateWaveAgents(numAgents));
+    $.merge(currentLevel.getCurrentAgents(), currentLevel.getLevelAgents());
 
     notify("New wave coming...");
 }
@@ -1637,7 +1606,7 @@ function newLevel() {
     maxLevelMoves = 0;
     currentLevelNumber++;
     previousLevelScore = score;
-    resources = new Array();
+    currentLevel.setResources(new Array());
     redrawWorld();
 
     levelInfo(currentLevel.getNotice());
@@ -1707,7 +1676,7 @@ function restartLevel() {
 //    var diffSelect = $("#difficultyInput")[0];
 //    levelOfDifficulty = checkInteger(diffSelect[diffSelect.selectedIndex].value);
     score = previousLevelScore;
-    resources = new Array();
+    currentLevel.setResources(new Array());
     redrawWorld();
 }
 
@@ -1771,19 +1740,6 @@ function reloadGame() {
 function initWorld() {
     log("Initialising world...");
 
-    agents = new Array();
-    resources = new Array();
-
-
-//    score = 0;
-    economicResourceCount = 0;
-    environmentalResourceCount = 0;
-    socialResourceCount = 0;
-    expiredAgentCount = 0;
-    savedAgentCount = 0;
-    waves = 1;
-
-    resourceRecoveryCycle = Math.pow(DEFAULT_RESOURCE_RECOVERY, levelOfDifficulty - 1);
 
     try {
         currentLevel = eval("level" + currentLevelNumber.toString());
@@ -1800,6 +1756,18 @@ function initWorld() {
         resourcesInStore = STARTING_STORE;
     }
 
+    currentLevel.setCurrentAgents(new Array());
+    currentLevel.setResources(new Array());
+
+//    score = 0;
+    economicResourceCount = 0;
+    environmentalResourceCount = 0;
+    socialResourceCount = 0;
+    expiredAgentCount = 0;
+    savedAgentCount = 0;
+    waves = 1;
+
+    resourceRecoveryCycle = Math.pow(DEFAULT_RESOURCE_RECOVERY, levelOfDifficulty - 1);
 
     numAgents = currentLevel.getInitialAgentNumber();
     worldWidth = currentLevel.getWorldWidth();
@@ -1952,8 +1920,8 @@ function showUpgradeDeleteDialog(e) {
     var posX = __ret.posX;
     var posY = __ret.posY;
     var foundResource = false;
-    for (var i = 0; i < resources.length; i++) {
-        var p = resources[i];
+    for (var i = 0; i < currentLevel.getResources().length; i++) {
+        var p = currentLevel.getResources()[i];
         if (p.getX() == posX && p.getY() == posY) {
             currentResource = p;
             $upgradeDelete.dialog('open');
@@ -2139,7 +2107,7 @@ function determineCreditsAndClass() {
 }
 
 function compileStats() {
-    var resourceCount = resources.length;
+    var resourceCount = currentLevel.getResources().length;
     var progressTowardsNextClass = 0;
     var stats = {
         "profile[current_level]": currentLevelNumber,
