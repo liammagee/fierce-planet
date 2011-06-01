@@ -25,7 +25,7 @@ function randomAgents(number, limit) {
     for (var i = 0; i < number; i ++) {
         var x = Math.floor(Math.random() * limit);
         var y = Math.floor(Math.random() * limit);
-        var agent = new Agent("Citizen", "888", x, y);
+        var agent = new Agent(currentLevel, CITIZEN_AGENT_TYPE, x, y);
         agents.push(agent);
     }
     return agents;
@@ -38,7 +38,7 @@ function presetAgents(number, points) {
         var x = point[0];
         var y = point[1];
         for (var i = 0; i < number; i ++) {
-            var agent = new Agent(CITIZEN_AGENT_TYPE, x, y);
+            var agent = new Agent(currentLevel, CITIZEN_AGENT_TYPE, x, y);
             var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
             agent.setDelay(delay);
             agents.push(agent);
@@ -139,8 +139,8 @@ level1.setupLevel = function() {
     this.setTiles(tiles);
 
     // Add predators and rivals
-    this.setLevelAgents([new Agent(PREDATOR_AGENT_TYPE, 0, 9)]);
-    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 10, 1)]);
+    this.setLevelAgents([new Agent(this, PREDATOR_AGENT_TYPE, 0, 9)]);
+    this.setWaveAgents([new Agent(this, RIVAL_AGENT_TYPE, 10, 1)]);
 };
 
 
@@ -503,8 +503,8 @@ level7.setupLevel = function() {
 
 
     // Add predators and rivals
-    this.addLevelAgent(new Agent(PREDATOR_AGENT_TYPE, 8, 4));
-    this.addWaveAgent(new Agent(RIVAL_AGENT_TYPE, 9, 4));
+    this.addLevelAgent(new Agent(this, PREDATOR_AGENT_TYPE, 8, 4));
+    this.addWaveAgent(new Agent(this, RIVAL_AGENT_TYPE, 9, 4));
 };
 
 
@@ -860,9 +860,9 @@ level11.setupLevel = function() {
     clearTiles(tiles, 21, 18);
     this.setTiles(tiles);
 
-//    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 16, 19)]);
-    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 9, 3)]);
-    this.setLevelAgents([new Agent(PREDATOR_AGENT_TYPE, 3, 16)]);
+//    this.setWaveAgents([new Agent(this, RIVAL_AGENT_TYPE, 16, 19)]);
+    this.setWaveAgents([new Agent(this, RIVAL_AGENT_TYPE, 9, 3)]);
+    this.setLevelAgents([new Agent(this, PREDATOR_AGENT_TYPE, 3, 16)]);
 };
 
 

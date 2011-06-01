@@ -104,6 +104,24 @@ Level.prototype.getImage = function() { return this._image; }
 Level.prototype.setImage = function(imageSrc) { this._image = new Image();  this._image.src = imageSrc; }
 Level.prototype.getSoundSrc = function() { return this._soundSrc; }
 Level.prototype.setSoundSrc = function(soundSrc) { this._soundSrc = soundSrc; }
+Level.prototype.getTile = function(x, y) {
+    var tilePosition = y * this.getWorldWidth() + x;
+    return this._tiles[tilePosition];
+}
+Level.prototype.getSurroundingTiles = function(x, y) {
+    var surroundingTiles = new Array();
+
+    if (x > 0)
+        surroundingTiles.add(this.getTile(x - 1, y));
+    if (x < this._worldWidth - 1)
+        surroundingTiles.add(this.getTile(x + 1, y));
+    if (y > 0)
+        surroundingTiles.add(this.getTile(x, y - 1));
+    if (y < this._worldHeight - 1)
+        surroundingTiles.add(this.getTile(x, y + 1));
+
+    return surroundingTiles;
+}
 Level.prototype.getTiles = function() { return this._tiles; }
 Level.prototype.setTiles = function(tiles) { this._tiles = tiles; }
 Level.prototype.addTile = function(tile) {
@@ -148,7 +166,7 @@ Level.prototype.generateWaveAgents = function(numAgents) {
     for (var j = 0; j < numAgents; j++) {
         for (var i = 0; i < this._waveAgents.length; i++) {
             var waveAgent = this._waveAgents[i];
-            newAgents.push(new Agent(waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
+            newAgents.push(new Agent(this, waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
         }
     }
     return newAgents;

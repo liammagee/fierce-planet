@@ -167,8 +167,10 @@ function handleEditorMouseUp(e) {
     currentY = __ret.posY;
 
     var foundTile = false;
-    var tiles = currentLevel.getTiles();
     var currentTile;
+    currentTile = currentLevel.getTile(currentX, currentY);
+    /*
+    var tiles = currentLevel.getTiles();
     for (var i = 0; i < tiles.length; i++) {
         var tile = tiles[i];
 
@@ -177,6 +179,7 @@ function handleEditorMouseUp(e) {
             break;
         }
     }
+    */
     if (currentTile == undefined && !mouseMoving) {
         showDesignFeaturesDialog(e);
     }

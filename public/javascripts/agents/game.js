@@ -16,7 +16,7 @@ var DEFAULT_RESOURCE_RECOVERY = 2;
 var WAVE_GOODNESS_BONUS = 5;
 
 
-var NEW_LEVEL_DELAY = 3000;
+var NEW_LEVEL_DELAY = 400;
 var NEW_WAVE_DELAY = 200;
 
 var EASY_DIFFICULTY = 1;
@@ -96,8 +96,7 @@ var numAgents = 1;
 var economicResourceCount = 0;
 var environmentalResourceCount = 0;
 var socialResourceCount = 0;
-var counter = 0;
-var counterLoops = 0;
+var globalCounter = 0;
 
 var previousLevelScore = 0;
 var score = 0;
@@ -569,7 +568,7 @@ function setupResourceTypes() {
     resourceTypes['water'] = 'env';
     resourceTypes['park'] = 'env';
     resourceTypes['air'] = 'env';
-    resourceTypes['renewable-energy'] = 'env';
+    resourceTypes['energy'] = 'env';
     resourceTypes['biodiversity'] = 'env';
     resourceTypes['clinic'] = 'soc';
     resourceTypes['school'] = 'soc';
@@ -778,7 +777,6 @@ function drawEntryPoints() {
         var point = currentLevel.getEntryPoints()[i];
         var x = point[0] * cellWidth + cellWidth / 2;
         var y = point[1] * cellHeight + cellHeight / 2;
-        console.log(x);
         var width = (pieceWidth / 2);
         var height = (pieceHeight / 2);
 
@@ -867,15 +865,15 @@ function clearAgents() {
     var canvas = $('#c4')[0];
     var ctx = canvas.getContext('2d');
     var agents = currentLevel.getCurrentAgents();
-    if (counter > 0) {
+    if (globalCounter > 0) {
         for (var i = 0; i < agents.length; i += 1) {
             var agent = agents[i];
             var wx = agent.getWanderX();
             var wy = agent.getWanderY();
-            var __ret = getDrawingPosition(agent, counter - 1);
+            var __ret = getDrawingPosition(agent, globalCounter - 1);
             var intX = __ret.intX * cellWidth + wx + 1;
             var intY = __ret.intY * cellHeight + wy + 1;
-            ctx.clearRect(intX, intY, cellWidth - 2, cellHeight - 2);
+            ctx.clearRect(intX, intY, cellWidth + wx + 1, cellHeight + wy + 1);
         }
     }
 }
@@ -918,10 +916,10 @@ function getAgentDirection(agent) {
 }
 
 function getDrawingPosition(agent, count) {
-    var lastX = agent.lastPosition()[0];
-    var lastY = agent.lastPosition()[1];
-    var x = agent.getPosition()[0];
-    var y = agent.getPosition()[1];
+    var lastX = agent.lastPosition().getX();
+    var lastY = agent.lastPosition().getY();
+    var x = agent.getX();
+    var y = agent.getY();
     var wx = agent.getWanderX();
     var wy = agent.getWanderY();
     var speed = agent.getSpeed();
@@ -932,6 +930,7 @@ function getDrawingPosition(agent, count) {
     var offsetY = (y - lastY) * (increment);
     var intX = (x - offsetX);
     var intY = (y - offsetY);
+
 
     if (currentLevel.getAllowOffscreenCycling()) {
         var halfWay = (increment < 0.5);
@@ -997,7 +996,7 @@ function drawAgents() {
         // Get co-ordinates
         var wx = agent.getWanderX();
         var wy = agent.getWanderY();
-        var __ret = getDrawingPosition(agent, counter);
+        var __ret = getDrawingPosition(agent, globalCounter);
         var intX = __ret.intX * cellWidth + wx + cellWidth / 2;
         var intY = __ret.intY * cellHeight + wy + cellHeight / 4;
         var direction = getAgentDirection(agent);
@@ -1011,7 +1010,7 @@ function drawAgents() {
         if (agent.getIsHit())
             newColor = "f00";
 
-        eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction);
+        eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, globalCounter, direction);
 
 
     }
@@ -1030,7 +1029,7 @@ function drawScrollingLayer() {
     }
     // Need exception handling for Safari
     try {
-        ctx.drawImage(scrollingImage, scrollingImageX, 1, 800, 600, 0, 0, 800, 600);
+//        ctx.drawImage(scrollingImage, scrollingImageX, 1, 800, 600, 0, 0, 800, 600);
     }
     catch(err) {
     }
@@ -1095,6 +1094,17 @@ function drawScoreboard() {
 
 
 /* Move Strategies */
+
+function moveAgents(withNoRepeat, withNoCollision) {
+    var agents = currentLevel.getCurrentAgents();
+    for (var i = 0; i < agents.length; i+= 1) {
+        var agent = agents[i];
+        var options = {"withNoRepeat": withNoRepeat, "withNoCollision": withNoCollision};
+        agent.evaluateMove(currentLevel, options);
+//        moveAgent(agent, withNoRepeat, withNoCollision);
+    }
+}
+
 function moveAgent(agent, withNoRepeat, withNoCollision) {
     var x = agent.getX();
     var y = agent.getY();
@@ -1105,17 +1115,8 @@ function moveAgent(agent, withNoRepeat, withNoCollision) {
         lastY = p[1];
     }
     var position = findPosition(agent, withNoRepeat, withNoCollision, currentLevel.getAllowOffscreenCycling(), currentLevel.getAllowOffscreenCycling());
-//    if ((position[0] != x || position[1] != y) && (position[0] != lastX || position[1] != lastY))
-        agent.setPosition(position[0], position[1]);
+    agent.setPosition(position[0], position[1]);
     agent.incrementMoves();
-}
-
-function moveAgents(withNoRepeat, withNoCollision) {
-    var agents = currentLevel.getCurrentAgents();
-    for (var i = 0; i < agents.length; i+= 1) {
-        var agent = agents[i];
-        moveAgent(agent, withNoRepeat, withNoCollision);
-    }
 }
 
 function findPosition(agent, withNoRepeat, withNoCollision, withOffscreenCycling) {
@@ -1130,7 +1131,6 @@ function findPosition(agent, withNoRepeat, withNoCollision, withOffscreenCycling
     var candidateCells = new Array();
     var directions = randomDirectionOrder();
     for (var i = 0; i < directions.length; i++) {
-        counterLoops++;
         newX = x;
         newY = y;
         var dir = directions[i];
@@ -1166,27 +1166,27 @@ function findPosition(agent, withNoRepeat, withNoCollision, withOffscreenCycling
         return [lastX, lastY];
     }
 
-    // Find the first candidate which is either the goal, or not in the history.
-    var candidatesNotInHistory = new Array();
+    // Find the first candidate which is either the goal, or not in the memory.
+    var candidatesNotInMemory = new Array();
     for (var i = 0; i < candidateCells.length; i++) {
         var candidate = candidateCells[i];
         if (isGoalCell(candidate[0], candidate[1]))
             return candidate;
-        var inHistory = false;
-        for (var j = agent.getHistory().length - 1 ; j >= 0; j--) {
-            var historyCell = agent.getHistory()[j];
-            if (historyCell[0] == candidate[0] && historyCell[1] == candidate[1])
-                inHistory = true;
+        var inMemory = false;
+        for (var j = agent.getMemories().length - 1 ; j >= 0; j--) {
+            var memory = agent.getMemories()[j];
+            if (memory[0] == candidate[0] && memory[1] == candidate[1])
+                inMemory = true;
         }
-        if (!inHistory)
-            candidatesNotInHistory.push(candidate);
+        if (!inMemory)
+            candidatesNotInMemory.push(candidate);
     }
 
     // Try to find a neighbouring resource, if it exists
-    if (candidatesNotInHistory.length > 0) {
-        var bestCandidate = candidatesNotInHistory[0];
-        for (var i = 0; i < candidatesNotInHistory.length; i++) {
-            var candidate = candidatesNotInHistory[i];
+    if (candidatesNotInMemory.length > 0) {
+        var bestCandidate = candidatesNotInMemory[0];
+        for (var i = 0; i < candidatesNotInMemory.length; i++) {
+            var candidate = candidatesNotInMemory[i];
             var neighbour = hasNeighbouringResources(candidate[0], candidate[1]);
             if (neighbour != null)
                 bestCandidate = candidate;
@@ -1241,6 +1241,72 @@ function randomDirectionOrder() {
         orderedDirections.splice(pos, 1);
     }
     return directions;
+}
+
+/*
+ * Processes neighbouring resources
+ */
+function processNeighbouringResources(agent) {
+    var x = agent.getX();
+    var y = agent.getY();
+    for (var j = 0; j < currentLevel.getResources().length; j++) {
+        var resource = currentLevel.getResources()[j];
+        var rx = resource.getX();
+        var ry = resource.getY();
+        if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
+            var resourceEffect = calculateResourceEffect(resource);
+            resource.provideYield(agent, resourceEffect, applyGeneralHealth);
+            drawResource(resource);
+        }
+    }
+}
+
+/*
+ * Processes neighbouring agents
+ */
+function processNeighbouringAgents(agent) {
+    var x = agent.getX();
+    var y = agent.getY();
+    agent.setIsHit(false);
+    var agents = currentLevel.getCurrentAgents();
+    for (var j = 0; j < agents.length; j++) {
+        var a = agents[j];
+        var ax = a.getX();
+        var ay = a.getY();
+        if (Math.abs(ax - x) <= 1 && Math.abs(ay - y) <= 1) {
+            if (!godMode && predatorsVisible && agent.getType() == CITIZEN_AGENT_TYPE && a.getType() == PREDATOR_AGENT_TYPE) {
+                agent.setIsHit(true);
+            }
+        }
+    }
+    if (agent.getIsHit())
+        agent.adjustHealth(-10);
+}
+
+function hasNeighbouringResources(x, y) {
+    for (var j = 0; j < currentLevel.getResources().length; j++) {
+        var p = currentLevel.getResources()[j];
+        var px = p.getX();
+        var py = p.getY();
+        if (Math.abs(px - x) <= 1 && Math.abs(py - y) <= 1) {
+            // Add hook here for evaluating relative health of neighbouring resources
+//            var h = p.getHealth();
+            return p;
+        }
+    }
+    return null;
+}
+
+function isGoalCell(x, y) {
+    var gx = currentLevel.getGoalX();
+    var gy = currentLevel.getGoalY();
+    return (gx == x && gy == y);
+}
+
+function getAbsoluteDistanceFromGoal(x, y){
+    var gx = currentLevel.getGoalX();
+    var gy = currentLevel.getGoalY();
+    return (Math.abs(gx - x) + Math.abs(gy - y));
 }
 
 function checkCollision(x, y) {
@@ -1306,7 +1372,7 @@ function processAgents() {
     }
 
     // Increment counter
-    counter++;
+    globalCounter++;
 
 
     clearAgents();
@@ -1326,7 +1392,7 @@ function processAgents() {
         var speed = agent.getSpeed();
         if (agent.getType() == CITIZEN_AGENT_TYPE)
             citizenCount++;
-        if (counter >= agent.getDelay() && (counter - agent.getDelay()) % speed == 0) {
+        if (globalCounter >= agent.getDelay() && (globalCounter - agent.getDelay()) % speed == 0) {
             if (agent.getType() == CITIZEN_AGENT_TYPE) {
                 if (agent.getX() == currentLevel.getGoalX() && agent.getY() == currentLevel.getGoalY()) {
                     score += SURVIVAL_SCORE;
@@ -1342,7 +1408,9 @@ function processAgents() {
             }
 
             // Do for all agents
-            moveAgent(agent, true, false);
+//            moveAgent(agent, true, false);
+            var options = {"withNoRepeat": true, "withNoCollision": false};
+            agent.evaluateMove(currentLevel, options);
 
             if (agent.getType() == CITIZEN_AGENT_TYPE) {
                 agent.adjustSpeed();
@@ -1401,51 +1469,12 @@ function processAgents() {
         }
     }
     else {
-        if (counter % resourceRecoveryCycle == 0)
+        if (globalCounter % resourceRecoveryCycle == 0)
             recoverResources();
         drawAgents();
     }
 }
 
-/*
- * Processes neighbouring resources
- */
-function processNeighbouringResources(agent) {
-    var x = agent.getX();
-    var y = agent.getY();
-    for (var j = 0; j < currentLevel.getResources().length; j++) {
-        var resource = currentLevel.getResources()[j];
-        var rx = resource.getX();
-        var ry = resource.getY();
-        if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
-            var resourceEffect = calculateResourceEffect(resource);
-            resource.provideYield(agent, resourceEffect, applyGeneralHealth);
-            drawResource(resource);
-        }
-    }
-}
-
-/*
- * Processes neighbouring agents
- */
-function processNeighbouringAgents(agent) {
-    var x = agent.getX();
-    var y = agent.getY();
-    agent.setIsHit(false);
-    var agents = currentLevel.getCurrentAgents();
-    for (var j = 0; j < agents.length; j++) {
-        var a = agents[j];
-        var ax = a.getX();
-        var ay = a.getY();
-        if (Math.abs(ax - x) <= 1 && Math.abs(ay - y) <= 1) {
-            if (!godMode && predatorsVisible && agent.getType() == CITIZEN_AGENT_TYPE && a.getType() == PREDATOR_AGENT_TYPE) {
-                agent.setIsHit(true);
-            }
-        }
-    }
-    if (agent.getIsHit())
-        agent.adjustHealth(-10);
-}
 
 /*
 Calculates the proportion of a particular resource type, relative to the overall number of resources, then returns a log derivative (so minor variations have minimal impact).
@@ -1534,31 +1563,6 @@ function calculateSurroundingResourcesEffects(resource) {
     return baseEffect;
 }
 
-function hasNeighbouringResources(x, y) {
-    for (var j = 0; j < currentLevel.getResources().length; j++) {
-        var p = currentLevel.getResources()[j];
-        var px = p.getX();
-        var py = p.getY();
-        if (Math.abs(px - x) <= 1 && Math.abs(py - y) <= 1) {
-            // Add hook here for evaluating relative health of neighbouring resources
-//            var h = p.getHealth();
-            return p;
-        }
-    }
-    return null;
-}
-
-function isGoalCell(x, y) {
-    var gx = currentLevel.getGoalX();
-    var gy = currentLevel.getGoalY();
-    return (gx == x && gy == y);
-}
-
-function getAbsoluteDistanceFromGoal(x, y){
-    var gx = currentLevel.getGoalX();
-    var gy = currentLevel.getGoalY();
-    return (Math.abs(gx - x) + Math.abs(gy - y));
-}
 
 function recoverResources() {
     for (var j = 0; j < currentLevel.getResources().length; j++) {
@@ -1582,7 +1586,7 @@ function resetResourceYields() {
 
 function newWave() {
     maxWaveMoves = 0;
-    counter = 0;
+    globalCounter = 0;
     savedAgentThisWaveCount = 0;
     waves ++;
 
@@ -1962,8 +1966,6 @@ function spliceTiles(e, canvas) {
     var posX = __ret.posX;
     var posY = __ret.posY;
     var tilePosition = -1;
-    console.log(posX);
-    console.log(posY);
     currentLevel.removeTile(posX, posY);
 
 }
