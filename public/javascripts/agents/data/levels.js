@@ -75,8 +75,7 @@ Level.prototype.postSetupLevel = new function() {
 
 var level0 = new Level(1);
 level0.addEntryPoint(0, 0);
-level0.setGoalX(4);
-level0.setGoalY(4);
+level0.addExitPoint(4, 4);
 level0.setWorldWidth(5);
 level0.setWorldHeight(5);
 level0.setInitialAgentNumber(1);
@@ -108,8 +107,7 @@ level0.setupLevel = function() {
 
 var level1 = new Level(1);
 level1.addEntryPoint(0, 9);
-level1.setGoalX(10);
-level1.setGoalY(1);
+level1.addExitPoint(10, 1);
 level1.setWorldWidth(11);
 level1.setWorldHeight(11);
 level1.setInitialAgentNumber(1);
@@ -148,8 +146,7 @@ level1.setupLevel = function() {
 
 var level2 = new Level(2);
 level2.addEntryPoint(0, 0);
-level2.setGoalX(11);
-level2.setGoalY(1);
+level2.addExitPoint(11, 1);
 level2.setWorldWidth(12);
 level2.setWorldHeight(12);
 level2.setInitialAgentNumber(1);
@@ -195,8 +192,7 @@ level2.setupLevel = function() {
 
 var level3 = new Level(3);
 level3.addEntryPoint(5, 12);
-level3.setGoalX(3);
-level3.setGoalY(3);
+level3.addEntryPoint(3, 3);
 level3.setWorldWidth(13);
 level3.setWorldHeight(13);
 level3.setInitialAgentNumber(1);
@@ -253,8 +249,7 @@ level3.setupLevel = function() {
 
 var level4 = new Level(1);
 level4.addEntryPoint(6, 6);
-level4.setGoalX(0);
-level4.setGoalY(0);
+level4.addEntryPoint(0, 0);
 level4.setWorldWidth(14);
 level4.setWorldHeight(14);
 level4.setInitialAgentNumber(1);
@@ -326,8 +321,7 @@ level4.setupLevel = function() {
 
 var level5 = new Level(1);
 level5.addEntryPoint(13, 0);
-level5.setGoalX(0);
-level5.setGoalY(1);
+level5.addExitPoint(0, 1);
 level5.setWorldWidth(15);
 level5.setWorldHeight(15);
 level5.setInitialAgentNumber(1);
@@ -422,8 +416,7 @@ level5.setupLevel = function() {
 
 var level6 = new Level(1);
 level6.addEntryPoint(0, 1);
-level6.setGoalX(2);
-level6.setGoalY(14);
+level6.addExitPoint(2, 14);
 level6.setWorldWidth(16);
 level6.setWorldHeight(16);
 level6.setInitialAgentNumber(1);
@@ -468,8 +461,7 @@ var level7 = new Level(7);
 level7.setWorldWidth(17);
 level7.setWorldHeight(17);
 level7.addEntryPoint(0, 8);
-level7.setGoalX(16);
-level7.setGoalY(8);
+level7.addExitPoint(16, 8);
 level7.setInitialAgentNumber(1);
 level7.setWaveNumber(10);
 level7.setExpiryLimit(10);
@@ -514,8 +506,7 @@ level7.setupLevel = function() {
 
 var level8 = new Level(8);
 level8.addEntryPoint(0, 0);
-level8.setGoalX(17);
-level8.setGoalY(17);
+level8.addExitPoint(17, 17);
 level8.setWorldWidth(18);
 level8.setWorldHeight(18);
 level8.setInitialAgentNumber(1);
@@ -609,8 +600,7 @@ level8.setupLevel = function() {
 
 var level9 = new Level(9);
 level9.addEntryPoint(9, 0);
-level9.setGoalX(9);
-level9.setGoalY(18);
+level9.addExitPoint(9, 18);
 level9.setWorldWidth(19);
 level9.setWorldHeight(19);
 level9.setInitialAgentNumber(1);
@@ -666,8 +656,7 @@ level9.setupLevel = function() {
 
 var level10 = new Level(10);
 level10.addEntryPoint(18, 19);
-level10.setGoalX(16);
-level10.setGoalY(19);
+level10.addExitPoint(16, 19);
 level10.setWorldWidth(20);
 level10.setWorldHeight(20);
 level10.setInitialAgentNumber(1);
@@ -768,8 +757,7 @@ level10.setupLevel = function() {
 var level11 = new Level(10);
 level11.addEntryPoint(18, 19);
 level11.addEntryPoint(1, 1);
-level11.setGoalX(16);
-level11.setGoalY(19);
+level11.addExitPoint(16, 19);
 level11.setWorldWidth(20);
 level11.setWorldHeight(20);
 level11.setInitialAgentNumber(10);

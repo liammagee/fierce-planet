@@ -20,22 +20,22 @@ function ResourceKind(name, code, domain, cost, upgradeCost, totalYield, perAgen
         this._color = "ff3300";
     }
 }
-ResourceKind.prototype.getName = function() { return this._name; }
-ResourceKind.prototype.setName = function(name) { this._name = name; }
-ResourceKind.prototype.getCode = function() { return this._code; }
-ResourceKind.prototype.setCode = function(code) { this._code = code; }
-ResourceKind.prototype.getDomain = function() { return this._domain; }
-ResourceKind.prototype.setDomain = function(domain) { this._domain = domain; }
-ResourceKind.prototype.getCost = function() { return this._cost; }
-ResourceKind.prototype.setCost = function(cost) { this._cost = cost; }
-ResourceKind.prototype.getUpgradeCost = function() { return this._upgradeCost; }
-ResourceKind.prototype.setUpgradeCost = function(upgradeCost) { this._upgradeCost = upgradeCost; }
-ResourceKind.prototype.getPerAgentYield = function() { return this._perAgentYield; }
-ResourceKind.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; }
-ResourceKind.prototype.getTotalYield = function() { return this._totalYield; }
-ResourceKind.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; }
-ResourceKind.prototype.getColor = function() { return this._color; }
-ResourceKind.prototype.setColor = function(color) { this._color = color; }
+ResourceKind.prototype.getName = function() { return this._name; };
+ResourceKind.prototype.setName = function(name) { this._name = name; };
+ResourceKind.prototype.getCode = function() { return this._code; };
+ResourceKind.prototype.setCode = function(code) { this._code = code; };
+ResourceKind.prototype.getDomain = function() { return this._domain; };
+ResourceKind.prototype.setDomain = function(domain) { this._domain = domain; };
+ResourceKind.prototype.getCost = function() { return this._cost; };
+ResourceKind.prototype.setCost = function(cost) { this._cost = cost; };
+ResourceKind.prototype.getUpgradeCost = function() { return this._upgradeCost; };
+ResourceKind.prototype.setUpgradeCost = function(upgradeCost) { this._upgradeCost = upgradeCost; };
+ResourceKind.prototype.getPerAgentYield = function() { return this._perAgentYield; };
+ResourceKind.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; };
+ResourceKind.prototype.getTotalYield = function() { return this._totalYield; };
+ResourceKind.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; };
+ResourceKind.prototype.getColor = function() { return this._color; };
+ResourceKind.prototype.setColor = function(color) { this._color = color; };
 
 
 /* Resource class definition */
@@ -87,30 +87,30 @@ function Resource(kind, x, y) {
     this.setPosition(x, y);
 }
 // Kind properties
-Resource.prototype.getName = function() { return this._resourceName; }
-Resource.prototype.getType = function() { return this._resourceType;}
-Resource.prototype.getColor = function() { return this._color;}
-Resource.prototype.getCost = function() { return this._cost; }
-Resource.prototype.setCost = function(cost) { this._cost = cost; }
-Resource.prototype.getUpgradeCost = function() { return this._upgradeCost; }
-Resource.prototype.setUpgradeCost = function(upgradeCost) { this._upgradeCost = upgradeCost; }
-Resource.prototype.getInitialTotalYield = function() { return this._initialTotalYield; }
-Resource.prototype.setInitialTotalYield = function(initialTotalYield) { this._initialTotalYield = initialTotalYield; this._totalYield = initialTotalYield; }
-Resource.prototype.getPerAgentYield = function() { return this._perAgentYield; }
-Resource.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; }
-Resource.prototype.getKind = function() { return this._kind; }
-Resource.prototype.setKind = function(resourceKind) { this._kind = resourceKind; }
+Resource.prototype.getName = function() { return this._resourceName; };
+Resource.prototype.getType = function() { return this._resourceType;};
+Resource.prototype.getColor = function() { return this._color;};
+Resource.prototype.getCost = function() { return this._cost; };
+Resource.prototype.setCost = function(cost) { this._cost = cost; };
+Resource.prototype.getUpgradeCost = function() { return this._upgradeCost; };
+Resource.prototype.setUpgradeCost = function(upgradeCost) { this._upgradeCost = upgradeCost; };
+Resource.prototype.getInitialTotalYield = function() { return this._initialTotalYield; };
+Resource.prototype.setInitialTotalYield = function(initialTotalYield) { this._initialTotalYield = initialTotalYield; this._totalYield = initialTotalYield; };
+Resource.prototype.getPerAgentYield = function() { return this._perAgentYield; };
+Resource.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; };
+Resource.prototype.getKind = function() { return this._kind; };
+Resource.prototype.setKind = function(resourceKind) { this._kind = resourceKind; };
 
-Resource.prototype.getUpgradeLevel = function() { return this._upgradeLevel; }
-Resource.prototype.setUpgradeLevel = function(upgradeLevel) { this._upgradeLevel = upgradeLevel; }
-Resource.prototype.getTotalYield = function() { return this._totalYield; }
-Resource.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; }
-Resource.prototype.getPosition = function() { return [this._x, this._y]; }
-Resource.prototype.setPosition = function(x, y) { this._x =x; this._y = y; }
-Resource.prototype.getX = function() { return this._x; }
-Resource.prototype.setX = function(x) { this._x = x; }
-Resource.prototype.getY = function() { return this._y; }
-Resource.prototype.setY = function(y) { this._y = y; }
+Resource.prototype.getUpgradeLevel = function() { return this._upgradeLevel; };
+Resource.prototype.setUpgradeLevel = function(upgradeLevel) { this._upgradeLevel = upgradeLevel; };
+Resource.prototype.getTotalYield = function() { return this._totalYield; };
+Resource.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; };
+Resource.prototype.getPosition = function() { return [this._x, this._y]; };
+Resource.prototype.setPosition = function(x, y) { this._x =x; this._y = y; };
+Resource.prototype.getX = function() { return this._x; };
+Resource.prototype.setX = function(x) { this._x = x; };
+Resource.prototype.getY = function() { return this._y; };
+Resource.prototype.setY = function(y) { this._y = y; };
 Resource.prototype.provideYield = function(agent, resourceEffect, applyGeneralHealth) {
     if (this._totalYield > this._perAgentYield && agent.getHealth() < 100) {
         if (applyGeneralHealth) {
@@ -131,5 +131,5 @@ Resource.prototype.provideYield = function(agent, resourceEffect, applyGeneralHe
             this._totalYield -= this._perAgentYield;
         }
     }
-}
+};
 

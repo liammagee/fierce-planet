@@ -392,6 +392,27 @@ function hookUpUIEventListeners() {
    $('#cancelLevelEditor')[0].addEventListener('click', cancelLevelEditor, false);
 
 
+    // Set admin functions to previously stored defaults
+    getAndRetrieveProperty('godMode');
+    getAndRetrieveProperty('rivalsVisible');
+    getAndRetrieveProperty('predatorsVisible');
+    getAndRetrieveProperty('tilesMutable');
+    getAndRetrieveProperty('soundsPlayable');
+    getAndRetrieveProperty('backgroundIconsVisible');
+    getAndRetrieveProperty('resourcesInTension');
+    getAndRetrieveProperty('resourceBonus');
+    getAndRetrieveProperty('applyGeneralHealth');
+    getAndRetrieveProperty('ignoreResourceBalance');
+
+}
+
+function getAndRetrieveProperty(property) {
+    if ($('#' + property + 'Input')[0] != undefined) {
+        if (localStorage[property] == "true") {
+            this[property] = true;
+            $('#' + property + 'Input')[0].checked = true;
+        }
+    }
 }
 
 /* Add button effects */
@@ -747,26 +768,21 @@ function drawGoal() {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
-    var x = currentLevel.getGoalX() * cellWidth + cellWidth / 2;
-    var y = currentLevel.getGoalY() * cellHeight + cellHeight / 2;
-    var width = (pieceWidth / 2);
-    var height = (pieceHeight / 2);
+    for (var i = 0; i < currentLevel.getExitPoints().length; i++) {
+        var point = currentLevel.getExitPoints()[i];
+        var x = point[0] * cellWidth + cellWidth / 2;
+        var y = point[1] * cellHeight + cellHeight / 2;
+        var width = (pieceWidth / 2);
+        var height = (pieceHeight / 2);
 
-    /*
-    ctx.fillStyle = "#fbe53b";
-    ctx.strokeStyle = "#ccc";
-    ctx.fillRect(x - width, y - width, width * 2, width * 2);
-    */
-
-
-
-    ctx.beginPath();
-    ctx.arc(x, y, width, 0, Math.PI * 2, false);
-    ctx.closePath();
-    ctx.strokeStyle = "#ccc";
-    ctx.stroke();
-    ctx.fillStyle = "#fbe53b";
-    ctx.fill();
+        ctx.beginPath();
+        ctx.arc(x, y, width, 0, Math.PI * 2, false);
+        ctx.closePath();
+        ctx.strokeStyle = "#ccc";
+        ctx.stroke();
+        ctx.fillStyle = "#fbe53b";
+        ctx.fill();
+    }
 }
 
 function drawEntryPoints() {
@@ -882,7 +898,7 @@ function clearAgents() {
 /* Dilutes (whitens) the colour of an element, given its strength (some value between 0 and 100) */
 function diluteColour(rStrength, gStrength, bStrength, colour) {
     var charOffset = (colour.length == 3 ? 1 : 2);
-    var multiplier = (charOffset == 1 ? 1 : 16)
+    var multiplier = (charOffset == 1 ? 1 : 16);
     var dilutionBase = 10;
     var maxValue = Math.pow(16, charOffset);
     var r = parseInt(colour.slice(0, 1 * charOffset), 16);
@@ -1170,7 +1186,7 @@ function findPosition(agent, withNoRepeat, withNoCollision, withOffscreenCycling
     var candidatesNotInMemory = new Array();
     for (var i = 0; i < candidateCells.length; i++) {
         var candidate = candidateCells[i];
-        if (isGoalCell(candidate[0], candidate[1]))
+        if (currentLevel.isExitPoint(candidate[0], candidate[1]))
             return candidate;
         var inMemory = false;
         for (var j = agent.getMemories().length - 1 ; j >= 0; j--) {
@@ -1297,11 +1313,6 @@ function hasNeighbouringResources(x, y) {
     return null;
 }
 
-function isGoalCell(x, y) {
-    var gx = currentLevel.getGoalX();
-    var gy = currentLevel.getGoalY();
-    return (gx == x && gy == y);
-}
 
 function getAbsoluteDistanceFromGoal(x, y){
     var gx = currentLevel.getGoalX();
@@ -1394,7 +1405,7 @@ function processAgents() {
             citizenCount++;
         if (globalCounter >= agent.getDelay() && (globalCounter - agent.getDelay()) % speed == 0) {
             if (agent.getType() == CITIZEN_AGENT_TYPE) {
-                if (agent.getX() == currentLevel.getGoalX() && agent.getY() == currentLevel.getGoalY()) {
+                if (currentLevel.isExitPoint(agent.getX(), agent.getY())) {
                     score += SURVIVAL_SCORE;
                     savedAgentCount++;
                     savedAgentThisWaveCount++;
@@ -1650,28 +1661,17 @@ function newGame() {
 
 function restartLevel() {
     inDesignMode = false;
-    if ($("#godModeInput")[0] != undefined)
-        godMode = $("#godModeInput")[0].checked;
-    if ($("#rivalsVisibleInput")[0] != undefined)
-        rivalsVisible = $("#rivalsVisibleInput")[0].checked;
-    if ($("#predatorsVisibleInput")[0] != undefined)
-        predatorsVisible = $("#predatorsVisibleInput")[0].checked;
-    if ($("#tilesMutableInput")[0] != undefined)
-        tilesMutable = $("#tilesMutableInput")[0].checked;
 
-    if ($("#soundsPlayableInput")[0] != undefined)
-        soundsPlayable = $("#soundsPlayableInput")[0].checked;
-    if ($("#backgroundIconsVisibleInput")[0] != undefined)
-        backgroundIconsVisible = $("#backgroundIconsVisibleInput")[0].checked;
-
-    if ($("#resourcesInTensionInput")[0] != undefined)
-        resourcesInTension = $("#resourcesInTensionInput")[0].checked;
-    if ($("#resourceBonusInput")[0] != undefined)
-        resourceBonus = $("#resourceBonusInput")[0].checked;
-    if ($("#applyGeneralHealthInput")[0] != undefined)
-        applyGeneralHealth = $("#applyGeneralHealthInput")[0].checked;
-    if ($("#ignoreResourceBalanceInput")[0] != undefined)
-        ignoreResourceBalance = $("#ignoreResourceBalanceInput")[0].checked;
+    setAndStoreProperty('godMode');
+    setAndStoreProperty('rivalsVisible');
+    setAndStoreProperty('predatorsVisible');
+    setAndStoreProperty('tilesMutable');
+    setAndStoreProperty('soundsPlayable');
+    setAndStoreProperty('backgroundIconsVisible');
+    setAndStoreProperty('resourcesInTension');
+    setAndStoreProperty('resourceBonus');
+    setAndStoreProperty('applyGeneralHealth');
+    setAndStoreProperty('ignoreResourceBalance');
 
 
 
@@ -1682,6 +1682,15 @@ function restartLevel() {
     score = previousLevelScore;
     currentLevel.setResources(new Array());
     redrawWorld();
+}
+
+function setAndStoreProperty(property) {
+    if ($("#" + property + "Input")[0] != undefined) {
+        var propertyInputValue = $("#" + property + "Input")[0].checked;
+        this[property] = propertyInputValue;
+        localStorage[property] = propertyInputValue;
+        console.log($("#" + property + "Input"));
+    }
 }
 
 function redrawWorld() {

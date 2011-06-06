@@ -112,10 +112,9 @@
 
   <br/>
   <div id="admin-controls" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
-      <h3>Admin functions:</h3>
-      <br/>
-      <strong>Developmental:</strong>
-      <br/>
+      <h3>Dev functions:</h3>
+    <button id="debug">Debug</button>
+       <br/>
       God mode: <input id="godModeInput" name="godModeInput" type="checkbox"/>
       <br/>
       Rivals: <input id="rivalsVisibleInput" name="rivalsVisibleInput" type="checkbox"/>
@@ -139,8 +138,6 @@
       Use general health: <input id="applyGeneralHealthInput" name="applyGeneralHealthInput" type="checkbox"/>
       <br/>
       (then click 'New game', and 'Start')
-      <br/>
-      <button id="debug">Debug</button>
       <br/>
   </div>
   <br/>

@@ -90,6 +90,7 @@ function showDesignFeaturesDialog(e) {
     });
 
     $("#addGoal")[0].addEventListener('click', function(e) {
+        currentLevel.addExitPoint(currentX, currentY);
         currentLevel.setGoalX(currentX);
         currentLevel.setGoalY(currentY);
         $designFeatures.dialog('close');
@@ -97,8 +98,7 @@ function showDesignFeaturesDialog(e) {
     }, false);
 
     $("#addAgentStartingPoint")[0].addEventListener('click', function(e) {
-        console.log(currentX);
-        currentLevel.removeInitialPoint(0, 0);
+        currentLevel.removeEntryPoint(0, 0);
         currentLevel.addEntryPoint(currentX, currentY);
         $designFeatures.dialog('close');
         redrawBaseCanvas();
