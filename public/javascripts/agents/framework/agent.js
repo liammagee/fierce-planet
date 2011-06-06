@@ -38,7 +38,11 @@ Memory.prototype.getY = function() { return this._y; };
 Memory.prototype.setY = function(y) { this._y = y; };
 Memory.prototype.getVisits = function() { return this._visits; };
 Memory.prototype.setVisits = function(visits) { this._visits = visits; };
-Memory.prototype.addVisit = function(agent, age) { this._agent = agent; this._age = age; this._visits++; };
+Memory.prototype.addVisit = function(agent, age) {
+    this._agent = agent;
+//    this._age = age;
+    this._visits++;
+};
 Memory.prototype.getDistanceFromLastUntriedPath = function() { return this._distanceFromLastUntriedPath;  };
 Memory.prototype.setDistanceFromLastUntriedPath = function(distanceFromLastUntriedPath) { this._distanceFromLastUntriedPath = distanceFromLastUntriedPath;  };
 
@@ -360,8 +364,8 @@ Agent.prototype.memorise = function(x, y) {
         if (agentX == x && agentY == y) {
             // Add agent to memory
             this._memoriesOfAgents[[x, y]] = new MemoryOfAgent(this, this._age, x, y, agent) ;
-            this._memoriesOfPlacesVisitedByOtherAgents[agent] = agent._memoriesOfPlacesVisited;
-            this._memoriesOfPathsUntriedByOtherAgents[agent] = agent._memoriesOfPathsUntried;
+            this._memoriesOfPlacesVisitedByOtherAgents[agent._id] = agent._memoriesOfPlacesVisited;
+            this._memoriesOfPathsUntriedByOtherAgents[agent._id] = agent._memoriesOfPathsUntried;
         }
     }
 
@@ -477,7 +481,7 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
             for (var agent in this._memoriesOfPlacesVisitedByOtherAgents) {
                 var agentMemoryOfPlacesVisited = this._memoriesOfPlacesVisitedByOtherAgents[agent];
                 if (agentMemoryOfPlacesVisited[candidate] != undefined) {
-//                    placeVisitedByOtherAgents = true;
+                    placeVisitedByOtherAgents = true;
                 }
             }
             if (!placeVisitedByOtherAgents) {
@@ -530,7 +534,7 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
                         var ageMet = -1;
                         for (var k in this._memoriesOfAgents) {
                             var otherAgentMemory = this._memoriesOfAgents[k];
-                            if (otherAgentMemory.getOtherAgent()._id == agent._id)
+                            if (otherAgentMemory.getOtherAgent()._id == agent)
                                 ageMet = otherAgentMemory.getAge();
                         }
                         if (ageMet == -1)
@@ -554,7 +558,7 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
                 var memoryOfThisAgentAge = -1;
                 for (var k in this._memoriesOfAgents) {
                     var otherAgentMemory = this._memoriesOfAgents[k];
-                    if (otherAgentMemory.getOtherAgent()._id == agent._id)
+                    if (otherAgentMemory.getOtherAgent()._id == agent)
                         memoryOfThisAgentAge = otherAgentMemory.getAge();
                 }
                 if (memoryOfThisAgentAge == -1)
@@ -581,11 +585,9 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
 
                             }
                         }
-                        */
                     }
                 }
             }
-            */
 
             // Simplified variant
 
@@ -596,6 +598,8 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
         }
 
         // Now try the oldest candidate
+        // TODO: Revisit this logic
+        /*
         if (shortestAgeDifference == -1) {
             var ageInMemory = -1;
             for (var i = 1; i < candidateCells.length; i++) {
@@ -609,6 +613,7 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
                 }
             }
         }
+        */
         // TODO: Revisit this logic
         /*
         var neighbour = this.hasNeighbouringResources(candidate[0], candidate[1]);
@@ -617,6 +622,7 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
             break;
         }
         */
+
         return bestCandidate;
     }
 

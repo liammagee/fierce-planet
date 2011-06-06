@@ -988,8 +988,6 @@ function getDrawingPosition(agent, count) {
             else {
                 offsetY = (worldWidth - lastY) * (increment);
                 intY = (worldWidth - offsetY);
-//                offsetY = (lastY - worldSize) * (increment);
-//                intY = (lastY - offsetY);
             }
         }
     }
@@ -1314,11 +1312,6 @@ function hasNeighbouringResources(x, y) {
 }
 
 
-function getAbsoluteDistanceFromGoal(x, y){
-    var gx = currentLevel.getGoalX();
-    var gy = currentLevel.getGoalY();
-    return (Math.abs(gx - x) + Math.abs(gy - y));
-}
 
 function checkCollision(x, y) {
     return currentLevel.getCell(x, y) == undefined;
@@ -1740,7 +1733,6 @@ function drawWorld() {
 }
 
 function reloadGame() {
-
     currentLevelNumber = (localStorage.currentLevelNumber != undefined ? parseInt(localStorage.currentLevelNumber) : currentLevelNumber);
     score = (localStorage.currentScore != undefined ? parseInt(localStorage.currentScore) : score);
 //    totalSaved = (localStorage.totalSaved != undefined ? parseInt(localStorage.totalSaved) : totalSaved);
@@ -1941,15 +1933,17 @@ function showUpgradeDeleteDialog(e) {
             return;
         }
     }
+    var currentTile = currentLevel.getTile(posX, posY);
+    /*
     var foundTile = false;
     var tiles = currentLevel.getTiles();
-    var currentTile;
     for (var i = 0; i < tiles.length; i++) {
         var tile = tiles[i];
         if (tile._x == posX && tile._y == posY) {
             currentTile = tile;
         }
     }
+    */
 
     if (tilesMutable) {
         if (currentTile == undefined) {

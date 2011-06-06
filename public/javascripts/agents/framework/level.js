@@ -4,19 +4,13 @@ function Level(id) {
     this._id = id;
     this._name = id;
     this._initialAgentNumber = 1;
-    this._initialAgentX = 0;
-    this._initialAgentY = 0;
     this._entryPoints = new Array();
     this._exitPoints = new Array();
-//    this._initialPoints.push([this._initialAgentX, this._initialAgentY]);
 
-    this._worldSize = 11;
     this._worldWidth = 11;
     this._worldHeight = 11;
     this._waveNumber = 10;
     this._expiryLimit = 20;
-    this._goalX = 0;
-    this._goalY = 0;
     this._initialResourceStore = 100;
     this._allowOffscreenCycling = false;
     this._allowResouresOnPath = false;
@@ -40,17 +34,9 @@ Level.prototype.getName = function() { return this._name; };
 Level.prototype.setName = function(name) { this._name = name; };
 Level.prototype.getInitialAgentNumber = function() { return this._initialAgentNumber; };
 Level.prototype.setInitialAgentNumber = function(initialAgentNumber) { this._initialAgentNumber = initialAgentNumber; };
-Level.prototype.getInitialAgentX = function() { return this._initialAgentX; };
-Level.prototype.setInitialAgentX = function(initialAgentX) { this._initialAgentX = initialAgentX; };
-Level.prototype.getInitialAgentY = function() { return this._initialAgentY; };
-Level.prototype.setInitialAgentY = function(initialAgentY) { this._initialAgentY = initialAgentY; };
 Level.prototype.getEntryPoints = function() { return this._entryPoints; };
 Level.prototype.setEntryPoints = function(entryPoints) { this._entryPoints = entryPoints; };
 Level.prototype.addEntryPoint = function(x, y) {
-    if (this._entryPoints.length == 0) {
-        this.setInitialAgentX(x);
-        this.setInitialAgentY(y);
-    }
     var found = false;
     for (var i = 0; i < this._entryPoints.length; i++) {
         var point = this._entryPoints[i];
@@ -78,10 +64,6 @@ Level.prototype.removeEntryPoint = function(x, y) {
     }
 };
 Level.prototype.getFirstEntryPoint = function() { this._entryPoints[0]; };
-Level.prototype.getGoalX = function() { return this._goalX; };
-Level.prototype.setGoalX = function(goalX) { this._goalX = goalX; };
-Level.prototype.getGoalY = function() { return this._goalY; };
-Level.prototype.setGoalY = function(goalY) { this._goalY = goalY; };
 Level.prototype.getExitPoints = function() { return this._exitPoints; };
 Level.prototype.setExitPoints = function(exitPoints) { this._exitPoints = exitPoints; };
 Level.prototype.isExitPoint = function(x, y) {

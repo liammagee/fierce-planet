@@ -67,11 +67,10 @@ function redrawBaseCanvas() {
     */
 }
 function showLevelEditor() {
-    var proposedWorldSize = 10;
     currentLevelNumber = MAX_DEFAULT_LEVELS + 1;
     currentLevel = new Level(currentLevelNumber);
-    currentLevel.setWorldWidth(proposedWorldSize);
-    currentLevel.setWorldHeight(proposedWorldSize);
+    currentLevel.setWorldWidth(20);
+    currentLevel.setWorldHeight(15);
     currentLevel.setupLevel = function(){};
     fillWithTiles();
     setupLevelEditor();
@@ -104,26 +103,6 @@ function showDesignFeaturesDialog(e) {
         redrawBaseCanvas();
     }, false);
     $designFeatures.dialog('open');
-}
-function makeTile() {
-    var tile = new Tile(TILE_COLOR, currentX, currentY);
-    currentLevel.getTiles().push(tile);
-    $designFeatures.dialog('close');
-    redrawBaseCanvas();
-}
-
-function addGoal() {
-    currentLevel.setGoalX(currentX);
-    currentLevel.setGoalY(currentY);
-    redrawBaseCanvas();
-    $designFeatures.dialog('close');
-}
-
-function addAgentStartingPoint() {
-    currentLevel.setInitialAgentX(currentX);
-    currentLevel.setInitialAgentY(currentY);
-    redrawBaseCanvas();
-    $designFeatures.dialog('close');
 }
 
 function setupLevelEditor() {
