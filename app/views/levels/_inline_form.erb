@@ -19,12 +19,22 @@
         $('#level_exit_points')[0].value = $.toJSON(currentLevel.getExitPoints());
         $('#level_world_width')[0].value = currentLevel.getWorldWidth();
         $('#level_world_height')[0].value = currentLevel.getWorldHeight();
-        $('#level_initial_agent_x')[0].value = currentLevel.getInitialAgentX();
-        $('#level_initial_agent_y')[0].value = currentLevel.getInitialAgentY();
-        $('#level_goal_x')[0].value = currentLevel.getGoalX();
-        $('#level_goal_y')[0].value = currentLevel.getGoalY();
         $('#level_image_src')[0].value = currentLevel.getMapURL();
-
     });
+
+    var levelTimerId = null;
+
+    $(document).ready(function() {
+        if (levelTimerId != undefined)
+            clearInterval(levelTimerId);
+        levelTimerId = setInterval("submitLevelForm()", interval);
+    });
+
+    function submitLevelForm() {
+      //$('.edit_level')[0].submit();
+    }
+
+
+
 </script>
 
