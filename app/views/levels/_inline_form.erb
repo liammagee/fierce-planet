@@ -27,11 +27,12 @@
     $(document).ready(function() {
         if (levelTimerId != undefined)
             clearInterval(levelTimerId);
-        levelTimerId = setInterval("submitLevelForm()", interval);
+        levelTimerId = setInterval("submitLevelForm()", 5000);
     });
 
     function submitLevelForm() {
-      //$('.edit_level')[0].submit();
+        // TODO: Intercept the JQuery Ajax call here
+//      $('.edit_level')[0].submit();
     }
 
 

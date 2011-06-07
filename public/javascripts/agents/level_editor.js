@@ -90,8 +90,6 @@ function showDesignFeaturesDialog(e) {
 
     $("#addGoal")[0].addEventListener('click', function(e) {
         currentLevel.addExitPoint(currentX, currentY);
-        currentLevel.setGoalX(currentX);
-        currentLevel.setGoalY(currentY);
         $designFeatures.dialog('close');
         redrawBaseCanvas();
     }, false);
@@ -212,8 +210,6 @@ function showLevelProperties() {
 function refreshTiles() {
     currentLevel.setTiles(fillWithTiles());
     currentLevel.addEntryPoint(0, 0);
-    currentLevel.setGoalX(0);
-    currentLevel.setGoalY(0);
     redrawBaseCanvas();
 }
 

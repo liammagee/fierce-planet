@@ -919,8 +919,8 @@ function diluteColour(rStrength, gStrength, bStrength, colour) {
 }
 
 function getAgentDirection(agent) {
-    var lastX = agent.lastPosition()[0];
-    var lastY = agent.lastPosition()[1];
+    var lastX = agent.lastPosition().getX();
+    var lastY = agent.lastPosition().getY();
     var x = agent.getPosition()[0];
     var y = agent.getPosition()[1];
     if (lastX < x) {
@@ -1133,116 +1133,6 @@ function moveAgent(agent, withNoRepeat, withNoCollision) {
     agent.incrementMoves();
 }
 
-function findPosition(agent, withNoRepeat, withNoCollision, withOffscreenCycling) {
-    var positionFound = false;
-    var existingDirections = new Array();
-    var x = agent.getPosition()[0];
-    var y = agent.getPosition()[1];
-    var newX = x;
-    var newY = y;
-    var lastX = agent.lastPosition()[0];
-    var lastY = agent.lastPosition()[1];
-    var candidateCells = new Array();
-    var directions = randomDirectionOrder();
-    for (var i = 0; i < directions.length; i++) {
-        newX = x;
-        newY = y;
-        var dir = directions[i];
-
-        var offScreen1 = 0;
-        var offScreenWidth = currentLevel.getWorldWidth() - 1;
-        var offScreenHeight = currentLevel.getWorldHeight() - 1;
-        var offset = 1;
-        var toContinue = false;
-        switch (dir) {
-            case 0:
-                (newX == offScreen1 ? (withOffscreenCycling ? newX = offScreenWidth : toContinue = true) : newX = newX - offset);
-                break;
-            case 1:
-                (newX == offScreenWidth ? (withOffscreenCycling ? newX = offScreen1 : toContinue = true) : newX = newX + offset);
-                break;
-            case 2:
-                (newY == offScreen1 ? (withOffscreenCycling ? newY = offScreenHeight : toContinue = true) : newY = newY - offset);
-                break;
-            case 3:
-                (newY == offScreenHeight ? (withOffscreenCycling ? newY = offScreen1 : toContinue = true) : newY = newY + offset);
-                break;
-        }
-        if ((withNoRepeat && lastX == newX && lastY == newY) || toContinue) {
-            continue;
-        }
-        if (currentLevel.getCell(newX, newY) == undefined) {
-            candidateCells.push([newX, newY]);
-        }
-    }
-    // Allow for back-tracking, if there is no way forward
-    if (candidateCells.length == 0) {
-        return [lastX, lastY];
-    }
-
-    // Find the first candidate which is either the goal, or not in the memory.
-    var candidatesNotInMemory = new Array();
-    for (var i = 0; i < candidateCells.length; i++) {
-        var candidate = candidateCells[i];
-        if (currentLevel.isExitPoint(candidate[0], candidate[1]))
-            return candidate;
-        var inMemory = false;
-        for (var j = agent.getMemories().length - 1 ; j >= 0; j--) {
-            var memory = agent.getMemories()[j];
-            if (memory[0] == candidate[0] && memory[1] == candidate[1])
-                inMemory = true;
-        }
-        if (!inMemory)
-            candidatesNotInMemory.push(candidate);
-    }
-
-    // Try to find a neighbouring resource, if it exists
-    if (candidatesNotInMemory.length > 0) {
-        var bestCandidate = candidatesNotInMemory[0];
-        for (var i = 0; i < candidatesNotInMemory.length; i++) {
-            var candidate = candidatesNotInMemory[i];
-            var neighbour = hasNeighbouringResources(candidate[0], candidate[1]);
-            if (neighbour != null)
-                bestCandidate = candidate;
-        }
-        return bestCandidate;
-    }
-    else {
-        var bestCandidate = candidateCells[0];
-        for (var i = 0; i < candidateCells.length; i++) {
-            var candidate = candidateCells[i];
-            var neighbour = hasNeighbouringResources(candidate[0], candidate[1]);
-            if (neighbour != null)
-                bestCandidate = candidate;
-        }
-        return bestCandidate;
-    }
-
-
-    // Allow for movement off-screen, if no other option is available
-    if (! withOffscreenCycling) {
-        if (x == offScreenWidth || x == offScreen1 || y == offScreenHeight || y == offScreen1) {
-            if (x == offScreenWidth) {
-                newX = offScreenWidth + 1;
-            }
-            else if (x == offScreen1) {
-                newX = offScreen1 - 1;
-            }
-            else if (y == offScreenHeight) {
-                newY = offScreenHeight + 1;
-            }
-            else if (y == offScreen1) {
-                newY = offScreen1 - 1;
-            }
-            return [newX, newY];
-        }
-    }
-
-
-    // Use the first NON-candidate cell to use if no candidate is found
-    return candidateCells[0];
-}
-
 function randomDirectionOrder() {
     var directions = new Array();
     var orderedDirections = [0, 1, 2, 3];
@@ -1384,7 +1274,19 @@ function processAgents() {
     var nullifiedAgents = new Array();
     var citizenCount = 0;
     var agents = currentLevel.getCurrentAgents();
-    for (var i = 0; i < agents.length; i+= 1) {
+
+    // Pre-movement processing - DO NOTHING FOR NOW
+    for (var i = 0; i < agents.length; i++) {
+        var agent = agents[i];
+        var speed = agent.getSpeed();
+        if (globalCounter >= agent.getDelay() && (globalCounter - agent.getDelay()) % speed == 0) {
+            agent.evaluatePosition();
+        }
+    }
+
+    // Move agents
+    var options = {"withNoRepeat": true, "withNoCollision": false};
+    for (var i = 0; i < agents.length; i++) {
         var agent = agents[i];
 
         // Don't process agents we want to block
@@ -1397,6 +1299,7 @@ function processAgents() {
         if (agent.getType() == CITIZEN_AGENT_TYPE)
             citizenCount++;
         if (globalCounter >= agent.getDelay() && (globalCounter - agent.getDelay()) % speed == 0) {
+            // TODO: move this logic elsewhere
             if (agent.getType() == CITIZEN_AGENT_TYPE) {
                 if (currentLevel.isExitPoint(agent.getX(), agent.getY())) {
                     score += SURVIVAL_SCORE;
@@ -1412,9 +1315,7 @@ function processAgents() {
             }
 
             // Do for all agents
-//            moveAgent(agent, true, false);
-            var options = {"withNoRepeat": true, "withNoCollision": false};
-            agent.evaluateMove(currentLevel, options);
+            agent.evaluateMove(options);
 
             if (agent.getType() == CITIZEN_AGENT_TYPE) {
                 agent.adjustSpeed();
@@ -1426,7 +1327,7 @@ function processAgents() {
             if (agent.getMoves() > maxLevelMoves)
                 maxLevelMoves = agent.getMoves();
 
-
+            // TODO: should be in-lined?
             if (agent.getType() == CITIZEN_AGENT_TYPE || agent.getType() == RIVAL_AGENT_TYPE) {
                 if (!godMode)
                     agent.adjustHealth(MOVE_HEALTH_COST);
@@ -1446,6 +1347,8 @@ function processAgents() {
             }
         }
     }
+
+
 
     if (expiredAgentCount >= currentLevel.getExpiryLimit()) {
         return gameOver();
@@ -1477,6 +1380,12 @@ function processAgents() {
             recoverResources();
         drawAgents();
     }
+
+    // Post-move processing
+//    for (var i = 0; i < agents.length; i++) {
+//        var agent = agents[i];
+//        agent.evaluatePosition();
+//    }
 }
 
 

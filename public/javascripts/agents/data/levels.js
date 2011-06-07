@@ -39,6 +39,9 @@ function presetAgents(number, points) {
         var y = point[1];
         for (var i = 0; i < number; i ++) {
             var agent = new Agent(currentLevel, CITIZEN_AGENT_TYPE, x, y);
+            var colorSeed = j % 3;
+            var colorScheme = (colorSeed == 0 ? "000" : (colorSeed == 1 ? "0f0" : "00f"));
+            agent.setColor(colorScheme);
             var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
             agent.setDelay(delay);
             agents.push(agent);
@@ -192,7 +195,7 @@ level2.setupLevel = function() {
 
 var level3 = new Level(3);
 level3.addEntryPoint(5, 12);
-level3.addEntryPoint(3, 3);
+level3.addExitPoint(3, 3);
 level3.setWorldWidth(13);
 level3.setWorldHeight(13);
 level3.setInitialAgentNumber(1);

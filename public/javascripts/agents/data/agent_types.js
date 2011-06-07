@@ -41,20 +41,20 @@ CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, pieceH
         ctx.moveTo(x, y - radius + 8);
         ctx.lineTo(x - 1, y - radius + 8 + bodyLength);
 
-        if (counter % 2 == 0) {
+        if (counter % 2 == 1) {
             var start = (direction == 0 ? -1 : 1);
             var end = (direction == 0 ? -6 : 6);
 
             // Arms
-            ctx.moveTo(x + 4, y + 8 + 2 * start);
-            ctx.lineTo(x - 4, y + 8 - 2 * start);
+            ctx.moveTo(x + 4, y + 13 + 2 * start);
+            ctx.lineTo(x - 4, y + 13 - 2 * start);
 
             // 1st leg
-            ctx.moveTo(x + start, y - radius + 8 + bodyLength);
+            ctx.moveTo(x, y - radius + 8 + bodyLength);
             ctx.lineTo(x + start + end, y - radius + 8 + bodyLength + Math.abs(end));
 
             // 2nd leg
-            ctx.moveTo(x - start, y - radius + 8 + bodyLength);
+            ctx.moveTo(x, y - radius + 8 + bodyLength);
             ctx.lineTo(x - start - end / 2, y - radius + 8 + bodyLength);
             ctx.moveTo(x - start - end / 2, y - radius + 8 + bodyLength);
             ctx.lineTo(x - start - end / 2, y - radius + 8 + bodyLength + Math.abs(end) / 2);
@@ -64,8 +64,8 @@ CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, pieceH
             var end = (direction == 0 ? 6 : -6);
 
             // Arms
-            ctx.moveTo(x + 4, y + 8 + 2 * start);
-            ctx.lineTo(x - 4, y + 8 - 2 * start);
+            ctx.moveTo(x + 4, y + 13 + 2 * start);
+            ctx.lineTo(x - 4, y + 13 - 2 * start);
 
             // 1st leg
             ctx.moveTo(x, y - radius + 8 + bodyLength);
