@@ -1,4 +1,4 @@
-Sustagency::Application.routes.draw do
+FiercePlanet::Application.routes.draw do
 
   resources :entry_points
 

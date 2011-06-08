@@ -11,7 +11,8 @@ currentLevel.setAllowResourcesOnPath(<%= @level.allow_patches_on_path %>);
 currentLevel.setMapURL("<%= @level.image_src %>");
 currentLevel.setCustomLevel(true);
 currentLevel.setupLevel = function() {};
-currentLevelNumber = -1;
+currentLevelNumber = <%= @level.id %>;
+currentLevelPreset = false;
 var arr = fillWithTiles();
 var jsonArray = '<%= raw @level.tiles %>';
 try {

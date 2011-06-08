@@ -11,8 +11,8 @@ Agent Type setup
  */
 var CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000");
 CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, pieceHeight, newColor, counter, direction) {
-    if (pieceWidth < 16 || pieceHeight < 16) {
-        var radius = (pieceWidth / 2);
+    if (pieceWidth < 12 || pieceHeight < 12) {
+        var radius = (pieceWidth / 4);
 
         ctx.lineWidth = 2;
         ctx.beginPath();

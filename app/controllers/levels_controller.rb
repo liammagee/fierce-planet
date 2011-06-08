@@ -30,6 +30,7 @@ class LevelsController < ApplicationController
   # GET /levels/1.xml
   def show
     @level = Level.find(params[:id])
+#    @level = Level.first
 
     respond_to do |format|
       format.html # _show.html.erb

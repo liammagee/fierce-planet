@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-Sustagency::Application.load_tasks
+FiercePlanet::Application.load_tasks

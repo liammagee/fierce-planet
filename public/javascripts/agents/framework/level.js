@@ -2,6 +2,7 @@
 /* Level class definition */
 function Level(id) {
     this._id = id;
+    this._isPresetLevel = false;
     this._name = id;
     this._initialAgentNumber = 1;
     this._entryPoints = new Array();
@@ -30,6 +31,8 @@ function Level(id) {
 }
 Level.prototype.getId = function() { return this._id; };
 Level.prototype.setId = function(id) { this._id = id; };
+Level.prototype.isPresetLevel = function() { return this._isPresetLevel; };
+Level.prototype.setPresetLevel = function(isPresetLevel) { this._isPresetLevel = isPresetLevel; };
 Level.prototype.getName = function() { return this._name; };
 Level.prototype.setName = function(name) { this._name = name; };
 Level.prototype.getInitialAgentNumber = function() { return this._initialAgentNumber; };

@@ -77,6 +77,7 @@ var currentResourceId = null;
 var resourceTypes = {};
 
 var currentLevelNumber = 1;
+var currentLevelPreset = true;
 var currentLevel;
 var waveOverride = 0;
 var maxWaveMoves = 0;
@@ -280,7 +281,11 @@ function setupDialogs() {
             }
         });
 
-    $('#tutorial')[0].addEventListener('click', function(e) { currentLevelNumber = 0; restartLevel(); }, false    );
+    $('#tutorial')[0].addEventListener('click', function(e) {
+        currentLevelNumber = 0;
+        currentLevelPreset = false; 
+        restartLevel();
+    }, false    );
 }
 
 // Handle various resource-related interactions
@@ -1551,7 +1556,8 @@ function completeGame() {
 /* Set up code */
 function newGame() {
     inDesignMode = false;
-    currentLevelNumber = 1;
+    if (currentLevelPreset)
+        currentLevelNumber = 1;
     score = 0;
     previousLevelScore = 0;
     storeCurrentLevelData();
@@ -1643,6 +1649,7 @@ function drawWorld() {
 
 function reloadGame() {
     currentLevelNumber = (localStorage.currentLevelNumber != undefined ? parseInt(localStorage.currentLevelNumber) : currentLevelNumber);
+    currentLevelPreset = (localStorage.currentLevelPreset != undefined ? (localStorage.currentLevelPreset === 'true') : currentLevelPreset);
     score = (localStorage.currentScore != undefined ? parseInt(localStorage.currentScore) : score);
 //    totalSaved = (localStorage.totalSaved != undefined ? parseInt(localStorage.totalSaved) : totalSaved);
 //    profileClass = (localStorage.profileClass != undefined ? localStorage.profileClass : profileClass);
@@ -1655,12 +1662,24 @@ function initWorld() {
     log("Initialising world...");
 
 
-    try {
-        currentLevel = eval("level" + currentLevelNumber.toString());
+    if (currentLevelPreset) {
+        try {
+            currentLevel = eval("level" + currentLevelNumber.toString());
+        }
+        catch(err) {
+            // Silently fail - current level stays the same if undefined
+        }
     }
-    catch(err) {
-        // Silently fail - current level stays the same if undefined
+    else if (currentLevel == undefined) {
+        currentLevel = eval("level1");
+//        try {
+//            $.get("/levels/" + currentLevelNumber, { format: "js" });
+//        }
+//        catch(err) {
+//            currentLevel = eval("level1");
+//        }
     }
+    
     if (waveOverride > 0) {
         currentLevel.setWaveNumber(waveOverride);
         waveOverride = 0;
@@ -2100,8 +2119,9 @@ function generateStats() {
 /* Uses local storage to store highest scores and levels */
 function storeData() {
     localStorage.currentScore = previousLevelScore;
-    if (currentLevelNumber > 0 && currentLevelNumber <= MAX_DEFAULT_LEVELS)
-        localStorage.currentLevelNumber = currentLevelNumber;
+//    if (currentLevelNumber > 0 && currentLevelNumber <= MAX_DEFAULT_LEVELS)
+    localStorage.currentLevelNumber = currentLevelNumber;
+    localStorage.currentLevelPreset = currentLevel.isPresetLevel();
     localStorage.totalSaved = totalSaved;
     localStorage.profileClass = profileClass;
     localStorage.credits = credits;

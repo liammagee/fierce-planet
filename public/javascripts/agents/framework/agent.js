@@ -24,9 +24,10 @@ AgentType.prototype.setDrawFunction = function(drawFunction) { this._drawFunctio
 function Memory(agent, age, x, y) {
     this._agent = agent;
     this._age = age;
+    this._mostRecentVisit = age;
+    this._visits = 1;
     this._x = x;
     this._y = y;
-    this._visits = 1;
     this._distanceFromLastUntriedPath = -1;
 }
 Memory.prototype.getAgent = function() { return this._agent; };
@@ -40,11 +41,14 @@ Memory.prototype.getVisits = function() { return this._visits; };
 Memory.prototype.setVisits = function(visits) { this._visits = visits; };
 Memory.prototype.addVisit = function(agent, age) {
     this._agent = agent;
-//    this._age = age;
+    this._mostRecentVisit = age;
     this._visits++;
 };
+Memory.prototype.getMostRecentVisit = function() { return this._mostRecentVisit; };
+Memory.prototype.setMostRecentVisit = function(mostRecentVisit) { this._mostRecentVisit = mostRecentVisit; };
 Memory.prototype.getDistanceFromLastUntriedPath = function() { return this._distanceFromLastUntriedPath;  };
 Memory.prototype.setDistanceFromLastUntriedPath = function(distanceFromLastUntriedPath) { this._distanceFromLastUntriedPath = distanceFromLastUntriedPath;  };
+
 
 function MemoryOfAgent(agent, age, x, y, otherAgent) {
     this._agent = agent;
@@ -112,6 +116,7 @@ function Agent(level, agentType, x, y) {
     this._lastUntriedPathMemory = null;
 
     var tmpX = -1, tmpY = -1;
+    /*
     if (x == 0 || x == worldWidth - 1 || y == 0 || y == worldHeight - 1) {
         var tmpX = x, tmpY = y;
         if (x == 0)
@@ -127,6 +132,8 @@ function Agent(level, agentType, x, y) {
     else {
         this.memorise(x, y);
     }
+    */
+    this.memorise(x, y);
 
     // Speed-related
     this._delay = 0;
@@ -148,6 +155,8 @@ Agent.prototype.generateID = function() {
     return Math.floor(Math.random() * Math.pow(10, 10));
 };
 Agent.prototype.getID = function() { return this._id; };
+Agent.prototype.getAge = function() { return this._age; };
+Agent.prototype.setAge = function(age) { this._age = age; };
 Agent.prototype.getLevel = function() { return this._level; };
 Agent.prototype.setLevel = function(level) { this._level = level; };
 Agent.prototype.getPosition = function() { return [this._x, this._y]; };
@@ -298,8 +307,7 @@ Agent.prototype.memorise = function(x, y) {
         this._memoriesOfPlacesVisited[[x, y]] = memory;
     }
     if (this._memoriesOfPathsUntried[[x, y]] != undefined) {
-        this._memoriesOfPathsUntried[[x, y]] = undefined;
-//        console.log("Undefining untried path: " + [x, y]);
+        delete this._memoriesOfPathsUntried[[x, y]];
     }
     if (this._lastUntriedPathMemory != undefined)
         memory.setDistanceFromLastUntriedPath(this._age - this._lastUntriedPathMemory.getAge());
@@ -329,25 +337,21 @@ Agent.prototype.memorise = function(x, y) {
         // Add path cell to memory
         this._lastUntriedPathMemory = new Memory(this, this._age, x - 1, y);
         this._memoriesOfPathsUntried[[x - 1, y]] = this._lastUntriedPathMemory;
-//        console.log("Defining untried path: " + [x - 1, y]);
     }
     if (x + 1 < this._level.getWorldWidth() && this._level.getTile(x + 1, y) == undefined && this._memoriesOfPlacesVisited[[x + 1, y]] == undefined) {
         // Add path cell to memory
         this._lastUntriedPathMemory = new Memory(this, this._age, x + 1, y);
         this._memoriesOfPathsUntried[[x + 1, y]] = this._lastUntriedPathMemory;
-//        console.log("Defining untried path: " + [x + 1, y]);
     }
     if (y - 1 >= 0 && this._level.getTile(x, y - 1) == undefined && this._memoriesOfPlacesVisited[[x, y - 1]] == undefined) {
         // Add path cell to memory
         this._lastUntriedPathMemory = new Memory(this, this._age, x, y - 1);
         this._memoriesOfPathsUntried[[x, y - 1]] = this._lastUntriedPathMemory;
-//        console.log("Defining untried path: " + [x, y - 1]);
     }
     if (y + 1 < this._level.getWorldHeight() && this._level.getTile(x, y + 1) == undefined && this._memoriesOfPlacesVisited[[x, y + 1]] == undefined) {
         // Add path cell to memory
         this._lastUntriedPathMemory = new Memory(this, this._age, x, y + 1);
         this._memoriesOfPathsUntried[[x, y + 1]] = this._lastUntriedPathMemory;
-//        console.log("Defining untried path: " + [x, y + 1]);
     }
 
 
@@ -452,51 +456,6 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
 
     // Here try to see if any agents encountered have zero unvisited cells in their memory, that the current agent also does not have in *its* memory.
     // If not, backtrack
-    /*
-    for (var k in this._memoriesOfPathsUntriedByOtherAgents) {
-
-    }
-    var agents = currentLevel.getCurrentAgents();
-    var hasExhaustedAllPaths = false;
-    for (var l = 0; l < agents.length; l++) {
-        var agent = agents[l];
-        if (agent._id == this._id)
-            continue;
-        if (agent._x == this._x && agent._y == this._y &&
-                (agent.lastPosition().getX() != this.lastPosition().getX() || agent.lastPosition().getY() != this.lastPosition().getY())) {
-            console.log("Meeting an agent, and comparing notes");
-            for (var k in agent._memoriesOfPathsUntried) {
-                var otherAgentMemory = agent._memoriesOfPathsUntried[k];
-                if (otherAgentMemory == undefined)
-                    continue;
-
-                var ownAgentVisitedMemory = this._memoriesOfPlacesVisited[k];
-                var ownAgentUnvisitedMemory = this._memoriesOfPathsUntried[k];
-
-                if (ownAgentVisitedMemory == undefined && ownAgentUnvisitedMemory == undefined) {
-                    this._memoriesOfPathsUntried[k] = new Memory(agent, otherAgentMemory.getAge(), otherAgentMemory.getX(), otherAgentMemory.getY());
-//                    console.log("Adding unvisited memory: " + k);
-                }
-            }
-            for (var k in agent._memoriesOfPlacesVisited) {
-                var otherAgentMemory = agent._memoriesOfPlacesVisited[k];
-                if (otherAgentMemory == undefined)
-                    continue;
-
-                var ownAgentVisitedMemory = this._memoriesOfPlacesVisited[k];
-                var ownAgentUnvisitedMemory = this._memoriesOfPathsUntried[k];
-
-                if (ownAgentVisitedMemory == undefined) {
-                    this._memoriesOfPlacesVisited[k] = new Memory(agent, otherAgentMemory.getAge(), otherAgentMemory.getX(), otherAgentMemory.getY());
-//                    console.log("Adding visited memory: " + k);
-                }
-                if (ownAgentUnvisitedMemory != undefined) {
-                    this._memoriesOfPathsUntried[k] = undefined;
-                }
-            }
-        }
-    }
-    */
 
 
     // Find the first candidate which is either the goal, or not in the history.
@@ -516,7 +475,6 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
                 }
             }
             if (!placeVisitedByOtherAgents) {
-                //console.log("Neither this agent nor its friends have been here: " + candidate);
                 candidatesNotInHistory.push(candidate);
             }
         }
@@ -545,8 +503,12 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
         // Try to head in a direction where an unvisited tile can be found
 
         var shortestAgeDifference = -1;
-        var bestCandidate = candidateCells[0];
-        var candidateClosestToUnvisited = 0;
+        var bestCandidate = null;
+
+        var shortestAgeDifferenceForThisAgent = -1;
+        var bestCandidateForThisAgent = null;
+
+        // Merge all visited places in memory - expensive, but saves later loops
         var allPlacesVisited = new Array();
         for (var key in this._memoriesOfPlacesVisited) {
             var memory = this._memoriesOfPlacesVisited[key];
@@ -564,9 +526,11 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
             var candidate = candidateCells[i];
             var mostRecentMemoryOfCandidate = this._memoriesOfPlacesVisited[candidate];
             var shortestAgeDifferenceToCandidate = -1;
+            var shortestAgeDifferenceToCandidateForThisAgent = -1;
             var counter = 0;
             if (mostRecentMemoryOfCandidate != undefined) {
                 var age = mostRecentMemoryOfCandidate.getAge();
+                var mostRecentVisit = mostRecentMemoryOfCandidate.getMostRecentVisit();
 
                 for (var j in this._memoriesOfPathsUntried) {
                     var unvisited = this._memoriesOfPathsUntried[j];
@@ -575,14 +539,17 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
                         for (var agent in this._memoriesOfPlacesVisitedByOtherAgents) {
                             var agentMemoryOfPlacesVisited = this._memoriesOfPlacesVisitedByOtherAgents[agent];
                             if (agentMemoryOfPlacesVisited[j] != undefined) {
-//                            if (agentMemoryOfPlacesVisited[candidate] != undefined) {
                                 inOtherAgentsMemory = true;
                                 break;
                             }
                         }
+                        var unvisitedAge = unvisited.getAge();
+                        var diff = Math.abs(mostRecentVisit - unvisitedAge);
+//                        var diff = Math.abs(age - unvisitedAge);
+                        if (shortestAgeDifferenceToCandidateForThisAgent == -1 || diff < shortestAgeDifferenceToCandidateForThisAgent) {
+                            shortestAgeDifferenceToCandidateForThisAgent = diff;
+                        }
                         if (! inOtherAgentsMemory) {
-                            var unvisitedAge = unvisited.getAge();
-                            var diff = Math.abs(age - unvisitedAge);
                             if (shortestAgeDifferenceToCandidate == -1 || diff < shortestAgeDifferenceToCandidate) {
                                 shortestAgeDifferenceToCandidate = diff;
                             }
@@ -591,37 +558,64 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
                     counter++;
                 }
             }
-            var localClosestCandidate = -1;
             for (var agent in this._memoriesOfPlacesVisitedByOtherAgents) {
                 var agentMemoryOfPlacesVisited = this._memoriesOfPlacesVisitedByOtherAgents[agent];
                 var agentMemoryOfPathsUntried = this._memoriesOfPathsUntriedByOtherAgents[agent];
                 if (agentMemoryOfPathsUntried != undefined && agentMemoryOfPlacesVisited != undefined && agentMemoryOfPlacesVisited[candidate] != undefined) {
+
                     var mostRecentMemoryOfCandidateByAgent = agentMemoryOfPlacesVisited[candidate];
+
                     var ageOfOtherAgentMemory = mostRecentMemoryOfCandidateByAgent.getAge();
 
                     for (var j in agentMemoryOfPathsUntried) {
                         var agentUnvisitedMemory = agentMemoryOfPathsUntried[j];
-                        if (agentUnvisitedMemory != undefined) {
-//                            if (this._memoriesOfPlacesVisited[j] == undefined) {
-                            if (allPlacesVisited[j] == undefined) {
-                                var unvisitedAge = agentUnvisitedMemory.getAge();
-                                var diff = Math.abs(ageOfOtherAgentMemory - unvisitedAge);
-                                if (shortestAgeDifferenceToCandidate == -1 || diff < shortestAgeDifferenceToCandidate) {
-                                    shortestAgeDifferenceToCandidate = diff;
-                                }
-                            }
+                        if (allPlacesVisited[j] == undefined) {
+                            var unvisitedAge = agentUnvisitedMemory.getAge();
+                            var diff = Math.abs(ageOfOtherAgentMemory - unvisitedAge);
 
+                            if (shortestAgeDifferenceToCandidate == -1 || diff < shortestAgeDifferenceToCandidate) {
+                                if (mostRecentMemoryOfCandidate != undefined) {
+                                    // Assume if this candidate has been more recently visited, and has been visited several times, it is not a good candidate
+                                    var mostRecentVisit = mostRecentMemoryOfCandidate.getMostRecentVisit();
+                                    var numberOfVisits = mostRecentMemoryOfCandidate.getVisits();
+                                    if (mostRecentVisit > ageOfOtherAgentMemory && numberOfVisits > 3)
+                                        continue;
+                                }
+                                shortestAgeDifferenceToCandidate = diff;
+                            }
                         }
                     }
                 }
             }
 
-            // Simplified variant
 
+            //
+            if (shortestAgeDifferenceToCandidateForThisAgent > -1 && (shortestAgeDifferenceForThisAgent == -1 || shortestAgeDifferenceToCandidateForThisAgent < shortestAgeDifferenceForThisAgent)) {
+                shortestAgeDifferenceForThisAgent = shortestAgeDifferenceToCandidateForThisAgent;
+                bestCandidateForThisAgent = candidate;
+            }
             if (shortestAgeDifferenceToCandidate > -1 && (shortestAgeDifference == -1 || shortestAgeDifferenceToCandidate < shortestAgeDifference)) {
                 shortestAgeDifference = shortestAgeDifferenceToCandidate;
                 bestCandidate = candidate;
             }
+        }
+        // Try any unvisited cells at this point
+        if (bestCandidate == undefined) {
+            // Try any unvisited cells at this point
+            for (var i = 0; i < candidateCells.length; i++) {
+                var candidate = candidateCells[i];
+                if (this._memoriesOfPathsUntried[candidate] != undefined) {
+                    bestCandidate = candidate;
+                    break;
+                }
+            }
+        }
+        if (bestCandidate == undefined) {
+            if (bestCandidateForThisAgent != undefined) {
+                bestCandidate = bestCandidateForThisAgent;
+            }
+            else
+                bestCandidate = candidateCells[0];
         }
 
         // Now try the oldest candidate
@@ -650,6 +644,7 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
         }
         */
 
+        // Placeholder for debugging
         return bestCandidate;
     }
 

@@ -1,8 +1,8 @@
 # Be sure to restart your server when you modify this file.
 
-Sustagency::Application.config.session_store :cookie_store, :key => '_sustagency_session'
+FiercePlanet::Application.config.session_store :cookie_store, :key => '_fierceplanet_session'
 
 # Use the database for sessions instead of the cookie-based default,
 # which shouldn't be used to store highly confidential information
 # (create the session table with "rails generate session_migration")
-# Sustagency::Application.config.session_store :active_record_store
+# FiercePlanet::Application.config.session_store :active_record_store

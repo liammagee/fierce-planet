@@ -77,6 +77,7 @@ Level.prototype.postSetupLevel = new function() {
 /* Level 0 Definition */
 
 var level0 = new Level(1);
+level0.setPresetLevel(true);
 level0.addEntryPoint(0, 0);
 level0.addExitPoint(4, 4);
 level0.setWorldWidth(5);
@@ -109,13 +110,13 @@ level0.setupLevel = function() {
 /* Level 1 Definition */
 
 var level1 = new Level(1);
+level1.setPresetLevel(true);
 level1.addEntryPoint(0, 9);
 level1.addExitPoint(10, 1);
 level1.setWorldWidth(11);
 level1.setWorldHeight(11);
 level1.setInitialAgentNumber(1);
-level1.setWaveNumber(20);
-//level1.setWaveNumber(1);
+level1.setWaveNumber(10);
 level1.setExpiryLimit(20);
 //level1.setSoundSrc("http://forestmist.org/wp-content/uploads/2010/04/html5-audio-loop.mp3");
 //level1.setSoundSrc("/creepy1.wav");
@@ -148,13 +149,14 @@ level1.setupLevel = function() {
 /* Level 2 Definition */
 
 var level2 = new Level(2);
+level2.setPresetLevel(true);
 level2.addEntryPoint(0, 0);
 level2.addExitPoint(11, 1);
 level2.setWorldWidth(12);
 level2.setWorldHeight(12);
 level2.setInitialAgentNumber(1);
-level2.setWaveNumber(20);
-level2.setExpiryLimit(20);
+level2.setWaveNumber(10);
+level2.setExpiryLimit(10);
 level2.setInitialResourceStore(120);
 //level2.setImage("/images/Background_Level2.png");
 level2.setNotice("<h2>Level 2: Twists and Turns</h2>" +
@@ -194,13 +196,14 @@ level2.setupLevel = function() {
 /* Level 3 Definition */
 
 var level3 = new Level(3);
+level3.setPresetLevel(true);
 level3.addEntryPoint(5, 12);
 level3.addExitPoint(3, 3);
 level3.setWorldWidth(13);
 level3.setWorldHeight(13);
 level3.setInitialAgentNumber(1);
-level3.setWaveNumber(20);
-level3.setExpiryLimit(20);
+level3.setWaveNumber(10);
+level3.setExpiryLimit(10);
 level3.setInitialResourceStore(130);
 //level3.setImage("/images/Background_Level3.png");
 level3.setNotice("<h2>Level 3: Around and About</h2>" +
@@ -251,13 +254,14 @@ level3.setupLevel = function() {
 /* Level 4 Definition */
 
 var level4 = new Level(1);
+level4.setPresetLevel(true);
 level4.addEntryPoint(6, 6);
-level4.addEntryPoint(0, 0);
+level4.addExitPoint(0, 0);
 level4.setWorldWidth(14);
 level4.setWorldHeight(14);
 level4.setInitialAgentNumber(1);
-level4.setWaveNumber(20);
-level4.setExpiryLimit(20);
+level4.setWaveNumber(10);
+level4.setExpiryLimit(10);
 level4.setInitialResourceStore(150);
 //level4.setImage("/images/Background_Level4.png");
 level4.setNotice("<h2>Level 4: Spiral of uncertainty</h2>" +
@@ -323,13 +327,14 @@ level4.setupLevel = function() {
 /* Level 5 Definition */
 
 var level5 = new Level(1);
+level5.setPresetLevel(true);
 level5.addEntryPoint(13, 0);
 level5.addExitPoint(0, 1);
 level5.setWorldWidth(15);
 level5.setWorldHeight(15);
 level5.setInitialAgentNumber(1);
-level5.setWaveNumber(20);
-level5.setExpiryLimit(20);
+level5.setWaveNumber(10);
+level5.setExpiryLimit(10);
 level5.setInitialResourceStore(180);
 //level5.setImage("/images/Background_Level5.png");
 level5.setNotice("<h2>Level 5: A-mazing Grace</h2>" +
@@ -418,13 +423,14 @@ level5.setupLevel = function() {
 /* Level 6 Definition */
 
 var level6 = new Level(1);
+level6.setPresetLevel(true);
 level6.addEntryPoint(0, 1);
 level6.addExitPoint(2, 14);
 level6.setWorldWidth(16);
 level6.setWorldHeight(16);
 level6.setInitialAgentNumber(1);
-level6.setWaveNumber(20);
-level6.setExpiryLimit(20);
+level6.setWaveNumber(10);
+level6.setExpiryLimit(10);
 level6.setAllowOffscreenCycling(true);
 level6.setInitialResourceStore(250);
 //level6.setImage("/images/Background_Level6.png");
@@ -461,6 +467,7 @@ level6.setupLevel = function() {
 /* Level 7 Definition */
 
 var level7 = new Level(7);
+level7.setPresetLevel(true);
 level7.setWorldWidth(17);
 level7.setWorldHeight(17);
 level7.addEntryPoint(0, 8);
@@ -508,6 +515,7 @@ level7.setupLevel = function() {
 /* Level 8 Definition */
 
 var level8 = new Level(8);
+level8.setPresetLevel(true);
 level8.addEntryPoint(0, 0);
 level8.addExitPoint(17, 17);
 level8.setWorldWidth(18);
@@ -602,6 +610,7 @@ level8.setupLevel = function() {
 /* Level 9 Definition */
 
 var level9 = new Level(9);
+level9.setPresetLevel(true);
 level9.addEntryPoint(9, 0);
 level9.addExitPoint(9, 18);
 level9.setWorldWidth(19);
@@ -658,6 +667,7 @@ level9.setupLevel = function() {
 /* Level 10 Definition */
 
 var level10 = new Level(10);
+level10.setPresetLevel(true);
 level10.addEntryPoint(18, 19);
 level10.addExitPoint(16, 19);
 level10.setWorldWidth(20);
@@ -758,6 +768,7 @@ level10.setupLevel = function() {
 /* Level 10 Definition */
 
 var level11 = new Level(10);
+level11.setPresetLevel(true);
 level11.addEntryPoint(18, 19);
 level11.addEntryPoint(1, 1);
 level11.addExitPoint(16, 19);
