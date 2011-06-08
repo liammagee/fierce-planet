@@ -61,6 +61,7 @@ var mouseMoving = false;
 
 // Toggleable parameter values
 var godMode = false;
+var agentsCanCommunicate = true;
 var soundsPlayable = false;
 var resourcesInTension = false;
 var resourceBonus = false;
@@ -399,6 +400,7 @@ function hookUpUIEventListeners() {
 
     // Set admin functions to previously stored defaults
     getAndRetrieveProperty('godMode');
+    getAndRetrieveProperty('agentsCanCommunicate');
     getAndRetrieveProperty('rivalsVisible');
     getAndRetrieveProperty('predatorsVisible');
     getAndRetrieveProperty('tilesMutable');
@@ -1509,6 +1511,11 @@ function newWave() {
     waves ++;
 
     presetAgents(++numAgents, currentLevel.getEntryPoints());
+    var agents = currentLevel.getCurrentAgents();
+    for (var i = 0; i < agents.length; i++) {
+        var agent = agents[i];
+        agent.setCanCommunicateWithOtherAgents(agentsCanCommunicate);
+    }
 
     // Add generated agents
     $.merge(currentLevel.getCurrentAgents(), currentLevel.generateWaveAgents(numAgents));
@@ -1571,6 +1578,7 @@ function restartLevel() {
     inDesignMode = false;
 
     setAndStoreProperty('godMode');
+    setAndStoreProperty('agentsCanCommunicate');
     setAndStoreProperty('rivalsVisible');
     setAndStoreProperty('predatorsVisible');
     setAndStoreProperty('tilesMutable');
@@ -1715,6 +1723,13 @@ function initWorld() {
     preSetupLevel(currentLevel);
     currentLevel.setupLevel();
     postSetupLevel(currentLevel);
+
+    // Determine whether agents can communicate
+    var agents = currentLevel.getCurrentAgents();
+    for (var i = 0; i < agents.length; i++) {
+        var agent = agents[i];
+        agent.setCanCommunicateWithOtherAgents(agentsCanCommunicate);
+    }
 }
 
 function startAgents() {
