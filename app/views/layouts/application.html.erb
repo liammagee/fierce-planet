@@ -9,8 +9,8 @@
   <%= javascript_include_tag "jquery.min.js" %>
   <%= javascript_include_tag "jquery-ui.min.js" %>
   <%= javascript_include_tag "jquery.json-2.2.min.js" %>
-  <!--<%= javascript_include_tag "http://www.google.com/jsapi" %>-->
-  <!--<%= javascript_include_tag "http://maps.google.com/maps/api/js?sensor=true" %>-->
+  <%= javascript_include_tag "jquery.mousewheel.3.0.2/jquery.mousewheel.min.js" %>
+  <%= javascript_include_tag "jquery.zoomEvent.js" %>
 
   <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? -%>
   <%= javascript_tag "var PROFILE_ID;" -%>
@@ -44,6 +44,12 @@
       </script>
   <% end %>
   <%= csrf_meta_tag %>
+  <script>
+    $(window).live("documentzoomed",function(){
+        alert('the document has zoomed!');
+    });
+
+  </script>
 
 </head>
 <body>

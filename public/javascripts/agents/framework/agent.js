@@ -106,24 +106,6 @@ function Agent(level, agentType, x, y) {
     this._lastMemory = null;
     this._lastUntriedPathMemory = null;
 
-    var tmpX = -1, tmpY = -1;
-    /*
-    if (x == 0 || x == worldWidth - 1 || y == 0 || y == worldHeight - 1) {
-        var tmpX = x, tmpY = y;
-        if (x == 0)
-            tmpX = -1;
-        else if (x == worldWidth - 1)
-            tmpX = worldWidth;
-        else if (y == 0)
-            tmpY = -1;
-        else if (y == worldHeight - 1)
-            tmpY = worldHeight;
-        this.memorise(tmpX, tmpY);
-    }
-    else {
-        this.memorise(x, y);
-    }
-    */
     this.memorise(x, y);
 
     // Speed-related
@@ -357,7 +339,9 @@ Agent.prototype.memorise = function(x, y) {
                 continue;
             var agentX = agent.getX();
             var agentY = agent.getY();
-            if (agentX == x && agentY == y && (agent.lastPosition().getX() != this.lastPosition().getX() || agent.lastPosition().getY() != this.lastPosition().getY())) {
+//            if (agentX == x && agentY == y && (agent.lastPosition().getX() != this.lastPosition().getX() || agent.lastPosition().getY() != this.lastPosition().getY())) {
+            // TODO: This is very slow - consider ways to optimise
+            if (Math.abs(agentX - x) <= 1 && Math.abs(agentY - y) <= 1) {
                 // Add agent to memory
                 this._memoriesOfAgents[agent._id] = new MemoryOfAgent(this, this._age, x, y, agent);
                 var mpv = new Array();

@@ -170,6 +170,9 @@ $(document).ready(function() {
 
     // Add general event listeners
     hookUpUIEventListeners();
+
+
+    
 });
 
 
@@ -343,7 +346,11 @@ function setupResourceInteraction() {
         this.className = '';
         dropItem(e);
       }, false);
-
+    $('#c4').mousewheel(function(event, delta) {
+        zoom(delta);
+        event.preventDefault();
+        return false; // prevent default
+    });
 }
 
 // Add general event listeners
@@ -389,13 +396,16 @@ function hookUpUIEventListeners() {
     $('#debug')[0].addEventListener('click', processAgents, false);
 
     // Level editor functions
-   $('#makeTile')[0].addEventListener('click', makeTile, false);
-   $('#addGoal')[0].addEventListener('click', addGoal, false);
-   $('#addAgentStartingPoint')[0].addEventListener('click', addAgentStartingPoint, false);
-   $('#showLevelProperties')[0].addEventListener('click', showLevelProperties, false);
-   $('#refreshTiles')[0].addEventListener('click', refreshTiles, false);
-   $('#undoAction')[0].addEventListener('click', undoAction, false);
-   $('#cancelLevelEditor')[0].addEventListener('click', cancelLevelEditor, false);
+    try {
+        $('#makeTile')[0].addEventListener('click', makeTile, false);
+        $('#addGoal')[0].addEventListener('click', addGoal, false);
+        $('#addAgentStartingPoint')[0].addEventListener('click', addAgentStartingPoint, false);
+        $('#showLevelProperties')[0].addEventListener('click', showLevelProperties, false);
+        $('#refreshTiles')[0].addEventListener('click', refreshTiles, false);
+        $('#undoAction')[0].addEventListener('click', undoAction, false);
+        $('#cancelLevelEditor')[0].addEventListener('click', cancelLevelEditor, false);
+    }
+    catch (err){}
 
 
     // Set admin functions to previously stored defaults
@@ -695,9 +705,16 @@ function drawTile(tile) {
     var x = tile._x * cellWidth;
     var y = tile._y * cellHeight;
     ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellHeight - 1);
-    ctx.fillStyle = "#" + tile._color;
+    if (tile._y == 0 || currentLevel.getTile(tile._x, tile._y - 1) == undefined) {
+        var my_gradient = ctx.createLinearGradient(x, y, x, y + cellHeight / 4);
+        my_gradient.addColorStop(0, "#060");
+        my_gradient.addColorStop(1, "#" + tile._color);
+        ctx.fillStyle = my_gradient;
+    }
+    else {
+        ctx.fillStyle = "#" + tile._color;
+    }
     ctx.fillRect(x, y, cellWidth, cellHeight);
-    ctx.strokeStyle = "#" + tile._color;
     ctx.strokeStyle = "#fff";
     ctx.strokeRect(x, y, cellWidth, cellHeight);
 }
@@ -708,25 +725,26 @@ function drawPath() {
     var pathTiles = currentLevel.getPath();
     for (var i = 0; i < pathTiles.length; i+= 1) {
         var pathTile = pathTiles[i];
-        var x = pathTile[0] * cellWidth;
-        var y = pathTile[1] * cellHeight;
+        var xPos = pathTile[0];
+        var yPos = pathTile[1];
+        var x = xPos * cellWidth;
+        var y = yPos * cellHeight;
         ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellHeight - 1);
-//        ctx.fillStyle = "#fff";
 
-
-//        ctx.shadowOffsetX = 0;
-//        ctx.shadowOffsetY = -5;
-//        ctx.shadowBlur    = 4;
-//        ctx.shadowColor   = '#ccc';
-        ctx.border = "1px #ccc solid";
-        ctx.fillStyle = "#fafafa";
+        if (yPos == 0 || currentLevel.getTile(xPos, yPos - 1) != undefined) {
+            var my_gradient = ctx.createLinearGradient(x, y, x, y + cellHeight / 4);
+            my_gradient.addColorStop(0, "#ccc");
+            my_gradient.addColorStop(1, "#eee");
+            ctx.fillStyle = my_gradient;
+        }
+        else {
+            ctx.fillStyle = "#eee";
+        }
+        ctx.border = "1px #eee solid";
         ctx.fillRect(x, y, cellWidth, cellHeight);
         ctx.strokeStyle = "#ccc";
         ctx.strokeRect(x, y, cellWidth, cellHeight);
-//        ctx.shadowOffsetX = 2;
-//        ctx.shadowOffsetY = 2;
-//        ctx.shadowBlur    = 1;
-//        ctx.shadowColor   = '#ccc';
+
     }
 }
 
@@ -744,7 +762,7 @@ function handleApiReady() {
       center: new google.maps.LatLng(47.5153, 19.0782),
         mapTypeId: google.maps.MapTypeId.SATELLITE,
       disableDefaultUI: true,
-      zoom: 18,
+      zoom: 19,
         tilt: 45
     };
     if (currentLevel.getMapOptions()['lat'] != undefined && currentLevel.getMapOptions()['long'] != undefined)

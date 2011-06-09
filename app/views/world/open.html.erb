@@ -1,7 +1,7 @@
 
   <div id="main-panel">
-    <%= render "score_board" %>
 
+    <%= render "score_board" %>
 
     <div id="gameworld">
       <div id="world">
@@ -15,7 +15,7 @@
 
     <div id="info">
       <div id="global-info"  style="clear:both;">
-        <div id="user-links" style="clear:both; float: right; position: relative; width: 35%; color: #add8e6; padding: 0; text-align: right">
+        <div id="user-links" style="clear:both; float: right; position: relative; color: #add8e6; padding: 0; text-align: right">
           <p>
             <% if user_signed_in? %>
                 <%= 'Welcome, ' + current_user.profile.nickname + ' | '  if current_user and current_user.profile.nickname %>
@@ -29,9 +29,6 @@
             <% end %>
           </p>
         </div>
-        <div id="notifications" style="float: left; position: relative; width: 65%; color: #add8e6; padding: 0">
-          <p><%= flash[:notice] %></p>
-        </div>
       </div>
       <div id="level-info"  style="clear:both;" >
       </div>
@@ -42,7 +39,6 @@
 
     <!-- Should only be visible when NOT in design mode -->
     <%= render 'swatch' %>
-
     <!-- Should only be visible when in design mode -->
     <%= render 'level_editor' %>
 

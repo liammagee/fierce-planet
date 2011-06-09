@@ -52,20 +52,8 @@ $(document).ready(function() {
 
 function redrawBaseCanvas() {
     drawWorld();
-    /*
-    $('#map_canvas').empty();
-    clearCanvas('c1');
-    clearCanvas('c2');
-    clearCanvas('c3');
-    clearCanvas('c4');
-
-    // Draw basic elements
-    drawGrid();
-    drawTiles();
-    drawEntryPoints();
-    drawGoal();
-    */
 }
+
 function showLevelEditor() {
     currentLevelNumber = MAX_DEFAULT_LEVELS + 1;
     currentLevel = new Level(currentLevelNumber);
@@ -197,8 +185,6 @@ function saveLevel() {
     $('#level_tiles')[0].value = $.toJSON(currentLevel.getTiles());
     $('#level_world_width')[0].value = worldWidth;
     $('#level_world_height')[0].value = worldHeight;
-
-//    redrawWorld();
 }
 
 

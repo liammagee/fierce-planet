@@ -14,12 +14,7 @@
 <script>
     // attach a submit handler to the form
     $('.edit_level')[0].addEventListener('submit', function(event) {
-        $('#level_tiles')[0].value = $.toJSON(currentLevel.getTiles());
-        $('#level_entry_points')[0].value = $.toJSON(currentLevel.getEntryPoints());
-        $('#level_exit_points')[0].value = $.toJSON(currentLevel.getExitPoints());
-        $('#level_world_width')[0].value = currentLevel.getWorldWidth();
-        $('#level_world_height')[0].value = currentLevel.getWorldHeight();
-        $('#level_image_src')[0].value = currentLevel.getMapURL();
+        serializeLevel();
     });
 
     var levelTimerId = null;
@@ -33,6 +28,20 @@
     function submitLevelForm() {
         // TODO: Intercept the JQuery Ajax call here
 //      $('.edit_level')[0].submit();
+        serializeLevel();
+        try {
+            $.rails.handleRemote($('.edit_level'));
+        }
+        catch(err){}
+    }
+
+    function serializeLevel() {
+        $('#level_tiles')[0].value = $.toJSON(currentLevel.getTiles());
+        $('#level_entry_points')[0].value = $.toJSON(currentLevel.getEntryPoints());
+        $('#level_exit_points')[0].value = $.toJSON(currentLevel.getExitPoints());
+        $('#level_world_width')[0].value = currentLevel.getWorldWidth();
+        $('#level_world_height')[0].value = currentLevel.getWorldHeight();
+        $('#level_image_src')[0].value = currentLevel.getMapURL();
     }
 
 
