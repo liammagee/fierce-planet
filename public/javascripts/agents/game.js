@@ -61,6 +61,7 @@ var mouseMoving = false;
 
 // Toggleable parameter values
 var godMode = false;
+var invisiblePath = false;
 var agentsCanCommunicate = true;
 var soundsPlayable = false;
 var resourcesInTension = false;
@@ -410,6 +411,7 @@ function hookUpUIEventListeners() {
 
     // Set admin functions to previously stored defaults
     getAndRetrieveProperty('godMode');
+    getAndRetrieveProperty('invisiblePath');
     getAndRetrieveProperty('agentsCanCommunicate');
     getAndRetrieveProperty('rivalsVisible');
     getAndRetrieveProperty('predatorsVisible');
@@ -731,17 +733,19 @@ function drawPath() {
         var y = yPos * cellHeight;
         ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellHeight - 1);
 
-        if (yPos == 0 || currentLevel.getTile(xPos, yPos - 1) != undefined) {
-            var my_gradient = ctx.createLinearGradient(x, y, x, y + cellHeight / 4);
-            my_gradient.addColorStop(0, "#ccc");
-            my_gradient.addColorStop(1, "#eee");
-            ctx.fillStyle = my_gradient;
+        if (!invisiblePath) {
+            if (yPos == 0 || currentLevel.getTile(xPos, yPos - 1) != undefined) {
+                var my_gradient = ctx.createLinearGradient(x, y, x, y + cellHeight / 4);
+                my_gradient.addColorStop(0, "#ccc");
+                my_gradient.addColorStop(1, "#eee");
+                ctx.fillStyle = my_gradient;
+            }
+            else {
+                ctx.fillStyle = "#eee";
+            }
+            ctx.border = "1px #eee solid";
+            ctx.fillRect(x, y, cellWidth, cellHeight);
         }
-        else {
-            ctx.fillStyle = "#eee";
-        }
-        ctx.border = "1px #eee solid";
-        ctx.fillRect(x, y, cellWidth, cellHeight);
         ctx.strokeStyle = "#ccc";
         ctx.strokeRect(x, y, cellWidth, cellHeight);
 
@@ -762,7 +766,7 @@ function handleApiReady() {
       center: new google.maps.LatLng(47.5153, 19.0782),
         mapTypeId: google.maps.MapTypeId.SATELLITE,
       disableDefaultUI: true,
-      zoom: 19,
+      zoom: 18,
         tilt: 45
     };
     if (currentLevel.getMapOptions()['lat'] != undefined && currentLevel.getMapOptions()['long'] != undefined)
@@ -1596,6 +1600,7 @@ function restartLevel() {
     inDesignMode = false;
 
     setAndStoreProperty('godMode');
+    setAndStoreProperty('invisiblePath');
     setAndStoreProperty('agentsCanCommunicate');
     setAndStoreProperty('rivalsVisible');
     setAndStoreProperty('predatorsVisible');
@@ -1687,7 +1692,8 @@ function reloadGame() {
 function initWorld() {
     log("Initialising world...");
 
-
+    if (currentLevelNumber < 1 || currentLevelNumber > 10)
+        currentLevelNumber = 1;
     if (currentLevelPreset) {
         try {
             currentLevel = eval("level" + currentLevelNumber.toString());

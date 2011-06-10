@@ -1,7 +1,7 @@
 
 /* NB: Level is defined in classes.js */
 
-var MAX_DEFAULT_LEVELS = 11;
+var MAX_DEFAULT_LEVELS = 10;
 
 
 /* Level setup methods - this should be moved to the Level class when refactored. */
@@ -889,16 +889,16 @@ for(var i = 0; i < GOOGLE_MAPS.length; i++) {
     tempImg[i] = new Image();
     tempImg[i].src = GOOGLE_MAPS[i];
 }
-level1.setMapOptions({});
-level2.setMapOptions({lat: 37.390296, long: -5.954579});
-level3.setMapOptions({lat: 45.433607, long: 12.338124});
-level4.setMapOptions({lat: 37.390296, long: -5.954579});
-level5.setMapOptions({lat: 37.390296, long: -5.954579});
-level6.setMapOptions({lat: 37.390296, long: -5.954579});
-level7.setMapOptions({lat: 37.390296, long: -5.954579});
-level8.setMapOptions({lat: 37.390296, long: -5.954579});
-level9.setMapOptions({lat: 37.390296, long: -5.954579});
-level10.setMapOptions({lat: 37.390296, long: -5.954579});
+level1.setMapOptions({lat: 47.5153, long: 19.0782, zoom: 20}); // Rome: 47.5153, 19.0782
+level2.setMapOptions({lat: 37.390296, long: -5.954579, zoom: 18}); // Seville: 37.390296,-5.954579
+level3.setMapOptions({lat: 45.433607, long: 12.338124, zoom: 18}); // Venice: 45.433607,12.338124
+level4.setMapOptions({lat: -33.909092, long: 18.406061, zoom: 19}); // Cape Town: -33.909092,18.406061
+level5.setMapOptions({lat: -33.434969, long: -70.655254}); // Santiago: -33.434969,-70.655254
+level6.setMapOptions({lat: 47.487229, long: 19.07513}); // Budapest: 47.487229,19.07513
+level7.setMapOptions({lat: 30.006533, long: -90.158792}); // New Orleans: 30.006533,-90.158792
+level8.setMapOptions({lat: 21.283355, long: -157.837787}); // Honululu: 21.283355,-157.837787
+level9.setMapOptions({lat: 33.441393, long: -112.077407}); // Phoenix, Arizona: 33.441393,-112.077407
+level10.setMapOptions({lat: 30.265452, long: -97.744524}); // Austin, Texas: 30.265452,-97.744524
 //level1.setMapURL(GOOGLE_MAPS[0]);
 //level2.setMapURL(GOOGLE_MAPS[1]);
 //level3.setMapURL(GOOGLE_MAPS[2]);
