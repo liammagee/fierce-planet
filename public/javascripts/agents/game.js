@@ -140,6 +140,7 @@ var $upgradeDelete;
 var $resourceGallery;
 
 var audio;
+var googleMap;
 
 
 /* Initialisation code: start game and dialog boxes */
@@ -761,7 +762,7 @@ function drawBackgroundImage() {
 }
 
 function handleApiReady() {
-    var map;
+//    var googleMap;
     var mapOptions = {
       center: new google.maps.LatLng(47.5153, 19.0782),
         mapTypeId: google.maps.MapTypeId.SATELLITE,
@@ -774,8 +775,13 @@ function handleApiReady() {
     if (currentLevel.getMapOptions()['zoom'] != undefined)
         mapOptions['zoom'] = currentLevel.getMapOptions()['zoom'];
 
-    map = new google.maps.Map($("#map_canvas")[0], mapOptions);
-    map.setTilt(45);
+    // Handle built-in zoom
+    if (zoomLevel > 1)
+        mapOptions['zoom'] = mapOptions['zoom'] + Math.log(zoomLevel) / Math.log(1.5);
+
+    googleMap = new google.maps.Map($("#map_canvas")[0], mapOptions);
+    googleMap.setTilt(45);
+
 }
 
 function drawMap() {
@@ -2266,14 +2272,17 @@ function zoom(direction) {
             case -1:
                 if (zoomLevel > 1) {
                     ctx.scale(1 / magnify, 1 / magnify);
+//                    ctx.translate(200, 150);
                 }
                 break;
             case 0:
                 ctx.scale(1 / zoomLevel, 1 / zoomLevel);
+//                ctx.translate(0, 0);
                 break;
             case 1:
                 if (zoomLevel < 10) {
                     ctx.scale(magnify, magnify);
+//                    ctx.translate(-200 * magnify, -150 * magnify);
                 }
                 break;
         }
@@ -2281,20 +2290,20 @@ function zoom(direction) {
     switch (direction) {
         case -1:
             if (zoomLevel > 1) {
-//                panLeftOffset *= 1 / magnify;
-//                panTopOffset *= 1 / magnify;
+//                panLeftOffset += 200;
+//                panTopOffset += 150;
                 zoomLevel *= 1 / magnify;
             }
             break;
         case 0:
-//            panLeftOffset = panLeftOffset / zoomLevel;
-//            panTopOffset = panTopOffset / zoomLevel;
+//            panLeftOffset = 0;
+//            panTopOffset = 0;
             zoomLevel = 1;
             break;
         case 1:
             if (zoomLevel < 10) {
-//                panLeftOffset *= magnify;
-//                panTopOffset *= magnify;
+//                panLeftOffset -= 200;
+//                panTopOffset -= 150;
                 zoomLevel *= magnify;
             }
             break;

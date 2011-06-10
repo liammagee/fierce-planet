@@ -898,7 +898,7 @@ level6.setMapOptions({lat: 47.487229, long: 19.07513}); // Budapest: 47.487229,1
 level7.setMapOptions({lat: 30.006533, long: -90.158792}); // New Orleans: 30.006533,-90.158792
 level8.setMapOptions({lat: 21.283355, long: -157.837787}); // Honululu: 21.283355,-157.837787
 level9.setMapOptions({lat: 33.441393, long: -112.077407}); // Phoenix, Arizona: 33.441393,-112.077407
-level10.setMapOptions({lat: 30.265452, long: -97.744524}); // Austin, Texas: 30.265452,-97.744524
+level10.setMapOptions({lat: 30.265452, long: -97.744524, zoom: 18}); // Austin, Texas: 30.265452,-97.744524
 //level1.setMapURL(GOOGLE_MAPS[0]);
 //level2.setMapURL(GOOGLE_MAPS[1]);
 //level3.setMapURL(GOOGLE_MAPS[2]);
