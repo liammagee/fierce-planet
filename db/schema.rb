@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110424121829) do
+ActiveRecord::Schema.define(:version => 20110612075242) do
 
   create_table "capabilities", :force => true do |t|
     t.integer  "capability_type"
@@ -48,11 +48,7 @@ ActiveRecord::Schema.define(:version => 20110424121829) do
     t.string   "name"
     t.integer  "world_width"
     t.integer  "world_height"
-    t.integer  "initial_agent_x"
-    t.integer  "initial_agent_y"
     t.integer  "initial_agent_number"
-    t.integer  "goal_x"
-    t.integer  "goal_y"
     t.integer  "wave_number"
     t.integer  "expiry_limit"
     t.boolean  "allow_offscreen_cycling"
@@ -65,6 +61,10 @@ ActiveRecord::Schema.define(:version => 20110424121829) do
     t.string   "sound_src"
     t.string   "entry_points"
     t.string   "exit_points"
+    t.string   "google_map_tilt"
+    t.string   "google_map_zoom"
+    t.string   "google_map_long"
+    t.string   "google_map_lat"
   end
 
   create_table "profile_capabilities", :force => true do |t|
@@ -85,6 +85,10 @@ ActiveRecord::Schema.define(:version => 20110424121829) do
     t.text     "capabilities"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "total_patches",                 :default => 0
+    t.integer  "total_economic_patches",        :default => 0
+    t.integer  "total_environmental_patches",   :default => 0
+    t.integer  "total_social_patches",          :default => 0
     t.integer  "total_saved",                   :default => 0
     t.integer  "total_expired",                 :default => 0
     t.integer  "total_resources",               :default => 0
@@ -92,7 +96,7 @@ ActiveRecord::Schema.define(:version => 20110424121829) do
     t.integer  "total_environmental_resources", :default => 0
     t.integer  "total_social_resources",        :default => 0
     t.integer  "credits",                       :default => 0
-    t.integer  "profile_class",                 :default => 0
+    t.string   "profile_class",                 :default => "0"
     t.integer  "progress_towards_next_class",   :default => 0
   end
 

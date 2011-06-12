@@ -9,6 +9,12 @@ currentLevel.setExpiryLimit(<%= @level.expiry_limit %>);
 currentLevel.setAllowOffscreenCycling(<%= @level.allow_offscreen_cycling %>);
 currentLevel.setAllowResourcesOnPath(<%= @level.allow_patches_on_path %>);
 currentLevel.setMapURL("<%= @level.image_src %>");
+currentLevel.setMapOptions({
+<%= raw 'lat: "' + @level.google_map_lat + '",' unless @level.google_map_lat.nil? or @level.google_map_lat.empty? %>
+<%= raw 'long: "' + @level.google_map_long + '",' unless @level.google_map_long.nil? or @level.google_map_long.empty? %>
+<%= raw 'tilt: "' + @level.google_map_tilt + '",' unless @level.google_map_tilt.nil? or @level.google_map_tilt.empty? %>
+<%= raw 'zoom: "' + @level.google_map_zoom + '",' unless @level.google_map_zoom.nil? or @level.google_map_zoom.empty? %>
+});
 currentLevel.setCustomLevel(true);
 currentLevel.setupLevel = function() {};
 currentLevelNumber = <%= @level.id %>;

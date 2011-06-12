@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>jQuery.zoom() demo</title>
+        <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+        <script type="text/javascript" src="/javascripts/jquery.zoom.js"></script>
+		<script>
+		$(function(){
+			$().zoom(function(direction){
+                var txt = "";
+                switch(direction) {
+                    case 1:
+                        txt = 'zoom increased';
+                        break;
+                    case -1:
+                        txt = 'zoom decreased';
+                        break;
+                    case 0:
+                        txt = 'zoom reset';
+                        break;
+                    }
+				$('p.message').text(txt);
+			});
+		});
+		</script>
+		<style>
+			p.message { background-color: #ffc; }
+		</style>
+	</head>
+
+	<body>
+		<h1>jQuery.zoom() demo</h1>
+
+		<p class="message"></p>
+
+		<p>Try zooming</p>
+		<p>
+			<strong>Firefox and IE</strong><br />
+			CTRL++ to zoom in<br />
+			CTRL+- to zoom out<br />
+			CTRL+0 to reset zoom<br />
+			CTRL+(scroll up) to zoom in<br />
+			CTRL+(scroll down) to zoom out
+		</p>
+		<p>
+			<strong>Opera</strong><br />
+			CTRL++ (numpad) to zoom in<br />
+			CTRL+- (numpad) to zoom out<br />
+			CTRL+0 (numpad) to reset zoom<br />
+			CTRL+* (numpad) to reset zoom
+		</p>
+		<p>
+			<strong>Safari 2</strong><br />
+			CTRL++ (numpad) to zoom in<br />
+			CTRL+- (numpad) to zoom out<br />
+		</p>
+		
+		<script type="text/javascript">
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+
+		</script>
+		<script type="text/javascript">
+		var pageTracker = _gat._getTracker("UA-4510508-4");
+		pageTracker._initData();
+		pageTracker._trackPageview();
+		</script>
+	</body>
+</html>

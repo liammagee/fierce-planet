@@ -63,6 +63,8 @@ var mouseMoving = false;
 var godMode = false;
 var invisiblePath = false;
 var agentsCanCommunicate = true;
+var agentTracing = false;
+var recording = false;
 var soundsPlayable = false;
 var resourcesInTension = false;
 var resourceBonus = false;
@@ -75,12 +77,15 @@ var tilesMutable = false;
 
 var agentTimerId = 0;
 
+var recordedLevels = new Array();
+
 var currentResourceId = null;
 var resourceTypes = {};
 
 var currentLevelNumber = 1;
 var currentLevelPreset = true;
 var currentLevel;
+var existingCurrentLevel;
 var waveOverride = 0;
 var maxWaveMoves = 0;
 var maxLevelMoves = 0;
@@ -99,7 +104,9 @@ var numAgents = 1;
 var economicResourceCount = 0;
 var environmentalResourceCount = 0;
 var socialResourceCount = 0;
+
 var globalCounter = 0;
+var globalRecordingCounter = 0;
 
 var previousLevelScore = 0;
 var score = 0;
@@ -112,6 +119,7 @@ var savedAgentThisWaveCount = 0;
 
 
 var zoomLevel = 1;
+var externalZoomLevel = 1;
 var panLeftOffset = 0;
 var panTopOffset = 0;
 
@@ -153,7 +161,24 @@ $(document).ajaxSend(function(event, request, settings) {
     }
 });
 
+$(function(){
+    $().zoom(function(direction){
+        switch(direction) {
+            case 1:
+                externalZoomLevel *= 1.2;
+                break;
+            case -1:
+                externalZoomLevel /= 1.2;
+                break;
+            case 0:
+                externalZoomLevel = 1;
+                break;
+            }
+    });
+});
+
 $(document).ready(function() {
+    document.body.style.zoom = "1";
 
     // Reload the game when the level 1 image is loaded (TODO: how should other levels be handled?)
     reloadGame();
@@ -173,8 +198,6 @@ $(document).ready(function() {
     // Add general event listeners
     hookUpUIEventListeners();
 
-
-    
 });
 
 
@@ -269,8 +292,8 @@ function setupDialogs() {
                 }
             }
 		});
-    $('#del-button')[0].addEventListener('click', function(e) {deleteCurrentResource(); $upgradeDelete.dialog('close'); }, false );
-    $('#upg-button')[0].addEventListener('click', function(e) {upgradeCurrentResource(); $upgradeDelete.dialog('close'); }, false    );
+    $('#del-button').click(function() {deleteCurrentResource(); $upgradeDelete.dialog('close'); });
+    $('#upg-button').click(function() {upgradeCurrentResource(); $upgradeDelete.dialog('close'); });
 
     $resourceGallery = $('#resource-gallery')
         .dialog({
@@ -287,7 +310,21 @@ function setupDialogs() {
             }
         });
 
-    $('#tutorial')[0].addEventListener('click', function(e) {
+    $settingsDialog = $('#settings-dialog')
+        .dialog({
+            width: 460,
+            autoOpen: false,
+            modal: true,
+            title: 'Settings',
+            buttons: {
+                "OK": function() {
+                    saveSettings();
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+
+    $('#tutorial').click(function(e) {
         currentLevelNumber = 0;
         currentLevelPreset = false; 
         restartLevel();
@@ -358,23 +395,24 @@ function setupResourceInteraction() {
 // Add general event listeners
 function hookUpUIEventListeners() {
     // Control panel functions
-    $('#startAgents')[0].addEventListener('click', startAgents, false);
-    $('#stopAgents')[0].addEventListener('click', stopAgents, false);
-   $('#slowDown')[0].addEventListener('click', slowDown, false);
-   $('#speedUp')[0].addEventListener('click', speedUp, false);
-    $('#newGame')[0].addEventListener('click', newGame, false);
-   $('#restartLevel')[0].addEventListener('click', restartLevel, false);
-   $('#showResourceGallery')[0].addEventListener('click', showResourceGallery, false);
+    $('#startAgents').click(startAgents);
+    $('#stopAgents').click(stopAgents);
+   $('#slowDown').click(slowDown);
+   $('#speedUp').click(speedUp);
+    $('#newGame').click(newGame);
+   $('#restartLevel').click(restartLevel);
+   $('#showResourceGallery').click(showResourceGallery);
 
     // Pan/zoomFunctions
-    $('#panUp')[0].addEventListener('click', function() { pan(0);}, false);
-    $('#panDown')[0].addEventListener('click', function() { pan(1);}, false);
-    $('#panLeft')[0].addEventListener('click', function() { pan(2);}, false);
-    $('#panRight')[0].addEventListener('click', function() { pan(3);}, false);
-    $('#panReset')[0].addEventListener('click', function() { pan(4);}, false);
-    $('#zoomIn')[0].addEventListener('click', function() { zoom(1);}, false);
-    $('#zoomOut')[0].addEventListener('click', function() { zoom(-1);}, false);
-    $('#zoomReset')[0].addEventListener('click', function() { zoom(0);}, false);
+    $('#panUp').click(function() { pan(0);});
+    $('#panDown').click(function() { pan(1);});
+    $('#panLeft').click(function() { pan(2);});
+    $('#panRight').click(function() { pan(3);});
+    $('#panReset').click(function() { pan(4);});
+    $('#zoomIn').click(function() { zoom(1);});
+    $('#zoomOut').click(function() { zoom(-1);});
+    $('#zoomReset').click(function() { zoom(0);});
+    $('#settings').click(showSettings);
 
     addButtonEffects($('#startAgents')[0]);
     addButtonEffects($('#stopAgents')[0]);
@@ -395,17 +433,18 @@ function hookUpUIEventListeners() {
 
 
     // Admin functions
-    $('#debug')[0].addEventListener('click', processAgents, false);
+    $('#debug').click(processAgents);
+    $('#replay').click(replayWorld);
 
     // Level editor functions
     try {
-        $('#makeTile')[0].addEventListener('click', makeTile, false);
-        $('#addGoal')[0].addEventListener('click', addGoal, false);
-        $('#addAgentStartingPoint')[0].addEventListener('click', addAgentStartingPoint, false);
-        $('#showLevelProperties')[0].addEventListener('click', showLevelProperties, false);
-        $('#refreshTiles')[0].addEventListener('click', refreshTiles, false);
-        $('#undoAction')[0].addEventListener('click', undoAction, false);
-        $('#cancelLevelEditor')[0].addEventListener('click', cancelLevelEditor, false);
+        $('#makeTile').click(makeTile);
+        $('#addGoal').click(addGoal);
+        $('#addAgentStartingPoint').click(addAgentStartingPoint);
+        $('#showLevelProperties').click(showLevelProperties);
+        $('#refreshTiles').click(refreshTiles);
+        $('#undoAction').click(undoAction);
+        $('#cancelLevelEditor').click(cancelLevelEditor);
     }
     catch (err){}
 
@@ -414,6 +453,8 @@ function hookUpUIEventListeners() {
     getAndRetrieveProperty('godMode');
     getAndRetrieveProperty('invisiblePath');
     getAndRetrieveProperty('agentsCanCommunicate');
+    getAndRetrieveProperty('agentTracing');
+    getAndRetrieveProperty('recording');
     getAndRetrieveProperty('rivalsVisible');
     getAndRetrieveProperty('predatorsVisible');
     getAndRetrieveProperty('tilesMutable');
@@ -654,6 +695,8 @@ function getCurrentPosition(e, canvas) {
     y -= panTopOffset;
     x /= zoomLevel;
     y /= zoomLevel;
+    x /= externalZoomLevel;
+    y /= externalZoomLevel;
     // Compensate for border
     x -= (6 / zoomLevel);
     y -= (6 / zoomLevel);
@@ -666,32 +709,6 @@ function getCurrentPosition(e, canvas) {
 
 
 /* Draw Methods */
-function drawGrid() {
-    var canvas = $('#c1')[0];
-    var ctx = canvas.getContext('2d');
-    var w = canvas.width;
-    var h = canvas.height;
-
-    ctx.lineWidth = 2;
-
-    ctx.clearRect(0, 0, w, h);
-
-    ctx.beginPath();
-    for (var i = 0; i < w; i+= cellWidth) {
-        ctx.moveTo(i + 0.5, 0);
-        ctx.lineTo(i + 0.5, h);
-
-    }
-    for (var j = 0; j < h; j+= cellHeight) {
-        ctx.moveTo(0, j + 0.5);
-        ctx.lineTo(h, j + 0.5);
-
-    }
-    ctx.closePath();
-    ctx.strokeStyle = "#fff";
-    ctx.stroke();
-
-}
 
 function drawTiles() {
     var tiles = currentLevel.getTiles();
@@ -762,7 +779,6 @@ function drawBackgroundImage() {
 }
 
 function handleApiReady() {
-//    var googleMap;
     var mapOptions = {
       center: new google.maps.LatLng(47.5153, 19.0782),
         mapTypeId: google.maps.MapTypeId.SATELLITE,
@@ -773,33 +789,34 @@ function handleApiReady() {
     if (currentLevel.getMapOptions()['lat'] != undefined && currentLevel.getMapOptions()['long'] != undefined)
         mapOptions['center'] = new google.maps.LatLng(currentLevel.getMapOptions()['lat'], currentLevel.getMapOptions()['long']);
     if (currentLevel.getMapOptions()['zoom'] != undefined)
-        mapOptions['zoom'] = currentLevel.getMapOptions()['zoom'];
+        mapOptions['zoom'] = parseInt(currentLevel.getMapOptions()['zoom']);
+    if (currentLevel.getMapOptions()['tilt'] != undefined)
+        mapOptions['tilt'] = parseInt(currentLevel.getMapOptions()['tilt']);
 
     // Handle built-in zoom
     if (zoomLevel > 1)
         mapOptions['zoom'] = mapOptions['zoom'] + Math.log(zoomLevel) / Math.log(1.5);
 
     googleMap = new google.maps.Map($("#map_canvas")[0], mapOptions);
-    googleMap.setTilt(45);
-
+    if (currentLevel.getMapOptions()['tilt'] != undefined && currentLevel.getMapOptions()['tilt'] != 'no' )
+        googleMap.setTilt(45);
 }
 
 function drawMap() {
-    if (currentLevel.getMapURL() != undefined) {
-        $("#map_canvas").prepend('<img src="' + currentLevel.getMapURL() + '"/>').css('image-orientation: 135deg');
-    }
-    else if (currentLevel.getMapOptions() != undefined) {
-//    else {
+    if (currentLevel.getMapOptions() != undefined && currentLevel.getMapOptions()['lat'] != undefined && currentLevel.getMapOptions()['long'] != undefined) {
         var script = document.createElement("script");
         script.type = "text/javascript";
         script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=handleApiReady";
         document.body.appendChild(script);
     }
+    else if (currentLevel.getMapURL() != undefined) {
+        $("#map_canvas").prepend('<img src="' + currentLevel.getMapURL() + '"/>').css('image-orientation: 135deg');
+    }
 }
 
 
 
-function drawGoal() {
+function drawGoal() {   
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
@@ -849,8 +866,8 @@ function drawEntryPoints() {
 }
 
 function drawResources() {
-    for (var i = 0; i < currentLevel.getResources().length; i+= 1) {
-        drawResource(currentLevel.getResources()[i]);
+    for (var i = 0; i < currentLevel._resources.length; i+= 1) {
+        drawResource(currentLevel._resources[i]);
     }
 }
 
@@ -858,10 +875,10 @@ function drawResource(p) {
     var canvas = $('#c2')[0];
     var ctx = canvas.getContext('2d');
 
-    var x = p.getX() * cellWidth;
-    var y = p.getY() * cellHeight;
-    var s = p.getTotalYield() / p.getInitialTotalYield() * 100;
-    var c = p.getColor();
+    var x = p._x * cellWidth;
+    var y = p._y * cellHeight;
+    var s = p._totalYield / p._initialTotalYield * 100;
+    var c = p._color;
     var newColor = diluteColour(s, s, s, c);
     ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellHeight - 1);
     ctx.fillStyle = "#" + newColor;
@@ -872,7 +889,7 @@ function drawResource(p) {
 //    ctx.fillRect(x, y, cellWidth, cellHeight);
     // Fill smaller square
     ctx.fillRect(x + 4, y + 4, cellWidth - 8, cellHeight - 8);
-    switch (p.getUpgradeLevel()) {
+    switch (p._upgradeLevel) {
         case 1:
             break;
         case 2:
@@ -899,7 +916,7 @@ function drawResource(p) {
 
     // Draw resource-specific representation here
     var resImage = new Image();
-    resImage.src = "/images/" + p.getName() + ".gif";
+    resImage.src = "/images/" + p._resourceName + ".gif";
     ctx.drawImage(resImage, x + 4, y + 4, cellWidth - 8, cellHeight - 8);
 }
 
@@ -915,16 +932,29 @@ function clearCanvas(canvasID) {
 function clearAgents() {
     var canvas = $('#c4')[0];
     var ctx = canvas.getContext('2d');
-    var agents = currentLevel.getCurrentAgents();
+    var agents = currentLevel._currentAgents;
     if (globalCounter > 0) {
         for (var i = 0; i < agents.length; i += 1) {
             var agent = agents[i];
-            var wx = agent.getWanderX();
-            var wy = agent.getWanderY();
+            var wx = agent._wanderX;
+            var wy = agent._wanderY;
             var __ret = getDrawingPosition(agent, globalCounter - 1);
             var intX = __ret.intX * cellWidth + wx + 1;
             var intY = __ret.intY * cellHeight + wy + 1;
             ctx.clearRect(intX, intY, cellWidth + wx + 1, cellHeight + wy + 1);
+            if (agentTracing) {
+                var __ret = getDrawingPosition(agent, globalCounter - 1);
+                var intX = __ret.intX * cellWidth;
+                var intY = __ret.intY * cellHeight;
+                ctx.beginPath();
+                ctx.arc(intX + cellWidth / 2, intY + cellHeight * 1.2, 2, 0, Math.PI * 2, false);
+                ctx.closePath();
+                ctx.strokeStyle = "#000";
+                ctx.stroke();
+                ctx.fillStyle = "#000";
+                ctx.fill();
+            }
+
         }
     }
 }
@@ -954,10 +984,10 @@ function diluteColour(rStrength, gStrength, bStrength, colour) {
 }
 
 function getAgentDirection(agent) {
-    var lastX = agent.lastPosition().getX();
-    var lastY = agent.lastPosition().getY();
-    var x = agent.getPosition()[0];
-    var y = agent.getPosition()[1];
+    var lastX = agent._lastMemory._x;
+    var lastY = agent._lastMemory._y;
+    var x = agent._x;
+    var y = agent._y;
     if (lastX < x) {
         return 0;
     }
@@ -967,14 +997,14 @@ function getAgentDirection(agent) {
 }
 
 function getDrawingPosition(agent, count) {
-    var lastX = agent.lastPosition().getX();
-    var lastY = agent.lastPosition().getY();
-    var x = agent.getX();
-    var y = agent.getY();
-    var wx = agent.getWanderX();
-    var wy = agent.getWanderY();
-    var speed = agent.getSpeed();
-    var increment = (speed - (count - agent.getDelay()) % speed) / speed;
+    var lastX = agent._lastMemory._x;
+    var lastY = agent._lastMemory._y;
+    var x = agent._x;
+    var y = agent._y;
+    var wx = agent._wanderX;
+    var wy = agent._wanderY;
+    var speed = agent._speed;
+    var increment = (speed - (count - agent._delay) % speed) / speed;
 
 
     var offsetX = (x - lastX) * (increment);
@@ -983,7 +1013,7 @@ function getDrawingPosition(agent, count) {
     var intY = (y - offsetY);
 
 
-    if (currentLevel.getAllowOffscreenCycling()) {
+    if (currentLevel._allowOffscreenCycling) {
         var halfWay = (increment < 0.5);
         if (x == worldWidth - 1 && lastX == 0) {
             if (halfWay) {
@@ -1032,34 +1062,38 @@ function getDrawingPosition(agent, count) {
 function drawAgents() {
     var canvas = $('#c4')[0];
     var ctx = canvas.getContext('2d');
-    var agents = currentLevel.getCurrentAgents();
+    var agents = currentLevel._currentAgents;
     for (var i = 0; i < agents.length; i += 1) {
         var agent = agents[i];
 
         // Don't process agents we want to block
-        if (! rivalsVisible && agent.getType() == RIVAL_AGENT_TYPE)
+        if (! rivalsVisible && agent._type == RIVAL_AGENT_TYPE)
             continue;
-        if (! predatorsVisible && agent.getType() == PREDATOR_AGENT_TYPE)
+        if (! predatorsVisible && agent._type == PREDATOR_AGENT_TYPE)
             continue;
 
         // Get co-ordinates
-        var wx = agent.getWanderX();
-        var wy = agent.getWanderY();
+        var wx = agent._wanderX;
+        var wy = agent._wanderY;
         var __ret = getDrawingPosition(agent, globalCounter);
         var intX = __ret.intX * cellWidth + wx + cellWidth / 2;
         var intY = __ret.intY * cellHeight + wy + cellHeight / 4;
         var direction = getAgentDirection(agent);
 
 
-        var ecoH = agent.getEconomicHealth();
-        var envH = agent.getEnvironmentalHealth();
-        var socH = agent.getSocialHealth();
-        var c = agent.getColor().toString();
+        var ecoH = agent._economicHealth;
+        var envH = agent._environmentalHealth;
+        var socH = agent._socialHealth;
+        var c = agent._color.toString();
         var newColor = diluteColour(socH, envH, ecoH, c);
-        if (agent.getIsHit())
+        if (agent._isHit)
             newColor = "f00";
 
-        eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, globalCounter, direction);
+        try {
+            eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, globalCounter, direction);
+        } catch(e) {
+            eval(CITIZEN_AGENT_TYPE.getDrawFunction())(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, globalCounter, direction);
+        }
 
 
     }
@@ -1284,6 +1318,8 @@ function checkTiles(newX, newY) {
 /* Game logic methods */
 function processAgents() {
 
+    var recordableChangeMade = false;
+
     // Draw the scrolling layer
     drawScrollingLayer();
 
@@ -1334,6 +1370,7 @@ function processAgents() {
         if (agent.getType() == CITIZEN_AGENT_TYPE)
             citizenCount++;
         if (globalCounter >= agent.getDelay() && (globalCounter - agent.getDelay()) % speed == 0) {
+            recordableChangeMade = true;
             // TODO: move this logic elsewhere
             if (agent.getType() == CITIZEN_AGENT_TYPE) {
                 if (currentLevel.isExitPoint(agent.getX(), agent.getY())) {
@@ -1417,10 +1454,71 @@ function processAgents() {
     }
 
     // Post-move processing
-//    for (var i = 0; i < agents.length; i++) {
-//        var agent = agents[i];
-//        agent.evaluatePosition();
-//    }
+    if (recording)
+        recordWorld();
+
+}
+
+function recordWorld() {
+    if (currentLevel != undefined) {
+        console.log("Recording at: " + globalRecordingCounter);
+        try {
+            var level = new Level(currentLevel._id);
+            level.setCurrentAgents(currentLevel.getCurrentAgents());
+            level.setResources(currentLevel.getResources());
+            recordedLevels[globalRecordingCounter] = $.toJSON(level);
+            globalRecordingCounter++;
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+}
+
+function replayWorld() {
+    stopAgents();
+    existingCurrentLevel = currentLevel;
+    clearInterval(agentTimerId);
+    globalRecordingCounter = 0;
+    drawWorld();
+    inPlay = true;
+
+    setTimeout("replayStart()", 3000);
+}
+
+function replayStart() {
+    agentTimerId = setInterval("replayStep()", interval);
+
+}
+function replayStep() {
+    var level = recordedLevels[globalRecordingCounter];
+    console.log("Replaying at: " + globalRecordingCounter);
+    console.log("Level: " + level);
+    if (level == undefined) {
+        replayStop();
+    }
+    else {
+        try {
+            clearAgents();
+            currentLevel = $.evalJSON(level);
+            globalRecordingCounter++;
+            drawResources();
+            drawScrollingLayer();
+//            drawScoreboard();
+            drawAgents();
+
+        }
+        catch(err) {
+            console.log(err);
+        }
+    }
+}
+
+function replayStop() {
+    agentTimerId = clearInterval(agentTimerId);
+    globalRecordingCounter = 0;
+    currentLevel = existingCurrentLevel;
+    inPlay = false;
 }
 
 
@@ -1564,6 +1662,7 @@ function newLevel() {
     currentLevelNumber++;
     previousLevelScore = score;
     currentLevel.setResources(new Array());
+    recordedLevels = new Array();
     redrawWorld();
 
     levelInfo(currentLevel.getNotice());
@@ -1598,6 +1697,7 @@ function newGame() {
     storeCurrentLevelData();
     var radius = (pieceWidth / 4);
     var bodyLength = (pieceWidth / 2);
+    recordedLevels = new Array();
     restartLevel();
 
 }
@@ -1608,6 +1708,8 @@ function restartLevel() {
     setAndStoreProperty('godMode');
     setAndStoreProperty('invisiblePath');
     setAndStoreProperty('agentsCanCommunicate');
+    setAndStoreProperty('agentTracing');
+    setAndStoreProperty('recording');
     setAndStoreProperty('rivalsVisible');
     setAndStoreProperty('predatorsVisible');
     setAndStoreProperty('tilesMutable');
@@ -1626,6 +1728,7 @@ function restartLevel() {
 //    levelOfDifficulty = checkInteger(diffSelect[diffSelect.selectedIndex].value);
     score = previousLevelScore;
     currentLevel.setResources(new Array());
+    recordedLevels = new Array();
     redrawWorld();
 }
 
@@ -1663,13 +1766,12 @@ function drawWorld() {
     clearCanvas('c4');
 
     // Draw basic elements
-    if (currentLevel.getMapOptions() != undefined || (currentLevel.getMapURL() != undefined && $.trim(currentLevel.getMapURL()).length > 0)) {
+    if ((currentLevel.getMapOptions() != undefined  && currentLevel.getMapOptions()['lat'] != undefined && currentLevel.getMapOptions()['long'] != undefined)
+            || (currentLevel.getMapURL() != undefined && $.trim(currentLevel.getMapURL()).length > 0)) {
         drawMap();
-        //drawGrid();
         drawPath();
     }
     else {
-        //drawGrid();
         drawTiles();
         drawBackgroundImage();
         drawPath();
@@ -2044,6 +2146,10 @@ function showResourceGallery() {
     $resourceGallery.dialog('open');
 }
 
+function showSettings() {
+    $settingsDialog.dialog('open');
+}
+
 function refreshSwatch() {
     for (var i = 0; i < capabilities.length; i++) {
         var capability = $.trim(capabilities[i]);
@@ -2061,7 +2167,10 @@ function saveCapabilities() {
     if (PROFILE_ID != undefined) {
         updateStats(function(data) {});
     }
+}
 
+function saveSettings() {
+    restartLevel();
 }
 /* End Dialog functions */
 

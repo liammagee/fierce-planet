@@ -10,6 +10,7 @@
 
 var currentX;
 var currentY;
+var nowEditingProperties = false;
 
 var $designFeatures;
 var $editProperties;
@@ -38,6 +39,11 @@ $(document).ready(function() {
             modal: true,
 			title: 'Edit level properties',
             buttons: {
+                "Save Level": function() {
+                    $(".edit_level_properties").submit();
+                    redrawBaseCanvas();
+                    $( this ).dialog( "close" );
+                },
                 "Cancel": function() {
                     $( this ).dialog( "close" );
                 }
@@ -134,17 +140,6 @@ function handleEditorMouseUp(e) {
     var foundTile = false;
     var currentTile;
     currentTile = currentLevel.getTile(currentX, currentY);
-    /*
-    var tiles = currentLevel.getTiles();
-    for (var i = 0; i < tiles.length; i++) {
-        var tile = tiles[i];
-
-        if (tile != undefined && tile._x == currentX && tile._y == currentY) {
-            currentTile = tile;
-            break;
-        }
-    }
-    */
     if (currentTile == undefined && !mouseMoving) {
         showDesignFeaturesDialog(e);
     }
@@ -165,8 +160,6 @@ function cancelLevelEditor() {
     canvas.removeEventListener('mousedown', handleEditorMouseDown, false);
     canvas.removeEventListener('mousemove', handleEditorMouseMove, false);
     canvas.removeEventListener('mouseup', handleEditorMouseUp, false);
-//    setupResourceInteraction();
-//    currentLevelNumber = 1;
     $('#level-editor').hide();
     $('#swatch').show();
     restartLevel();

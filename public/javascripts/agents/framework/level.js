@@ -26,6 +26,7 @@ function Level(id) {
     this._levelAgents = new Array();
     this._waveAgents = new Array();
     this._currentAgents = new Array();
+    this._currentAgentsMap = new Array();
     this._cells = new Array();
     this._resources = new Array();
 }
@@ -168,7 +169,13 @@ Level.prototype.getWaveAgents = function() { return this._waveAgents; };
 Level.prototype.setWaveAgents = function(waveAgents) { this._waveAgents = waveAgents; };
 Level.prototype.addWaveAgent = function(agent) { this._waveAgents.push(agent); };
 Level.prototype.getCurrentAgents = function() { return this._currentAgents; };
-Level.prototype.setCurrentAgents = function(currentAgents) { this._currentAgents = currentAgents; };
+Level.prototype.setCurrentAgents = function(currentAgents) {
+    this._currentAgents = currentAgents;
+    for (var agent in this._currentAgents) {
+        this._currentAgentsMap[agent._id] = agent;
+    }
+};
+Level.prototype.getAgentByID = function(agentID) { return this._currentAgentsMap[agentID]; };
 Level.prototype.getResources = function() { return this._resources; };
 Level.prototype.setResources = function(resources) { this._resources = resources; };
 Level.prototype.getCells = function() { return this._cells; };
@@ -188,7 +195,7 @@ Level.prototype.generateWaveAgents = function(numAgents) {
     for (var j = 0; j < numAgents; j++) {
         for (var i = 0; i < this._waveAgents.length; i++) {
             var waveAgent = this._waveAgents[i];
-            newAgents.push(new Agent(this, waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
+            newAgents.push(new Agent(waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
         }
     }
     return newAgents;

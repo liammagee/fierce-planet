@@ -109,6 +109,11 @@
         <%= link_to "Level Editor", levels_path, :method => :get, :remote => true %>
       </td>
     </tr>
+    <tr>
+      <td>
+        <a href="#" id="settings">Settings</a>
+      </td>
+    </tr>
   </table>
 
 
@@ -118,34 +123,10 @@
       <h3>Dev functions:</h3>
     <button id="debug">Debug</button>
        <br/>
-      God mode: <input id="godModeInput" name="godModeInput" type="checkbox"/>
+    <button id="replay">Replay</button>
        <br/>
-      Invisible path: <input id="invisiblePathInput" name="invisiblePathInput" type="checkbox"/>
-       <br/>
-      Agents can communicate: <input id="agentsCanCommunicateInput" name="agentsCanCommunicateInput" type="checkbox"/>
-      <br/>
-      Rivals: <input id="rivalsVisibleInput" name="rivalsVisibleInput" type="checkbox" checked="checked"/>
-      <br/>
-      Predators: <input id="predatorsVisibleInput" name="predatorsVisibleInput" type="checkbox"/>
-      <br/>
-      Change tiles: <input id="tilesMutableInput" name="tilesMutableInput" type="checkbox"/>
-      <br/>
-      Sounds: <input id="soundsPlayable" name="soundsPlayable" type="checkbox"/>
-      <br/>
-      Background icons: <input id="backgroundIconsVisibleInput" name="backgroundIconsVisibleInput" type="checkbox"/>
-      <br/>
+    <button id="editor">Script Editor</button>
 
-    <!--Resource handling-->
-      Resource weakening: <input id="resourcesInTensionInput" name="resourcesInTensionInput" type="checkbox"/>
-      <br/>
-    Ignore resource balance: <input id="ignoreResourceBalanceInput" name="ignoreResourceBalanceInput" type="checkbox"/>
-    <br/>
-      Resource bonus: <input id="resourceBonusInput" name="resourceBonusInput" type="checkbox"/>
-      <br/>
-      Use general health: <input id="applyGeneralHealthInput" name="applyGeneralHealthInput" type="checkbox"/>
-      <br/>
-      (then click 'New game', and 'Start')
-      <br/>
   </div>
   <br/>
 </div>

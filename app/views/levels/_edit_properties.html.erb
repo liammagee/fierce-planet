@@ -1,0 +1,81 @@
+<h1>Editing level</h1>
+
+<%= form_for @level, :remote => true, :html => { :class => "edit_level_properties", :id => "edit_level_properties_" + @level.id.to_s } do |f| %>
+    <% if @level.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@level.errors.count, "error") %> prohibited this level from being saved:</h2>
+
+          <ul>
+            <% @level.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :name %>
+      <br/>
+      <%= f.text_field :name %>
+    </div>
+    <% unless @level.id %>
+    <div class="field">
+      <%= f.label :world_width %>
+      <br/>
+      <%= f.select :world_width, 8.upto(80) %>
+    </div>
+    <div class="field">
+      <%= f.label :world_height %>
+      <br/>
+      <%= f.select :world_height, 6.upto(60) %>
+    </div>
+    <% end %>
+    <div class="field">
+      <%= f.label :initial_agent_number %>
+      <br/>
+      <%= f.select :initial_agent_number, 1.upto(20) %>
+    </div>
+    <div class="field">
+      <%= f.label :wave_number %>
+      <br/>
+      <%= f.select :wave_number, 1.upto(20) %>
+    </div>
+    <div class="field">
+      <%= f.label :expiry_limit %>
+      <br/>
+      <%= f.select :expiry_limit, 1.upto(20) %>
+    </div>
+    <div class="field">
+      <%= f.check_box :allow_offscreen_cycling %> <%= f.label :allow_offscreen_cycling %>
+    </div>
+    <div class="field">
+      <%= f.check_box :allow_patches_on_path %> <%= f.label :allow_patches_on_path %>
+    </div>
+    <div class="field">
+      <%= f.label :notice %>
+      <br/>
+      <%= f.text_area :notice, :rows => 5 %>
+    </div>
+    <p>
+      Note: you can include a Google Map as the background image.
+      See the <a href="http://code.google.com/apis/maps/documentation/staticmaps/"> Google Maps documentation</a> for more information.
+    </p>
+    <div>Google Map Fields</div>
+    <div class="field">
+      <%= f.label :google_map_lat, "Latitude" %>
+      <%= f.text_field :google_map_lat, { :size => 10 } %>
+    </div>
+    <div class="field">
+      <%= f.label :google_map_long, "Longitude" %>
+      <%= f.text_field :google_map_long, { :size => 10 } %>
+    </div>
+    <div class="field">
+      <%= f.label :google_map_tilt, "Tilt" %>
+      <%= f.text_field :google_map_tilt, { :size => 10 } %>
+    </div>
+    <div class="field">
+      <%= f.label :google_map_zoom, "Zoom" %>
+      <%= f.text_field :google_map_zoom, { :size => 10 } %>
+    </div>
+
+<% end %>

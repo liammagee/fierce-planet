@@ -1,10 +1,23 @@
-/**
- $('body').html("<h1><%= @level.id %></h1>").append("<%= @level.world_width %>");
- */
+
+
+// Close the level selection dialog
 $levelList.dialog('close');
+
+// Add a notification
 $('#notifications').html("<p><%= @level.name %> successfully saved.</p>");
+
+// Instantiate the current level from the database
 <%=  render('levels/setup_level', :locals => { :level => @level}) %>
+
+// Add a hidden form for serialising changes to the level
 $('#level-editor-form').html("<%=  escape_javascript(render('levels/inline_form', :locals => { :level => @level})) %>");
-$editProperties.html("<%=  escape_javascript(render('levels/edit', :locals => { :level => @level})) %>");
-currentLevelNumber = parseInt("<%= @level.id + 10 %>");
+
+// Set up the level properties dialog
+$editProperties.html("<%=  escape_javascript(render('levels/edit_properties', :locals => { :level => @level})) %>");
+
+// Set the current level number and preset value
+currentLevelNumber = parseInt("<%= @level.id %>");
+currentLevelPreset = false;
+
+// Finally, construct the level editor
 setupLevelEditor();

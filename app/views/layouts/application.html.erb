@@ -10,7 +10,8 @@
   <%= javascript_include_tag "jquery-ui.min.js" %>
   <%= javascript_include_tag "jquery.json-2.2.min.js" %>
   <%= javascript_include_tag "jquery.mousewheel.3.0.2/jquery.mousewheel.min.js" %>
-  <!--<%= javascript_include_tag "jquery.zoomEvent.js" %>-->
+  <%= javascript_include_tag "jquery.zoom.js" %>
+
 
   <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? -%>
   <%= javascript_tag "var PROFILE_ID;" -%>
@@ -50,6 +51,9 @@
 //    });
 
   </script>
+  <% if params[:test] %>
+    <%= raw include_qunit %>
+  <% end%>
 
 </head>
 <body>
