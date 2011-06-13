@@ -77,7 +77,7 @@ class LevelsController < ApplicationController
       if @level.save
         format.html { redirect_to(@level, :notice => 'Level was successfully created.') }
         format.xml  { render :xml => @level, :status => :created, :location => @level }
-        format.js 
+        format.js   
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @level.errors, :status => :unprocessable_entity }

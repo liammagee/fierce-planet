@@ -1067,9 +1067,9 @@ function drawAgents() {
         var agent = agents[i];
 
         // Don't process agents we want to block
-        if (! rivalsVisible && agent._type == RIVAL_AGENT_TYPE)
+        if (! rivalsVisible && agent._agentType == RIVAL_AGENT_TYPE)
             continue;
-        if (! predatorsVisible && agent._type == PREDATOR_AGENT_TYPE)
+        if (! predatorsVisible && agent._agentType == PREDATOR_AGENT_TYPE)
             continue;
 
         // Get co-ordinates
@@ -1737,7 +1737,6 @@ function setAndStoreProperty(property) {
         var propertyInputValue = $("#" + property + "Input")[0].checked;
         this[property] = propertyInputValue;
         localStorage[property] = propertyInputValue;
-        console.log($("#" + property + "Input"));
     }
 }
 

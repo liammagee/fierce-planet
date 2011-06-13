@@ -11,12 +11,22 @@
   <% @levels.each do |level| %>
       <tr>
         <td><%= level.name %></td>
-        <td><%= link_to image_tag("/images/32/edit-4.png", :alt => "Edit"), edit_level_path(level), :remote => true %></td>
-        <td><%= link_to image_tag("/images/32/edit-delete-5.png", :alt =>  "Delete"), level, :confirm => 'Are you sure?', :method => :delete, :remote => true %></td>
+        <td>
+          <% link_to edit_level_path(level), :remote => true do %>
+            <%= image_tag("/images/32/edit-4.png", :alt => "Edit Level") %> Edit
+            <% end %>
+        </td>
+        <td>
+          <% link_to level, :confirm => 'Are you sure?', :method => :delete, :remote => true do  %>
+              <%= image_tag("/images/32/edit-delete-5.png", :alt =>  "Delete Level") %> Delete
+          <% end %>
+        </td>
       </tr>
   <% end %>
 </table>
 
 <br/>
 
-<%= link_to image_tag("/images/32/project-development-new-template.png", :alt => "New"), new_level_path, :remote => true %>
+<% link_to new_level_path, :remote => true do %>
+    <%= image_tag("/images/32/project-development-new-template.png", :alt => "New Level") %> New Level
+<% end %>

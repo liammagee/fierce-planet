@@ -1,22 +1,23 @@
 $('#notifications').html("<p>Creating a new level...</p>");
 $levelList.dialog('close');
-$levelList = $('<div></div>')
-        .html("<%=  escape_javascript(render('levels/new', :locals => { :level => @level})) %>")
+$(".edit_level_properties").remove();
+$editProperties = $('<div></div>')
+        .html("<%=  escape_javascript(render('levels/edit_properties', :locals => { :level => @level})) %>")
         .dialog({
                     autoOpen: false,
                     modal: true,
                     title: 'Level Setup',
                     width: 600,
                     buttons: {
-                        /*
-                        "Save": function() {
-                            $('#new_level')[0].submit();
-                            //$( this ).dialog( "close" );
-                        },*/
+                        "Save Level": function() {
+                            $(".edit_level_properties").submit();
+                            redrawBaseCanvas();
+                            $( this ).dialog( "close" );
+                        },
                         "Cancel": function() {
                             $(this).dialog("close");
                         }
                     }
 
                 });
-$levelList.dialog('open');
+$editProperties.dialog('open');
