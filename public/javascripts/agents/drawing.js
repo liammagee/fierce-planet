@@ -2,7 +2,7 @@
  * Functions for drawing aspects of the game
  */
 
-function drawWorld() {
+function drawGame() {
     // Clear canvases
     $('#map_canvas').empty();
     clearCanvas('c1');
@@ -424,27 +424,29 @@ function drawAgents() {
 }
 
 function drawScrollingLayer() {
-    clearCanvas('c3');
-    var canvas = $('#c3')[0];
-    var ctx = canvas.getContext('2d');
+    if (scrollingImageVisible) {
+        clearCanvas('c3');
+        var canvas = $('#c3')[0];
+        var ctx = canvas.getContext('2d');
 
-    if ((scrollingImageX + scrollingImageOffset) < (500 - scrollingImageOffset)){
-        scrollingImageX += scrollingImageOffset;
-    }
-    else {
-        scrollingImageX = 1;
-    }
-    // Need exception handling for Safari
-    try {
-//        ctx.drawImage(scrollingImage, scrollingImageX, 1, 800, 600, 0, 0, 800, 600);
-    }
-    catch(err) {
+        if ((scrollingImageX + scrollingImageOffset) < (400 - scrollingImageOffset)){
+            scrollingImageX += scrollingImageOffset;
+        }
+        else {
+            scrollingImageX = 1;
+        }
+        // Need exception handling for Safari
+        try {
+            ctx.drawImage(scrollingImage, scrollingImageX, 1, 800, 600, 0, 0, 800, 600);
+        }
+        catch(err) {
+        }
     }
 }
 
 function drawLevel() {
     var e = $('#level-display')[0];
-    e.innerHTML = currentLevelNumber.toString();
+    e.innerHTML = currentLevel.getId();
 }
 
 function drawProfileClass() {
@@ -542,7 +544,7 @@ function pan(direction) {
             panTopOffset = 0;
             break;
     }
-    drawWorld();
+    drawGame();
 }
 
 
@@ -592,6 +594,6 @@ function zoom(direction) {
             }
             break;
     }
-    drawWorld();
+    drawGame();
 }
 /* End Pan and Zoom functions */

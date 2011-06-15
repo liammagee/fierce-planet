@@ -234,7 +234,7 @@ Level.prototype.clearTiles = function(start, number) {
         }
     }
 };
-Level.prototype.presetAgents = function(agentType, number) {
+Level.prototype.presetAgents = function(agentType, number, canCommunicateWithOtherAgents) {
     var agents = new Array();
     for (var j = 0; j < this._entryPoints.length; j++) {
         var point = this._entryPoints[j];
@@ -247,6 +247,7 @@ Level.prototype.presetAgents = function(agentType, number) {
             agent.setColor(colorScheme);
             var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
             agent.setDelay(delay);
+            agent.setCanCommunicateWithOtherAgents(canCommunicateWithOtherAgents);
             agents.push(agent);
         }
     }
@@ -254,8 +255,5 @@ Level.prototype.presetAgents = function(agentType, number) {
     $.merge(agents, this.getLevelAgents());
 
     this.setCurrentAgents(agents);
-};
-Level.prototype.preSetup = function() {
-    this.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, this._initialAgentNumber);
 };
 Level.prototype.setup = function() {};

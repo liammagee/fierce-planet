@@ -20,7 +20,7 @@ function loadGame() {
     hookUpUIEventListeners();
 
     // Draw the game
-    redrawWorld();
+    _initialiseGame();
 }
 
 
@@ -28,18 +28,11 @@ function loadGame() {
  * Called when a new game is commenced
  */
 function newGame() {
-    inDesignMode = false;
     if (currentLevelPreset)
         currentLevelNumber = 1;
     score = 0;
     previousLevelScore = 0;
-    storeCurrentLevelData();
-    var radius = (pieceWidth / 4);
-    var bodyLength = (pieceWidth / 2);
-    recordedLevels = new Array();
-
-
-    restartLevel();
+    newLevel();
 }
 
 
@@ -47,18 +40,30 @@ function newGame() {
  * Called when a new level is begun
  */
 function newLevel() {
+    inDesignMode = false;
+    levelDelayCounter = 0;
     maxLevelMoves = 0;
-    currentLevelNumber++;
     previousLevelScore = score;
-    currentLevel.setResources(new Array());
+    if (currentLevel != undefined)
+        currentLevel.setResources(new Array());
     recordedLevels = new Array();
-    redrawWorld();
 
     levelInfo(currentLevel.getNotice());
-    console.log("Starting level " + currentLevelNumber + " ...");
-    notify("Starting level " + currentLevelNumber + "...");
+    notify("Starting level " + currentLevel.getId() + "...");
 
-    startAgents();
+    _initialiseGame();
+
+    newWave();
+}
+
+
+/** Called when a game is restarted */
+function restartLevel() {
+    // Reset the score
+    score = previousLevelScore;
+
+    // Start a new level
+    newLevel();
 }
 
 
@@ -68,17 +73,23 @@ function newLevel() {
 function newWave() {
     maxWaveMoves = 0;
     globalCounter = 0;
+    waveDelayCounter = 0;
     savedAgentThisWaveCount = 0;
-    waves ++;
 
-    currentLevel.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, ++numAgents);
-    var agents = currentLevel.getCurrentAgents();
-    for (var i = 0; i < agents.length; i++) {
-        var agent = agents[i];
-        agent.setCanCommunicateWithOtherAgents(agentsCanCommunicate);
-    }
+    currentLevel.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, numAgents, agentsCanCommunicate);
 
     notify("New wave coming...");
+    _startAgents();
+}
+
+
+/**
+ * Called when a level is completed
+ */
+function completeWave() {
+    _finaliseGame();
+    waves++;
+    numAgents++;
 }
 
 
@@ -86,9 +97,9 @@ function newWave() {
  * Called when a level is completed
  */
 function completeLevel() {
-    stopAgents();
-    storeData();
-    drawScoreboard();
+    _finaliseGame();
+    if (currentLevel.isPresetLevel())
+        currentLevelNumber++;
     showCompleteLevelDialog();
 }
 
@@ -97,9 +108,8 @@ function completeLevel() {
  * Called when the game is over
  */
 function gameOver() {
-    stopAgents();
-    storeData();
-    drawScoreboard();
+    score = previousLevelScore;
+    _finaliseGame();
     showGameOverDialog();
 }
 
@@ -108,40 +118,68 @@ function gameOver() {
  * Called when a game is completed
  */
 function completeGame() {
-    stopAgents();
-    storeData();
-    drawScoreboard();
+    _finaliseGame();
     showCompleteGameDialog();
 }
 
 
-
-function restartLevel() {
-    inDesignMode = false;
-    score = previousLevelScore;
-    currentLevel.setResources(new Array());
-    recordedLevels = new Array();
-    redrawWorld();
+/**
+ * Plays the current game
+ */
+function playGame() {
+    if (inPlay)
+        return;
+    if (globalCounter == 0)
+        newWave();
+    else
+        _startAgents();
 }
 
-function redrawWorld() {
+
+/**
+ * Pauses the current game
+ */
+function pauseGame() {
+    if (!inPlay)
+        return;
+    _stopAgents();
+}
+
+
+/**
+ * Slows down the rate of processing agents
+ */
+function slowDown() {
+    if (interval < 10)
+        interval += 1;
+    else if (interval < 100)
+        interval += 10;
+    if (inPlay)
+        _startAgents();
+}
+
+
+/**
+ * Speeds up the rate of processing agents
+ */
+function speedUp() {
+    if (interval > 10)
+        interval -= 10;
+    else if (interval > 1)
+        interval -= 1;
+    if (inPlay)
+        _startAgents();
+}
+
+
+/**
+ * Initialises level data
+ */
+function _initialiseGame() {
+    console.log("Initialising world...");
 
     // Stop any existing timers
-    stopAgents();
-
-
-    // Initialise the world
-    initWorld();
-
-    // Reset existing resources
-    ResourceUI.resetResourceYields();
-
-
-    drawWorld();
-}
-
-function initWorld() {
-    console.log("Initialising world...");
+    _stopAgents();
 
     if (currentLevelNumber < 1 || currentLevelNumber > 10)
         currentLevelNumber = 1;
@@ -189,13 +227,57 @@ function initWorld() {
     scrollingImage.src = "/images/yellow-rain.png";
 
     // Set up level
-    currentLevel.preSetup();
     currentLevel.setup();
 
-    // Determine whether agents can communicate
-    var agents = currentLevel.getCurrentAgents();
-    for (var i = 0; i < agents.length; i++) {
-        var agent = agents[i];
-        agent.setCanCommunicateWithOtherAgents(agentsCanCommunicate);
+    // Draw the game
+    drawGame();
+}
+
+
+/**
+ * Finalises game
+ */
+function _finaliseGame() {
+    _stopAgents();
+    storeData();
+    drawScoreboard();
+}
+
+
+/**
+ * Starts the processing of agents
+ */
+function _startAgents() {
+    console.log("Starting agents...");
+
+    clearInterval(agentTimerId);
+    agentTimerId = setInterval("processAgents()", interval);
+    inPlay = true;
+
+
+    // Play sound, if any are set
+    if (audio != undefined)
+        audio.pause();
+    if (currentLevel.getSoundSrc() != undefined) {
+//        var audio = $("background-sound")[0];
+//        audio.src = currentLevel.getSoundSrc();
+
+        audio = new Audio(currentLevel.getSoundSrc());
+        audio.loop = true;
+        audio.addEventListener("ended", function(){audio.currentTime = 0; audio.play();}, false);
+        audio.play();
     }
+}
+
+/**
+ * Stops the processing of agents
+ */
+function _stopAgents() {
+    console.log("Pausing agents...");
+
+    clearInterval(agentTimerId);
+    inPlay = false;
+
+    if (audio != undefined)
+        audio.pause();
 }

@@ -6,7 +6,6 @@
 var $gameOver;
 var $completeLevel;
 var $completeGame;
-var $levelSetup;
 var $levelList;
 var $upgradeDelete;
 var $resourceGallery;
@@ -76,22 +75,6 @@ function setupDialogs() {
 
         });
 
-    $levelSetup = $('<div></div>')
-        .html('Level Setup')
-        .dialog({
-            autoOpen: false,
-            modal: true,
-            title: 'Level Setup',
-            buttons: {
-                "OK": function() {
-                    redrawWorld();
-                    $( this ).dialog( "close" );
-                }
-            }
-
-        });
-
-
     /* Upgrade / delete dialog */
     $upgradeDelete = $('#delete-upgrade-dialog')
         .dialog({
@@ -130,7 +113,7 @@ function setupDialogs() {
             title: 'Settings',
             buttons: {
                 "OK": function() {
-                    saveSettings();
+                    setAndStoreProperties();
                     $( this ).dialog( "close" );
                 }
             }
@@ -164,7 +147,7 @@ function setupDialogs() {
             buttons: {
                 "Save Level": function() {
                     $(".edit_level_properties").submit();
-                    redrawWorld();
+                    drawGame();
                     $( this ).dialog( "close" );
                 },
                 "Cancel": function() {
@@ -241,7 +224,7 @@ function showCompleteLevelDialog() {
 function openCompleteLevelDialog() {
     $completeLevel
             .html(
-                "<p>Congratulations! You have completed level " + currentLevelNumber + ". </p>" +
+                "<p>Congratulations! You have completed level " + currentLevel.getId() + ". </p>" +
                  generateStats() +
                 "<p>Click 'OK' to start the next level.</p>")
             .dialog('open');
@@ -264,7 +247,7 @@ function showUpgradeDeleteDialog(e) {
     if (tilesMutable) {
         if (currentTile == undefined) {
             currentLevel.addTile(new Tile(DEFAULT_TILE_COLOR, posX, posY));
-            drawWorld();
+            drawGame();
         }
         else if (!foundResource && currentResourceId != null) {
             dropItem(e);
@@ -272,7 +255,7 @@ function showUpgradeDeleteDialog(e) {
         else {
             var __ret = getCurrentPosition(e);
             currentLevel.removeTile(__ret.posX, __ret.posY);
-            drawWorld();
+            drawGame();
         }
     }
     else if (!foundResource && currentResourceId != null) {

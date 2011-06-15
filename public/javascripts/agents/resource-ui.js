@@ -21,43 +21,41 @@ var ResourceUI = {
           }, false);
         }
 
-        var world = $('#c4')[0];
+        var resourceCanvas = $('#c4')[0];
 
 
-        world.addEventListener('click', function (e) {
+        resourceCanvas.addEventListener('click', function (e) {
             if (e.preventDefault) e.preventDefault(); // allows us to drop
             if (! inDesignMode)
                 showUpgradeDeleteDialog(e);
             return false;
           }, false);
 
-        world.addEventListener('dragstart', function (e) {
+        resourceCanvas.addEventListener('dragstart', function (e) {
             if (e.preventDefault) e.preventDefault(); // allows us to drop
             this.className = 'over';
             e.dataTransfer.dropEffect = 'copy';
             return false;
           }, false);
-        world.addEventListener('dragover', function (e) {
+        resourceCanvas.addEventListener('dragover', function (e) {
             if (e.preventDefault) e.preventDefault(); // allows us to drop
             this.className = 'over';
             e.dataTransfer.dropEffect = 'copy';
             return false;
           }, false);
-        world.addEventListener('dragenter', function (e) {
+        resourceCanvas.addEventListener('dragenter', function (e) {
             this.className = 'over';
             return false;
           }, false);
-        world.addEventListener('dragleave', function (e) {
+        resourceCanvas.addEventListener('dragleave', function (e) {
             this.className = '';
           }, false);
-        world.addEventListener('drop', function (e) {
+        resourceCanvas.addEventListener('drop', function (e) {
             if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting...why???
             this.className = '';
             ResourceUI.dropItem(e);
           }, false);
     },
-
-
 
     // Delete the current resource
     deleteCurrentResource: function () {

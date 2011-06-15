@@ -59,6 +59,7 @@ var mouseMoving = false;
 // Setting variables
 var godMode = false;
 var invisiblePath = false;
+var scrollingImageVisible = false;
 var agentsCanCommunicate = true;
 var agentTracing = false;
 var recording = false;

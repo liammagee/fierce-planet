@@ -7,8 +7,8 @@
  */
 function hookUpUIEventListeners() {
     // Control panel functions
-    $('#startAgents').click(startAgents);
-    $('#stopAgents').click(stopAgents);
+    $('#playAgents').click(playGame);
+    $('#pauseAgents').click(pauseGame);
    $('#slowDown').click(slowDown);
    $('#speedUp').click(speedUp);
     $('#newGame').click(newGame);
@@ -26,8 +26,8 @@ function hookUpUIEventListeners() {
     $('#zoomReset').click(function() { zoom(0);});
     $('#settings').click(showSettings);
 
-    addButtonEffects($('#startAgents')[0]);
-    addButtonEffects($('#stopAgents')[0]);
+    addButtonEffects($('#playAgents')[0]);
+    addButtonEffects($('#pauseAgents')[0]);
     addButtonEffects($('#slowDown')[0]);
     addButtonEffects($('#speedUp')[0]);
     addButtonEffects($('#newGame')[0]);
@@ -63,20 +63,7 @@ function hookUpUIEventListeners() {
     }
 
     // Set admin functions to previously stored defaults
-    getAndRetrieveProperty('godMode');
-    getAndRetrieveProperty('invisiblePath');
-    getAndRetrieveProperty('agentsCanCommunicate');
-    getAndRetrieveProperty('agentTracing');
-    getAndRetrieveProperty('recording');
-    getAndRetrieveProperty('rivalsVisible');
-    getAndRetrieveProperty('predatorsVisible');
-    getAndRetrieveProperty('tilesMutable');
-    getAndRetrieveProperty('soundsPlayable');
-    getAndRetrieveProperty('backgroundIconsVisible');
-    getAndRetrieveProperty('resourcesInTension');
-    getAndRetrieveProperty('resourceBonus');
-    getAndRetrieveProperty('applyGeneralHealth');
-    getAndRetrieveProperty('ignoreResourceBalance');
+    getAndRetrieveProperties();
 
     $('#c4').mousewheel(function(event, delta) {
         zoom(delta);
@@ -152,3 +139,17 @@ function levelInfo(notice) {
     $("#level-info")[0].innerHTML = notice;
 }
 
+
+/**
+ * Refresh the swatch area with latest capabilities
+ */
+function refreshSwatch() {
+    for (var i = 0; i < capabilities.length; i++) {
+        var capability = $.trim(capabilities[i]);
+        try {
+            $('#' + capability)[0].style.display = 'block';
+        }
+        catch (err) {
+        }
+    }
+}

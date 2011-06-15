@@ -33,15 +33,6 @@ function storeData() {
         localStorage.highestLevel = currentLevelNumber;
 }
 
-function storeCurrentLevelData() {
-    localStorage.currentScore = previousLevelScore;
-    if (currentLevelNumber > 0 && currentLevelNumber <= MAX_DEFAULT_LEVELS)
-        localStorage.currentLevelNumber = currentLevelNumber;
-    localStorage.totalSaved = totalSaved;
-    localStorage.profileClass = profileClass;
-    localStorage.credits = credits;
-    localStorage.capabilities = capabilities;
-}
 
 
 /* Stats functions  */

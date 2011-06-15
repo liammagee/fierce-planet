@@ -20,33 +20,33 @@ function showDesignFeaturesDialog(e) {
         var tile = new Tile(DEFAULT_TILE_COLOR, currentX, currentY);
         currentLevel.addTile(tile);
         $designFeatures.dialog('close');
-        drawWorld();
+        drawGame();
     });
 
     $("#addExitPoint").click(function(e) {
         currentLevel.addExitPoint(currentX, currentY);
         $designFeatures.dialog('close');
-        drawWorld();
+        drawGame();
     });
 
     $("#addEntryPoint").click(function(e) {
         currentLevel.removeEntryPoint(0, 0);
         currentLevel.addEntryPoint(currentX, currentY);
         $designFeatures.dialog('close');
-        drawWorld();
+        drawGame();
     });
 
 
     $("#removeEntryPoint").click(function(e) {
         currentLevel.removeEntryPoint(currentX, currentY);
         $designFeatures.dialog('close');
-        drawWorld();
+        drawGame();
     });
 
     $("#removeExitPoint").click(function(e) {
         currentLevel.removeExitPoint(currentX, currentY);
         $designFeatures.dialog('close');
-        drawWorld();
+        drawGame();
     });
 
 
@@ -65,9 +65,9 @@ function setupLevelEditor() {
     canvas.mousemove(handleEditorMouseMove);
     canvas.mouseup(handleEditorMouseUp);
 
-    redrawWorld();
-
     inDesignMode = true;
+
+    drawGame();
 }
 
 function handleEditorMouseDown(e) {
@@ -81,7 +81,7 @@ function handleEditorMouseMove(e) {
         mouseMoving = true;
         var __ret = getCurrentPosition(e);
         currentLevel.removeTile(__ret.posX, __ret.posY);
-        drawWorld();
+        drawGame();
     }
     return false;
 }
@@ -97,7 +97,7 @@ function handleEditorMouseUp(e) {
     }
     else {
         currentLevel.removeTile(currentX, currentY);
-        drawWorld();
+        drawGame();
     }
 
     mouseDown = false;
@@ -114,12 +114,11 @@ function cancelLevelEditor() {
     canvas.unbind('mouseup', handleEditorMouseUp);
     $('#level-editor').hide();
     $('#swatch').show();
-    restartLevel();
 }
 
 function undoAction() {
     currentLevel.setTiles(oldTiles);
-    drawWorld();
+    drawGame();
 }
 
 
@@ -130,17 +129,17 @@ function showLevelProperties() {
 function refreshTiles() {
     currentLevel.fillWithTiles();
     currentLevel.addEntryPoint(0, 0);
-    drawWorld();
+    drawGame();
 }
 
 function clearEntryPoints() {
     currentLevel.resetEntryPoints();
-    drawWorld();
+    drawGame();
 }
 
 function clearExitPoints() {
     currentLevel.resetExitPoints();
-    drawWorld();
+    drawGame();
 }
 
 /* End Level editor functions */

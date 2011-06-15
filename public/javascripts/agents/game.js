@@ -15,70 +15,6 @@ $(document).ready(function() {
 });
 
 
-/**
- * Starts the processing of agents
- */
-function startAgents() {
-    console.log("Starting agents...");
-
-    clearInterval(agentTimerId);
-    agentTimerId = setInterval("processAgents()", interval);
-    inPlay = true;
-
-
-    // Play sound, if any are set
-    if (audio != undefined)
-        audio.pause();
-    if (currentLevel.getSoundSrc() != undefined) {
-//        var audio = $("background-sound")[0];
-//        audio.src = currentLevel.getSoundSrc();
-
-        audio = new Audio(currentLevel.getSoundSrc());
-        audio.loop = true;
-        audio.addEventListener("ended", function(){audio.currentTime = 0; audio.play();}, false);
-        audio.play();
-    }
-}
-
-/**
- * Stops the processing of agents
- */
-function stopAgents() {
-    console.log("Pausing agents...");
-
-    clearInterval(agentTimerId);
-    inPlay = false;
-
-    if (audio != undefined)
-        audio.pause();
-}
-
-
-/**
- * Slows down the rate of processing agents
- */
-function slowDown() {
-    if (interval < 10)
-        interval += 1;
-    else if (interval < 100)
-        interval += 10;
-    if (inPlay)
-        startAgents();
-}
-
-
-/**
- * Speeds up the rate of processing agents
- */
-function speedUp() {
-    if (interval > 10)
-        interval -= 10;
-    else if (interval > 1)
-        interval -= 1;
-    if (inPlay)
-        startAgents();
-}
-
 
 /**
  * Core logic loop: processes agents
@@ -163,8 +99,6 @@ function processAgents() {
 
             if (agent.getMoves() > maxWaveMoves)
                 maxWaveMoves = agent.getMoves();
-            if (agent.getMoves() > maxLevelMoves)
-                maxLevelMoves = agent.getMoves();
 
             // TODO: should be in-lined?
             if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE || agent.getType() == AgentTypes.RIVAL_AGENT_TYPE) {
@@ -201,10 +135,8 @@ function processAgents() {
     if (citizenCount == 0) {
         // Start a new wave
         if (waves < currentLevel.getWaveNumber()) {
-//            alert(maxWaveMoves);
+            completeWave();
             newWave();
-            drawScoreboard();
-            waveDelayCounter = 0;
         }
         else if (currentLevelNumber < LEVELS) {
             completeLevel();
@@ -274,40 +206,12 @@ function processNeighbouringAgents(agent) {
 
 
 
-function refreshSwatch() {
-    for (var i = 0; i < capabilities.length; i++) {
-        var capability = $.trim(capabilities[i]);
-        try {
-            $('#' + capability)[0].style.display = 'block';
-        }
-        catch (err) {
-        }
-    }
-}
+
 
 function saveCapabilities() {
     if (PROFILE_ID != undefined) {
         updateStats(function(data) {});
     }
-}
-
-function saveSettings() {
-    setAndStoreProperty('godMode');
-    setAndStoreProperty('invisiblePath');
-    setAndStoreProperty('agentsCanCommunicate');
-    setAndStoreProperty('agentTracing');
-    setAndStoreProperty('recording');
-    setAndStoreProperty('rivalsVisible');
-    setAndStoreProperty('predatorsVisible');
-    setAndStoreProperty('tilesMutable');
-    setAndStoreProperty('soundsPlayable');
-    setAndStoreProperty('backgroundIconsVisible');
-    setAndStoreProperty('resourcesInTension');
-    setAndStoreProperty('resourceBonus');
-    setAndStoreProperty('applyGeneralHealth');
-    setAndStoreProperty('ignoreResourceBalance');
-
-    restartLevel();
 }
 
 

@@ -22,11 +22,11 @@ var Recording = {
     },
 
     replayWorld: function() {
-        stopAgents();
+        _stopAgents();
         existingCurrentLevel = currentLevel;
         clearInterval(agentTimerId);
         globalRecordingCounter = 0;
-        drawWorld();
+        drawGame();
         inPlay = true;
 
         setTimeout("this.replayStart()", 3000);

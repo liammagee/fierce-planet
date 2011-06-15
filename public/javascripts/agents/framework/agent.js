@@ -349,9 +349,10 @@ Agent.prototype.memorise = function(level, x, y) {
                     continue;
                 var agentX = agent.getX();
                 var agentY = agent.getY();
-//            if (agentX == x && agentY == y && (agent.lastPosition().getX() != this.lastPosition().getX() || agent.lastPosition().getY() != this.lastPosition().getY())) {
+//                if (agentX == x && agentY == y && (agent.lastPosition().getX() != this.lastPosition().getX() || agent.lastPosition().getY() != this.lastPosition().getY())) {
                 // TODO: This is very slow - consider ways to optimise
-                if (Math.abs(agentX - x) <= 1 && Math.abs(agentY - y) <= 1) {
+                if ((agent.lastPosition().getX() != this.lastPosition().getX() || agent.lastPosition().getY() != this.lastPosition().getY()) && (Math.abs(agentX - x) <= 1 && Math.abs(agentY - y) <= 1)) {
+//                    console.log("Agent " + this._id + " meeting agent " + agent._id);
                     // Add agent to memory
                     this._memoriesOfAgents[agent._id] = new MemoryOfAgent(this._id, this._age, x, y, agent._id);
                     var mpv = new Array();
@@ -371,23 +372,21 @@ Agent.prototype.memorise = function(level, x, y) {
 
                     // Add memories to other agent
                     // TODO: No longer necessary?
-                    /*
-                    agent._memoriesOfAgents[this._id] = new MemoryOfAgent(agent._id, agent._age, x, y, this._id) ;
-                    mpv = new Array();
-                    for (var j in this._memoriesOfPlacesVisited) {
-                        var m = this._memoriesOfPlacesVisited[j];
-                        if (m != undefined)
-                            mpv[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
-                    }
-                    agent._memoriesOfPlacesVisitedByOtherAgents[this._id] = mpv;
-                    mpu = new Array();
-                    for (var j in this._memoriesOfPathsUntried) {
-                        var m = this._memoriesOfPathsUntried[j];
-                        if (m != undefined)
-                            mpu[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
-                    }
-                    agent._memoriesOfPathsUntriedByOtherAgents[this._id] = mpu;
-                    */
+//                    agent._memoriesOfAgents[this._id] = new MemoryOfAgent(agent._id, agent._age, x, y, this._id) ;
+//                    mpv = new Array();
+//                    for (var j in this._memoriesOfPlacesVisited) {
+//                        var m = this._memoriesOfPlacesVisited[j];
+//                        if (m != undefined)
+//                            mpv[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
+//                    }
+//                    agent._memoriesOfPlacesVisitedByOtherAgents[this._id] = mpv;
+//                    mpu = new Array();
+//                    for (var j in this._memoriesOfPathsUntried) {
+//                        var m = this._memoriesOfPathsUntried[j];
+//                        if (m != undefined)
+//                            mpu[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
+//                    }
+//                    agent._memoriesOfPathsUntriedByOtherAgents[this._id] = mpu;
 
                 }
             }

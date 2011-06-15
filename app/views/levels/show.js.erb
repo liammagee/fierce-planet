@@ -1,5 +1,5 @@
 $('#notifications').html("<p>Opening level <%= @level.name %>...</p>");
 $levelList.dialog('close');
 <%=  render('levels/setup_level', :locals => { :level => @level}) %>
-redrawWorld();
+newLevel();
 
