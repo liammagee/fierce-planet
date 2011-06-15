@@ -6,7 +6,8 @@
   <%= stylesheet_link_tag "styles" %>
   <%= stylesheet_link_tag "smoothness/jquery-ui-1.8.11.custom" %>
 
-  <%= javascript_include_tag "jquery.min.js" %>
+  <%= javascript_include_tag "jquery-1.6.1.js" %>
+  <!--<%= javascript_include_tag "jquery.min.js" %>-->
   <%= javascript_include_tag "jquery-ui.min.js" %>
   <%= javascript_include_tag "jquery.json-2.2.min.js" %>
   <%= javascript_include_tag "jquery.mousewheel.3.0.2/jquery.mousewheel.min.js" %>
@@ -19,20 +20,29 @@
 
   <%= javascript_include_tag "rails" %>
 
+  <!-- Load FiercePlanet classes here -->
   <%= javascript_include_tag "agents/framework/agent" %>
   <%= javascript_include_tag "agents/framework/level" %>
   <%= javascript_include_tag "agents/framework/resource" %>
   <%= javascript_include_tag "agents/framework/player_class" %>
   <%= javascript_include_tag "agents/framework/tile" %>
-
-  <%= javascript_include_tag "agents/framework/classes" %>
   <%= javascript_include_tag "agents/data/resource_kinds" %>
   <%= javascript_include_tag "agents/data/player_classes" %>
   <%= javascript_include_tag "agents/data/agent_types" %>
-  <%= javascript_include_tag "agents/game" %>
   <%= javascript_include_tag "agents/data/levels" %>
-  <%= javascript_include_tag "agents/level_editor" %>
+  <%= javascript_include_tag "agents/dialogs" %>
+  <%= javascript_include_tag "agents/drawing" %>
+  <%= javascript_include_tag "agents/editor" %>
+  <%= javascript_include_tag "agents/general-ui" %>
+  <%= javascript_include_tag "agents/lifecycle" %>
+  <%= javascript_include_tag "agents/params" %>
+  <%= javascript_include_tag "agents/profile" %>
+  <%= javascript_include_tag "agents/recording" %>
+  <%= javascript_include_tag "agents/resource-ui" %>
+  <%= javascript_include_tag "agents/utils" %>
+  <%= javascript_include_tag "agents/game" %>
 
+  <!-- If a user is logged in, set their properties here -->
   <% if current_user %>
       <script>
           profileClass = '<%= current_user.profile.profile_class ? current_user.profile.profile_class : "Novice" %>';
@@ -44,16 +54,12 @@
           });
       </script>
   <% end %>
-  <%= csrf_meta_tag %>
-  <script>
-//    $(window).live("documentzoomed",function(){
-//        alert('the document has zoomed!');
-//    });
 
-  </script>
+  <!-- If test parameter is passed, showed the QUnit test runner -->
   <% if params[:test] %>
     <%= raw include_qunit %>
   <% end%>
+  <%= csrf_meta_tag %>
 
 </head>
 <body>

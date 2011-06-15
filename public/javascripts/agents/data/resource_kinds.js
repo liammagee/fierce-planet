@@ -36,13 +36,3 @@ ENVIRONMENTAL_RESOURCE_KINDS = [FRESH_WATER_RESOURCE_KIND, WILDLIFE_PARK_RESOURC
 SOCIAL_RESOURCE_KINDS = [CLINIC_RESOURCE_KIND, SCHOOL_RESOURCE_KIND, LEGAL_SYSTEM_RESOURCE_KIND, DEMOCRACY_RESOURCE_KIND, FESTIVAL_RESOURCE_KIND];
 
 RESOURCE_KINDS = ECONOMIC_RESOURCE_KINDS.concat(ENVIRONMENTAL_RESOURCE_KINDS.concat(SOCIAL_RESOURCE_KINDS));
-
-/* Generic resource kind functions */
-function resolveResourceKind(code) {
-    for (var i = 0; i < RESOURCE_KINDS.length; i++) {
-        var resourceKind = RESOURCE_KINDS[i];
-        if (resourceKind._code == code)
-            return resourceKind;
-    }
-    return null;
-}

@@ -1,5 +1,6 @@
 $('#notifications').html("<p>Creating a new level...</p>");
-$levelList.dialog('close');
+if ($levelList != undefined)
+    $levelList.dialog('close');
 $(".edit_level_properties").remove();
 $editProperties = $('<div></div>')
         .html("<%=  escape_javascript(render('levels/edit_properties', :locals => { :level => @level})) %>")
@@ -11,7 +12,7 @@ $editProperties = $('<div></div>')
                     buttons: {
                         "Save Level": function() {
                             $(".edit_level_properties").submit();
-                            redrawBaseCanvas();
+                            drawWorld();
                             $( this ).dialog( "close" );
                         },
                         "Cancel": function() {

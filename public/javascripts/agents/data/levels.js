@@ -1,78 +1,9 @@
 
-/* NB: Level is defined in classes.js */
+/* NB: Level is defined in level.js */
 
 var MAX_DEFAULT_LEVELS = 10;
 
-
-/* Level setup methods - this should be moved to the Level class when refactored. */
-
-function fillWithTiles() {
-    var tiles = new Array();
-    for (var i = 0; i < currentLevel.getWorldHeight(); i++) {
-        for (var j = 0; j < currentLevel.getWorldWidth(); j++) {
-            tiles.push(new Tile(TILE_COLOR, j, i));
-        }
-    }
-    return tiles;
-};
-function clearTiles(tiles, start, number) {
-    for (var i = start; i < start + number; i++) {
-        tiles[i] = undefined;
-    }
-};
-function randomAgents(number, limit) {
-    var agents = new Array();
-    for (var i = 0; i < number; i ++) {
-        var x = Math.floor(Math.random() * limit);
-        var y = Math.floor(Math.random() * limit);
-        var agent = new Agent(CITIZEN_AGENT_TYPE, x, y);
-        agents.push(agent);
-    }
-    return agents;
-};
-
-function presetAgents(number, points) {
-    var agents = new Array();
-    for (var j = 0; j < points.length; j++) {
-        var point = points[j];
-        var x = point[0];
-        var y = point[1];
-        for (var i = 0; i < number; i ++) {
-            var agent = new Agent(CITIZEN_AGENT_TYPE, x, y);
-            var colorSeed = j % 3;
-            var colorScheme = (colorSeed == 0 ? "000" : (colorSeed == 1 ? "0f0" : "00f"));
-            agent.setColor(colorScheme);
-            var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
-            agent.setDelay(delay);
-            agents.push(agent);
-        }
-    }
-    currentLevel.setCurrentAgents(agents);
-};
-
-function preSetupLevel(level) {
-    if (level.getTiles() == undefined) 
-        level.setTiles(fillWithTiles());
-
-    presetAgents(level.getInitialAgentNumber(), level.getEntryPoints());
-
-    // Add generated agents
-    $.merge(currentLevel.getCurrentAgents(), level.generateWaveAgents());
-    $.merge(currentLevel.getCurrentAgents(), level.getLevelAgents());
-};
-function postSetupLevel(level) {
-    level.assignCells();
-};
-/*
-Level.prototype.preSetupLevel = new function() {
-    fillWithTiles();
-    presetAgents(this.getInitialAgentNumber(), level.getEntryPoints());
-};
-Level.prototype.postSetupLevel = new function() {
-    assignCells();
-};
-*/
-
+var PresetLevels = function(){};
 
 /* Level 0 Definition */
 
@@ -96,14 +27,14 @@ level0.setNotice("<h2>Tutorial</h2> " +
         "<p>Start by placing some resources on the map. When you are ready, click the 'Start' button in the Control Panel on the left. A small number of citizens will make their way along the path.</p> "
         );
 
-level0.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 20, 5);
-    clearTiles(tiles, 15, 1);
-    clearTiles(tiles, 10, 5);
-    clearTiles(tiles, 9, 1);
-    clearTiles(tiles, 0, 5);
-    this.setTiles(tiles);
+level0.setup = function() {
+    this.fillWithTiles();
+    this.clearTiles(20, 5);
+    this.clearTiles(15, 1);
+    this.clearTiles(10, 5);
+    this.clearTiles(9, 1);
+    this.clearTiles(0, 5);
+    
 };
 
 
@@ -127,22 +58,21 @@ level1.setNotice("<h2>Level 1: Welcome to Fierce Planet!</h2> " +
         "<p><em>Tip: Keep watch on your resource and expired levels - once the maximum number of citizens have expired, it's Game Over!</em></p> ");
 //level1.setMapOptions({ lat: 30.9376, long: 79.4292, zoom: 10});
 
-level1.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 99, 10);
-    clearTiles(tiles, 97, 1);
-    clearTiles(tiles, 78, 9);
-    clearTiles(tiles, 67, 1);
-    clearTiles(tiles, 56, 9);
-    clearTiles(tiles, 53, 1);
-    clearTiles(tiles, 34, 9);
-    clearTiles(tiles, 23, 1);
-    clearTiles(tiles, 12, 10);
-    this.setTiles(tiles);
+level1.setup = function() {
+    this.fillWithTiles();
+    this.clearTiles(99, 10);
+    this.clearTiles(97, 1);
+    this.clearTiles(78, 9);
+    this.clearTiles(67, 1);
+    this.clearTiles(56, 9);
+    this.clearTiles(53, 1);
+    this.clearTiles(34, 9);
+    this.clearTiles(23, 1);
+    this.clearTiles(12, 10);
 
     // Add predators and rivals
-    this.setLevelAgents([new Agent(PREDATOR_AGENT_TYPE, 0, 9)]);
-    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 10, 1)]);
+    this.setLevelAgents([new Agent(AgentTypes.PREDATOR_AGENT_TYPE, 0, 9)]);
+    this.setWaveAgents([new Agent(AgentTypes.RIVAL_AGENT_TYPE, 10, 1)]);
 };
 
 
@@ -158,38 +88,37 @@ level2.setInitialAgentNumber(1);
 level2.setWaveNumber(10);
 level2.setExpiryLimit(10);
 level2.setInitialResourceStore(120);
-//level2.setImage("/images/Background_Level2.png");
 level2.setNotice("<h2>Level 2: Twists and Turns</h2>" +
         "<p>Congratulations! You successfully navigated Level 1!</p>" +
         "<p>The citizens of Fierce Planet now face a greater challenge... Can you supply them with resources to reach their goal?</p>" +
         "<p><em>Tip: you can pause at any time to add resources. Your resource store increases as you save more citizens.</em></p>"
         );
 
-level2.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 121, 10);
-    clearTiles(tiles, 118, 1);
-    clearTiles(tiles, 109, 1);
-    clearTiles(tiles, 102, 5);
-    clearTiles(tiles, 97, 4);
-    clearTiles(tiles, 90, 1);
-    clearTiles(tiles, 88, 1);
-    clearTiles(tiles, 78, 5);
-    clearTiles(tiles, 73, 4);
-    clearTiles(tiles, 70, 1);
-    clearTiles(tiles, 61, 1);
-    clearTiles(tiles, 54, 5);
-    clearTiles(tiles, 49, 4);
-    clearTiles(tiles, 42, 1);
-    clearTiles(tiles, 40, 1);
-    clearTiles(tiles, 32, 3);
-    clearTiles(tiles, 30, 1);
-    clearTiles(tiles, 25, 4);
-    clearTiles(tiles, 22, 2);
-    clearTiles(tiles, 18, 3);
-    clearTiles(tiles, 13, 1);
-    clearTiles(tiles, 0, 2);
-    this.setTiles(tiles);
+level2.setup = function() {
+    this.fillWithTiles();
+    this.clearTiles(121, 10);
+    this.clearTiles(118, 1);
+    this.clearTiles(109, 1);
+    this.clearTiles(102, 5);
+    this.clearTiles(97, 4);
+    this.clearTiles(90, 1);
+    this.clearTiles(88, 1);
+    this.clearTiles(78, 5);
+    this.clearTiles(73, 4);
+    this.clearTiles(70, 1);
+    this.clearTiles(61, 1);
+    this.clearTiles(54, 5);
+    this.clearTiles(49, 4);
+    this.clearTiles(42, 1);
+    this.clearTiles(40, 1);
+    this.clearTiles(32, 3);
+    this.clearTiles(30, 1);
+    this.clearTiles(25, 4);
+    this.clearTiles(22, 2);
+    this.clearTiles(18, 3);
+    this.clearTiles(13, 1);
+    this.clearTiles(0, 2);
+    
 };
 
 
@@ -205,55 +134,54 @@ level3.setInitialAgentNumber(1);
 level3.setWaveNumber(10);
 level3.setExpiryLimit(10);
 level3.setInitialResourceStore(130);
-//level3.setImage("/images/Background_Level3.png");
 level3.setNotice("<h2>Level 3: Around and About</h2>" +
         "<p>After some further twists, the citizens of Fierce Planet are about to embark on some long roads ahead....</p>" +
         "<p><em>Tip: Levels get progressively larger, requiring more planning about where you allocate resources. Aim to place resources at regular intervals.</em></p>"
         );
 
-level3.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 161, 1);
-    clearTiles(tiles, 150, 5);
-    clearTiles(tiles, 148, 1);
-    clearTiles(tiles, 144, 3);
-    clearTiles(tiles, 141, 1);
-    clearTiles(tiles, 137, 1);
-    clearTiles(tiles, 135, 1);
-    clearTiles(tiles, 133, 1);
-    clearTiles(tiles, 131, 1);
-    clearTiles(tiles, 126, 3);
-    clearTiles(tiles, 124, 1);
-    clearTiles(tiles, 122, 1);
-    clearTiles(tiles, 120, 1);
-    clearTiles(tiles, 118, 1);
-    clearTiles(tiles, 113, 1);
-    clearTiles(tiles, 111, 1);
-    clearTiles(tiles, 109, 1);
-    clearTiles(tiles, 107, 1);
-    clearTiles(tiles, 105, 1);
-    clearTiles(tiles, 100, 3);
-    clearTiles(tiles, 96, 3);
-    clearTiles(tiles, 94, 1);
-    clearTiles(tiles, 92, 1);
-    clearTiles(tiles, 89, 1);
-    clearTiles(tiles, 81, 1);
-    clearTiles(tiles, 79, 1);
-    clearTiles(tiles, 68, 9);
-    clearTiles(tiles, 66, 1);
-    clearTiles(tiles, 53, 1);
-    clearTiles(tiles, 42, 9);
-    clearTiles(tiles, 40, 1);
-    clearTiles(tiles, 37, 1);
-    clearTiles(tiles, 27, 1);
-    clearTiles(tiles, 14, 11);
-    this.setTiles(tiles);
+level3.setup = function() {
+    this.fillWithTiles();
+    this.clearTiles(161, 1);
+    this.clearTiles(150, 5);
+    this.clearTiles(148, 1);
+    this.clearTiles(144, 3);
+    this.clearTiles(141, 1);
+    this.clearTiles(137, 1);
+    this.clearTiles(135, 1);
+    this.clearTiles(133, 1);
+    this.clearTiles(131, 1);
+    this.clearTiles(126, 3);
+    this.clearTiles(124, 1);
+    this.clearTiles(122, 1);
+    this.clearTiles(120, 1);
+    this.clearTiles(118, 1);
+    this.clearTiles(113, 1);
+    this.clearTiles(111, 1);
+    this.clearTiles(109, 1);
+    this.clearTiles(107, 1);
+    this.clearTiles(105, 1);
+    this.clearTiles(100, 3);
+    this.clearTiles(96, 3);
+    this.clearTiles(94, 1);
+    this.clearTiles(92, 1);
+    this.clearTiles(89, 1);
+    this.clearTiles(81, 1);
+    this.clearTiles(79, 1);
+    this.clearTiles(68, 9);
+    this.clearTiles(66, 1);
+    this.clearTiles(53, 1);
+    this.clearTiles(42, 9);
+    this.clearTiles(40, 1);
+    this.clearTiles(37, 1);
+    this.clearTiles(27, 1);
+    this.clearTiles(14, 11);
+    
 };
 
 
 /* Level 4 Definition */
 
-var level4 = new Level(1);
+var level4 = new Level(4);
 level4.setPresetLevel(true);
 level4.addEntryPoint(6, 6);
 level4.addExitPoint(0, 0);
@@ -263,70 +191,69 @@ level4.setInitialAgentNumber(1);
 level4.setWaveNumber(10);
 level4.setExpiryLimit(10);
 level4.setInitialResourceStore(150);
-//level4.setImage("/images/Background_Level4.png");
 level4.setNotice("<h2>Level 4: Spiral of uncertainty</h2>" +
         "<p>The only way out is via the long and winding road...</p>" +
         "<p><em>Tip: be sure to allocate plenty of resources to the outer reaches of the road. The citizens will start to sprint when there is less to go around.</em></p>"
         );
 
-level4.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 168, 13);
-    clearTiles(tiles, 166, 1);
-    clearTiles(tiles, 154, 1);
-    clearTiles(tiles, 152, 1);
-    clearTiles(tiles, 142, 9);
-    clearTiles(tiles, 140, 1);
-    clearTiles(tiles, 138, 1);
-    clearTiles(tiles, 136, 1);
-    clearTiles(tiles, 128, 1);
-    clearTiles(tiles, 126, 1);
-    clearTiles(tiles, 124, 1);
-    clearTiles(tiles, 122, 1);
-    clearTiles(tiles, 116, 5);
-    clearTiles(tiles, 114, 1);
-    clearTiles(tiles, 112, 1);
-    clearTiles(tiles, 110, 1);
-    clearTiles(tiles, 108, 1);
-    clearTiles(tiles, 106, 1);
-    clearTiles(tiles, 102, 1);
-    clearTiles(tiles, 100, 1);
-    clearTiles(tiles, 98, 1);
-    clearTiles(tiles, 96, 1);
-    clearTiles(tiles, 94, 1);
-    clearTiles(tiles, 92, 1);
-    clearTiles(tiles, 90, 1);
-    clearTiles(tiles, 88, 1);
-    clearTiles(tiles, 86, 1);
-    clearTiles(tiles, 84, 1);
-    clearTiles(tiles, 82, 1);
-    clearTiles(tiles, 80, 1);
-    clearTiles(tiles, 76, 3);
-    clearTiles(tiles, 74, 1);
-    clearTiles(tiles, 72, 1);
-    clearTiles(tiles, 70, 1);
-    clearTiles(tiles, 68, 1);
-    clearTiles(tiles, 66, 1);
-    clearTiles(tiles, 60, 1);
-    clearTiles(tiles, 58, 1);
-    clearTiles(tiles, 56, 1);
-    clearTiles(tiles, 54, 1);
-    clearTiles(tiles, 46, 7);
-    clearTiles(tiles, 44, 1);
-    clearTiles(tiles, 42, 1);
-    clearTiles(tiles, 40, 1);
-    clearTiles(tiles, 30, 1);
-    clearTiles(tiles, 28, 1);
-    clearTiles(tiles, 16, 11);
-    clearTiles(tiles, 14, 1);
-    clearTiles(tiles, 0, 1);
-    this.setTiles(tiles);
+level4.setup = function() {
+    this.fillWithTiles();
+    this.clearTiles(168, 13);
+    this.clearTiles(166, 1);
+    this.clearTiles(154, 1);
+    this.clearTiles(152, 1);
+    this.clearTiles(142, 9);
+    this.clearTiles(140, 1);
+    this.clearTiles(138, 1);
+    this.clearTiles(136, 1);
+    this.clearTiles(128, 1);
+    this.clearTiles(126, 1);
+    this.clearTiles(124, 1);
+    this.clearTiles(122, 1);
+    this.clearTiles(116, 5);
+    this.clearTiles(114, 1);
+    this.clearTiles(112, 1);
+    this.clearTiles(110, 1);
+    this.clearTiles(108, 1);
+    this.clearTiles(106, 1);
+    this.clearTiles(102, 1);
+    this.clearTiles(100, 1);
+    this.clearTiles(98, 1);
+    this.clearTiles(96, 1);
+    this.clearTiles(94, 1);
+    this.clearTiles(92, 1);
+    this.clearTiles(90, 1);
+    this.clearTiles(88, 1);
+    this.clearTiles(86, 1);
+    this.clearTiles(84, 1);
+    this.clearTiles(82, 1);
+    this.clearTiles(80, 1);
+    this.clearTiles(76, 3);
+    this.clearTiles(74, 1);
+    this.clearTiles(72, 1);
+    this.clearTiles(70, 1);
+    this.clearTiles(68, 1);
+    this.clearTiles(66, 1);
+    this.clearTiles(60, 1);
+    this.clearTiles(58, 1);
+    this.clearTiles(56, 1);
+    this.clearTiles(54, 1);
+    this.clearTiles(46, 7);
+    this.clearTiles(44, 1);
+    this.clearTiles(42, 1);
+    this.clearTiles(40, 1);
+    this.clearTiles(30, 1);
+    this.clearTiles(28, 1);
+    this.clearTiles(16, 11);
+    this.clearTiles(14, 1);
+    this.clearTiles(0, 1);
+    
 };
 
 
 /* Level 5 Definition */
 
-var level5 = new Level(1);
+var level5 = new Level(5);
 level5.setPresetLevel(true);
 level5.addEntryPoint(13, 0);
 level5.addExitPoint(0, 1);
@@ -336,93 +263,92 @@ level5.setInitialAgentNumber(1);
 level5.setWaveNumber(10);
 level5.setExpiryLimit(10);
 level5.setInitialResourceStore(180);
-//level5.setImage("/images/Background_Level5.png");
 level5.setNotice("<h2>Level 5: A-mazing Grace</h2>" +
         "<p>The citizens are -mistakenly? - hopeful that the promised land lies not too far ahead. If only they can find their way through...</p>" +
         "<p><em>Citizens are (sort of) smart - at forks in the road, they'll take the path which appears more plentiful. Place resources to help them choose the right path.</em>.</p>"
         );
 
-level5.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 208, 1);
-    clearTiles(tiles, 204, 3);
-    clearTiles(tiles, 196, 7);
-    clearTiles(tiles, 193, 1);
-    clearTiles(tiles, 191, 1);
-    clearTiles(tiles, 189, 1);
-    clearTiles(tiles, 187, 1);
-    clearTiles(tiles, 183, 1);
-    clearTiles(tiles, 178, 1);
-    clearTiles(tiles, 176, 1);
-    clearTiles(tiles, 174, 1);
-    clearTiles(tiles, 172, 1);
-    clearTiles(tiles, 170, 1);
-    clearTiles(tiles, 166, 3);
-    clearTiles(tiles, 163, 1);
-    clearTiles(tiles, 161, 1);
-    clearTiles(tiles, 159, 1);
-    clearTiles(tiles, 157, 1);
-    clearTiles(tiles, 155, 1);
-    clearTiles(tiles, 151, 1);
-    clearTiles(tiles, 148, 1);
-    clearTiles(tiles, 146, 1);
-    clearTiles(tiles, 144, 1);
-    clearTiles(tiles, 142, 1);
-    clearTiles(tiles, 140, 1);
-    clearTiles(tiles, 138, 1);
-    clearTiles(tiles, 136, 1);
-    clearTiles(tiles, 131, 3);
-    clearTiles(tiles, 129, 1);
-    clearTiles(tiles, 127, 1);
-    clearTiles(tiles, 125, 1);
-    clearTiles(tiles, 123, 1);
-    clearTiles(tiles, 121, 1);
-    clearTiles(tiles, 118, 1);
-    clearTiles(tiles, 114, 1);
-    clearTiles(tiles, 112, 1);
-    clearTiles(tiles, 110, 1);
-    clearTiles(tiles, 108, 1);
-    clearTiles(tiles, 106, 1);
-    clearTiles(tiles, 103, 1);
-    clearTiles(tiles, 99, 3);
-    clearTiles(tiles, 95, 3);
-    clearTiles(tiles, 91, 3);
-    clearTiles(tiles, 88, 1);
-    clearTiles(tiles, 86, 1);
-    clearTiles(tiles, 80, 1);
-    clearTiles(tiles, 78, 1);
-    clearTiles(tiles, 76, 1);
-    clearTiles(tiles, 73, 1);
-    clearTiles(tiles, 71, 1);
-    clearTiles(tiles, 67, 3);
-    clearTiles(tiles, 65, 1);
-    clearTiles(tiles, 63, 1);
-    clearTiles(tiles, 61, 1);
-    clearTiles(tiles, 58, 1);
-    clearTiles(tiles, 56, 1);
-    clearTiles(tiles, 54, 1);
-    clearTiles(tiles, 52, 1);
-    clearTiles(tiles, 50, 1);
-    clearTiles(tiles, 48, 1);
-    clearTiles(tiles, 46, 1);
-    clearTiles(tiles, 43, 1);
-    clearTiles(tiles, 41, 1);
-    clearTiles(tiles, 39, 1);
-    clearTiles(tiles, 37, 1);
-    clearTiles(tiles, 35, 1);
-    clearTiles(tiles, 33, 1);
-    clearTiles(tiles, 28, 1);
-    clearTiles(tiles, 24, 3);
-    clearTiles(tiles, 20, 3);
-    clearTiles(tiles, 15, 4);
-    clearTiles(tiles, 13, 1);
-    this.setTiles(tiles);
+level5.setup = function() {
+    this.fillWithTiles();
+    this.clearTiles(208, 1);
+    this.clearTiles(204, 3);
+    this.clearTiles(196, 7);
+    this.clearTiles(193, 1);
+    this.clearTiles(191, 1);
+    this.clearTiles(189, 1);
+    this.clearTiles(187, 1);
+    this.clearTiles(183, 1);
+    this.clearTiles(178, 1);
+    this.clearTiles(176, 1);
+    this.clearTiles(174, 1);
+    this.clearTiles(172, 1);
+    this.clearTiles(170, 1);
+    this.clearTiles(166, 3);
+    this.clearTiles(163, 1);
+    this.clearTiles(161, 1);
+    this.clearTiles(159, 1);
+    this.clearTiles(157, 1);
+    this.clearTiles(155, 1);
+    this.clearTiles(151, 1);
+    this.clearTiles(148, 1);
+    this.clearTiles(146, 1);
+    this.clearTiles(144, 1);
+    this.clearTiles(142, 1);
+    this.clearTiles(140, 1);
+    this.clearTiles(138, 1);
+    this.clearTiles(136, 1);
+    this.clearTiles(131, 3);
+    this.clearTiles(129, 1);
+    this.clearTiles(127, 1);
+    this.clearTiles(125, 1);
+    this.clearTiles(123, 1);
+    this.clearTiles(121, 1);
+    this.clearTiles(118, 1);
+    this.clearTiles(114, 1);
+    this.clearTiles(112, 1);
+    this.clearTiles(110, 1);
+    this.clearTiles(108, 1);
+    this.clearTiles(106, 1);
+    this.clearTiles(103, 1);
+    this.clearTiles(99, 3);
+    this.clearTiles(95, 3);
+    this.clearTiles(91, 3);
+    this.clearTiles(88, 1);
+    this.clearTiles(86, 1);
+    this.clearTiles(80, 1);
+    this.clearTiles(78, 1);
+    this.clearTiles(76, 1);
+    this.clearTiles(73, 1);
+    this.clearTiles(71, 1);
+    this.clearTiles(67, 3);
+    this.clearTiles(65, 1);
+    this.clearTiles(63, 1);
+    this.clearTiles(61, 1);
+    this.clearTiles(58, 1);
+    this.clearTiles(56, 1);
+    this.clearTiles(54, 1);
+    this.clearTiles(52, 1);
+    this.clearTiles(50, 1);
+    this.clearTiles(48, 1);
+    this.clearTiles(46, 1);
+    this.clearTiles(43, 1);
+    this.clearTiles(41, 1);
+    this.clearTiles(39, 1);
+    this.clearTiles(37, 1);
+    this.clearTiles(35, 1);
+    this.clearTiles(33, 1);
+    this.clearTiles(28, 1);
+    this.clearTiles(24, 3);
+    this.clearTiles(20, 3);
+    this.clearTiles(15, 4);
+    this.clearTiles(13, 1);
+    
 };
 
 
 /* Level 6 Definition */
 
-var level6 = new Level(1);
+var level6 = new Level(6);
 level6.setPresetLevel(true);
 level6.addEntryPoint(0, 1);
 level6.addExitPoint(2, 14);
@@ -433,34 +359,32 @@ level6.setWaveNumber(10);
 level6.setExpiryLimit(10);
 level6.setAllowOffscreenCycling(true);
 level6.setInitialResourceStore(250);
-//level6.setImage("/images/Background_Level6.png");
 level6.setNotice("<h2>Level 6: Dire Straits</h2>" +
         "<p>Not there yet... This level looks well resourced - but your citizens will need them. </p>"+
         "<p><em>Tip: Clicking on an existing resource allows you to delete or upgrade it. An upgraded resource will dispense more health to citizens passing by.</em></p>");
 
-level6.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 226, 1);
-    clearTiles(tiles, 212, 12);
-    clearTiles(tiles, 208, 3);
-    clearTiles(tiles, 196, 1);
-    clearTiles(tiles, 182, 10);
-    clearTiles(tiles, 176, 5);
-    clearTiles(tiles, 166, 1);
-    clearTiles(tiles, 152, 8);
-    clearTiles(tiles, 144, 7);
-    clearTiles(tiles, 136, 1);
-    clearTiles(tiles, 122, 6);
-    clearTiles(tiles, 112, 9);
-    clearTiles(tiles, 106, 1);
-    clearTiles(tiles, 92, 4);
-    clearTiles(tiles, 80, 11);
-    clearTiles(tiles, 76, 1);
-    clearTiles(tiles, 62, 2);
-    clearTiles(tiles, 48, 13);
-    clearTiles(tiles, 46, 1);
-    clearTiles(tiles, 16, 15);
-    this.setTiles(tiles);
+level6.setup = function() {
+    this.fillWithTiles();
+    this.clearTiles(226, 1);
+    this.clearTiles(212, 12);
+    this.clearTiles(208, 3);
+    this.clearTiles(196, 1);
+    this.clearTiles(182, 10);
+    this.clearTiles(176, 5);
+    this.clearTiles(166, 1);
+    this.clearTiles(152, 8);
+    this.clearTiles(144, 7);
+    this.clearTiles(136, 1);
+    this.clearTiles(122, 6);
+    this.clearTiles(112, 9);
+    this.clearTiles(106, 1);
+    this.clearTiles(92, 4);
+    this.clearTiles(80, 11);
+    this.clearTiles(76, 1);
+    this.clearTiles(62, 2);
+    this.clearTiles(48, 13);
+    this.clearTiles(46, 1);
+    this.clearTiles(16, 15);
 };
 
 
@@ -477,36 +401,33 @@ level7.setWaveNumber(10);
 level7.setExpiryLimit(10);
 level7.setAllowResourcesOnPath(true);
 level7.setInitialResourceStore(150);
-//level7.setImage("/images/Background_Level7.png");
 level7.setNotice("<h2>Level 7: Like, Totally Random...</h2>" +
         "<p>Ahead lies a vast and empty expanse. The citizens are understandably nervous. Left unaided, they will try not to backtrack, but could still find themselves hopelessly lost without your aid.</p>" +
         "<p><em>You can add resources to the paths (the white squares) on this level, to direct citizens to their goal.</em></p>");
 
-level7.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 280, 1);
-    clearTiles(tiles, 262, 3);
-    clearTiles(tiles, 244, 5);
-    clearTiles(tiles, 226, 7);
-    clearTiles(tiles, 208, 9);
-    clearTiles(tiles, 190, 11);
-    clearTiles(tiles, 172, 13);
-    clearTiles(tiles, 154, 15);
-    clearTiles(tiles, 136, 17);
-    clearTiles(tiles, 120, 15);
-    clearTiles(tiles, 104, 13);
-    clearTiles(tiles, 88, 11);
-    clearTiles(tiles, 72, 9);
-    clearTiles(tiles, 56, 7);
-    clearTiles(tiles, 40, 5);
-    clearTiles(tiles, 24, 3);
-    clearTiles(tiles, 8, 1);
-    this.setTiles(tiles);
-
-
+level7.setup = function() {
+    this.fillWithTiles();
+    this.clearTiles(280, 1);
+    this.clearTiles(262, 3);
+    this.clearTiles(244, 5);
+    this.clearTiles(226, 7);
+    this.clearTiles(208, 9);
+    this.clearTiles(190, 11);
+    this.clearTiles(172, 13);
+    this.clearTiles(154, 15);
+    this.clearTiles(136, 17);
+    this.clearTiles(120, 15);
+    this.clearTiles(104, 13);
+    this.clearTiles(88, 11);
+    this.clearTiles(72, 9);
+    this.clearTiles(56, 7);
+    this.clearTiles(40, 5);
+    this.clearTiles(24, 3);
+    this.clearTiles(8, 1);
+    
     // Add predators and rivals
-    this.addLevelAgent(new Agent(PREDATOR_AGENT_TYPE, 8, 4));
-    this.addWaveAgent(new Agent(RIVAL_AGENT_TYPE, 9, 4));
+    this.addLevelAgent(new Agent(AgentTypes.PREDATOR_AGENT_TYPE, 8, 4));
+    this.addWaveAgent(new Agent(AgentTypes.RIVAL_AGENT_TYPE, 9, 4));
 };
 
 
@@ -524,86 +445,85 @@ level8.setInitialAgentNumber(1);
 level8.setWaveNumber(10);
 level8.setExpiryLimit(10);
 level8.setInitialResourceStore(200);
-//level8.setImage("/images/Background_Level8.png");
 level8.setNotice("<h2>Level 8: A Fork (or Two) in the Road</h2>" +
         "<p>Life for the citizens of Fierce Planet is never easy. Having escaped the perils of random wandering, here they are faced with many decisions about which way to turn.</p>" + 
         "<p><em>Again, you'll need to direct citizen through numerous forks in the road, with strategic allocation of resources. Beware: leave no path under-resourced!</em></p>");
 
-level8.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 322, 2);
-    clearTiles(tiles, 289, 16);
-    clearTiles(tiles, 286, 1);
-    clearTiles(tiles, 271, 1);
-    clearTiles(tiles, 255, 14);
-    clearTiles(tiles, 253, 1);
-    clearTiles(tiles, 250, 1);
-    clearTiles(tiles, 248, 1);
-    clearTiles(tiles, 246, 1);
-    clearTiles(tiles, 237, 1);
-    clearTiles(tiles, 235, 1);
-    clearTiles(tiles, 232, 1);
-    clearTiles(tiles, 230, 1);
-    clearTiles(tiles, 221, 8);
-    clearTiles(tiles, 219, 1);
-    clearTiles(tiles, 217, 1);
-    clearTiles(tiles, 214, 1);
-    clearTiles(tiles, 212, 1);
-    clearTiles(tiles, 210, 1);
-    clearTiles(tiles, 203, 1);
-    clearTiles(tiles, 201, 1);
-    clearTiles(tiles, 199, 1);
-    clearTiles(tiles, 196, 1);
-    clearTiles(tiles, 194, 1);
-    clearTiles(tiles, 187, 6);
-    clearTiles(tiles, 185, 1);
-    clearTiles(tiles, 183, 1);
-    clearTiles(tiles, 181, 1);
-    clearTiles(tiles, 178, 1);
-    clearTiles(tiles, 176, 1);
-    clearTiles(tiles, 174, 1);
-    clearTiles(tiles, 172, 1);
-    clearTiles(tiles, 169, 1);
-    clearTiles(tiles, 167, 1);
-    clearTiles(tiles, 165, 1);
-    clearTiles(tiles, 163, 1);
-    clearTiles(tiles, 160, 1);
-    clearTiles(tiles, 158, 1);
-    clearTiles(tiles, 156, 1);
-    clearTiles(tiles, 154, 1);
-    clearTiles(tiles, 151, 1);
-    clearTiles(tiles, 149, 1);
-    clearTiles(tiles, 147, 1);
-    clearTiles(tiles, 145, 1);
-    clearTiles(tiles, 142, 1);
-    clearTiles(tiles, 140, 1);
-    clearTiles(tiles, 138, 1);
-    clearTiles(tiles, 131, 6);
-    clearTiles(tiles, 129, 1);
-    clearTiles(tiles, 127, 1);
-    clearTiles(tiles, 124, 1);
-    clearTiles(tiles, 122, 1);
-    clearTiles(tiles, 120, 1);
-    clearTiles(tiles, 113, 1);
-    clearTiles(tiles, 111, 1);
-    clearTiles(tiles, 109, 1);
-    clearTiles(tiles, 106, 1);
-    clearTiles(tiles, 104, 1);
-    clearTiles(tiles, 95, 8);
-    clearTiles(tiles, 93, 1);
-    clearTiles(tiles, 91, 1);
-    clearTiles(tiles, 88, 1);
-    clearTiles(tiles, 86, 1);
-    clearTiles(tiles, 77, 1);
-    clearTiles(tiles, 75, 1);
-    clearTiles(tiles, 73, 1);
-    clearTiles(tiles, 70, 1);
-    clearTiles(tiles, 55, 14);
-    clearTiles(tiles, 52, 1);
-    clearTiles(tiles, 37, 1);
-    clearTiles(tiles, 19, 16);
-    clearTiles(tiles, 0, 2);
-    this.setTiles(tiles);
+level8.setup = function() {
+    this.fillWithTiles();
+    this.clearTiles(322, 2);
+    this.clearTiles(289, 16);
+    this.clearTiles(286, 1);
+    this.clearTiles(271, 1);
+    this.clearTiles(255, 14);
+    this.clearTiles(253, 1);
+    this.clearTiles(250, 1);
+    this.clearTiles(248, 1);
+    this.clearTiles(246, 1);
+    this.clearTiles(237, 1);
+    this.clearTiles(235, 1);
+    this.clearTiles(232, 1);
+    this.clearTiles(230, 1);
+    this.clearTiles(221, 8);
+    this.clearTiles(219, 1);
+    this.clearTiles(217, 1);
+    this.clearTiles(214, 1);
+    this.clearTiles(212, 1);
+    this.clearTiles(210, 1);
+    this.clearTiles(203, 1);
+    this.clearTiles(201, 1);
+    this.clearTiles(199, 1);
+    this.clearTiles(196, 1);
+    this.clearTiles(194, 1);
+    this.clearTiles(187, 6);
+    this.clearTiles(185, 1);
+    this.clearTiles(183, 1);
+    this.clearTiles(181, 1);
+    this.clearTiles(178, 1);
+    this.clearTiles(176, 1);
+    this.clearTiles(174, 1);
+    this.clearTiles(172, 1);
+    this.clearTiles(169, 1);
+    this.clearTiles(167, 1);
+    this.clearTiles(165, 1);
+    this.clearTiles(163, 1);
+    this.clearTiles(160, 1);
+    this.clearTiles(158, 1);
+    this.clearTiles(156, 1);
+    this.clearTiles(154, 1);
+    this.clearTiles(151, 1);
+    this.clearTiles(149, 1);
+    this.clearTiles(147, 1);
+    this.clearTiles(145, 1);
+    this.clearTiles(142, 1);
+    this.clearTiles(140, 1);
+    this.clearTiles(138, 1);
+    this.clearTiles(131, 6);
+    this.clearTiles(129, 1);
+    this.clearTiles(127, 1);
+    this.clearTiles(124, 1);
+    this.clearTiles(122, 1);
+    this.clearTiles(120, 1);
+    this.clearTiles(113, 1);
+    this.clearTiles(111, 1);
+    this.clearTiles(109, 1);
+    this.clearTiles(106, 1);
+    this.clearTiles(104, 1);
+    this.clearTiles(95, 8);
+    this.clearTiles(93, 1);
+    this.clearTiles(91, 1);
+    this.clearTiles(88, 1);
+    this.clearTiles(86, 1);
+    this.clearTiles(77, 1);
+    this.clearTiles(75, 1);
+    this.clearTiles(73, 1);
+    this.clearTiles(70, 1);
+    this.clearTiles(55, 14);
+    this.clearTiles(52, 1);
+    this.clearTiles(37, 1);
+    this.clearTiles(19, 16);
+    this.clearTiles(0, 2);
+    
 };
 
 
@@ -618,48 +538,47 @@ level9.setWorldHeight(19);
 level9.setInitialAgentNumber(1);
 level9.setWaveNumber(10);
 level9.setExpiryLimit(10);
-//level9.setImage("/images/Background_Level9.png");
 level9.setNotice("<h2>Level 9: Cascades</h2>" +
         "<p>With time running out, the citizens of Fierce Planet are in a rush to find safety. But they're in for a bumpy ride.</p>" +
         "<p><em>Tip: No tip! You've gotten this far...</em></p>");
 
-level9.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 351, 1);
-    clearTiles(tiles, 330, 5);
-    clearTiles(tiles, 315, 1);
-    clearTiles(tiles, 311, 1);
-    clearTiles(tiles, 296, 3);
-    clearTiles(tiles, 290, 3);
-    clearTiles(tiles, 279, 1);
-    clearTiles(tiles, 271, 1);
-    clearTiles(tiles, 260, 3);
-    clearTiles(tiles, 250, 3);
-    clearTiles(tiles, 243, 1);
-    clearTiles(tiles, 231, 1);
-    clearTiles(tiles, 224, 3);
-    clearTiles(tiles, 210, 3);
-    clearTiles(tiles, 207, 1);
-    clearTiles(tiles, 191, 1);
-    clearTiles(tiles, 182, 7);
-    clearTiles(tiles, 172, 7);
-    clearTiles(tiles, 163, 1);
-    clearTiles(tiles, 159, 1);
-    clearTiles(tiles, 144, 3);
-    clearTiles(tiles, 138, 3);
-    clearTiles(tiles, 127, 1);
-    clearTiles(tiles, 119, 1);
-    clearTiles(tiles, 108, 3);
-    clearTiles(tiles, 98, 3);
-    clearTiles(tiles, 91, 1);
-    clearTiles(tiles, 79, 1);
-    clearTiles(tiles, 72, 3);
-    clearTiles(tiles, 58, 3);
-    clearTiles(tiles, 55, 1);
-    clearTiles(tiles, 39, 1);
-    clearTiles(tiles, 20, 17);
-    clearTiles(tiles, 9, 1);
-    this.setTiles(tiles);
+level9.setup = function() {
+    this.fillWithTiles();
+    this.clearTiles(351, 1);
+    this.clearTiles(330, 5);
+    this.clearTiles(315, 1);
+    this.clearTiles(311, 1);
+    this.clearTiles(296, 3);
+    this.clearTiles(290, 3);
+    this.clearTiles(279, 1);
+    this.clearTiles(271, 1);
+    this.clearTiles(260, 3);
+    this.clearTiles(250, 3);
+    this.clearTiles(243, 1);
+    this.clearTiles(231, 1);
+    this.clearTiles(224, 3);
+    this.clearTiles(210, 3);
+    this.clearTiles(207, 1);
+    this.clearTiles(191, 1);
+    this.clearTiles(182, 7);
+    this.clearTiles(172, 7);
+    this.clearTiles(163, 1);
+    this.clearTiles(159, 1);
+    this.clearTiles(144, 3);
+    this.clearTiles(138, 3);
+    this.clearTiles(127, 1);
+    this.clearTiles(119, 1);
+    this.clearTiles(108, 3);
+    this.clearTiles(98, 3);
+    this.clearTiles(91, 1);
+    this.clearTiles(79, 1);
+    this.clearTiles(72, 3);
+    this.clearTiles(58, 3);
+    this.clearTiles(55, 1);
+    this.clearTiles(39, 1);
+    this.clearTiles(20, 17);
+    this.clearTiles(9, 1);
+    
 };
 
 
@@ -676,219 +595,94 @@ level10.setInitialAgentNumber(1);
 level10.setWaveNumber(5);
 level10.setExpiryLimit(1);
 level10.setInitialResourceStore(250);
-//level10.setImage("/images/Background_Level10.png");
 level10.setNotice("<h2>Level 10: Fields of Ma(i)ze</h2>" +
         "<p>Nearly there! Pastures of plenty, and a new future, lie in store for the citizens of Fierce Planet. " +
         "However the way ahead is full of false dawns. Can they navigate the treacherous maze?</p>" +
         "<p><em>Tip: Remember to resource dead end paths, or citizens will expire, dazed and confused.</em></p>");
 
-level10.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 398, 1);
-    clearTiles(tiles, 396, 1);
-    clearTiles(tiles, 378, 1);
-    clearTiles(tiles, 361, 16);
-    clearTiles(tiles, 358, 1);
-    clearTiles(tiles, 356, 1);
-    clearTiles(tiles, 345, 1);
-    clearTiles(tiles, 341, 1);
-    clearTiles(tiles, 338, 1);
-    clearTiles(tiles, 334, 3);
-    clearTiles(tiles, 325, 8);
-    clearTiles(tiles, 323, 1);
-    clearTiles(tiles, 321, 1);
-    clearTiles(tiles, 318, 1);
-    clearTiles(tiles, 312, 1);
-    clearTiles(tiles, 305, 1);
-    clearTiles(tiles, 303, 1);
-    clearTiles(tiles, 301, 1);
-    clearTiles(tiles, 298, 1);
-    clearTiles(tiles, 292, 5);
-    clearTiles(tiles, 287, 4);
-    clearTiles(tiles, 285, 1);
-    clearTiles(tiles, 281, 3);
-    clearTiles(tiles, 278, 1);
-    clearTiles(tiles, 267, 1);
-    clearTiles(tiles, 265, 1);
-    clearTiles(tiles, 247, 12);
-    clearTiles(tiles, 241, 5);
-    clearTiles(tiles, 238, 1);
-    clearTiles(tiles, 221, 1);
-    clearTiles(tiles, 218, 1);
-    clearTiles(tiles, 215, 1);
-    clearTiles(tiles, 211, 3);
-    clearTiles(tiles, 207, 3);
-    clearTiles(tiles, 205, 1);
-    clearTiles(tiles, 203, 1);
-    clearTiles(tiles, 201, 1);
-    clearTiles(tiles, 195, 4);
-    clearTiles(tiles, 193, 1);
-    clearTiles(tiles, 189, 3);
-    clearTiles(tiles, 183, 5);
-    clearTiles(tiles, 181, 1);
-    clearTiles(tiles, 178, 1);
-    clearTiles(tiles, 173, 1);
-    clearTiles(tiles, 164, 1);
-    clearTiles(tiles, 161, 1);
-    clearTiles(tiles, 158, 1);
-    clearTiles(tiles, 153, 4);
-    clearTiles(tiles, 146, 6);
-    clearTiles(tiles, 141, 4);
-    clearTiles(tiles, 138, 1);
-    clearTiles(tiles, 136, 1);
-    clearTiles(tiles, 131, 1);
-    clearTiles(tiles, 126, 1);
-    clearTiles(tiles, 118, 1);
-    clearTiles(tiles, 114, 3);
-    clearTiles(tiles, 108, 5);
-    clearTiles(tiles, 106, 1);
-    clearTiles(tiles, 101, 4);
-    clearTiles(tiles, 98, 1);
-    clearTiles(tiles, 94, 1);
-    clearTiles(tiles, 91, 1);
-    clearTiles(tiles, 88, 1);
-    clearTiles(tiles, 86, 1);
-    clearTiles(tiles, 84, 1);
-    clearTiles(tiles, 81, 1);
-    clearTiles(tiles, 78, 1);
-    clearTiles(tiles, 76, 1);
-    clearTiles(tiles, 71, 4);
-    clearTiles(tiles, 68, 2);
-    clearTiles(tiles, 63, 4);
-    clearTiles(tiles, 61, 1);
-    clearTiles(tiles, 58, 1);
-    clearTiles(tiles, 56, 1);
-    clearTiles(tiles, 41, 1);
-    clearTiles(tiles, 21, 18);
-    this.setTiles(tiles);
-};
-
-
-
-/* Level 10 Definition */
-
-var level11 = new Level(10);
-level11.setPresetLevel(true);
-level11.addEntryPoint(18, 19);
-level11.addEntryPoint(1, 1);
-level11.addExitPoint(16, 19);
-level11.setWorldWidth(20);
-level11.setWorldHeight(20);
-level11.setInitialAgentNumber(10);
-level11.setWaveNumber(5);
-level11.setExpiryLimit(100);
-level11.setInitialResourceStore(250);
-level11.setNotice("<h2>Level 11: A Very Testing Level</h2>" +
-        "<p>Experimental features are added here. Play at your own risk!</p>");
-
-level11.setupLevel = function() {
-    var tiles = fillWithTiles();
-    clearTiles(tiles, 398, 1);
-    clearTiles(tiles, 396, 1);
-    clearTiles(tiles, 378, 1);
-    clearTiles(tiles, 361, 16);
-    clearTiles(tiles, 358, 1);
-    clearTiles(tiles, 356, 1);
-    clearTiles(tiles, 345, 1);
-    clearTiles(tiles, 341, 1);
-    clearTiles(tiles, 338, 1);
-    clearTiles(tiles, 334, 3);
-    clearTiles(tiles, 325, 8);
-    clearTiles(tiles, 323, 1);
-    clearTiles(tiles, 321, 1);
-    clearTiles(tiles, 318, 1);
-    clearTiles(tiles, 312, 1);
-    clearTiles(tiles, 305, 1);
-    clearTiles(tiles, 303, 1);
-    clearTiles(tiles, 301, 1);
-    clearTiles(tiles, 298, 1);
-    clearTiles(tiles, 292, 5);
-    clearTiles(tiles, 287, 4);
-    clearTiles(tiles, 285, 1);
-    clearTiles(tiles, 281, 3);
-    clearTiles(tiles, 278, 1);
-    clearTiles(tiles, 267, 1);
-    clearTiles(tiles, 265, 1);
-    clearTiles(tiles, 247, 12);
-    clearTiles(tiles, 241, 5);
-    clearTiles(tiles, 238, 1);
-    clearTiles(tiles, 221, 1);
-    clearTiles(tiles, 218, 1);
-    clearTiles(tiles, 211, 5);
-//    clearTiles(tiles, 215, 1);
-//    clearTiles(tiles, 211, 3);
-    clearTiles(tiles, 207, 3);
-    clearTiles(tiles, 205, 1);
-    clearTiles(tiles, 203, 1);
-    clearTiles(tiles, 201, 1);
-    clearTiles(tiles, 195, 4);
-    clearTiles(tiles, 193, 1);
-    clearTiles(tiles, 189, 3);
-    clearTiles(tiles, 183, 5);
-    clearTiles(tiles, 181, 1);
-    clearTiles(tiles, 178, 1);
-    clearTiles(tiles, 173, 1);
-    clearTiles(tiles, 164, 1);
-    clearTiles(tiles, 161, 1);
-    clearTiles(tiles, 158, 1);
-    clearTiles(tiles, 153, 4);
-    clearTiles(tiles, 146, 6);
-    clearTiles(tiles, 141, 4);
-    clearTiles(tiles, 138, 1);
-    clearTiles(tiles, 136, 1);
-    clearTiles(tiles, 131, 1);
-    clearTiles(tiles, 126, 1);
-    clearTiles(tiles, 118, 1);
-    clearTiles(tiles, 114, 3);
-    clearTiles(tiles, 108, 5);
-    clearTiles(tiles, 106, 1);
-    clearTiles(tiles, 101, 4);
-    clearTiles(tiles, 98, 1);
-    clearTiles(tiles, 94, 1);
-    clearTiles(tiles, 91, 1);
-    clearTiles(tiles, 88, 1);
-    clearTiles(tiles, 86, 1);
-    clearTiles(tiles, 84, 1);
-    clearTiles(tiles, 81, 1);
-    clearTiles(tiles, 78, 1);
-    clearTiles(tiles, 76, 1);
-    clearTiles(tiles, 71, 4);
-    clearTiles(tiles, 68, 2);
-    clearTiles(tiles, 63, 4);
-    clearTiles(tiles, 61, 1);
-    clearTiles(tiles, 58, 1);
-    clearTiles(tiles, 56, 1);
-    clearTiles(tiles, 41, 1);
-    clearTiles(tiles, 21, 18);
-    this.setTiles(tiles);
-
-//    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 16, 19)]);
-    this.setWaveAgents([new Agent(RIVAL_AGENT_TYPE, 9, 3)]);
-    this.setLevelAgents([new Agent(PREDATOR_AGENT_TYPE, 3, 16)]);
+level10.setup = function() {
+    this.fillWithTiles();
+    this.clearTiles(398, 1);
+    this.clearTiles(396, 1);
+    this.clearTiles(378, 1);
+    this.clearTiles(361, 16);
+    this.clearTiles(358, 1);
+    this.clearTiles(356, 1);
+    this.clearTiles(345, 1);
+    this.clearTiles(341, 1);
+    this.clearTiles(338, 1);
+    this.clearTiles(334, 3);
+    this.clearTiles(325, 8);
+    this.clearTiles(323, 1);
+    this.clearTiles(321, 1);
+    this.clearTiles(318, 1);
+    this.clearTiles(312, 1);
+    this.clearTiles(305, 1);
+    this.clearTiles(303, 1);
+    this.clearTiles(301, 1);
+    this.clearTiles(298, 1);
+    this.clearTiles(292, 5);
+    this.clearTiles(287, 4);
+    this.clearTiles(285, 1);
+    this.clearTiles(281, 3);
+    this.clearTiles(278, 1);
+    this.clearTiles(267, 1);
+    this.clearTiles(265, 1);
+    this.clearTiles(247, 12);
+    this.clearTiles(241, 5);
+    this.clearTiles(238, 1);
+    this.clearTiles(221, 1);
+    this.clearTiles(218, 1);
+    this.clearTiles(215, 1);
+    this.clearTiles(211, 3);
+    this.clearTiles(207, 3);
+    this.clearTiles(205, 1);
+    this.clearTiles(203, 1);
+    this.clearTiles(201, 1);
+    this.clearTiles(195, 4);
+    this.clearTiles(193, 1);
+    this.clearTiles(189, 3);
+    this.clearTiles(183, 5);
+    this.clearTiles(181, 1);
+    this.clearTiles(178, 1);
+    this.clearTiles(173, 1);
+    this.clearTiles(164, 1);
+    this.clearTiles(161, 1);
+    this.clearTiles(158, 1);
+    this.clearTiles(153, 4);
+    this.clearTiles(146, 6);
+    this.clearTiles(141, 4);
+    this.clearTiles(138, 1);
+    this.clearTiles(136, 1);
+    this.clearTiles(131, 1);
+    this.clearTiles(126, 1);
+    this.clearTiles(118, 1);
+    this.clearTiles(114, 3);
+    this.clearTiles(108, 5);
+    this.clearTiles(106, 1);
+    this.clearTiles(101, 4);
+    this.clearTiles(98, 1);
+    this.clearTiles(94, 1);
+    this.clearTiles(91, 1);
+    this.clearTiles(88, 1);
+    this.clearTiles(86, 1);
+    this.clearTiles(84, 1);
+    this.clearTiles(81, 1);
+    this.clearTiles(78, 1);
+    this.clearTiles(76, 1);
+    this.clearTiles(71, 4);
+    this.clearTiles(68, 2);
+    this.clearTiles(63, 4);
+    this.clearTiles(61, 1);
+    this.clearTiles(58, 1);
+    this.clearTiles(56, 1);
+    this.clearTiles(41, 1);
+    this.clearTiles(21, 18);
+    
 };
 
 
 /* Google Map links */
-var GOOGLE_MAPS = [
-    "http://maps.google.com/maps/api/staticmap?center=30.9376,79.4292&zoom=10&size=801x601&maptype=satellite&sensor=false",
-    "http://maps.google.com/maps/api/staticmap?center=32.3939,78.2345&zoom=13&size=801x601&maptype=satellite&sensor=false",
-        "http://maps.google.com/maps/api/staticmap?center=-63.1748,-56.6296&zoom=13&size=801x601&maptype=satellite&sensor=false",
-        "http://maps.google.com/maps/api/staticmap?center=-25.34340,131.03644&zoom=14&size=801x601&maptype=satellite&sensor=false",
-        "http://maps.google.com/maps/api/staticmap?center=25.088,12.201&zoom=10&size=801x601&maptype=satellite&sensor=false",
-        "http://maps.google.com/maps/api/staticmap?center=-9.8691,-37.2139&zoom=10&size=801x601&maptype=satellite&sensor=false",
-        "http://maps.google.com/maps/api/staticmap?center=-13.182,167.705&zoom=10&size=801x601&maptype=satellite&sensor=false",
-        "http://maps.google.com/maps/api/staticmap?center=41.890260,12.492220&zoom=20&size=801x601&maptype=satellite&sensor=false",
-        "http://maps.google.com/maps/api/staticmap?center=43.07646,-79.07158&zoom=18&size=801x601&maptype=satellite&sensor=false",
-        "http://maps.google.com/maps/api/staticmap?center=-41.81182,146.98923&zoom=14&size=801x601&maptype=satellite&sensor=false",
-        "http://maps.google.com/maps/api/staticmap?center=40.75259,-73.98030&zoom=15&size=801x601&maptype=satellite&sensor=false"
-];
-
-var tempImg = new Array();
-
-for(var i = 0; i < GOOGLE_MAPS.length; i++) {
-    tempImg[i] = new Image();
-    tempImg[i].src = GOOGLE_MAPS[i];
-}
 level1.setMapOptions({lat: 47.5153, long: 19.0782, zoom: 20}); // Rome: 47.5153, 19.0782
 level2.setMapOptions({lat: 37.390296, long: -5.954579, zoom: 18}); // Seville: 37.390296,-5.954579
 level3.setMapOptions({lat: 45.433607, long: 12.338124, zoom: 18}); // Venice: 45.433607,12.338124
@@ -899,14 +693,3 @@ level7.setMapOptions({lat: 30.006533, long: -90.158792}); // New Orleans: 30.006
 level8.setMapOptions({lat: 21.283355, long: -157.837787}); // Honululu: 21.283355,-157.837787
 level9.setMapOptions({lat: 33.441393, long: -112.077407}); // Phoenix, Arizona: 33.441393,-112.077407
 level10.setMapOptions({lat: 30.265452, long: -97.744524, zoom: 18}); // Austin, Texas: 30.265452,-97.744524
-//level1.setMapURL(GOOGLE_MAPS[0]);
-//level2.setMapURL(GOOGLE_MAPS[1]);
-//level3.setMapURL(GOOGLE_MAPS[2]);
-//level4.setMapURL(GOOGLE_MAPS[3]);
-//level5.setMapURL(GOOGLE_MAPS[4]);
-//level6.setMapURL(GOOGLE_MAPS[5]);
-//level7.setMapURL(GOOGLE_MAPS[6]);
-//level8.setMapURL(GOOGLE_MAPS[7]);
-//level9.setMapURL(GOOGLE_MAPS[8]);
-//level10.setMapURL(GOOGLE_MAPS[9]);
-//level11.setMapURL(GOOGLE_MAPS[10]);

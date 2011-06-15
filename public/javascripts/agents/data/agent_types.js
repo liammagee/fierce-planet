@@ -9,8 +9,11 @@
 /*
 Agent Type setup
  */
-var CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000");
-CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, pieceHeight, newColor, counter, direction) {
+
+var AgentTypes = function() {};
+
+AgentTypes.CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000");
+AgentTypes.CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, pieceHeight, newColor, counter, direction) {
     if (pieceWidth < 12 || pieceHeight < 12) {
         var radius = (pieceWidth / 4);
 
@@ -87,8 +90,9 @@ CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, pieceH
     }
 
 });
-var PREDATOR_AGENT_TYPE = new AgentType("Predator", "fbe53b");
-PREDATOR_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
+
+AgentTypes.PREDATOR_AGENT_TYPE = new AgentType("Predator", "fbe53b");
+AgentTypes.PREDATOR_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
     var radius = (pieceWidth / 4);
     var bodyLength = (pieceWidth / 2);
 
@@ -109,8 +113,9 @@ PREDATOR_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth,
     }
     ctx.drawImage(img, intX - pieceWidth / 2, intY - pieceWidth / 2, pieceWidth, pieceWidth);
 });
-var RIVAL_AGENT_TYPE = new AgentType("Rival", "3be5fb");
-RIVAL_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
+
+AgentTypes.RIVAL_AGENT_TYPE = new AgentType("Rival", "3be5fb");
+AgentTypes.RIVAL_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
     var radius = (pieceWidth / 4);
     var bodyLength = (pieceWidth / 2);
 

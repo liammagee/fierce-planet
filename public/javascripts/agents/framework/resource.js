@@ -39,37 +39,6 @@ ResourceKind.prototype.setColor = function(color) { this._color = color; };
 
 
 /* Resource class definition */
-// Three types currently: soc, env, eco
-function Resource(resourceName, resourceType, color) {
-    // Kind properties
-    this._resourceName = resourceName;
-    this._resourceType = resourceType;
-    this._color = color;
-    this._initialTotalYield = 0;
-    this._perAgentYield = 0;
-    this._cost = 0;
-    this._upgradeCost = 0;
-    this._upgradeLevel = 1;
-    this._kind = resolveResourceKind(resourceName);
-
-    this._upgradeLevel = 1;
-    this._totalYield = 0;
-}
-function Resource(resourceName, resourceType, color, x, y) {
-    // Kind properties
-    this._resourceName = resourceName;
-    this._resourceType = resourceType;
-    this._color = color;
-    this._initialTotalYield = 0;
-    this._perAgentYield = 0;
-    this._cost = 0;
-    this._upgradeCost = 0;
-    this._kind = resolveResourceKind(resourceName);
-
-    this._upgradeLevel = 1;
-    this._totalYield = 0;
-    this.setPosition(x, y);
-}
 function Resource(kind, x, y) {
     // Kind properties
     this._kind = kind;

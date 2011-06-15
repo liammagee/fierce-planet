@@ -1,5 +1,6 @@
 $('#notifications').html("<p>Showing levels...</p>");
-$levelList.dialog('close');
+if ($levelList != undefined)
+    $levelList.dialog('close');
 $levelList = $('<div></div>')
         .html("<%=  escape_javascript(render('levels/index', :locals => { :levels => @levels})) %>")
         .dialog({

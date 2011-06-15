@@ -1,6 +1,14 @@
 
+/**
+ * Tile constants
+ */
+var DEFAULT_TILE_COLOR = "0FFF1F";
+
 
 /* Tile class definition */
+function Tile() {
+    this._color = "0FFF1F";
+}
 function Tile(color) {
     this._color = color;
 }

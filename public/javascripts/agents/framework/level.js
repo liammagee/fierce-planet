@@ -144,7 +144,10 @@ Level.prototype.getSurroundingTiles = function(x, y) {
     return surroundingTiles;
 };
 Level.prototype.getTiles = function() { return this._tiles; };
-Level.prototype.setTiles = function(tiles) { this._tiles = tiles; };
+Level.prototype.setTiles = function(tiles) {
+    this._tiles = tiles;
+    this.assignCells();
+};
 Level.prototype.addTile = function(tile) {
     this._tiles[tile._y * this._worldWidth + tile._x] = tile;
     this.removeEntryPoint(tile._x, tile._y);
@@ -207,20 +210,52 @@ Level.prototype.getPath = function() {
             var tilePosition = i * this._worldWidth + j;
             if (this._tiles[tilePosition] == undefined)
                 pathCells.push([j, i]);
-            /*
-            var found  = false;
-            for (var k = 0; k < this._tiles.length; k++) {
-                var tile = this._tiles[k];
-                if (tile._x == i && tile._y == j) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found)
-                pathCells.push([i, j]);
-                */
         }
 
     }
     return pathCells;
 };
+Level.prototype.fillWithTiles = function() {
+    this._tiles = new Array();
+    for (var i = 0; i < this._worldHeight; i++) {
+        for (var j = 0; j < this._worldWidth; j++) {
+            var tile = new Tile(DEFAULT_TILE_COLOR, j, i);
+            this._tiles.push(tile);
+            this.addCell(tile._x, tile._y, tile);
+        }
+    }
+};
+Level.prototype.clearTiles = function(start, number) {
+    for (var i = start; i < start + number; i++) {
+        if (i >= 0 && i < this._tiles.length) {
+            var tile = this._tiles[i];
+            this._tiles[i] = undefined;
+            this.annulCell(tile._x, tile._y);
+        }
+    }
+};
+Level.prototype.presetAgents = function(agentType, number) {
+    var agents = new Array();
+    for (var j = 0; j < this._entryPoints.length; j++) {
+        var point = this._entryPoints[j];
+        var x = point[0];
+        var y = point[1];
+        for (var i = 0; i < number; i ++) {
+            var agent = new Agent(agentType, x, y);
+            var colorSeed = j % 3;
+            var colorScheme = (colorSeed == 0 ? "000" : (colorSeed == 1 ? "0f0" : "00f"));
+            agent.setColor(colorScheme);
+            var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
+            agent.setDelay(delay);
+            agents.push(agent);
+        }
+    }
+    $.merge(agents, this.generateWaveAgents());
+    $.merge(agents, this.getLevelAgents());
+
+    this.setCurrentAgents(agents);
+};
+Level.prototype.preSetup = function() {
+    this.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, this._initialAgentNumber);
+};
+Level.prototype.setup = function() {};

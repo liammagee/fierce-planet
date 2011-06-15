@@ -19,14 +19,15 @@ currentLevel.setCustomLevel(true);
 currentLevel.setupLevel = function() {};
 currentLevelNumber = <%= @level.id %>;
 currentLevelPreset = false;
-var arr = fillWithTiles();
+var arr = [];
 var jsonArray = '<%= raw @level.tiles %>';
 try {
-arr = $.evalJSON(jsonArray);
+    arr = $.evalJSON(jsonArray);
+    currentLevel.setTiles(arr);
 }
 catch (err) {
+    arr = currentLevel.fillWithTiles();
 }
-currentLevel.setTiles(arr);
 
 jsonArray = '<%= raw @level.entry_points %>';
 arr = [];

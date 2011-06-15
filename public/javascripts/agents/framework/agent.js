@@ -1,3 +1,8 @@
+/**
+ * Agent constants
+ */
+var INITIAL_HEALTH = 100;
+var MOVE_INCREMENTS = 5;
 
 /* Agent type class definition */
 function AgentType(name, color) {
@@ -105,7 +110,7 @@ function Agent(agentType, x, y) {
     this._lastMemory = null;
     this._lastUntriedPathMemory = null;
 
-    this.memorise(x, y);
+    this.memorise(undefined, x, y);
 
     // Speed-related
     this._delay = 0;
@@ -247,14 +252,14 @@ Agent.prototype.adjustSpeed = function() {
  * Main method for evaluating and making moves
  * @param options
  */
-Agent.prototype.evaluateMove = function(options) {
+Agent.prototype.evaluateMove = function(level, options) {
     // TODO: Make these parameters of the level
     var withNoRepeat = options["withNoRepeat"];
     var withNoCollision = options["withNoCollision"];
 
 //    this.memorise(this._x, this._y);
 
-    var position = this.findPosition(withNoRepeat, withNoCollision, currentLevel.getAllowOffscreenCycling());
+    var position = this.findPosition(level, withNoRepeat, withNoCollision, level.getAllowOffscreenCycling());
 
     // Set the position and add the move to the agent's memory
     this.setPosition(position[0], position[1]);
@@ -264,9 +269,9 @@ Agent.prototype.evaluateMove = function(options) {
 /**
  *
  */
-Agent.prototype.evaluatePosition = function() {
+Agent.prototype.evaluatePosition = function(level) {
     // Record current position in memory, before moving on
-    this.memorise(this._x, this._y);
+    this.memorise(level, this._x, this._y);
 }
 
 /**
@@ -274,7 +279,7 @@ Agent.prototype.evaluatePosition = function() {
  * @param x
  * @param y
  */
-Agent.prototype.memorise = function(x, y) {
+Agent.prototype.memorise = function(level, x, y) {
 
     var memory = null;
     if (this._memoriesOfPlacesVisited[[x, y]] != undefined) {
@@ -295,102 +300,102 @@ Agent.prototype.memorise = function(x, y) {
     this._chronologicalMemory[this._age] = memory;
 
 
-    var resources = currentLevel.getResources();
-    // Add neighbouring resources to memory
-    for (var j = 0; j < resources.length; j++) {
-        var resource = resources[j];
-        var resourceX = resource.getX();
-        var resourceY = resource.getY();
-        // Is the resource next to our current position?
-        var diffX = Math.abs(resourceX - x);
-        var diffY = Math.abs(resourceY - y);
-        var diff = diffX * diffY;
-        if (diff <= 1) {
-            // Add resource to memory
-            this._memoriesOfResources[[x, y]] = resource;
+    if (level != undefined) {
+        var resources = level.getResources();
+        // Add neighbouring resources to memory
+        for (var j = 0; j < resources.length; j++) {
+            var resource = resources[j];
+            var resourceX = resource.getX();
+            var resourceY = resource.getY();
+            // Is the resource next to our current position?
+            var diffX = Math.abs(resourceX - x);
+            var diffY = Math.abs(resourceY - y);
+            var diff = diffX * diffY;
+            if (diff <= 1) {
+                // Add resource to memory
+                this._memoriesOfResources[[x, y]] = resource;
+            }
         }
-    }
 
-    // Add any unvisited path cells to memory
-    if (x - 1 >= 0 && currentLevel.getTile(x - 1, y) == undefined && this._memoriesOfPlacesVisited[[x - 1, y]] == undefined) {
-        // Add path cell to memory
-        this._lastUntriedPathMemory = new Memory(this._id, this._age, x - 1, y);
-        this._memoriesOfPathsUntried[[x - 1, y]] = this._lastUntriedPathMemory;
-    }
-    if (x + 1 < currentLevel.getWorldWidth() && currentLevel.getTile(x + 1, y) == undefined && this._memoriesOfPlacesVisited[[x + 1, y]] == undefined) {
-        // Add path cell to memory
-        this._lastUntriedPathMemory = new Memory(this._id, this._age, x + 1, y);
-        this._memoriesOfPathsUntried[[x + 1, y]] = this._lastUntriedPathMemory;
-    }
-    if (y - 1 >= 0 && currentLevel.getTile(x, y - 1) == undefined && this._memoriesOfPlacesVisited[[x, y - 1]] == undefined) {
-        // Add path cell to memory
-        this._lastUntriedPathMemory = new Memory(this._id, this._age, x, y - 1);
-        this._memoriesOfPathsUntried[[x, y - 1]] = this._lastUntriedPathMemory;
-    }
-    if (y + 1 < currentLevel.getWorldHeight() && currentLevel.getTile(x, y + 1) == undefined && this._memoriesOfPlacesVisited[[x, y + 1]] == undefined) {
-        // Add path cell to memory
-        this._lastUntriedPathMemory = new Memory(this._id, this._age, x, y + 1);
-        this._memoriesOfPathsUntried[[x, y + 1]] = this._lastUntriedPathMemory;
-    }
+        // Add any unvisited path cells to memory
+        if (x - 1 >= 0 && level.getTile(x - 1, y) == undefined && this._memoriesOfPlacesVisited[[x - 1, y]] == undefined) {
+            // Add path cell to memory
+            this._lastUntriedPathMemory = new Memory(this._id, this._age, x - 1, y);
+            this._memoriesOfPathsUntried[[x - 1, y]] = this._lastUntriedPathMemory;
+        }
+        if (x + 1 < level.getWorldWidth() && level.getTile(x + 1, y) == undefined && this._memoriesOfPlacesVisited[[x + 1, y]] == undefined) {
+            // Add path cell to memory
+            this._lastUntriedPathMemory = new Memory(this._id, this._age, x + 1, y);
+            this._memoriesOfPathsUntried[[x + 1, y]] = this._lastUntriedPathMemory;
+        }
+        if (y - 1 >= 0 && level.getTile(x, y - 1) == undefined && this._memoriesOfPlacesVisited[[x, y - 1]] == undefined) {
+            // Add path cell to memory
+            this._lastUntriedPathMemory = new Memory(this._id, this._age, x, y - 1);
+            this._memoriesOfPathsUntried[[x, y - 1]] = this._lastUntriedPathMemory;
+        }
+        if (y + 1 < level.getWorldHeight() && level.getTile(x, y + 1) == undefined && this._memoriesOfPlacesVisited[[x, y + 1]] == undefined) {
+            // Add path cell to memory
+            this._lastUntriedPathMemory = new Memory(this._id, this._age, x, y + 1);
+            this._memoriesOfPathsUntried[[x, y + 1]] = this._lastUntriedPathMemory;
+        }
 
 
-    // Add agents on this tile to memory
-    if (this._canCommunicateWithOtherAgents) {
-        var agents = currentLevel.getCurrentAgents();
-        for (var i = 0; i < agents.length; i++) {
-            var agent = agents[i];
-            if (agent._id == this._id)
-                continue;
-            var agentX = agent.getX();
-            var agentY = agent.getY();
+        // Add agents on this tile to memory
+        if (this._canCommunicateWithOtherAgents) {
+            var agents = level.getCurrentAgents();
+            for (var i = 0; i < agents.length; i++) {
+                var agent = agents[i];
+                if (agent._id == this._id)
+                    continue;
+                var agentX = agent.getX();
+                var agentY = agent.getY();
 //            if (agentX == x && agentY == y && (agent.lastPosition().getX() != this.lastPosition().getX() || agent.lastPosition().getY() != this.lastPosition().getY())) {
-            // TODO: This is very slow - consider ways to optimise
-            if (Math.abs(agentX - x) <= 1 && Math.abs(agentY - y) <= 1) {
-                // Add agent to memory
-                this._memoriesOfAgents[agent._id] = new MemoryOfAgent(this._id, this._age, x, y, agent._id);
-                var mpv = new Array();
-                for (var j in agent._memoriesOfPlacesVisited) {
-                    var m = agent._memoriesOfPlacesVisited[j];
-                    if (m != undefined)
-                        mpv[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
-                }
-                this._memoriesOfPlacesVisitedByOtherAgents[agent._id] = mpv;
-                var mpu = new Array();
-                for (var j in agent._memoriesOfPathsUntried) {
-                    var m = agent._memoriesOfPathsUntried[j];
-                    if (m != undefined)
-                        mpu[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
-                }
-                this._memoriesOfPathsUntriedByOtherAgents[agent._id] = mpu;
+                // TODO: This is very slow - consider ways to optimise
+                if (Math.abs(agentX - x) <= 1 && Math.abs(agentY - y) <= 1) {
+                    // Add agent to memory
+                    this._memoriesOfAgents[agent._id] = new MemoryOfAgent(this._id, this._age, x, y, agent._id);
+                    var mpv = new Array();
+                    for (var j in agent._memoriesOfPlacesVisited) {
+                        var m = agent._memoriesOfPlacesVisited[j];
+                        if (m != undefined)
+                            mpv[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
+                    }
+                    this._memoriesOfPlacesVisitedByOtherAgents[agent._id] = mpv;
+                    var mpu = new Array();
+                    for (var j in agent._memoriesOfPathsUntried) {
+                        var m = agent._memoriesOfPathsUntried[j];
+                        if (m != undefined)
+                            mpu[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
+                    }
+                    this._memoriesOfPathsUntriedByOtherAgents[agent._id] = mpu;
 
-                // Add memories to other agent
-                // TODO: No longer necessary?
-                /*
-                agent._memoriesOfAgents[this._id] = new MemoryOfAgent(agent._id, agent._age, x, y, this._id) ;
-                mpv = new Array();
-                for (var j in this._memoriesOfPlacesVisited) {
-                    var m = this._memoriesOfPlacesVisited[j];
-                    if (m != undefined)
-                        mpv[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
-                }
-                agent._memoriesOfPlacesVisitedByOtherAgents[this._id] = mpv;
-                mpu = new Array();
-                for (var j in this._memoriesOfPathsUntried) {
-                    var m = this._memoriesOfPathsUntried[j];
-                    if (m != undefined)
-                        mpu[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
-                }
-                agent._memoriesOfPathsUntriedByOtherAgents[this._id] = mpu;
-                */
+                    // Add memories to other agent
+                    // TODO: No longer necessary?
+                    /*
+                    agent._memoriesOfAgents[this._id] = new MemoryOfAgent(agent._id, agent._age, x, y, this._id) ;
+                    mpv = new Array();
+                    for (var j in this._memoriesOfPlacesVisited) {
+                        var m = this._memoriesOfPlacesVisited[j];
+                        if (m != undefined)
+                            mpv[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
+                    }
+                    agent._memoriesOfPlacesVisitedByOtherAgents[this._id] = mpv;
+                    mpu = new Array();
+                    for (var j in this._memoriesOfPathsUntried) {
+                        var m = this._memoriesOfPathsUntried[j];
+                        if (m != undefined)
+                            mpu[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
+                    }
+                    agent._memoriesOfPathsUntriedByOtherAgents[this._id] = mpu;
+                    */
 
+                }
             }
         }
     }
 };
 
-Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffscreenCycling) {
-    var positionFound = false;
-    var existingDirections = new Array();
+Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, withOffscreenCycling) {
     var x = this.getPosition()[0];
     var y = this.getPosition()[1];
     var newX = x;
@@ -405,8 +410,8 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
         var dir = directions[i];
 
         var offScreen1 = 0;
-        var offScreenWidth = currentLevel.getWorldWidth() - 1;
-        var offScreenHeight = currentLevel.getWorldHeight() - 1;
+        var offScreenWidth = level._worldWidth - 1;
+        var offScreenHeight = level._worldHeight - 1;
         var offset = 1;
         var toContinue = false;
         switch (dir) {
@@ -426,7 +431,7 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
         if ((withNoRepeat && lastX == newX && lastY == newY) || toContinue) {
             continue;
         }
-        if (currentLevel.getCell(newX, newY) == undefined) {
+        if (level.getCell(newX, newY) == undefined) {
             candidateCells.push([newX, newY]);
         }
     }
@@ -444,7 +449,7 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
     var candidatesNotInHistory = new Array();
     for (var i = 0; i < candidateCells.length; i++) {
         var candidate = candidateCells[i];
-        if (currentLevel.isExitPoint(candidate[0], candidate[1]))
+        if (level.isExitPoint(candidate[0], candidate[1]))
             return candidate;
 
 
@@ -470,7 +475,7 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
         var bestCandidate = candidatesNotInHistory[0];
         for (var i = 0; i < candidatesNotInHistory.length; i++) {
             var candidate = candidatesNotInHistory[i];
-            var neighbour = this.hasNeighbouringResources(candidate[0], candidate[1]);
+            var neighbour = this.hasNeighbouringResources(level, candidate[0], candidate[1]);
             if (neighbour != null) {
                 bestCandidate = candidate;
                 break;
@@ -665,11 +670,6 @@ Agent.prototype.findPosition = function(withNoRepeat, withNoCollision, withOffsc
 };
 
 Agent.prototype.getClosestUnvisitedTile = function(currentX, currentY) {
-    for (var unvisited in this._memoriesOfPathsUntried) {
-        var memory = this._chronologicalMemory[unvisited.getAge()];
-        if (memory != undefined) {
-        }
-    }
     var foundMemory = null;
     var foundMemoryPosition = -1;
     for (var i = 0; i < this._memoriesOfPlacesVisited.length; i++) {
@@ -710,8 +710,8 @@ Agent.prototype.randomDirectionOrder = function() {
     return directions;
 };
 
-Agent.prototype.hasNeighbouringResources = function(x, y) {
-    for (var j = 0; j < currentLevel.getResources().length; j++) {
+Agent.prototype.hasNeighbouringResources = function(level, x, y) {
+    for (var j = 0; j < level.getResources().length; j++) {
         var p = currentLevel.getResources()[j];
         var px = p.getX();
         var py = p.getY();
