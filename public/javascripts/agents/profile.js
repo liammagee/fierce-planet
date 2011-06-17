@@ -74,7 +74,7 @@ FiercePlanet.compileStats = function() {
         "profile[profile_class]": FiercePlanet.profileClass,
         "profile[credits]": FiercePlanet.credits,
         "profile[capabilities]": FiercePlanet.capabilities.join(','),
-        waves_survived: FiercePlanet.levelWaves,
+        waves_survived: FiercePlanet.currentWave,
         saved_agent_count: FiercePlanet.savedAgentCount,
         expired_agent_count: FiercePlanet.expiredAgentCount,
         resources_spent: FiercePlanet.resourcesSpent,
@@ -103,7 +103,7 @@ FiercePlanet.generateStats = function() {
             "</tr>" +
             "<tr>" +
             "<td>Waves survived:</td>" +
-            "<td>" + FiercePlanet.levelWaves + "</td>" +
+            "<td>" + FiercePlanet.currentWave + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Citizens saved:</td>" +

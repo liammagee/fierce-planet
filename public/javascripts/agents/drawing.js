@@ -30,7 +30,7 @@ FiercePlanet.drawGame = function() {
         FiercePlanet.drawPath();
     }
     FiercePlanet.drawEntryPoints();
-    FiercePlanet.drawGoal();
+    FiercePlanet.drawExitPoints();
     FiercePlanet.drawResources();
     FiercePlanet.drawScrollingLayer();
     FiercePlanet.drawScoreboard();
@@ -170,7 +170,7 @@ FiercePlanet.drawMap = function() {
 /**
  *
  */
-FiercePlanet.drawGoal = function() {
+FiercePlanet.drawExitPoints = function() {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
@@ -181,15 +181,36 @@ FiercePlanet.drawGoal = function() {
         var width = (FiercePlanet.pieceWidth / 2);
         var height = (FiercePlanet.pieceHeight / 2);
 
+//        ctx.beginPath();
+//        ctx.arc(x, y, width, 0, Math.PI * 2, false);
+//        ctx.closePath();
+//        ctx.strokeStyle = "#ccc";
+//        ctx.stroke();
+//        ctx.fillStyle = "#fbe53b";
+//        ctx.fill();
+
+        // Draw circle
         ctx.beginPath();
         ctx.arc(x, y, width, 0, Math.PI * 2, false);
         ctx.closePath();
-        ctx.strokeStyle = "#ccc";
+        ctx.strokeStyle = "#000";
         ctx.stroke();
-        ctx.fillStyle = "#fbe53b";
+        ctx.fillStyle = "#fff";
+        ctx.fill();
+
+        // Draw progress
+        var progressRatio = (FiercePlanet.currentWave - 1) / FiercePlanet.currentLevel.getWaveNumber();
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.arc(x, y, width, - Math.PI / 2, - Math.PI / 2 + Math.PI * 2 * progressRatio, false);
+        ctx.closePath();
+        ctx.strokeStyle = "#000";
+        ctx.stroke();
+        ctx.fillStyle = "#0f0";
         ctx.fill();
     }
 };
+
 
 /**
  *
@@ -214,12 +235,60 @@ FiercePlanet.drawEntryPoints = function() {
         ctx.beginPath();
         ctx.arc(x, y, width, 0, Math.PI * 2, false);
         ctx.closePath();
-        ctx.strokeStyle = "#ddd";
+        ctx.strokeStyle = "#000";
         ctx.stroke();
-        ctx.fillStyle = "#ddd";
+        ctx.fillStyle = "#0f0";
+        ctx.fill();
+
+        // Draw progress
+        var progressRatio = (FiercePlanet.currentWave - 1) / FiercePlanet.currentLevel.getWaveNumber();
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.arc(x, y, width, - Math.PI / 2, - Math.PI / 2 + Math.PI * 2 * progressRatio, false);
+        ctx.closePath();
+        ctx.strokeStyle = "#000";
+        ctx.stroke();
+        ctx.fillStyle = "#fff";
         ctx.fill();
     }
 
+};
+
+/**
+ *
+ */
+FiercePlanet.drawNotice = function() {
+    var canvas = $('#c3')[0];
+    var ctx = canvas.getContext('2d');
+    ctx.font = '500 16px/2 Unknown Font, sans-serif';
+
+    ctx.lineWidth = 2;
+    var showForTicks = 150;
+    var startingTransparency = 0.1;
+    FiercePlanet.alphaLevel = FiercePlanet.globalCounter > showForTicks ? 0 : Math.pow((showForTicks - FiercePlanet.globalCounter) / showForTicks - startingTransparency, 0.5);
+    var width = FiercePlanet.WAVE_NOTICE_WIDTH, height = FiercePlanet.WAVE_NOTICE_HEIGHT, roundedEdge = 10;
+    var x = FiercePlanet.waveNoticeX, y = FiercePlanet.waveNoticeY;
+    ctx.clearRect(x - 1, y - 1, width + 2, height + 2);
+    ctx.beginPath();
+    ctx.moveTo(x + roundedEdge, y);
+    ctx.lineTo(x + width - roundedEdge, y);
+    ctx.arcTo(x + width, y, x + width, y + roundedEdge, roundedEdge);
+    ctx.lineTo(x + width, y + height - roundedEdge);
+    ctx.arcTo(x + width, y + height, x + width - roundedEdge, y + height, roundedEdge);
+    ctx.lineTo(x + roundedEdge, y + height);
+    ctx.arcTo(x, y + height, x, y + height - roundedEdge, roundedEdge);
+    ctx.lineTo(x, y + roundedEdge);
+    ctx.arcTo(x, y, x + roundedEdge, y, roundedEdge);
+    ctx.closePath();
+    ctx.strokeStyle = "rgba(255, 255, 255, " + FiercePlanet.alphaLevel + ")";
+    ctx.stroke();
+//    ctx.fillStyle = "rgba(251, 228, 60, 0.1)";
+    ctx.fillStyle = "rgba(32, 98, 210, " + FiercePlanet.alphaLevel + ")";
+    ctx.fill();//2062c2
+    ctx.fillStyle = "rgba(255, 255, 255, " + FiercePlanet.alphaLevel + ")";
+    ctx.fillText("Hello Fierce Planet Player! ", x + 10, y + 20, 20);
+    ctx.fillText("Well done, you saved a", x + 10, y + 40, 20);
+    ctx.fillText("citizen!", x + 10, y + 60, 20);
 };
 
 /**
@@ -567,7 +636,7 @@ FiercePlanet.drawSaved = function() {
  */
 FiercePlanet.drawWaves = function() {
     var e = $('#waves-display')[0];
-    e.innerHTML = FiercePlanet.levelWaves.toString() + " out of " + FiercePlanet.currentLevel.getWaveNumber();
+    e.innerHTML = FiercePlanet.currentWave.toString() + " out of " + FiercePlanet.currentLevel.getWaveNumber();
 };
 
 /**

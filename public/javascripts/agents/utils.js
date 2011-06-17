@@ -71,6 +71,7 @@ FiercePlanet.getAndRetrieveProperties = function() {
     FiercePlanet.getAndRetrieveProperty('agentsCanCommunicate');
     FiercePlanet.getAndRetrieveProperty('agentTracing');
     FiercePlanet.getAndRetrieveProperty('scrollingImageVisible');
+    FiercePlanet.getAndRetrieveProperty('noticesVisible');
     FiercePlanet.getAndRetrieveProperty('recording');
     FiercePlanet.getAndRetrieveProperty('rivalsVisible');
     FiercePlanet.getAndRetrieveProperty('predatorsVisible');
@@ -92,6 +93,7 @@ FiercePlanet.setAndStoreProperties = function() {
     FiercePlanet.setAndStoreProperty('agentsCanCommunicate');
     FiercePlanet.setAndStoreProperty('agentTracing');
     FiercePlanet.setAndStoreProperty('scrollingImageVisible');
+    FiercePlanet.setAndStoreProperty('noticesVisible');
     FiercePlanet.setAndStoreProperty('recording');
     FiercePlanet.setAndStoreProperty('rivalsVisible');
     FiercePlanet.setAndStoreProperty('predatorsVisible');

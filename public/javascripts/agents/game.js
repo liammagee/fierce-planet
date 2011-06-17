@@ -4,6 +4,7 @@
 
 /* Constants */
 var FiercePlanet = FiercePlanet || {};
+var fp = fp || FiercePlanet;
 
 
 /* Initialisation code: start game and dialog boxes */
@@ -24,6 +25,9 @@ FiercePlanet.processAgents = function() {
     // Draw the scrolling layer
     FiercePlanet.drawScrollingLayer();
 
+    // Draw any notices
+    if (FiercePlanet.noticesVisible)
+        FiercePlanet.drawNotice();
 
     // Delay, until we are ready for the first wave
     if (FiercePlanet.levelDelayCounter < FiercePlanet.NEW_LEVEL_DELAY / FiercePlanet.interval) {
@@ -75,11 +79,11 @@ FiercePlanet.processAgents = function() {
             // TODO: move this logic elsewhere
             if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE) {
                 if (FiercePlanet.currentLevel.isExitPoint(agent.getX(), agent.getY())) {
-                    FiercePlanet.currentScore += FiercePlanet.MOVE_HEALTH_COST;
+                    FiercePlanet.currentScore += FiercePlanet.SAVE_SCORE;
                     FiercePlanet.savedAgentCount++;
                     FiercePlanet.savedAgentThisWaveCount++;
                     nullifiedAgents.push(i);
-                    var multiplier = (FiercePlanet.levelWaves < 5 ? 4 : (FiercePlanet.levelWaves < 10 ? 3 : (FiercePlanet.levelWaves < 20 ? 2 : 1)));
+                    var multiplier = (FiercePlanet.currentWave < 5 ? 4 : (FiercePlanet.currentWave < 10 ? 3 : (FiercePlanet.currentWave < 20 ? 2 : 1)));
                     FiercePlanet.resourcesInStore += multiplier; //FiercePlanet.WAVE_GOODNESS_BONUS;
                     FiercePlanet.drawScore();
                     FiercePlanet.drawResourcesInStore();
@@ -132,7 +136,7 @@ FiercePlanet.processAgents = function() {
     // No agents left? End of wave
     if (citizenCount == 0) {
         // Start a new wave
-        if (FiercePlanet.levelWaves < FiercePlanet.currentLevel.getWaveNumber()) {
+        if (FiercePlanet.currentWave < FiercePlanet.currentLevel.getWaveNumber()) {
             FiercePlanet.completeWave();
             FiercePlanet.newWave();
         }

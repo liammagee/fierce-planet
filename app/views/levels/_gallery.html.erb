@@ -7,7 +7,7 @@
 <form>
   Select difficulty:
   <br/>
-  <select id="difficultyInput" name="difficultyInput" onchange="FiercePlanet.levelOfDifficulty = checkInteger(difficultyInput.value)">
+  <select id="difficultyInput" name="difficultyInput" onchange="FiercePlanet.levelOfDifficulty = FiercePlanet.checkInteger(difficultyInput.value)">
     <option value="1">Easy</option>
     <option value="2" selected="selected">Medium</option>
     <option value="3">Hard</option>
@@ -17,7 +17,7 @@
 
   Level:
   <br/>
-  <select id="levelInput" name="levelInput" onchange="FiercePlanet.currentLevelNumber = checkInteger(levelInput.value); FiercePlanet.currentLevelPreset = true;">
+  <select id="levelInput" name="levelInput" onchange="FiercePlanet.currentLevelNumber = FiercePlanet.checkInteger(levelInput.value); FiercePlanet.currentLevelPreset = true;">
     <option value="Choose level...">Choose level...</option>
     <option value="1">1</option>
     <option value="2">2</option>

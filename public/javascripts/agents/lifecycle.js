@@ -86,6 +86,10 @@ FiercePlanet.newWave = function() {
     FiercePlanet.currentLevel.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, FiercePlanet.numAgents, FiercePlanet.agentsCanCommunicate);
 
     FiercePlanet.notify("New wave coming...");
+    FiercePlanet.waveNoticeX = Math.random() * (FiercePlanet.WORLD_WIDTH - FiercePlanet.WAVE_NOTICE_WIDTH);
+    FiercePlanet.waveNoticeY = Math.random() * (FiercePlanet.WORLD_HEIGHT - FiercePlanet.WAVE_NOTICE_HEIGHT);
+    FiercePlanet.drawEntryPoints();
+    FiercePlanet.drawExitPoints();
     FiercePlanet._startAgents();
 };
 
@@ -95,7 +99,7 @@ FiercePlanet.newWave = function() {
  */
 FiercePlanet.completeWave = function() {
     FiercePlanet._finaliseGame();
-    FiercePlanet.levelWaves++;
+    FiercePlanet.currentWave++;
     FiercePlanet.numAgents++;
 };
 
@@ -220,7 +224,7 @@ FiercePlanet._initialiseGame = function () {
     FiercePlanet.socialResourceCount = 0;
     FiercePlanet.expiredAgentCount = 0;
     FiercePlanet.savedAgentCount = 0;
-    FiercePlanet.levelWaves = 1;
+    FiercePlanet.currentWave = 1;
 
     FiercePlanet.resourceRecoveryCycle = Math.pow(FiercePlanet.DEFAULT_RESOURCE_RECOVERY, FiercePlanet.levelOfDifficulty - 1);
 

@@ -12,7 +12,7 @@ FiercePlanet.PROFILE_ID = null;
 
 // Game variable constants
 FiercePlanet.MOVE_HEALTH_COST = -2;
-FiercePlanet.MOVE_HEALTH_COST = 10;
+FiercePlanet.SAVE_SCORE = 10;
 FiercePlanet.STARTING_STORE = 100;
 FiercePlanet.DEFAULT_RESOURCE_RECOVERY = 2;
 FiercePlanet.WAVE_GOODNESS_BONUS = 5;
@@ -31,6 +31,9 @@ FiercePlanet.EXTREME_DIFFICULTY = 4;
 // Dimension constants
 FiercePlanet.WORLD_WIDTH = 800;
 FiercePlanet.WORLD_HEIGHT = 600;
+FiercePlanet.WAVE_NOTICE_WIDTH = 200;
+FiercePlanet.WAVE_NOTICE_HEIGHT = 150;
+
 
 
 // Resource constants
@@ -66,6 +69,7 @@ FiercePlanet.godMode = false;
 FiercePlanet.invisiblePath = false;
 FiercePlanet.scrollingImageVisible = false;
 FiercePlanet.agentsCanCommunicate = true;
+FiercePlanet.noticesVisible = false;
 FiercePlanet.agentTracing = false;
 FiercePlanet.recording = false;
 FiercePlanet.soundsPlayable = false;
@@ -86,6 +90,7 @@ FiercePlanet.recordedLevels = [];
 
 // Current state
 FiercePlanet.currentLevelNumber = 1;
+FiercePlanet.currentWave = 1;
 FiercePlanet.currentLevelPreset = true;
 FiercePlanet.currentLevel = null;
 FiercePlanet.existingCurrentLevel = null;
@@ -118,7 +123,6 @@ FiercePlanet.globalRecordingCounter = 0;
 
 
 
-FiercePlanet.levelWaves = 1;
 FiercePlanet.previousLevelScore = 0;
 FiercePlanet.currentScore = 0;
 FiercePlanet.resourcesInStore = 0;

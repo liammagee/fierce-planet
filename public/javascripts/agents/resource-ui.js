@@ -36,11 +36,25 @@ FiercePlanet.setupResourceInteraction = function () {
                 FiercePlanet.showUpgradeDeleteDialog(e);
             return false;
           }, false);
+        resourceCanvas.setAttribute('draggable', 'true');
 
         resourceCanvas.addEventListener('dragstart', function (e) {
             if (e.preventDefault) e.preventDefault(); // allows us to drop
             this.className = 'over';
             e.dataTransfer.dropEffect = 'copy';
+
+            /*
+            TODO: Find a way to drag and drop resources
+            var __ret = FiercePlanet.getCurrentPosition(e);
+            var posX = __ret.posX;
+            var posY = __ret.posY;
+            if (FiercePlanet.currentLevel.getCell(posX, posY) instanceof Resource) {
+                var resource = FiercePlanet.currentLevel.getCell(posX, posY);
+                e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
+                e.dataTransfer.setData('Text', resource.getName()); // required otherwise doesn't work
+                FiercePlanet.currentResourceId = resource.getName();
+            }
+            */
             return false;
           }, false);
         resourceCanvas.addEventListener('dragover', function (e) {
@@ -59,6 +73,7 @@ FiercePlanet.setupResourceInteraction = function () {
         resourceCanvas.addEventListener('drop', function (e) {
             if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting...why???
             this.className = '';
+            console.log('got here');
             FiercePlanet.dropItem(e);
           }, false);
     };
@@ -105,12 +120,8 @@ FiercePlanet.dropItem = function(e) {
         var posY = __ret.posY;
         if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
             return;
-        for (var i = 0; i < FiercePlanet.currentLevel.getResources().length; i++) {
-            var p = FiercePlanet.currentLevel.getResources()[i];
-            if (p.getX() == posX && p.getY() == posY) {
-                return;
-            }
-        }
+        if (FiercePlanet.currentLevel.getCell(posX, posY) instanceof Resource)
+            return;
 
         var resourceCode = FiercePlanet.currentResourceId;
         if (e.dataTransfer)
@@ -148,7 +159,7 @@ FiercePlanet.dropItem = function(e) {
  */
 FiercePlanet.getCurrentResourceIndex = function () {
         for (var i = 0; i < FiercePlanet.currentLevel.getResources().length; i++) {
-            var p = FiercePlanet.currentLevel.getResources().resources[i];
+            var p = FiercePlanet.currentLevel.getResources()[i];
             if (p == FiercePlanet.currentResource) {
                 return i;
             }
