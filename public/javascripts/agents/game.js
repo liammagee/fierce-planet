@@ -41,8 +41,10 @@ FiercePlanet.processAgents = function() {
         return;
     }
 
-    // Increment counter
+    // Increment counters
     FiercePlanet.waveCounter++;
+    FiercePlanet.levelCounter++;
+    FiercePlanet.globalCounter++;
 
 
     FiercePlanet.clearAgents();

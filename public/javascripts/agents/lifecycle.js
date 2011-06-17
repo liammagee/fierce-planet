@@ -37,6 +37,7 @@ FiercePlanet.newGame = function() {
         FiercePlanet.currentLevelNumber = 1;
     FiercePlanet.currentScore = 0;
     FiercePlanet.previousLevelScore = 0;
+    FiercePlanet.gameCounter = 0;
     FiercePlanet.newLevel();
 };
 
@@ -47,6 +48,7 @@ FiercePlanet.newGame = function() {
 FiercePlanet.newLevel = function() {
     FiercePlanet.inDesignMode = false;
     FiercePlanet.levelDelayCounter = 0;
+    FiercePlanet.levelCounter = 0;
     FiercePlanet.maxLevelMoves = 0;
     FiercePlanet.previousLevelScore = FiercePlanet.currentScore;
     if (FiercePlanet.currentLevel != undefined)

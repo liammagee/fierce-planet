@@ -120,7 +120,7 @@ FiercePlanet.socialResourceCount = 0;
 
 FiercePlanet.waveCounter = 0;
 FiercePlanet.levelCounter = 0;
-FiercePlanet.globalCounter = 0;
+FiercePlanet.gameCounter = 0;
 FiercePlanet.globalRecordingCounter = 0;
 
 

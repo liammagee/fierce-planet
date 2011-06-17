@@ -73,7 +73,6 @@ FiercePlanet.setupResourceInteraction = function () {
         resourceCanvas.addEventListener('drop', function (e) {
             if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting...why???
             this.className = '';
-            console.log('got here');
             FiercePlanet.dropItem(e);
           }, false);
     };
