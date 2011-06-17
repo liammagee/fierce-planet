@@ -148,7 +148,7 @@ FiercePlanet.setupDialogs = function() {
         FiercePlanet.currentLevelNumber = 0;
         FiercePlanet.currentLevelPreset = false;
         FiercePlanet.restartLevel();
-    }, false    );
+    });
 
     FiercePlanet.$designFeatures = $('#level-features')
         .dialog({

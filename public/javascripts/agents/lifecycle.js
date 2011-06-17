@@ -188,18 +188,18 @@ FiercePlanet._initialiseGame = function () {
     // Stop any existing timers
     FiercePlanet._stopAgents();
 
-    if (FiercePlanet.currentLevelNumber < 1 || FiercePlanet.currentLevelNumber > 10)
+    if (FiercePlanet.currentLevelNumber < 0 || FiercePlanet.currentLevelNumber > 10)
         FiercePlanet.currentLevelNumber = 1;
     if (FiercePlanet.currentLevel != undefined && FiercePlanet.currentLevel.isPresetLevel()) {
         try {
-            FiercePlanet.currentLevel = eval("level" + FiercePlanet.currentLevelNumber.toString());
+            FiercePlanet.currentLevel = eval("PresetLevels.level" + FiercePlanet.currentLevelNumber.toString());
         }
         catch(err) {
             // Silently fail - current level stays the same if undefined
         }
     }
     else if (FiercePlanet.currentLevel == undefined) {
-        FiercePlanet.currentLevel = eval("level1");
+        FiercePlanet.currentLevel = eval("PresetLevels.level1");
     }
 
     if (FiercePlanet.waveOverride > 0) {
