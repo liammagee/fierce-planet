@@ -79,7 +79,7 @@ FiercePlanet.restartLevel = function() {
  */
 FiercePlanet.newWave = function() {
     FiercePlanet.maxWaveMoves = 0;
-    FiercePlanet.globalCounter = 0;
+    FiercePlanet.waveCounter = 0;
     FiercePlanet.waveDelayCounter = 0;
     FiercePlanet.savedAgentThisWaveCount = 0;
 
@@ -140,7 +140,7 @@ FiercePlanet.completeGame = function() {
 FiercePlanet.playGame = function() {
     if (FiercePlanet.inPlay)
         return;
-    if (FiercePlanet.globalCounter == 0)
+    if (FiercePlanet.waveCounter == 0)
         FiercePlanet.newWave();
     else
         FiercePlanet._startAgents();
@@ -194,7 +194,7 @@ FiercePlanet._initialiseGame = function () {
 
     if (FiercePlanet.currentLevelNumber < 0 || FiercePlanet.currentLevelNumber > 10)
         FiercePlanet.currentLevelNumber = 1;
-    if (FiercePlanet.currentLevel != undefined && FiercePlanet.currentLevel.isPresetLevel()) {
+    if (FiercePlanet.currentLevel != undefined && FiercePlanet.currentLevelPreset) {
         try {
             FiercePlanet.currentLevel = eval("PresetLevels.level" + FiercePlanet.currentLevelNumber.toString());
         }

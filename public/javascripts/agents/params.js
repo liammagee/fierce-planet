@@ -118,6 +118,8 @@ FiercePlanet.economicResourceCount = 0;
 FiercePlanet.environmentalResourceCount = 0;
 FiercePlanet.socialResourceCount = 0;
 
+FiercePlanet.waveCounter = 0;
+FiercePlanet.levelCounter = 0;
 FiercePlanet.globalCounter = 0;
 FiercePlanet.globalRecordingCounter = 0;
 

@@ -42,7 +42,7 @@ FiercePlanet.processAgents = function() {
     }
 
     // Increment counter
-    FiercePlanet.globalCounter++;
+    FiercePlanet.waveCounter++;
 
 
     FiercePlanet.clearAgents();
@@ -55,7 +55,7 @@ FiercePlanet.processAgents = function() {
     for (var i = 0; i < agents.length; i++) {
         var agent = agents[i];
         var speed = agent.getSpeed();
-        if (FiercePlanet.globalCounter >= agent.getDelay() && (FiercePlanet.globalCounter - agent.getDelay()) % speed == 0) {
+        if (FiercePlanet.waveCounter >= agent.getDelay() && (FiercePlanet.waveCounter - agent.getDelay()) % speed == 0) {
             agent.evaluatePosition(FiercePlanet.currentLevel);
         }
     }
@@ -74,7 +74,7 @@ FiercePlanet.processAgents = function() {
         var speed = agent.getSpeed();
         if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE)
             citizenCount++;
-        if (FiercePlanet.globalCounter >= agent.getDelay() && (FiercePlanet.globalCounter - agent.getDelay()) % speed == 0) {
+        if (FiercePlanet.waveCounter >= agent.getDelay() && (FiercePlanet.waveCounter - agent.getDelay()) % speed == 0) {
             recordableChangeMade = true;
             // TODO: move this logic elsewhere
             if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE) {
@@ -149,7 +149,7 @@ FiercePlanet.processAgents = function() {
         }
     }
     else {
-        if (FiercePlanet.globalCounter % FiercePlanet.resourceRecoveryCycle == 0)
+        if (FiercePlanet.waveCounter % FiercePlanet.resourceRecoveryCycle == 0)
             FiercePlanet.recoverResources();
         FiercePlanet.drawAgents();
     }

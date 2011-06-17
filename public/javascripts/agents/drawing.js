@@ -265,7 +265,7 @@ FiercePlanet.drawNotice = function() {
     ctx.lineWidth = 2;
     var showForTicks = 150;
     var startingTransparency = 0.1;
-    FiercePlanet.alphaLevel = FiercePlanet.globalCounter > showForTicks ? 0 : Math.pow((showForTicks - FiercePlanet.globalCounter) / showForTicks - startingTransparency, 0.5);
+    FiercePlanet.alphaLevel = FiercePlanet.waveCounter > showForTicks ? 0 : Math.pow((showForTicks - FiercePlanet.waveCounter) / showForTicks - startingTransparency, 0.5);
     var width = FiercePlanet.WAVE_NOTICE_WIDTH, height = FiercePlanet.WAVE_NOTICE_HEIGHT, roundedEdge = 10;
     var x = FiercePlanet.waveNoticeX, y = FiercePlanet.waveNoticeY;
     ctx.clearRect(x - 1, y - 1, width + 2, height + 2);
@@ -373,17 +373,17 @@ FiercePlanet.clearAgents = function() {
     var canvas = $('#c4')[0];
     var ctx = canvas.getContext('2d');
     var agents = FiercePlanet.currentLevel._currentAgents;
-    if (FiercePlanet.globalCounter > 0) {
+    if (FiercePlanet.waveCounter > 0) {
         for (var i = 0; i < agents.length; i += 1) {
             var agent = agents[i];
             var wx = agent._wanderX;
             var wy = agent._wanderY;
-            var __ret = FiercePlanet.getDrawingPosition(agent, FiercePlanet.globalCounter - 1);
+            var __ret = FiercePlanet.getDrawingPosition(agent, FiercePlanet.waveCounter - 1);
             var intX = __ret.intX * FiercePlanet.cellWidth + wx + 1;
             var intY = __ret.intY * FiercePlanet.cellHeight + wy + 1;
             ctx.clearRect(intX, intY, FiercePlanet.cellWidth + wx + 1, FiercePlanet.cellHeight + wy + 1);
             if (FiercePlanet.agentTracing) {
-                var __ret = FiercePlanet.getDrawingPosition(agent, FiercePlanet.globalCounter - 1);
+                var __ret = FiercePlanet.getDrawingPosition(agent, FiercePlanet.waveCounter - 1);
                 var intX = __ret.intX * FiercePlanet.cellWidth;
                 var intY = __ret.intY * FiercePlanet.cellHeight;
                 ctx.beginPath();
@@ -524,7 +524,7 @@ FiercePlanet.drawAgents = function() {
         // Get co-ordinates
         var wx = agent._wanderX;
         var wy = agent._wanderY;
-        var __ret = FiercePlanet.getDrawingPosition(agent, FiercePlanet.globalCounter);
+        var __ret = FiercePlanet.getDrawingPosition(agent, FiercePlanet.waveCounter);
         var intX = __ret.intX * FiercePlanet.cellWidth + wx + FiercePlanet.cellWidth / 2;
         var intY = __ret.intY * FiercePlanet.cellHeight + wy + FiercePlanet.cellHeight / 4;
         var direction = FiercePlanet.getAgentDirection(agent);
@@ -539,9 +539,9 @@ FiercePlanet.drawAgents = function() {
             newColor = "f00";
 
         try {
-            eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, FiercePlanet.pieceWidth, FiercePlanet.pieceHeight, newColor, FiercePlanet.globalCounter, direction);
+            eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, FiercePlanet.pieceWidth, FiercePlanet.pieceHeight, newColor, FiercePlanet.waveCounter, direction);
         } catch(e) {
-            eval(CITIZEN_AGENT_TYPE.getDrawFunction())(ctx, agent, intX, intY, FiercePlanet.pieceWidth, FiercePlanet.pieceHeight, newColor, FiercePlanet.globalCounter, direction);
+            eval(CITIZEN_AGENT_TYPE.getDrawFunction())(ctx, agent, intX, intY, FiercePlanet.pieceWidth, FiercePlanet.pieceHeight, newColor, FiercePlanet.waveCounter, direction);
         }
 
 
