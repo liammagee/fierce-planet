@@ -1,12 +1,12 @@
 
 // If we are editing a level, cancel the level editor
-cancelLevelEditor();
+FiercePlanet.cancelLevelEditor();
 
 // Notify
 $('#notifications').html("<p>Opening level gallery</p>");
 
 // Construct and show the level gallery
-$levelList = $('<div></div>')
+FiercePlanet.$levelList = $('<div></div>')
         .html("<%=  escape_javascript(render('levels/gallery', :locals => { :levels => @levels})) %>")
         .dialog({
                     autoOpen: false,
@@ -15,10 +15,10 @@ $levelList = $('<div></div>')
                     title: 'Level Setup',
                     buttons: {
                         "OK": function() {
-                            newLevel();
+                            FiercePlanet.newLevel();
                             $(this).dialog("close");
                         }
                     }
 
                 });
-$levelList.dialog('open');
+FiercePlanet.$levelList.dialog('open');

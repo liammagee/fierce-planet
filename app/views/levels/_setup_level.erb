@@ -1,32 +1,32 @@
-currentLevel = new Level(<%= @level.id %>);
-currentLevel.setName("<%= @level.name %>");
-currentLevel.setWorldWidth(<%= @level.world_width %>);
-currentLevel.setWorldHeight(<%= @level.world_height %>);
-currentLevel.setNotice("<%= @level.notice %>");
-currentLevel.setInitialAgentNumber(<%= @level.initial_agent_number %>);
-currentLevel.setWaveNumber(<%= @level.wave_number %>);
-currentLevel.setExpiryLimit(<%= @level.expiry_limit %>);
-currentLevel.setAllowOffscreenCycling(<%= @level.allow_offscreen_cycling %>);
-currentLevel.setAllowResourcesOnPath(<%= @level.allow_patches_on_path %>);
-currentLevel.setMapURL("<%= @level.image_src %>");
-currentLevel.setMapOptions({
+FiercePlanet.currentLevel = new Level(<%= @level.id %>);
+FiercePlanet.currentLevel.setName("<%= @level.name %>");
+FiercePlanet.currentLevel.setWorldWidth(<%= @level.world_width %>);
+FiercePlanet.currentLevel.setWorldHeight(<%= @level.world_height %>);
+FiercePlanet.currentLevel.setNotice("<%= @level.notice %>");
+FiercePlanet.currentLevel.setInitialAgentNumber(<%= @level.initial_agent_number %>);
+FiercePlanet.currentLevel.setWaveNumber(<%= @level.wave_number %>);
+FiercePlanet.currentLevel.setExpiryLimit(<%= @level.expiry_limit %>);
+FiercePlanet.currentLevel.setAllowOffscreenCycling(<%= @level.allow_offscreen_cycling %>);
+FiercePlanet.currentLevel.setAllowResourcesOnPath(<%= @level.allow_patches_on_path %>);
+FiercePlanet.currentLevel.setMapURL("<%= @level.image_src %>");
+FiercePlanet.currentLevel.setMapOptions({
 <%= raw 'lat: "' + @level.google_map_lat + '",' unless @level.google_map_lat.nil? or @level.google_map_lat.empty? %>
 <%= raw 'long: "' + @level.google_map_long + '",' unless @level.google_map_long.nil? or @level.google_map_long.empty? %>
 <%= raw 'tilt: "' + @level.google_map_tilt + '",' unless @level.google_map_tilt.nil? or @level.google_map_tilt.empty? %>
 <%= raw 'zoom: "' + @level.google_map_zoom + '",' unless @level.google_map_zoom.nil? or @level.google_map_zoom.empty? %>
 });
-currentLevel.setCustomLevel(true);
-currentLevel.setupLevel = function() {};
-currentLevelNumber = <%= @level.id %>;
-currentLevelPreset = false;
+FiercePlanet.currentLevel.setCustomLevel(true);
+FiercePlanet.currentLevel.setupLevel = function() {};
+FiercePlanet.currentLevelNumber = <%= @level.id %>;
+FiercePlanet.currentLevelPreset = false;
 var arr = [];
 var jsonArray = '<%= raw @level.tiles %>';
 try {
     arr = $.evalJSON(jsonArray);
-    currentLevel.setTiles(arr);
+    FiercePlanet.currentLevel.setTiles(arr);
 }
 catch (err) {
-    arr = currentLevel.fillWithTiles();
+    arr = FiercePlanet.currentLevel.fillWithTiles();
 }
 
 jsonArray = '<%= raw @level.entry_points %>';
@@ -36,7 +36,7 @@ arr = $.evalJSON(jsonArray);
 }
 catch (err) {
 }
-currentLevel.setEntryPoints(arr);
+FiercePlanet.currentLevel.setEntryPoints(arr);
 
 jsonArray = '<%= raw @level.exit_points %>';
 arr = [];
@@ -45,4 +45,4 @@ arr = $.evalJSON(jsonArray);
 }
 catch (err) {
 }
-currentLevel.setExitPoints(arr);
+FiercePlanet.currentLevel.setExitPoints(arr);

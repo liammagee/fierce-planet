@@ -1,7 +1,7 @@
 $('#notifications').html("<p>Showing levels...</p>");
-if ($levelList != undefined)
-    $levelList.dialog('close');
-$levelList = $('<div></div>')
+if (FiercePlanet.$levelList != undefined)
+    FiercePlanet.$levelList.dialog('close');
+FiercePlanet.$levelList = $('<div></div>')
         .html("<%=  escape_javascript(render('levels/index', :locals => { :levels => @levels})) %>")
         .dialog({
                     autoOpen: false,
@@ -15,4 +15,4 @@ $levelList = $('<div></div>')
                     }
 
                 });
-$levelList.dialog('open');
+FiercePlanet.$levelList.dialog('open');

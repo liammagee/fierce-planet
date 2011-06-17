@@ -19,7 +19,7 @@
     });
 
     function submitLevelForm() {
-        if (inDesignMode) {
+        if (FiercePlanet.inDesignMode) {
             serializeLevel();
             try {
                 $.rails.handleRemote($('.edit_level'));
@@ -29,9 +29,9 @@
     }
 
     function serializeLevel() {
-        $('#level_tiles')[0].value = $.toJSON(currentLevel.getTiles());
-        $('#level_entry_points')[0].value = $.toJSON(currentLevel.getEntryPoints());
-        $('#level_exit_points')[0].value = $.toJSON(currentLevel.getExitPoints());
+        $('#level_tiles')[0].value = $.toJSON(FiercePlanet.currentLevel.getTiles());
+        $('#level_entry_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getEntryPoints());
+        $('#level_exit_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getExitPoints());
     }
 
 

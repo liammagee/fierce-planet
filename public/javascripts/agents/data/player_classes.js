@@ -2,10 +2,15 @@
 /* NB: PlayerClass is defined in classes.js */
 
 
+/**
+ * Declare the FiercePlanet namespace
+ */
+var FiercePlanet = FiercePlanet || {};
+
 
 /* PlayerClass 1 Definition */
 
-var novice = new PlayerClass("Novice", 0);
-var teamLeader = new PlayerClass("Team Leader", 200);
-var planner = new PlayerClass("Planner", 500);
+FiercePlanet.novice = new PlayerClass("Novice", 0);
+FiercePlanet.teamLeader = new PlayerClass("Team Leader", 200);
+FiercePlanet.planner = new PlayerClass("Planner", 500);
 

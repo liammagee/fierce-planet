@@ -1,59 +1,55 @@
-/**
- * Created by .
- * User: Liam
- * Date: 23/03/11
- * Time: 4:52 PM
- * To change this template use File | Settings | File Templates.
- */
 
 /* Level editor functions */
 
-var currentX;
-var currentY;
-var nowEditingProperties = false;
+/**
+ * Declare the FiercePlanet namespace
+ */
+var FiercePlanet = FiercePlanet || {};
 
 
 
-
-function showDesignFeaturesDialog(e) {
+FiercePlanet.showDesignFeaturesDialog = function(e) {
     $("#makeTile").click(function(e) {
-        var tile = new Tile(DEFAULT_TILE_COLOR, currentX, currentY);
-        currentLevel.addTile(tile);
-        $designFeatures.dialog('close');
-        drawGame();
+        var tile = new Tile(DEFAULT_TILE_COLOR, FiercePlanet.currentX, FiercePlanet.currentY);
+        FiercePlanet.currentLevel.addTile(tile);
+        FiercePlanet.$designFeatures.dialog('close');
+        FiercePlanet.drawGame();
     });
 
     $("#addExitPoint").click(function(e) {
-        currentLevel.addExitPoint(currentX, currentY);
-        $designFeatures.dialog('close');
-        drawGame();
+        FiercePlanet.currentLevel.addExitPoint(FiercePlanet.currentX, FiercePlanet.currentY);
+        FiercePlanet.$designFeatures.dialog('close');
+        FiercePlanet.drawGame();
     });
 
     $("#addEntryPoint").click(function(e) {
-        currentLevel.removeEntryPoint(0, 0);
-        currentLevel.addEntryPoint(currentX, currentY);
-        $designFeatures.dialog('close');
-        drawGame();
+        FiercePlanet.currentLevel.removeEntryPoint(0, 0);
+        FiercePlanet.currentLevel.addEntryPoint(FiercePlanet.currentX, FiercePlanet.currentY);
+        FiercePlanet.$designFeatures.dialog('close');
+        FiercePlanet.drawGame();
     });
 
 
     $("#removeEntryPoint").click(function(e) {
-        currentLevel.removeEntryPoint(currentX, currentY);
-        $designFeatures.dialog('close');
-        drawGame();
+        FiercePlanet.currentLevel.removeEntryPoint(FiercePlanet.currentX, FiercePlanet.currentY);
+        FiercePlanet.$designFeatures.dialog('close');
+        FiercePlanet.drawGame();
     });
 
     $("#removeExitPoint").click(function(e) {
-        currentLevel.removeExitPoint(currentX, currentY);
-        $designFeatures.dialog('close');
-        drawGame();
+        FiercePlanet.currentLevel.removeExitPoint(FiercePlanet.currentX, FiercePlanet.currentY);
+        FiercePlanet.$designFeatures.dialog('close');
+        FiercePlanet.drawGame();
     });
 
 
-    $designFeatures.dialog('open');
-}
+    FiercePlanet.$designFeatures.dialog('open');
+};
 
-function setupLevelEditor() {
+/**
+ *
+ */
+FiercePlanet.setupLevelEditor = function() {
     $('#delete-upgrade').hide();
     $('#swatch').hide();
     $('#level-editor').show();
@@ -61,85 +57,114 @@ function setupLevelEditor() {
     var canvas = $('#c4');
     canvas.unbind('click');
 //    canvas.click(function() {return false;});
-    canvas.mousedown(handleEditorMouseDown);
-    canvas.mousemove(handleEditorMouseMove);
-    canvas.mouseup(handleEditorMouseUp);
+    canvas.mousedown(FiercePlanet.handleEditorMouseDown);
+    canvas.mousemove(FiercePlanet.handleEditorMouseMove);
+    canvas.mouseup(FiercePlanet.handleEditorMouseUp);
 
-    inDesignMode = true;
+    FiercePlanet.inDesignMode = true;
 
-    drawGame();
-}
+    FiercePlanet._initialiseGame();
+};
 
-function handleEditorMouseDown(e) {
-    oldTiles = currentLevel.getTiles().slice();
-    mouseDown = true;
+/**
+ *
+ * @param e
+ */
+FiercePlanet.handleEditorMouseDown = function(e) {
+    FiercePlanet.oldTiles = FiercePlanet.currentLevel.getTiles().slice();
+    FiercePlanet.isMouseDown = true;
     return false;
-}
+};
 
-function handleEditorMouseMove(e) {
-    if (mouseDown) {
-        mouseMoving = true;
-        var __ret = getCurrentPosition(e);
-        currentLevel.removeTile(__ret.posX, __ret.posY);
-        drawGame();
+/**
+ *
+ * @param e
+ */
+FiercePlanet.handleEditorMouseMove = function(e) {
+    if (e.preventDefault) e.preventDefault(); // allows us to drop
+    if (FiercePlanet.isMouseDown) {
+        FiercePlanet.isMouseMoving = true;
+        var __ret = FiercePlanet.getCurrentPosition(e);
+        FiercePlanet.currentLevel.removeTile(__ret.posX, __ret.posY);
+        FiercePlanet.drawGame();
     }
     return false;
-}
+};
 
-function handleEditorMouseUp(e) {
-    var __ret = getCurrentPosition(e);
-    currentX = __ret.posX;
-    currentY = __ret.posY;
+/**
+ *
+ * @param e
+ */
+FiercePlanet.handleEditorMouseUp = function(e) {
+    if (e.preventDefault) e.preventDefault(); // allows us to drop
+    var __ret = FiercePlanet.getCurrentPosition(e);
+    FiercePlanet.currentX = __ret.posX;
+    FiercePlanet.currentY = __ret.posY;
 
-    var currentTile = currentLevel.getTile(currentX, currentY);
-    if (currentTile == undefined && !mouseMoving) {
-        showDesignFeaturesDialog(e);
+    var currentTile = FiercePlanet.currentLevel.getTile(FiercePlanet.currentX, FiercePlanet.currentY);
+    if (currentTile == undefined && !FiercePlanet.isMouseMoving) {
+        FiercePlanet.showDesignFeaturesDialog(e);
     }
     else {
-        currentLevel.removeTile(currentX, currentY);
-        drawGame();
+        FiercePlanet.currentLevel.removeTile(FiercePlanet.currentX, FiercePlanet.currentY);
+        FiercePlanet.drawGame();
     }
 
-    mouseDown = false;
-    mouseMoving = false;
+    FiercePlanet.isMouseDown = false;
+    FiercePlanet.isMouseMoving = false;
 
     return false;
-}
+};
 
-function cancelLevelEditor() {
-    inDesignMode = false;
+/**
+ *
+ */
+FiercePlanet.cancelLevelEditor = function() {
+    FiercePlanet.inDesignMode = false;
     var canvas = $('#c4');
-    canvas.unbind('mousedown', handleEditorMouseDown);
-    canvas.unbind('mousemove', handleEditorMouseMove);
-    canvas.unbind('mouseup', handleEditorMouseUp);
+    canvas.unbind('mousedown', FiercePlanet.handleEditorMouseDown);
+    canvas.unbind('mousemove', FiercePlanet.handleEditorMouseMove);
+    canvas.unbind('mouseup', FiercePlanet.handleEditorMouseUp);
     $('#level-editor').hide();
     $('#swatch').show();
-}
+};
 
-function undoAction() {
-    currentLevel.setTiles(oldTiles);
-    drawGame();
-}
+/**
+ *
+ */
+FiercePlanet.undoAction = function() {
+    FiercePlanet.currentLevel.setTiles(FiercePlanet.oldTiles);
+    FiercePlanet.drawGame();
+};
 
+/**
+ *
+ */
+FiercePlanet.showLevelProperties = function() {
+    FiercePlanet.$editProperties.dialog('open');
+};
 
-function showLevelProperties() {
-    $editProperties.dialog('open');
-}
+/**
+ *
+ */
+FiercePlanet.refreshTiles = function() {
+    FiercePlanet.currentLevel.fillWithTiles();
+    FiercePlanet.currentLevel.addEntryPoint(0, 0);
+    FiercePlanet.drawGame();
+};
 
-function refreshTiles() {
-    currentLevel.fillWithTiles();
-    currentLevel.addEntryPoint(0, 0);
-    drawGame();
-}
+/**
+ *
+ */
+FiercePlanet.clearEntryPoints = function() {
+    FiercePlanet.currentLevel.resetEntryPoints();
+    FiercePlanet.drawGame();
+};
 
-function clearEntryPoints() {
-    currentLevel.resetEntryPoints();
-    drawGame();
-}
-
-function clearExitPoints() {
-    currentLevel.resetExitPoints();
-    drawGame();
-}
-
-/* End Level editor functions */
+/**
+ *
+ */
+FiercePlanet.clearExitPoints = function() {
+    FiercePlanet.currentLevel.resetExitPoints();
+    FiercePlanet.drawGame();
+};

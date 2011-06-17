@@ -99,14 +99,14 @@ function Agent(agentType, x, y) {
     // Position-related
     this._x = x;
     this._y = y;
-    this._chronologicalMemory = new Array();
-    this._memoriesOfPlacesVisited = new Array();
-    this._memoriesOfPathsUntried = new Array();
+    this._chronologicalMemory = [];
+    this._memoriesOfPlacesVisited = [];
+    this._memoriesOfPathsUntried = [];
     this._canCommunicateWithOtherAgents = true;
-    this._memoriesOfPlacesVisitedByOtherAgents = new Array();
-    this._memoriesOfPathsUntriedByOtherAgents = new Array();
-    this._memoriesOfResources = new Array();
-    this._memoriesOfAgents = new Array();
+    this._memoriesOfPlacesVisitedByOtherAgents = [];
+    this._memoriesOfPathsUntriedByOtherAgents = [];
+    this._memoriesOfResources = [];
+    this._memoriesOfAgents = [];
     this._lastMemory = null;
     this._lastUntriedPathMemory = null;
 
@@ -198,7 +198,7 @@ Agent.prototype.getWanderY = function() { return this._wanderY; };
 Agent.prototype.adjustWander = function() {
     var wx = this._wanderX;
     var wy = this._wanderY;
-    var limit = cellWidth / 2 - pieceWidth / 2;
+    var limit = FiercePlanet.cellWidth / 2 - FiercePlanet.pieceWidth / 2;
     var rx = Math.floor(Math.random() * 3 - 1);
     var ry = Math.floor(Math.random() * 3 - 1);
     wx = wx + rx;
@@ -355,14 +355,14 @@ Agent.prototype.memorise = function(level, x, y) {
 //                    console.log("Agent " + this._id + " meeting agent " + agent._id);
                     // Add agent to memory
                     this._memoriesOfAgents[agent._id] = new MemoryOfAgent(this._id, this._age, x, y, agent._id);
-                    var mpv = new Array();
+                    var mpv = [];
                     for (var j in agent._memoriesOfPlacesVisited) {
                         var m = agent._memoriesOfPlacesVisited[j];
                         if (m != undefined)
                             mpv[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
                     }
                     this._memoriesOfPlacesVisitedByOtherAgents[agent._id] = mpv;
-                    var mpu = new Array();
+                    var mpu = [];
                     for (var j in agent._memoriesOfPathsUntried) {
                         var m = agent._memoriesOfPathsUntried[j];
                         if (m != undefined)
@@ -373,14 +373,14 @@ Agent.prototype.memorise = function(level, x, y) {
                     // Add memories to other agent
                     // TODO: No longer necessary?
 //                    agent._memoriesOfAgents[this._id] = new MemoryOfAgent(agent._id, agent._age, x, y, this._id) ;
-//                    mpv = new Array();
+//                    mpv = [];
 //                    for (var j in this._memoriesOfPlacesVisited) {
 //                        var m = this._memoriesOfPlacesVisited[j];
 //                        if (m != undefined)
 //                            mpv[[m.getX(), m.getY()]] = new Memory(m.getAgentID(), m.getAge(), m.getX(), m.getY());
 //                    }
 //                    agent._memoriesOfPlacesVisitedByOtherAgents[this._id] = mpv;
-//                    mpu = new Array();
+//                    mpu = [];
 //                    for (var j in this._memoriesOfPathsUntried) {
 //                        var m = this._memoriesOfPathsUntried[j];
 //                        if (m != undefined)
@@ -401,7 +401,7 @@ Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, wi
     var newY = y;
     var lastX = this.lastPosition().getX();
     var lastY = this.lastPosition().getY();
-    var candidateCells = new Array();
+    var candidateCells = [];
     var directions = this.randomDirectionOrder();
     for (var i = 0; i < directions.length; i++) {
         newX = x;
@@ -445,7 +445,7 @@ Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, wi
 
 
     // Find the first candidate which is either the goal, or not in the history.
-    var candidatesNotInHistory = new Array();
+    var candidatesNotInHistory = [];
     for (var i = 0; i < candidateCells.length; i++) {
         var candidate = candidateCells[i];
         if (level.isExitPoint(candidate[0], candidate[1]))
@@ -497,7 +497,7 @@ Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, wi
         var bestCandidateForThisAgent = null;
 
         // Merge all visited places in memory - expensive, but saves later loops
-        var allPlacesVisited = new Array();
+        var allPlacesVisited = [];
         for (var key in this._memoriesOfPlacesVisited) {
             var memory = this._memoriesOfPlacesVisited[key];
             allPlacesVisited[key] = memory;
@@ -696,7 +696,7 @@ Agent.prototype.getClosestUnvisitedTile = function(currentX, currentY) {
 
 
 Agent.prototype.randomDirectionOrder = function() {
-    var directions = new Array();
+    var directions = [];
     var orderedDirections = [0, 1, 2, 3];
     var odl = orderedDirections.length;
     for (var i = 0; i < odl; i++) {
@@ -711,7 +711,7 @@ Agent.prototype.randomDirectionOrder = function() {
 
 Agent.prototype.hasNeighbouringResources = function(level, x, y) {
     for (var j = 0; j < level.getResources().length; j++) {
-        var p = currentLevel.getResources()[j];
+        var p = FiercePlanet.currentLevel.getResources()[j];
         var px = p.getX();
         var py = p.getY();
         if (Math.abs(px - x) <= 1 && Math.abs(py - y) <= 1) {

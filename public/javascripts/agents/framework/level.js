@@ -5,8 +5,8 @@ function Level(id) {
     this._isPresetLevel = false;
     this._name = id;
     this._initialAgentNumber = 1;
-    this._entryPoints = new Array();
-    this._exitPoints = new Array();
+    this._entryPoints = [];
+    this._exitPoints = [];
 
     this._worldWidth = 11;
     this._worldHeight = 11;
@@ -18,17 +18,17 @@ function Level(id) {
     this._notice = "";
     this._image = null;
     this._soundSrc = null;
-    this._tiles = new Array();
-    this._tileMap = new Array();
+    this._tiles = [];
+    this._tileMap = [];
     this._mapOptions = null;
     this._mapURL = null;
     this._customLevel = false;
-    this._levelAgents = new Array();
-    this._waveAgents = new Array();
-    this._currentAgents = new Array();
-    this._currentAgentsMap = new Array();
-    this._cells = new Array();
-    this._resources = new Array();
+    this._levelAgents = [];
+    this._waveAgents = [];
+    this._currentAgents = [];
+    this._currentAgentsMap = [];
+    this._cells = [];
+    this._resources = [];
 }
 Level.prototype.getId = function() { return this._id; };
 Level.prototype.setId = function(id) { this._id = id; };
@@ -53,7 +53,7 @@ Level.prototype.addEntryPoint = function(x, y) {
         this._entryPoints.push([x, y]);
 };
 Level.prototype.resetEntryPoints = function() {
-    this._entryPoints = new Array();
+    this._entryPoints = [];
     this.addEntryPoint(0, 0);
 };
 Level.prototype.removeEntryPoint = function(x, y) {
@@ -92,7 +92,7 @@ Level.prototype.addExitPoint = function(x, y) {
         this._exitPoints.push([x, y]);
 };
 Level.prototype.resetExitPoints = function() {
-    this._exitPoints = new Array();
+    this._exitPoints = [];
 };
 Level.prototype.removeExitPoint = function(x, y) {
     var position = -1;
@@ -130,7 +130,7 @@ Level.prototype.getTile = function(x, y) {
     return this._tiles[tilePosition];
 };
 Level.prototype.getSurroundingTiles = function(x, y) {
-    var surroundingTiles = new Array();
+    var surroundingTiles = [];
 
     if (x > 0)
         surroundingTiles.add(this.getTile(x - 1, y));
@@ -204,7 +204,7 @@ Level.prototype.generateWaveAgents = function(numAgents) {
     return newAgents;
 };
 Level.prototype.getPath = function() {
-    var pathCells = new Array();
+    var pathCells = [];
     for (var i = 0; i < this._worldHeight; i++) {
         for (var j = 0; j < this._worldWidth; j++) {
             var tilePosition = i * this._worldWidth + j;
@@ -216,7 +216,7 @@ Level.prototype.getPath = function() {
     return pathCells;
 };
 Level.prototype.fillWithTiles = function() {
-    this._tiles = new Array();
+    this._tiles = [];
     for (var i = 0; i < this._worldHeight; i++) {
         for (var j = 0; j < this._worldWidth; j++) {
             var tile = new Tile(DEFAULT_TILE_COLOR, j, i);
@@ -235,7 +235,7 @@ Level.prototype.clearTiles = function(start, number) {
     }
 };
 Level.prototype.presetAgents = function(agentType, number, canCommunicateWithOtherAgents) {
-    var agents = new Array();
+    var agents = [];
     for (var j = 0; j < this._entryPoints.length; j++) {
         var point = this._entryPoints[j];
         var x = point[0];

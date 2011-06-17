@@ -1,8 +1,8 @@
 $('#notifications').html("<p>Creating a new level...</p>");
-if ($levelList != undefined)
-    $levelList.dialog('close');
+if (FiercePlanet.$levelList != undefined)
+    FiercePlanet.$levelList.dialog('close');
 $(".edit_level_properties").remove();
-$editProperties = $('<div></div>')
+FiercePlanet.$editProperties = $('<div></div>')
         .html("<%=  escape_javascript(render('levels/edit_properties', :locals => { :level => @level})) %>")
         .dialog({
                     autoOpen: false,
@@ -12,7 +12,7 @@ $editProperties = $('<div></div>')
                     buttons: {
                         "Save Level": function() {
                             $(".edit_level_properties").submit();
-                            drawGame();
+                            FiercePlanet.drawGame();
                             $( this ).dialog( "close" );
                         },
                         "Cancel": function() {
@@ -21,4 +21,4 @@ $editProperties = $('<div></div>')
                     }
 
                 });
-$editProperties.dialog('open');
+FiercePlanet.$editProperties.dialog('open');

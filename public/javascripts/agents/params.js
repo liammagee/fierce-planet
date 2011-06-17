@@ -2,145 +2,173 @@
  * Declares game parameters
  */
 
-var LEVELS = 10;
+/**
+ * Declare the FiercePlanet namespace
+ */
+var FiercePlanet = FiercePlanet || {};
+
+// Profile ID
+FiercePlanet.PROFILE_ID = null;
 
 // Game variable constants
-var MOVE_HEALTH_COST = -2;
-var SURVIVAL_SCORE = 10;
-var STARTING_STORE = 100;
-var RESOURCE_STORE = 10;
-var DEFAULT_RESOURCE_RECOVERY = 2;
-var WAVE_GOODNESS_BONUS = 5;
+FiercePlanet.MOVE_HEALTH_COST = -2;
+FiercePlanet.MOVE_HEALTH_COST = 10;
+FiercePlanet.STARTING_STORE = 100;
+FiercePlanet.DEFAULT_RESOURCE_RECOVERY = 2;
+FiercePlanet.WAVE_GOODNESS_BONUS = 5;
 
 // Timer constants
-var NEW_LEVEL_DELAY = 3000;
-var NEW_WAVE_DELAY = 200;
+FiercePlanet.NEW_LEVEL_DELAY = 3000;
+FiercePlanet.NEW_WAVE_DELAY = 200;
 
 
 // Difficulty constants
-var EASY_DIFFICULTY = 1;
-var MEDIUM_DIFFICULTY = 2;
-var HARD_DIFFICULTY = 3;
-var EXTREME_DIFFICULTY = 4;
+FiercePlanet.EASY_DIFFICULTY = 1;
+FiercePlanet.MEDIUM_DIFFICULTY = 2;
+FiercePlanet.HARD_DIFFICULTY = 3;
+FiercePlanet.EXTREME_DIFFICULTY = 4;
 
 // Dimension constants
-var WORLD_WIDTH = 800;
-var WORLD_HEIGHT = 600;
+FiercePlanet.WORLD_WIDTH = 800;
+FiercePlanet.WORLD_HEIGHT = 600;
 
 
 // Resource constants
-var PROFILE_CLASSES = ["Novice", "Planner", "Expert", "Visionary", "Genius"];
-var CAPABILITY_COSTS = [0, 100, 200, 300, 500];
-var NOVICE_CAPABILITIES = ["farm", "water", "clinic"];
-var PLANNER_CAPABILITIES = NOVICE_CAPABILITIES.concat(["shop", "park", "school"]);
-var EXPERT_CAPABILITIES = PLANNER_CAPABILITIES.concat(["bank", "air", "legal"]);
-var VISIONARY_CAPABILITIES = EXPERT_CAPABILITIES.concat(["factory", "energy", "democracy"]);
-var GENIUS_CAPABILITIES = VISIONARY_CAPABILITIES.concat(["stockmarket", "biodiversity", "festival"]);
+FiercePlanet.PROFILE_CLASSES = ["Novice", "Planner", "Expert", "Visionary", "Genius"];
+FiercePlanet.CAPABILITY_COSTS = [0, 100, 200, 300, 500];
+FiercePlanet.NOVICE_CAPABILITIES = ["farm", "water", "clinic"];
+FiercePlanet.PLANNER_CAPABILITIES = FiercePlanet.NOVICE_CAPABILITIES.concat(["shop", "park", "school"]);
+FiercePlanet.EXPERT_CAPABILITIES = FiercePlanet.PLANNER_CAPABILITIES.concat(["bank", "air", "legal"]);
+FiercePlanet.VISIONARY_CAPABILITIES = FiercePlanet.EXPERT_CAPABILITIES.concat(["factory", "energy", "democracy"]);
+FiercePlanet.GENIUS_CAPABILITIES = FiercePlanet.VISIONARY_CAPABILITIES.concat(["stockmarket", "biodiversity", "festival"]);
 
 
 // VARIABLES
 
 // Profile variables
-var capabilities = ["farm", "water", "clinic"];
-var credits = 0;
-var profileClass = "Novice";
-//var credits = 10000;
-//var profileClass = "Genius";
-var totalSaved = 0;
+FiercePlanet.capabilities = ["farm", "water", "clinic"];
+FiercePlanet.credits = 0;
+FiercePlanet.profileClass = "Novice";
+//FiercePlanet.credits = 10000;
+//FiercePlanet.profileClass = "Genius";
+FiercePlanet.totalSaved = 0;
 
-var PROFILE_ID;
 
-// Togglable variables
-var inDesignMode = false;
-var inPlay = false;
-var mouseDown = false;
-var mouseMoving = false;
+
+// Toggleable variables
+FiercePlanet.inDesignMode = false;
+FiercePlanet.inPlay = false;
+FiercePlanet.isMouseDown = false;
+FiercePlanet.isMouseMoving = false;
 
 // Setting variables
-var godMode = false;
-var invisiblePath = false;
-var scrollingImageVisible = false;
-var agentsCanCommunicate = true;
-var agentTracing = false;
-var recording = false;
-var soundsPlayable = false;
-var resourcesInTension = false;
-var resourceBonus = false;
-var predatorsVisible = false;
-var rivalsVisible = false;
-var backgroundIconsVisible = false;
-var applyGeneralHealth = false;
-var ignoreResourceBalance = false;
-var tilesMutable = false;
+FiercePlanet.godMode = false;
+FiercePlanet.invisiblePath = false;
+FiercePlanet.scrollingImageVisible = false;
+FiercePlanet.agentsCanCommunicate = true;
+FiercePlanet.agentTracing = false;
+FiercePlanet.recording = false;
+FiercePlanet.soundsPlayable = false;
+FiercePlanet.resourcesInTension = false;
+FiercePlanet.resourceBonus = false;
+FiercePlanet.predatorsVisible = false;
+FiercePlanet.rivalsVisible = false;
+FiercePlanet.backgroundIconsVisible = false;
+FiercePlanet.applyGeneralHealth = false;
+FiercePlanet.ignoreResourceBalance = false;
+FiercePlanet.tilesMutable = false;
 
 
 // Timer variables
-var agentTimerId = 0;
+FiercePlanet.agentTimerId = 0;
 
-var recordedLevels = new Array();
+FiercePlanet.recordedLevels = [];
 
 // Current state
-var currentResourceId = null;
-var currentLevelNumber = 1;
-var currentLevelPreset = true;
-var currentLevel;
-var existingCurrentLevel;
-var currentResource = null;
+FiercePlanet.currentLevelNumber = 1;
+FiercePlanet.currentLevelPreset = true;
+FiercePlanet.currentLevel = null;
+FiercePlanet.existingCurrentLevel = null;
+FiercePlanet.currentResourceId = null;
+FiercePlanet.currentResource = null;
 
 
 // Game play variables
-var waveOverride = 0;
-var maxWaveMoves = 0;
-var maxLevelMoves = 0;
+FiercePlanet.waveOverride = 0;
+FiercePlanet.maxWaveMoves = 0;
+FiercePlanet.maxLevelMoves = 0;
 
-var levelOfDifficulty = MEDIUM_DIFFICULTY;
-var resourceRecoveryCycle = 5;
-var interval = 20;
+FiercePlanet.levelOfDifficulty = FiercePlanet.MEDIUM_DIFFICULTY;
+FiercePlanet.resourceRecoveryCycle = 5;
+FiercePlanet.interval = 20;
 
-var levelDelayCounter = 0;
-var waveDelayCounter = 0;
+FiercePlanet.levelDelayCounter = 0;
+FiercePlanet.waveDelayCounter = 0;
 
-var numAgents = 1;
-
-
-
-var economicResourceCount = 0;
-var environmentalResourceCount = 0;
-var socialResourceCount = 0;
-
-var globalCounter = 0;
-var globalRecordingCounter = 0;
+FiercePlanet.numAgents = 1;
 
 
 
-var previousLevelScore = 0;
-var score = 0;
-var resourcesInStore = 0;
-var resourcesSpent = 0;
-var waves = 1;
-var expiredAgentCount = 0;
-var savedAgentCount = 0;
-var savedAgentThisWaveCount = 0;
+FiercePlanet.economicResourceCount = 0;
+FiercePlanet.environmentalResourceCount = 0;
+FiercePlanet.socialResourceCount = 0;
+
+FiercePlanet.globalCounter = 0;
+FiercePlanet.globalRecordingCounter = 0;
+
+
+
+FiercePlanet.levelWaves = 1;
+FiercePlanet.previousLevelScore = 0;
+FiercePlanet.currentScore = 0;
+FiercePlanet.resourcesInStore = 0;
+FiercePlanet.resourcesSpent = 0;
+FiercePlanet.expiredAgentCount = 0;
+FiercePlanet.savedAgentCount = 0;
+FiercePlanet.savedAgentThisWaveCount = 0;
 
 
 // Dimension variables
-var zoomLevel = 1;
-var panLeftOffset = 0;
-var panTopOffset = 0;
+FiercePlanet.zoomLevel = 1;
+FiercePlanet.externalZoomLevel = 1;
 
-var worldWidth = 14;
-var worldHeight = 11;
-var cellWidth = WORLD_WIDTH / worldWidth;
-var cellHeight = WORLD_HEIGHT / worldHeight;
-var pieceWidth = cellWidth * 0.5;
-var pieceHeight = cellHeight * 0.5;
+FiercePlanet.panLeftOffset = 0;
+FiercePlanet.panTopOffset = 0;
+
+FiercePlanet.worldWidth = 14;
+FiercePlanet.worldHeight = 11;
+FiercePlanet.cellWidth = FiercePlanet.WORLD_WIDTH / FiercePlanet.worldWidth;
+FiercePlanet.cellHeight = FiercePlanet.WORLD_HEIGHT / FiercePlanet.worldHeight;
+FiercePlanet.pieceWidth = FiercePlanet.cellWidth * 0.5;
+FiercePlanet.pieceHeight = FiercePlanet.cellHeight * 0.5;
 
 
 
 // General visual and audio variables
-var scrollingImage = new Image(); // City image
-var scrollingImageX = 0;
-var scrollingImageOffset = 1;
+FiercePlanet.scrollingImage = new Image(); // City image
+FiercePlanet.scrollingImageX = 0;
+FiercePlanet.scrollingImageOffset = 1;
 
-var audio;
-var googleMap;
+FiercePlanet.audio = null;
+FiercePlanet.googleMap = null;
+
+
+// Level editor variables
+FiercePlanet.currentX = null;
+FiercePlanet.currentY = null;
+
+
+// Main game dialogs
+FiercePlanet.$gameOver = null;
+FiercePlanet.$completeLevel = null;
+FiercePlanet.$completeGame = null;
+FiercePlanet.$levelList = null;
+FiercePlanet.$upgradeDelete = null;
+FiercePlanet.$resourceGallery = null;
+FiercePlanet.$newLevel = null;
+
+
+// Level editor dialogs
+FiercePlanet.$designFeatures = null;
+FiercePlanet.$editProperties = null;
+

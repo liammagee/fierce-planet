@@ -2,52 +2,67 @@
  * Functions for drawing aspects of the game
  */
 
-function drawGame() {
+/**
+ * Declare the FiercePlanet namespace
+ */
+var FiercePlanet = FiercePlanet || {};
+
+/**
+ *
+ */
+FiercePlanet.drawGame = function() {
     // Clear canvases
     $('#map_canvas').empty();
-    clearCanvas('c1');
-    clearCanvas('c2');
-    clearCanvas('c3');
-    clearCanvas('c4');
+    FiercePlanet.clearCanvas('c1');
+    FiercePlanet.clearCanvas('c2');
+    FiercePlanet.clearCanvas('c3');
+    FiercePlanet.clearCanvas('c4');
 
     // Draw basic elements
-    if ((currentLevel.getMapOptions() != undefined  && currentLevel.getMapOptions()['lat'] != undefined && currentLevel.getMapOptions()['long'] != undefined)
-            || (currentLevel.getMapURL() != undefined && $.trim(currentLevel.getMapURL()).length > 0)) {
-        drawMap();
-        drawPath();
+    if ((FiercePlanet.currentLevel.getMapOptions() != undefined  && FiercePlanet.currentLevel.getMapOptions()['lat'] != undefined && FiercePlanet.currentLevel.getMapOptions()['long'] != undefined)
+            || (FiercePlanet.currentLevel.getMapURL() != undefined && $.trim(FiercePlanet.currentLevel.getMapURL()).length > 0)) {
+        FiercePlanet.drawMap();
+        FiercePlanet.drawPath();
     }
     else {
-        drawTiles();
-        drawBackgroundImage();
-        drawPath();
+        FiercePlanet.drawTiles();
+        FiercePlanet.drawBackgroundImage();
+        FiercePlanet.drawPath();
     }
-    drawEntryPoints();
-    drawGoal();
-    drawResources();
-    drawScrollingLayer();
-    drawScoreboard();
+    FiercePlanet.drawEntryPoints();
+    FiercePlanet.drawGoal();
+    FiercePlanet.drawResources();
+    FiercePlanet.drawScrollingLayer();
+    FiercePlanet.drawScoreboard();
 
-    levelInfo(currentLevel.getNotice());
+//    FiercePlanet.levelInfo(FiercePlanet.currentLevel.getNotice());
 
-}
+};
 
-function drawTiles() {
-    var tiles = currentLevel.getTiles();
+/**
+ *
+ */
+FiercePlanet.drawTiles = function() {
+    var tiles = FiercePlanet.currentLevel.getTiles();
     for (var i = 0; i < tiles.length; i+= 1) {
         if (tiles[i] != undefined)
-            drawTile(tiles[i]);
+            FiercePlanet.drawTile(tiles[i]);
     }
-}
+};
 
-function drawTile(tile) {
+/**
+ *
+ * @param tile
+ */
+FiercePlanet.drawTile = function(tile) {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
-    var x = tile._x * cellWidth;
-    var y = tile._y * cellHeight;
-    ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellHeight - 1);
-    if (tile._y == 0 || currentLevel.getTile(tile._x, tile._y - 1) == undefined) {
-        var my_gradient = ctx.createLinearGradient(x, y, x, y + cellHeight / 4);
+    var x = tile._x * FiercePlanet.cellWidth;
+    var y = tile._y * FiercePlanet.cellHeight;
+    ctx.clearRect(x + 1, y + 1, FiercePlanet.cellWidth - 1, FiercePlanet.cellHeight - 1);
+    if (tile._y == 0 || FiercePlanet.currentLevel.getTile(tile._x, tile._y - 1) == undefined) {
+        var my_gradient = ctx.createLinearGradient(x, y, x, y + FiercePlanet.cellHeight / 4);
         my_gradient.addColorStop(0, "#060");
         my_gradient.addColorStop(1, "#" + tile._color);
         ctx.fillStyle = my_gradient;
@@ -55,26 +70,29 @@ function drawTile(tile) {
     else {
         ctx.fillStyle = "#" + tile._color;
     }
-    ctx.fillRect(x, y, cellWidth, cellHeight);
+    ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
     ctx.strokeStyle = "#fff";
-    ctx.strokeRect(x, y, cellWidth, cellHeight);
-}
+    ctx.strokeRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
+};
 
-function drawPath() {
+/**
+ *
+ */
+FiercePlanet.drawPath = function() {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
-    var pathTiles = currentLevel.getPath();
+    var pathTiles = FiercePlanet.currentLevel.getPath();
     for (var i = 0; i < pathTiles.length; i+= 1) {
         var pathTile = pathTiles[i];
         var xPos = pathTile[0];
         var yPos = pathTile[1];
-        var x = xPos * cellWidth;
-        var y = yPos * cellHeight;
-        ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellHeight - 1);
+        var x = xPos * FiercePlanet.cellWidth;
+        var y = yPos * FiercePlanet.cellHeight;
+        ctx.clearRect(x + 1, y + 1, FiercePlanet.cellWidth - 1, FiercePlanet.cellHeight - 1);
 
-        if (!invisiblePath) {
-            if (yPos == 0 || currentLevel.getTile(xPos, yPos - 1) != undefined) {
-                var my_gradient = ctx.createLinearGradient(x, y, x, y + cellHeight / 4);
+        if (!FiercePlanet.invisiblePath) {
+            if (yPos == 0 || FiercePlanet.currentLevel.getTile(xPos, yPos - 1) != undefined) {
+                var my_gradient = ctx.createLinearGradient(x, y, x, y + FiercePlanet.cellHeight / 4);
                 my_gradient.addColorStop(0, "#ccc");
                 my_gradient.addColorStop(1, "#eee");
                 ctx.fillStyle = my_gradient;
@@ -83,23 +101,29 @@ function drawPath() {
                 ctx.fillStyle = "#eee";
             }
             ctx.border = "1px #eee solid";
-            ctx.fillRect(x, y, cellWidth, cellHeight);
+            ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
         }
         ctx.strokeStyle = "#ccc";
-        ctx.strokeRect(x, y, cellWidth, cellHeight);
+        ctx.strokeRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
 
     }
-}
+};
 
-function drawBackgroundImage() {
-    if (currentLevel.getImage() != undefined) {
+/**
+ *
+ */
+FiercePlanet.drawBackgroundImage = function() {
+    if (FiercePlanet.currentLevel.getImage() != undefined) {
         var canvas = $('#c1')[0];
         var ctx = canvas.getContext('2d');
-        ctx.drawImage(currentLevel.getImage(), 0, 0);
+        ctx.drawImage(FiercePlanet.currentLevel.getImage(), 0, 0);
     }
-}
+};
 
-function handleApiReady() {
+/**
+ *
+ */
+FiercePlanet.handleApiReady = function() {
     var mapOptions = {
       center: new google.maps.LatLng(47.5153, 19.0782),
         mapTypeId: google.maps.MapTypeId.SATELLITE,
@@ -107,49 +131,55 @@ function handleApiReady() {
       zoom: 18,
         tilt: 45
     };
-    if (currentLevel != undefined) {
-        if (currentLevel.getMapOptions()['lat'] != undefined && currentLevel.getMapOptions()['long'] != undefined)
-            mapOptions['center'] = new google.maps.LatLng(currentLevel.getMapOptions()['lat'], currentLevel.getMapOptions()['long']);
-        if (currentLevel.getMapOptions()['zoom'] != undefined)
-            mapOptions['zoom'] = parseInt(currentLevel.getMapOptions()['zoom']);
-        if (currentLevel.getMapOptions()['tilt'] != undefined)
-            mapOptions['tilt'] = parseInt(currentLevel.getMapOptions()['tilt']);
+    if (FiercePlanet.currentLevel != undefined) {
+        if (FiercePlanet.currentLevel.getMapOptions()['lat'] != undefined && FiercePlanet.currentLevel.getMapOptions()['long'] != undefined)
+            mapOptions['center'] = new google.maps.LatLng(FiercePlanet.currentLevel.getMapOptions()['lat'], FiercePlanet.currentLevel.getMapOptions()['long']);
+        if (FiercePlanet.currentLevel.getMapOptions()['zoom'] != undefined)
+            mapOptions['zoom'] = parseInt(FiercePlanet.currentLevel.getMapOptions()['zoom']);
+        if (FiercePlanet.currentLevel.getMapOptions()['tilt'] != undefined)
+            mapOptions['tilt'] = parseInt(FiercePlanet.currentLevel.getMapOptions()['tilt']);
 
         // Handle built-in zoom
-        if (zoomLevel > 1)
-            mapOptions['zoom'] = mapOptions['zoom'] + Math.log(zoomLevel) / Math.log(1.5);
+        if (FiercePlanet.zoomLevel > 1)
+            mapOptions['zoom'] = mapOptions['zoom'] + Math.log(FiercePlanet.zoomLevel) / Math.log(1.5);
 
-        googleMap = new google.maps.Map($("#map_canvas")[0], mapOptions);
-        if (currentLevel.getMapOptions()['tilt'] != undefined && currentLevel.getMapOptions()['tilt'] != 'no' )
-            googleMap.setTilt(45);
+        FiercePlanet.googleMap = new google.maps.Map($("#map_canvas")[0], mapOptions);
+        if (FiercePlanet.currentLevel.getMapOptions()['tilt'] != undefined && FiercePlanet.currentLevel.getMapOptions()['tilt'] != 'no' )
+            FiercePlanet.googleMap.setTilt(45);
     }
     else {
-        googleMap = new google.maps.Map($("#map_canvas")[0], mapOptions);
+        FiercePlanet.googleMap = new google.maps.Map($("#map_canvas")[0], mapOptions);
     }
-}
+};
 
-function drawMap() {
-    if (currentLevel.getMapOptions() != undefined && currentLevel.getMapOptions()['lat'] != undefined && currentLevel.getMapOptions()['long'] != undefined) {
+/**
+ *
+ */
+FiercePlanet.drawMap = function() {
+    if (FiercePlanet.currentLevel.getMapOptions() != undefined && FiercePlanet.currentLevel.getMapOptions()['lat'] != undefined && FiercePlanet.currentLevel.getMapOptions()['long'] != undefined) {
         var script = document.createElement("script");
         script.type = "text/javascript";
-        script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=handleApiReady";
+        script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=FiercePlanet.handleApiReady";
         document.body.appendChild(script);
     }
-    else if (currentLevel.getMapURL() != undefined) {
-        $("#map_canvas").prepend('<img src="' + currentLevel.getMapURL() + '"/>').css('image-orientation: 135deg');
+    else if (FiercePlanet.currentLevel.getMapURL() != undefined) {
+        $("#map_canvas").prepend('<img src="' + FiercePlanet.currentLevel.getMapURL() + '"/>').css('image-orientation: 135deg');
     }
-}
+};
 
-function drawGoal() {
+/**
+ *
+ */
+FiercePlanet.drawGoal = function() {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
-    for (var i = 0; i < currentLevel.getExitPoints().length; i++) {
-        var point = currentLevel.getExitPoints()[i];
-        var x = point[0] * cellWidth + cellWidth / 2;
-        var y = point[1] * cellHeight + cellHeight / 2;
-        var width = (pieceWidth / 2);
-        var height = (pieceHeight / 2);
+    for (var i = 0; i < FiercePlanet.currentLevel.getExitPoints().length; i++) {
+        var point = FiercePlanet.currentLevel.getExitPoints()[i];
+        var x = point[0] * FiercePlanet.cellWidth + FiercePlanet.cellWidth / 2;
+        var y = point[1] * FiercePlanet.cellHeight + FiercePlanet.cellHeight / 2;
+        var width = (FiercePlanet.pieceWidth / 2);
+        var height = (FiercePlanet.pieceHeight / 2);
 
         ctx.beginPath();
         ctx.arc(x, y, width, 0, Math.PI * 2, false);
@@ -159,18 +189,21 @@ function drawGoal() {
         ctx.fillStyle = "#fbe53b";
         ctx.fill();
     }
-}
+};
 
-function drawEntryPoints() {
+/**
+ *
+ */
+FiercePlanet.drawEntryPoints = function() {
     var canvas = $('#c1')[0];
     var ctx = canvas.getContext('2d');
 
-    for (var i = 0; i < currentLevel.getEntryPoints().length; i++) {
-        var point = currentLevel.getEntryPoints()[i];
-        var x = point[0] * cellWidth + cellWidth / 2;
-        var y = point[1] * cellHeight + cellHeight / 2;
-        var width = (pieceWidth / 2);
-        var height = (pieceHeight / 2);
+    for (var i = 0; i < FiercePlanet.currentLevel.getEntryPoints().length; i++) {
+        var point = FiercePlanet.currentLevel.getEntryPoints()[i];
+        var x = point[0] * FiercePlanet.cellWidth + FiercePlanet.cellWidth / 2;
+        var y = point[1] * FiercePlanet.cellHeight + FiercePlanet.cellHeight / 2;
+        var width = (FiercePlanet.pieceWidth / 2);
+        var height = (FiercePlanet.pieceHeight / 2);
 
         /*
         ctx.fillStyle = "#ddd";
@@ -187,91 +220,105 @@ function drawEntryPoints() {
         ctx.fill();
     }
 
-}
+};
 
-function drawResources() {
-    for (var i = 0; i < currentLevel._resources.length; i+= 1) {
-        drawResource(currentLevel._resources[i]);
+/**
+ *
+ */
+FiercePlanet.drawResources = function() {
+    for (var i = 0; i < FiercePlanet.currentLevel._resources.length; i+= 1) {
+        FiercePlanet.drawResource(FiercePlanet.currentLevel._resources[i]);
     }
-}
+};
 
-function drawResource(p) {
+/**
+ *
+ * @param p
+ */
+FiercePlanet.drawResource = function(p) {
     var canvas = $('#c2')[0];
     var ctx = canvas.getContext('2d');
 
-    var x = p._x * cellWidth;
-    var y = p._y * cellHeight;
+    var x = p._x * FiercePlanet.cellWidth;
+    var y = p._y * FiercePlanet.cellHeight;
     var s = p._totalYield / p._initialTotalYield * 100;
     var c = p._color;
-    var newColor = diluteColour(s, s, s, c);
-    ctx.clearRect(x + 1, y + 1, cellWidth - 1, cellHeight - 1);
+    var newColor = FiercePlanet.diluteColour(s, s, s, c);
+    ctx.clearRect(x + 1, y + 1, FiercePlanet.cellWidth - 1, FiercePlanet.cellHeight - 1);
     ctx.fillStyle = "#" + newColor;
     ctx.strokeStyle = "#333";
 
 
     // Fill whole square
-//    ctx.fillRect(x, y, cellWidth, cellHeight);
+//    ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
     // Fill smaller square
-    ctx.fillRect(x + 4, y + 4, cellWidth - 8, cellHeight - 8);
+    ctx.fillRect(x + 4, y + 4, FiercePlanet.cellWidth - 8, FiercePlanet.cellHeight - 8);
     switch (p._upgradeLevel) {
         case 1:
             break;
         case 2:
             ctx.lineWidth = 2;
             ctx.strokeStyle = "#666";
-            ctx.strokeRect(x + 4, y + 4, cellWidth - 8, cellHeight - 8);
+            ctx.strokeRect(x + 4, y + 4, FiercePlanet.cellWidth - 8, FiercePlanet.cellHeight - 8);
             break;
         case 3:
             ctx.lineWidth = 4;
             ctx.strokeStyle = "#666";
-            ctx.strokeRect(x + 6, y + 6, cellWidth - 12, cellHeight - 12);
+            ctx.strokeRect(x + 6, y + 6, FiercePlanet.cellWidth - 12, FiercePlanet.cellHeight - 12);
             break;
         case 4:
             ctx.fillStyle = "#666";
-            ctx.fillRect(x + 8, y + 8, cellWidth - 16, cellHeight - 16);
+            ctx.fillRect(x + 8, y + 8, FiercePlanet.cellWidth - 16, FiercePlanet.cellHeight - 16);
             break;
     }
 
     ctx.lineWidth = 4;
     ctx.strokeStyle = "#" + newColor;
-//    ctx.strokeRect(x, y, cellWidth, cellHeight);
-    ctx.strokeRect(x + 2, y + 2, cellWidth - 4, cellHeight - 4);
+//    ctx.strokeRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
+    ctx.strokeRect(x + 2, y + 2, FiercePlanet.cellWidth - 4, FiercePlanet.cellHeight - 4);
 //    ctx.strokeText(p.getUpgradeLevel(), x + 10, y + 10);
 
     // Draw resource-specific representation here
     var resImage = new Image();
     resImage.src = "/images/" + p._resourceName + ".gif";
-    ctx.drawImage(resImage, x + 4, y + 4, cellWidth - 8, cellHeight - 8);
-}
+    ctx.drawImage(resImage, x + 4, y + 4, FiercePlanet.cellWidth - 8, FiercePlanet.cellHeight - 8);
+};
 
-function clearCanvas(canvasID) {
+/**
+ *
+ * @param canvasID
+ */
+FiercePlanet.clearCanvas = function(canvasID) {
     var canvas = $('#' + canvasID)[0];
     var ctx = canvas.getContext('2d');
     var w = canvas.width;
     var h = canvas.height;
 
     ctx.clearRect(0, 0, w, h);
-}
+};
 
-function clearAgents() {
+/**
+ *
+ */
+FiercePlanet.clearAgents = function() {
     var canvas = $('#c4')[0];
     var ctx = canvas.getContext('2d');
-    var agents = currentLevel._currentAgents;
-    if (globalCounter > 0) {
+    var agents = FiercePlanet.currentLevel._currentAgents;
+    if (FiercePlanet.globalCounter > 0) {
         for (var i = 0; i < agents.length; i += 1) {
             var agent = agents[i];
             var wx = agent._wanderX;
             var wy = agent._wanderY;
-            var __ret = getDrawingPosition(agent, globalCounter - 1);
-            var intX = __ret.intX * cellWidth + wx + 1;
-            var intY = __ret.intY * cellHeight + wy + 1;
-            ctx.clearRect(intX, intY, cellWidth + wx + 1, cellHeight + wy + 1);
-            if (agentTracing) {
-                var __ret = getDrawingPosition(agent, globalCounter - 1);
-                var intX = __ret.intX * cellWidth;
-                var intY = __ret.intY * cellHeight;
+            var __ret = FiercePlanet.getDrawingPosition(agent, FiercePlanet.globalCounter - 1);
+            var intX = __ret.intX * FiercePlanet.cellWidth + wx + 1;
+            var intY = __ret.intY * FiercePlanet.cellHeight + wy + 1;
+            ctx.clearRect(intX, intY, FiercePlanet.cellWidth + wx + 1, FiercePlanet.cellHeight + wy + 1);
+            if (FiercePlanet.agentTracing) {
+                var __ret = FiercePlanet.getDrawingPosition(agent, FiercePlanet.globalCounter - 1);
+                var intX = __ret.intX * FiercePlanet.cellWidth;
+                var intY = __ret.intY * FiercePlanet.cellHeight;
                 ctx.beginPath();
-                ctx.arc(intX + cellWidth / 2, intY + cellHeight * 1.2, 2, 0, Math.PI * 2, false);
+                ctx.arc(intX + FiercePlanet.cellWidth / 2, intY + FiercePlanet.cellHeight * 1.2, 2, 0, Math.PI * 2, false);
                 ctx.closePath();
                 ctx.strokeStyle = "#000";
                 ctx.stroke();
@@ -281,11 +328,11 @@ function clearAgents() {
 
         }
     }
-}
+};
 
 
 /* Dilutes (whitens) the colour of an element, given its strength (some value between 0 and 100) */
-function diluteColour(rStrength, gStrength, bStrength, colour) {
+FiercePlanet.diluteColour = function(rStrength, gStrength, bStrength, colour) {
     var charOffset = (colour.length == 3 ? 1 : 2);
     var multiplier = (charOffset == 1 ? 1 : 16);
     var dilutionBase = 10;
@@ -305,9 +352,12 @@ function diluteColour(rStrength, gStrength, bStrength, colour) {
     bOffset = (bOffset.length < charOffset ? bOffset + "0" : bOffset);
     var newColor = rOffset + gOffset + bOffset;
     return newColor;
-}
+};
 
-function getAgentDirection(agent) {
+/**
+ *
+ */
+FiercePlanet.getAgentDirection = function(agent) {
     var lastX = agent._lastMemory._x;
     var lastY = agent._lastMemory._y;
     var x = agent._x;
@@ -318,9 +368,12 @@ function getAgentDirection(agent) {
     else {
         return 1;
     }
-}
+};
 
-function getDrawingPosition(agent, count) {
+/**
+ *
+ */
+FiercePlanet.getDrawingPosition = function(agent, count) {
     var lastX = agent._lastMemory._x;
     var lastY = agent._lastMemory._y;
     var x = agent._x;
@@ -337,11 +390,11 @@ function getDrawingPosition(agent, count) {
     var intY = (y - offsetY);
 
 
-    if (currentLevel._allowOffscreenCycling) {
+    if (FiercePlanet.currentLevel._allowOffscreenCycling) {
         var halfWay = (increment < 0.5);
-        if (x == worldWidth - 1 && lastX == 0) {
+        if (x == FiercePlanet.worldWidth - 1 && lastX == 0) {
             if (halfWay) {
-                offsetX = (x - worldWidth) * (increment);
+                offsetX = (x - FiercePlanet.worldWidth) * (increment);
                 intX = (x - offsetX);
             }
             else {
@@ -349,19 +402,19 @@ function getDrawingPosition(agent, count) {
                 intX = offsetX;
             }
         }
-        else if (x == 0 && lastX == worldWidth - 1) {
+        else if (x == 0 && lastX == FiercePlanet.worldWidth - 1) {
             if (halfWay) {
                 offsetX = increment;
                 intX = (0 - offsetX);
             }
             else {
-                offsetX = (worldWidth - lastX) * (increment);
-                intX = (worldWidth - offsetX);
+                offsetX = (FiercePlanet.worldWidth - lastX) * (increment);
+                intX = (FiercePlanet.worldWidth - offsetX);
             }
         }
-        else if (y == worldWidth - 1 && lastY == 0) {
+        else if (y == FiercePlanet.worldWidth - 1 && lastY == 0) {
             if (halfWay) {
-                offsetY = (y - worldWidth) * (increment);
+                offsetY = (y - FiercePlanet.worldWidth) * (increment);
                 intY = (y - offsetY);
             }
             else {
@@ -369,139 +422,175 @@ function getDrawingPosition(agent, count) {
                 intY = offsetY;
             }
         }
-        else if (y == 0 && lastY == worldWidth - 1) {
+        else if (y == 0 && lastY == FiercePlanet.worldWidth - 1) {
             if (halfWay) {
                 offsetY = increment;
                 intY = (0 - offsetY);
             }
             else {
-                offsetY = (worldWidth - lastY) * (increment);
-                intY = (worldWidth - offsetY);
+                offsetY = (FiercePlanet.worldWidth - lastY) * (increment);
+                intY = (FiercePlanet.worldWidth - offsetY);
             }
         }
     }
     return {intX:intX, intY:intY};
-}
+};
 
-function drawAgents() {
+/**
+ *
+ */
+FiercePlanet.drawAgents = function() {
     var canvas = $('#c4')[0];
     var ctx = canvas.getContext('2d');
-    var agents = currentLevel._currentAgents;
+    var agents = FiercePlanet.currentLevel._currentAgents;
     for (var i = 0; i < agents.length; i += 1) {
         var agent = agents[i];
 
         // Don't process agents we want to block
-        if (! rivalsVisible && agent._agentType == AgentTypes.RIVAL_AGENT_TYPE)
+        if (! FiercePlanet.rivalsVisible && agent._agentType == AgentTypes.RIVAL_AGENT_TYPE)
             continue;
-        if (! predatorsVisible && agent._agentType == AgentTypes.PREDATOR_AGENT_TYPE)
+        if (! FiercePlanet.predatorsVisible && agent._agentType == AgentTypes.PREDATOR_AGENT_TYPE)
             continue;
 
         // Get co-ordinates
         var wx = agent._wanderX;
         var wy = agent._wanderY;
-        var __ret = getDrawingPosition(agent, globalCounter);
-        var intX = __ret.intX * cellWidth + wx + cellWidth / 2;
-        var intY = __ret.intY * cellHeight + wy + cellHeight / 4;
-        var direction = getAgentDirection(agent);
+        var __ret = FiercePlanet.getDrawingPosition(agent, FiercePlanet.globalCounter);
+        var intX = __ret.intX * FiercePlanet.cellWidth + wx + FiercePlanet.cellWidth / 2;
+        var intY = __ret.intY * FiercePlanet.cellHeight + wy + FiercePlanet.cellHeight / 4;
+        var direction = FiercePlanet.getAgentDirection(agent);
 
 
         var ecoH = agent._economicHealth;
         var envH = agent._environmentalHealth;
         var socH = agent._socialHealth;
         var c = agent._color.toString();
-        var newColor = diluteColour(socH, envH, ecoH, c);
+        var newColor = FiercePlanet.diluteColour(socH, envH, ecoH, c);
         if (agent._isHit)
             newColor = "f00";
 
         try {
-            eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, globalCounter, direction);
+            eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, FiercePlanet.pieceWidth, FiercePlanet.pieceHeight, newColor, FiercePlanet.globalCounter, direction);
         } catch(e) {
-            eval(CITIZEN_AGENT_TYPE.getDrawFunction())(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, globalCounter, direction);
+            eval(CITIZEN_AGENT_TYPE.getDrawFunction())(ctx, agent, intX, intY, FiercePlanet.pieceWidth, FiercePlanet.pieceHeight, newColor, FiercePlanet.globalCounter, direction);
         }
 
 
     }
-}
+};
 
-function drawScrollingLayer() {
-    if (scrollingImageVisible) {
-        clearCanvas('c3');
+/**
+ *
+ */
+FiercePlanet.drawScrollingLayer = function() {
+    if (FiercePlanet.scrollingImageVisible) {
+        FiercePlanet.clearCanvas('c3');
         var canvas = $('#c3')[0];
         var ctx = canvas.getContext('2d');
 
-        if ((scrollingImageX + scrollingImageOffset) < (400 - scrollingImageOffset)){
-            scrollingImageX += scrollingImageOffset;
+        if ((FiercePlanet.scrollingImageX + FiercePlanet.scrollingImageOffset) < (400 - FiercePlanet.scrollingImageOffset)){
+            FiercePlanet.scrollingImageX += FiercePlanet.scrollingImageOffset;
         }
         else {
-            scrollingImageX = 1;
+            FiercePlanet.scrollingImageX = 1;
         }
         // Need exception handling for Safari
         try {
-            ctx.drawImage(scrollingImage, scrollingImageX, 1, 800, 600, 0, 0, 800, 600);
+            ctx.drawImage(FiercePlanet.scrollingImage, FiercePlanet.scrollingImageX, 1, 800, 600, 0, 0, 800, 600);
         }
         catch(err) {
         }
     }
-}
+};
 
-function drawLevel() {
+/**
+ *
+ */
+FiercePlanet.drawLevel = function() {
     var e = $('#level-display')[0];
-    e.innerHTML = currentLevel.getId();
-}
+    e.innerHTML = FiercePlanet.currentLevel.getId();
+};
 
-function drawProfileClass() {
+/**
+ *
+ */
+FiercePlanet.drawProfileClass = function() {
     var e = $('#profile-class-display')[0];
-    e.innerHTML = profileClass;
-}
+    e.innerHTML = FiercePlanet.profileClass;
+};
 
-function drawScore() {
+/**
+ *
+ */
+FiercePlanet.drawScore = function() {
     var e = $('#score-display')[0];
-    e.innerHTML = score.toString();
-}
+    e.innerHTML = FiercePlanet.currentScore.toString();
+};
 
-function drawHighestScore() {
+/**
+ *
+ */
+FiercePlanet.drawHighestScore = function() {
     var e = $('#highest-score-display')[0];
     var hs = localStorage.highestScore;
     if (hs == undefined)
         hs = 0;
     e.innerHTML = hs.toString();
-}
+};
 
-function drawResourcesInStore() {
+/**
+ *
+ */
+FiercePlanet.drawResourcesInStore = function() {
     var e = $('#goodness-display')[0];
-    e.innerHTML = resourcesInStore.toString();
-}
+    e.innerHTML = FiercePlanet.resourcesInStore.toString();
+};
 
-function drawExpired() {
+/**
+ *
+ */
+FiercePlanet.drawExpired = function() {
     var e = $('#expired-display')[0];
-    e.innerHTML = expiredAgentCount.toString() + " out of " + currentLevel.getExpiryLimit();
-}
+    e.innerHTML = FiercePlanet.expiredAgentCount.toString() + " out of " + FiercePlanet.currentLevel.getExpiryLimit();
+};
 
-function drawSaved() {
+/**
+ *
+ */
+FiercePlanet.drawSaved = function() {
     var e = $('#saved-display')[0];
-    e.innerHTML = savedAgentCount.toString();
-}
+    e.innerHTML = FiercePlanet.savedAgentCount.toString();
+};
 
-function drawWaves() {
+/**
+ *
+ */
+FiercePlanet.drawWaves = function() {
     var e = $('#waves-display')[0];
-    e.innerHTML = waves.toString() + " out of " + currentLevel.getWaveNumber();
-}
+    e.innerHTML = FiercePlanet.levelWaves.toString() + " out of " + FiercePlanet.currentLevel.getWaveNumber();
+};
 
-function drawScoreboard() {
-    drawLevel();
-    drawProfileClass();
-    drawScore();
-    drawHighestScore();
-    drawWaves();
-    drawSaved();
-    drawExpired();
-    drawResourcesInStore();
-}
+/**
+ *
+ */
+FiercePlanet.drawScoreboard = function() {
+    FiercePlanet.drawLevel();
+    FiercePlanet.drawProfileClass();
+    FiercePlanet.drawScore();
+    FiercePlanet.drawHighestScore();
+    FiercePlanet.drawWaves();
+    FiercePlanet.drawSaved();
+    FiercePlanet.drawExpired();
+    FiercePlanet.drawResourcesInStore();
+};
 
 
-/* Pan and Zoom functions */
 
-function pan(direction) {
+/**
+ *
+ * @param direction
+ */
+FiercePlanet.pan = function(direction) {
     var canvases = $('canvas');
     var offset = 10;
     for (var i = 0; i < canvases.length; i++) {
@@ -522,33 +611,36 @@ function pan(direction) {
                 ctx.translate(-offset, 0);
                 break;
             case 4:
-                ctx.translate(- panLeftOffset / zoomLevel, - panTopOffset / zoomLevel);
+                ctx.translate(- FiercePlanet.panLeftOffset / FiercePlanet.zoomLevel, - FiercePlanet.panTopOffset / FiercePlanet.zoomLevel);
                 break;
         }
     }
     switch (direction) {
         case 0:
-            panTopOffset += offset * zoomLevel;
+            FiercePlanet.panTopOffset += offset * FiercePlanet.zoomLevel;
             break;
         case 1:
-            panTopOffset += -offset * zoomLevel;
+            FiercePlanet.panTopOffset += -offset * FiercePlanet.zoomLevel;
             break;
         case 2:
-            panLeftOffset += offset * zoomLevel;
+            FiercePlanet.panLeftOffset += offset * FiercePlanet.zoomLevel;
             break;
         case 3:
-            panLeftOffset += -offset * zoomLevel;
+            FiercePlanet.panLeftOffset += -offset * FiercePlanet.zoomLevel;
             break;
         case 4:
-            panLeftOffset = 0;
-            panTopOffset = 0;
+            FiercePlanet.panLeftOffset = 0;
+            FiercePlanet.panTopOffset = 0;
             break;
     }
-    drawGame();
-}
+    FiercePlanet.drawGame();
+};
 
-
-function zoom(direction) {
+/**
+ *
+ * @param direction
+ */
+FiercePlanet.zoom = function(direction) {
     var canvases = $('canvas');
     var magnify = 1.5;
     for (var i = 0; i < canvases.length; i++) {
@@ -556,17 +648,17 @@ function zoom(direction) {
         var ctx = canvas.getContext('2d');
         switch (direction) {
             case -1:
-                if (zoomLevel > 1) {
+                if (FiercePlanet.zoomLevel > 1) {
                     ctx.scale(1 / magnify, 1 / magnify);
 //                    ctx.translate(200, 150);
                 }
                 break;
             case 0:
-                ctx.scale(1 / zoomLevel, 1 / zoomLevel);
+                ctx.scale(1 / FiercePlanet.zoomLevel, 1 / FiercePlanet.zoomLevel);
 //                ctx.translate(0, 0);
                 break;
             case 1:
-                if (zoomLevel < 10) {
+                if (FiercePlanet.zoomLevel < 10) {
                     ctx.scale(magnify, magnify);
 //                    ctx.translate(-200 * magnify, -150 * magnify);
                 }
@@ -575,25 +667,25 @@ function zoom(direction) {
     }
     switch (direction) {
         case -1:
-            if (zoomLevel > 1) {
-//                panLeftOffset += 200;
-//                panTopOffset += 150;
-                zoomLevel *= 1 / magnify;
+            if (FiercePlanet.zoomLevel > 1) {
+//                FiercePlanet.panLeftOffset += 200;
+//                FiercePlanet.panTopOffset += 150;
+                FiercePlanet.zoomLevel *= 1 / magnify;
             }
             break;
         case 0:
-//            panLeftOffset = 0;
-//            panTopOffset = 0;
-            zoomLevel = 1;
+//            FiercePlanet.panLeftOffset = 0;
+//            FiercePlanet.panTopOffset = 0;
+            FiercePlanet.zoomLevel = 1;
             break;
         case 1:
-            if (zoomLevel < 10) {
-//                panLeftOffset -= 200;
-//                panTopOffset -= 150;
-                zoomLevel *= magnify;
+            if (FiercePlanet.zoomLevel < 10) {
+//                FiercePlanet.panLeftOffset -= 200;
+//                FiercePlanet.panTopOffset -= 150;
+                FiercePlanet.zoomLevel *= magnify;
             }
             break;
     }
-    drawGame();
-}
-/* End Pan and Zoom functions */
+    FiercePlanet.drawGame();
+};
+

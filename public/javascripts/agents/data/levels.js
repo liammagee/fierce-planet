@@ -1,9 +1,10 @@
 
 /* NB: Level is defined in level.js */
 
-var MAX_DEFAULT_LEVELS = 10;
 
 var PresetLevels = function(){};
+
+PresetLevels.MAX_DEFAULT_LEVELS = 10;
 
 /* Level 0 Definition */
 

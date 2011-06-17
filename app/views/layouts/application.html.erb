@@ -4,19 +4,22 @@
   <title>Fierce Planet</title>
   <!--<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />-->
   <%= stylesheet_link_tag "styles" %>
-  <%= stylesheet_link_tag "smoothness/jquery-ui-1.8.11.custom" %>
+  <!--<%= stylesheet_link_tag "smoothness/jquery-ui-1.8.11.custom" %>-->
+  <%= stylesheet_link_tag "custom/jquery-ui-1.8.13.custom" %>
 
   <%= javascript_include_tag "jquery-1.6.1.js" %>
   <!--<%= javascript_include_tag "jquery.min.js" %>-->
-  <%= javascript_include_tag "jquery-ui.min.js" %>
+  <%= javascript_include_tag "jquery-ui-1.8.13.custom.min.js" %>
+  <!--<%= javascript_include_tag "jquery-ui.min.js" %>-->
   <%= javascript_include_tag "jquery.json-2.2.min.js" %>
   <%= javascript_include_tag "jquery.mousewheel.3.0.2/jquery.mousewheel.min.js" %>
   <%= javascript_include_tag "jquery.zoom.js" %>
 
 
   <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? -%>
-  <%= javascript_tag "var PROFILE_ID;" -%>
-  <%= javascript_tag "PROFILE_ID = #{current_user.profile.id};" if current_user -%>
+  <%= javascript_tag "var FiercePlanet = FiercePlanet || {};" -%>
+  <%= javascript_tag "FiercePlanet.PROFILE_ID;" -%>
+  <%= javascript_tag "FiercePlanet.PROFILE_ID = #{current_user.profile.id};" if current_user -%>
 
   <%= javascript_include_tag "rails" %>
 
@@ -45,12 +48,12 @@
   <!-- If a user is logged in, set their properties here -->
   <% if current_user %>
       <script>
-          profileClass = '<%= current_user.profile.profile_class ? current_user.profile.profile_class : "Novice" %>';
-          credits = parseInt('<%= current_user.profile.credits ? current_user.profile.credits : 0 %>');
-          capabilities = '<%= current_user.profile.capabilities ? current_user.profile.capabilities : "farm,water,clinic" %>'.split(',');
-          totalSaved = parseInt('<%= current_user.profile.total_saved ? current_user.profile.total_saved : 0 %>');
+          FiercePlanet.profileClass = '<%= current_user.profile.profile_class ? current_user.profile.profile_class : "Novice" %>';
+          FiercePlanet.credits = parseInt('<%= current_user.profile.credits ? current_user.profile.credits : 0 %>');
+          FiercePlanet.capabilities = '<%= current_user.profile.capabilities ? current_user.profile.capabilities : "farm,water,clinic" %>'.split(',');
+          FiercePlanet.totalSaved = parseInt('<%= current_user.profile.total_saved ? current_user.profile.total_saved : 0 %>');
           $(document).ready(function() {
-              refreshSwatch();
+              FiercePlanet.refreshSwatch();
           });
       </script>
   <% end %>

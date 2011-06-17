@@ -70,7 +70,7 @@ class ProfilesController < ApplicationController
     economic_resources = params[:economic_resources]
     environmental_resources = params[:environmental_resources]
     social_resources = params[:social_resources]
-    credits = params[:credits]
+    FiercePlanet.credits = params[:credits]
     progress_towards_next_class = params[:progress_towards_next_class]
 
     @profile.total_saved ||= 0
@@ -86,7 +86,7 @@ class ProfilesController < ApplicationController
     @profile.total_social_resources ||= 0
     @profile.total_social_resources += social_resources.to_i
     @profile.credits ||= 0
-    @profile.credits += credits.to_i
+    @profile.credits += FiercePlanet.credits.to_i
     @profile.progress_towards_next_class = progress_towards_next_class.to_i
 
     respond_to do |format|

@@ -2,282 +2,289 @@
  * Lifecycle related methods
  */
 
+/**
+ * Declare the FiercePlanet namespace
+ */
+var FiercePlanet = FiercePlanet || {};
+
 
 /**
  * Called when a game is loaded
  */
-function loadGame() {
+FiercePlanet.loadGame = function() {
     // Load relevant settings, if available
-    loadSettingsFromStorage();
+    FiercePlanet.loadSettingsFromStorage();
 
     // Set up dialogs
-    setupDialogs();
+    FiercePlanet.setupDialogs();
 
     // Handle resource drag and drop and click interactions
-    ResourceUI.setupResourceInteraction();
+    FiercePlanet.setupResourceInteraction();
 
     // Add general event listeners
-    hookUpUIEventListeners();
+    FiercePlanet.hookUpUIEventListeners();
 
     // Draw the game
-    _initialiseGame();
-}
+    FiercePlanet._initialiseGame();
+};
 
 
 /**
  * Called when a new game is commenced
  */
-function newGame() {
-    if (currentLevelPreset)
-        currentLevelNumber = 1;
-    score = 0;
-    previousLevelScore = 0;
-    newLevel();
-}
+FiercePlanet.newGame = function() {
+    if (FiercePlanet.currentLevelPreset)
+        FiercePlanet.currentLevelNumber = 1;
+    FiercePlanet.currentScore = 0;
+    FiercePlanet.previousLevelScore = 0;
+    FiercePlanet.newLevel();
+};
 
 
 /**
  * Called when a new level is begun
  */
-function newLevel() {
-    inDesignMode = false;
-    levelDelayCounter = 0;
-    maxLevelMoves = 0;
-    previousLevelScore = score;
-    if (currentLevel != undefined)
-        currentLevel.setResources(new Array());
-    recordedLevels = new Array();
+FiercePlanet.newLevel = function() {
+    FiercePlanet.inDesignMode = false;
+    FiercePlanet.levelDelayCounter = 0;
+    FiercePlanet.maxLevelMoves = 0;
+    FiercePlanet.previousLevelScore = FiercePlanet.currentScore;
+    if (FiercePlanet.currentLevel != undefined)
+        FiercePlanet.currentLevel.setResources([]);
+    FiercePlanet.recordedLevels = [];
 
-    levelInfo(currentLevel.getNotice());
-    notify("Starting level " + currentLevel.getId() + "...");
+    FiercePlanet._initialiseGame();
 
-    _initialiseGame();
+    FiercePlanet.levelInfo(FiercePlanet.currentLevel.getNotice());
+    FiercePlanet.notify("Starting level " + FiercePlanet.currentLevel.getId() + "...");
 
-    newWave();
-}
+//    newWave();
+};
 
 
-/** Called when a game is restarted */
-function restartLevel() {
+/**
+ * Called when a game is restarted
+ */
+FiercePlanet.restartLevel = function() {
     // Reset the score
-    score = previousLevelScore;
+    FiercePlanet.currentScore = FiercePlanet.previousLevelScore;
 
     // Start a new level
-    newLevel();
-}
+    FiercePlanet.newLevel();
+};
 
 
 /**
  * Called when a new wave is ready
  */
-function newWave() {
-    maxWaveMoves = 0;
-    globalCounter = 0;
-    waveDelayCounter = 0;
-    savedAgentThisWaveCount = 0;
+FiercePlanet.newWave = function() {
+    FiercePlanet.maxWaveMoves = 0;
+    FiercePlanet.globalCounter = 0;
+    FiercePlanet.waveDelayCounter = 0;
+    FiercePlanet.savedAgentThisWaveCount = 0;
 
-    currentLevel.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, numAgents, agentsCanCommunicate);
+    FiercePlanet.currentLevel.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, FiercePlanet.numAgents, FiercePlanet.agentsCanCommunicate);
 
-    notify("New wave coming...");
-    _startAgents();
-}
-
-
-/**
- * Called when a level is completed
- */
-function completeWave() {
-    _finaliseGame();
-    waves++;
-    numAgents++;
-}
+    FiercePlanet.notify("New wave coming...");
+    FiercePlanet._startAgents();
+};
 
 
 /**
  * Called when a level is completed
  */
-function completeLevel() {
-    _finaliseGame();
-    if (currentLevel.isPresetLevel())
-        currentLevelNumber++;
-    showCompleteLevelDialog();
-}
+FiercePlanet.completeWave = function() {
+    FiercePlanet._finaliseGame();
+    FiercePlanet.levelWaves++;
+    FiercePlanet.numAgents++;
+};
+
+
+/**
+ * Called when a level is completed
+ */
+FiercePlanet.completeLevel = function() {
+    FiercePlanet._finaliseGame();
+    if (FiercePlanet.currentLevel.isPresetLevel())
+        FiercePlanet.currentLevelNumber++;
+    FiercePlanet.showCompleteLevelDialog();
+};
 
 
 /**
  * Called when the game is over
  */
-function gameOver() {
-    score = previousLevelScore;
-    _finaliseGame();
-    showGameOverDialog();
-}
+FiercePlanet.gameOver = function() {
+    FiercePlanet.currentScore = FiercePlanet.previousLevelScore;
+    FiercePlanet._finaliseGame();
+    FiercePlanet.showGameOverDialog();
+};
 
 
 /**
  * Called when a game is completed
  */
-function completeGame() {
-    _finaliseGame();
-    showCompleteGameDialog();
-}
+FiercePlanet.completeGame = function() {
+    FiercePlanet._finaliseGame();
+    FiercePlanet.showCompleteGameDialog();
+};
 
 
 /**
  * Plays the current game
  */
-function playGame() {
-    if (inPlay)
+FiercePlanet.playGame = function() {
+    if (FiercePlanet.inPlay)
         return;
-    if (globalCounter == 0)
-        newWave();
+    if (FiercePlanet.globalCounter == 0)
+        FiercePlanet.newWave();
     else
-        _startAgents();
-}
+        FiercePlanet._startAgents();
+};
 
 
 /**
  * Pauses the current game
  */
-function pauseGame() {
-    if (!inPlay)
+FiercePlanet.pauseGame = function() {
+    if (!FiercePlanet.inPlay)
         return;
-    _stopAgents();
-}
+    FiercePlanet._stopAgents();
+};
 
 
 /**
  * Slows down the rate of processing agents
  */
-function slowDown() {
-    if (interval < 10)
-        interval += 1;
-    else if (interval < 100)
-        interval += 10;
-    if (inPlay)
-        _startAgents();
-}
+FiercePlanet.slowDown = function() {
+    if (FiercePlanet.interval < 10)
+        FiercePlanet.interval += 1;
+    else if (FiercePlanet.interval < 100)
+        FiercePlanet.interval += 10;
+    if (FiercePlanet.inPlay)
+        FiercePlanet._startAgents();
+};
 
 
 /**
  * Speeds up the rate of processing agents
  */
-function speedUp() {
-    if (interval > 10)
-        interval -= 10;
-    else if (interval > 1)
-        interval -= 1;
-    if (inPlay)
-        _startAgents();
-}
+FiercePlanet.speedUp = function() {
+    if (FiercePlanet.interval > 10)
+        FiercePlanet.interval -= 10;
+    else if (FiercePlanet.interval > 1)
+        FiercePlanet.interval -= 1;
+    if (FiercePlanet.inPlay)
+        FiercePlanet._startAgents();
+};
 
 
 /**
  * Initialises level data
  */
-function _initialiseGame() {
+FiercePlanet._initialiseGame = function () {
     console.log("Initialising world...");
 
     // Stop any existing timers
-    _stopAgents();
+    FiercePlanet._stopAgents();
 
-    if (currentLevelNumber < 1 || currentLevelNumber > 10)
-        currentLevelNumber = 1;
-    if (currentLevelPreset) {
+    if (FiercePlanet.currentLevelNumber < 1 || FiercePlanet.currentLevelNumber > 10)
+        FiercePlanet.currentLevelNumber = 1;
+    if (FiercePlanet.currentLevel != undefined && FiercePlanet.currentLevel.isPresetLevel()) {
         try {
-            currentLevel = eval("level" + currentLevelNumber.toString());
+            FiercePlanet.currentLevel = eval("level" + FiercePlanet.currentLevelNumber.toString());
         }
         catch(err) {
             // Silently fail - current level stays the same if undefined
         }
     }
-    else if (currentLevel == undefined) {
-        currentLevel = eval("level1");
+    else if (FiercePlanet.currentLevel == undefined) {
+        FiercePlanet.currentLevel = eval("level1");
     }
 
-    if (waveOverride > 0) {
-        currentLevel.setWaveNumber(waveOverride);
-        waveOverride = 0;
+    if (FiercePlanet.waveOverride > 0) {
+        FiercePlanet.currentLevel.setWaveNumber(FiercePlanet.waveOverride);
+        FiercePlanet.waveOverride = 0;
     }
-    resourcesInStore = currentLevel.getInitialResourceStore();
-    if (resourcesInStore == undefined || resourcesInStore == null) {
-        resourcesInStore = STARTING_STORE;
+    FiercePlanet.resourcesInStore = FiercePlanet.currentLevel.getInitialResourceStore();
+    if (FiercePlanet.resourcesInStore == undefined || FiercePlanet.resourcesInStore == null) {
+        FiercePlanet.resourcesInStore = FiercePlanet.STARTING_STORE;
     }
 
-    currentLevel.setCurrentAgents(new Array());
-    currentLevel.setResources(new Array());
+    FiercePlanet.currentLevel.setCurrentAgents([]);
+    FiercePlanet.currentLevel.setResources([]);
 
 //    score = 0;
-    economicResourceCount = 0;
-    environmentalResourceCount = 0;
-    socialResourceCount = 0;
-    expiredAgentCount = 0;
-    savedAgentCount = 0;
-    waves = 1;
+    FiercePlanet.economicResourceCount = 0;
+    FiercePlanet.environmentalResourceCount = 0;
+    FiercePlanet.socialResourceCount = 0;
+    FiercePlanet.expiredAgentCount = 0;
+    FiercePlanet.savedAgentCount = 0;
+    FiercePlanet.levelWaves = 1;
 
-    resourceRecoveryCycle = Math.pow(DEFAULT_RESOURCE_RECOVERY, levelOfDifficulty - 1);
+    FiercePlanet.resourceRecoveryCycle = Math.pow(FiercePlanet.DEFAULT_RESOURCE_RECOVERY, FiercePlanet.levelOfDifficulty - 1);
 
-    numAgents = currentLevel.getInitialAgentNumber();
-    worldWidth = currentLevel.getWorldWidth();
-    worldHeight = currentLevel.getWorldHeight();
-    cellWidth = WORLD_WIDTH / worldWidth;
-    cellHeight = WORLD_HEIGHT / worldHeight;
-    pieceWidth = cellWidth * 0.5;
-    pieceHeight = cellHeight * 0.5;
-    scrollingImage.src = "/images/yellow-rain.png";
+    FiercePlanet.numAgents = FiercePlanet.currentLevel.getInitialAgentNumber();
+    FiercePlanet.worldWidth = FiercePlanet.currentLevel.getWorldWidth();
+    FiercePlanet.worldHeight = FiercePlanet.currentLevel.getWorldHeight();
+    FiercePlanet.cellWidth = FiercePlanet.WORLD_WIDTH / FiercePlanet.worldWidth;
+    FiercePlanet.cellHeight = FiercePlanet.WORLD_HEIGHT / FiercePlanet.worldHeight;
+    FiercePlanet.pieceWidth = FiercePlanet.cellWidth * 0.5;
+    FiercePlanet.pieceHeight = FiercePlanet.cellHeight * 0.5;
+    FiercePlanet.scrollingImage.src = "/images/yellow-rain.png";
 
     // Set up level
-    currentLevel.setup();
+    FiercePlanet.currentLevel.setup();
 
     // Draw the game
-    drawGame();
-}
+    FiercePlanet.drawGame();
+};
 
 
 /**
  * Finalises game
  */
-function _finaliseGame() {
-    _stopAgents();
-    storeData();
-    drawScoreboard();
-}
+FiercePlanet._finaliseGame = function() {
+    FiercePlanet._stopAgents();
+    FiercePlanet.storeData();
+    FiercePlanet.drawScoreboard();
+};
 
 
 /**
  * Starts the processing of agents
  */
-function _startAgents() {
+FiercePlanet._startAgents = function () {
     console.log("Starting agents...");
 
-    clearInterval(agentTimerId);
-    agentTimerId = setInterval("processAgents()", interval);
-    inPlay = true;
+    clearInterval(FiercePlanet.agentTimerId);
+    FiercePlanet.agentTimerId = setInterval("FiercePlanet.processAgents()", FiercePlanet.interval);
+    FiercePlanet.inPlay = true;
 
 
     // Play sound, if any are set
-    if (audio != undefined)
-        audio.pause();
-    if (currentLevel.getSoundSrc() != undefined) {
+    if (FiercePlanet.audio != undefined)
+        FiercePlanet.audio.pause();
+    if (FiercePlanet.currentLevel.getSoundSrc() != undefined) {
 //        var audio = $("background-sound")[0];
-//        audio.src = currentLevel.getSoundSrc();
+//        audio.src = FiercePlanet.currentLevel.getSoundSrc();
 
-        audio = new Audio(currentLevel.getSoundSrc());
-        audio.loop = true;
-        audio.addEventListener("ended", function(){audio.currentTime = 0; audio.play();}, false);
-        audio.play();
+        FiercePlanet.audio = new Audio(FiercePlanet.currentLevel.getSoundSrc());
+        FiercePlanet.audio.loop = true;
+        FiercePlanet.audio.addEventListener("ended", function(){FiercePlanet.audio.currentTime = 0; FiercePlanet.audio.play();}, false);
+        FiercePlanet.audio.play();
     }
-}
+};
 
 /**
  * Stops the processing of agents
  */
-function _stopAgents() {
+FiercePlanet._stopAgents = function () {
     console.log("Pausing agents...");
 
-    clearInterval(agentTimerId);
-    inPlay = false;
+    clearInterval(FiercePlanet.agentTimerId);
+    FiercePlanet.inPlay = false;
 
-    if (audio != undefined)
-        audio.pause();
-}
+    if (FiercePlanet.audio != undefined)
+        FiercePlanet.audio.pause();
+};

@@ -6,41 +6,46 @@
  * To change this template use File | Settings | File Templates.
  */
 
+/**
+ * Declare the FiercePlanet namespace
+ */
+var FiercePlanet = FiercePlanet || {};
+
 
 // Economic resources
-FARM_RESOURCE_KIND = new ResourceKind("Farm", "farm", "eco", 10, 20, 100, 20);
-SHOP_RESOURCE_KIND = new ResourceKind("Shop", "shop", "eco", 15, 25, 100, 30);
-BANK_RESOURCE_KIND = new ResourceKind("Bank", "bank", "eco", 20, 30, 100, 50);
-FACTORY_RESOURCE_KIND = new ResourceKind("Factory", "factory", "eco", 25, 40, 100, 70);
-STOCKMARKET_RESOURCE_KIND = new ResourceKind("Stockmarket", "stockmarket", "eco", 30, 50, 100, 90);
+FiercePlanet.FARM_RESOURCE_KIND = new ResourceKind("Farm", "farm", "eco", 10, 20, 100, 20);
+FiercePlanet.SHOP_RESOURCE_KIND = new ResourceKind("Shop", "shop", "eco", 15, 25, 100, 30);
+FiercePlanet.BANK_RESOURCE_KIND = new ResourceKind("Bank", "bank", "eco", 20, 30, 100, 50);
+FiercePlanet.FACTORY_RESOURCE_KIND = new ResourceKind("Factory", "factory", "eco", 25, 40, 100, 70);
+FiercePlanet.STOCKMARKET_RESOURCE_KIND = new ResourceKind("Stockmarket", "stockmarket", "eco", 30, 50, 100, 90);
 
 
 // Environmental resources
-FRESH_WATER_RESOURCE_KIND = new ResourceKind("Fresh Water", "water", "env", 10, 20, 100, 10);
-WILDLIFE_PARK_RESOURCE_KIND = new ResourceKind("Wildlife Park", "park", "env", 15, 25, 100, 15);
-CLEAN_AIR_RESOURCE_KIND = new ResourceKind("Clear Air", "air", "env", 20, 30, 100, 25);
-GREEN_ENERGY_RESOURCE_KIND = new ResourceKind("Green Energy", "energy", "env", 25, 40, 100, 35);
-BIODIVERSITY_RESOURCE_KIND = new ResourceKind("Biodiversity", "biodiversity", "env", 30, 50, 100, 45);
+FiercePlanet.FRESH_WATER_RESOURCE_KIND = new ResourceKind("Fresh Water", "water", "env", 10, 20, 100, 10);
+FiercePlanet.WILDLIFE_PARK_RESOURCE_KIND = new ResourceKind("Wildlife Park", "park", "env", 15, 25, 100, 15);
+FiercePlanet.CLEAN_AIR_RESOURCE_KIND = new ResourceKind("Clear Air", "air", "env", 20, 30, 100, 25);
+FiercePlanet.GREEN_ENERGY_RESOURCE_KIND = new ResourceKind("Green Energy", "energy", "env", 25, 40, 100, 35);
+FiercePlanet.BIODIVERSITY_RESOURCE_KIND = new ResourceKind("Biodiversity", "biodiversity", "env", 30, 50, 100, 45);
 
 
 // Social resources
-CLINIC_RESOURCE_KIND = new ResourceKind("Clinic", "clinic", "soc", 10, 20, 100, 5);
-SCHOOL_RESOURCE_KIND = new ResourceKind("School", "school", "soc", 15, 25, 100, 8);
-LEGAL_SYSTEM_RESOURCE_KIND = new ResourceKind("Legal System", "legal", "soc", 20, 30, 100, 15);
-DEMOCRACY_RESOURCE_KIND = new ResourceKind("Democracy", "democracy", "soc", 25, 40, 100, 20);
-FESTIVAL_RESOURCE_KIND = new ResourceKind("Festival", "festival", "soc", 30, 50, 100, 25);
+FiercePlanet.CLINIC_RESOURCE_KIND = new ResourceKind("Clinic", "clinic", "soc", 10, 20, 100, 5);
+FiercePlanet.SCHOOL_RESOURCE_KIND = new ResourceKind("School", "school", "soc", 15, 25, 100, 8);
+FiercePlanet.LEGAL_SYSTEM_RESOURCE_KIND = new ResourceKind("Legal System", "legal", "soc", 20, 30, 100, 15);
+FiercePlanet.DEMOCRACY_RESOURCE_KIND = new ResourceKind("Democracy", "democracy", "soc", 25, 40, 100, 20);
+FiercePlanet.FESTIVAL_RESOURCE_KIND = new ResourceKind("Festival", "festival", "soc", 30, 50, 100, 25);
 
 // Arrays of resource kinds
-ECONOMIC_RESOURCE_KINDS = [FARM_RESOURCE_KIND, SHOP_RESOURCE_KIND, BANK_RESOURCE_KIND, FACTORY_RESOURCE_KIND, STOCKMARKET_RESOURCE_KIND];
-ENVIRONMENTAL_RESOURCE_KINDS = [FRESH_WATER_RESOURCE_KIND, WILDLIFE_PARK_RESOURCE_KIND, CLEAN_AIR_RESOURCE_KIND, GREEN_ENERGY_RESOURCE_KIND, BIODIVERSITY_RESOURCE_KIND];
-SOCIAL_RESOURCE_KINDS = [CLINIC_RESOURCE_KIND, SCHOOL_RESOURCE_KIND, LEGAL_SYSTEM_RESOURCE_KIND, DEMOCRACY_RESOURCE_KIND, FESTIVAL_RESOURCE_KIND];
+FiercePlanet.ECONOMIC_RESOURCE_KINDS = [FiercePlanet.FARM_RESOURCE_KIND, FiercePlanet.SHOP_RESOURCE_KIND, FiercePlanet.BANK_RESOURCE_KIND, FiercePlanet.FACTORY_RESOURCE_KIND, FiercePlanet.STOCKMARKET_RESOURCE_KIND];
+FiercePlanet.ENVIRONMENTAL_RESOURCE_KINDS = [FiercePlanet.FRESH_WATER_RESOURCE_KIND, FiercePlanet.WILDLIFE_PARK_RESOURCE_KIND, FiercePlanet.CLEAN_AIR_RESOURCE_KIND, FiercePlanet.GREEN_ENERGY_RESOURCE_KIND, FiercePlanet.BIODIVERSITY_RESOURCE_KIND];
+FiercePlanet.SOCIAL_RESOURCE_KINDS = [FiercePlanet.CLINIC_RESOURCE_KIND, FiercePlanet.SCHOOL_RESOURCE_KIND, FiercePlanet.LEGAL_SYSTEM_RESOURCE_KIND, FiercePlanet.DEMOCRACY_RESOURCE_KIND, FiercePlanet.FESTIVAL_RESOURCE_KIND];
 
-RESOURCE_KINDS = ECONOMIC_RESOURCE_KINDS.concat(ENVIRONMENTAL_RESOURCE_KINDS.concat(SOCIAL_RESOURCE_KINDS));
+FiercePlanet.RESOURCE_KINDS = FiercePlanet.ECONOMIC_RESOURCE_KINDS.concat(FiercePlanet.ENVIRONMENTAL_RESOURCE_KINDS.concat(FiercePlanet.SOCIAL_RESOURCE_KINDS));
 
 /* Generic resource kind functions */
-function resolveResourceKind(code) {
-    for (var i = 0; i < RESOURCE_KINDS.length; i++) {
-        var resourceKind = RESOURCE_KINDS[i];
+FiercePlanet.resolveResourceKind = function (code) {
+    for (var i = 0; i < FiercePlanet.RESOURCE_KINDS.length; i++) {
+        var resourceKind = FiercePlanet.RESOURCE_KINDS[i];
         if (resourceKind._code == code)
             return resourceKind;
     }

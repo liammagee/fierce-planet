@@ -3,108 +3,123 @@
  */
 
 
-/* Uses local storage to store highest scores and levels */
+/**
+ * Declare the FiercePlanet namespace
+ */
+var FiercePlanet = FiercePlanet || {};
+
+
 
 /**
  * Loads available settings from local storage
  */
-function loadSettingsFromStorage() {
-    currentLevelNumber = (localStorage.currentLevelNumber != undefined ? parseInt(localStorage.currentLevelNumber) : currentLevelNumber);
-    currentLevelPreset = (localStorage.currentLevelPreset != undefined ? (localStorage.currentLevelPreset === 'true') : currentLevelPreset);
-    score = (localStorage.currentScore != undefined ? parseInt(localStorage.currentScore) : score);
-//    totalSaved = (localStorage.totalSaved != undefined ? parseInt(localStorage.totalSaved) : totalSaved);
-//    profileClass = (localStorage.profileClass != undefined ? localStorage.profileClass : profileClass);
-//    credits = (localStorage.credits != undefined ? parseInt(localStorage.credits) : credits);
-//    capabilities = (localStorage.capabilities != undefined ? localStorage.capabilities : capabilities);
-}
+FiercePlanet.loadSettingsFromStorage = function () {
+    FiercePlanet.currentLevelNumber = (localStorage.currentLevelNumber != undefined ? parseInt(localStorage.currentLevelNumber) : FiercePlanet.currentLevelNumber);
+    FiercePlanet.currentLevelPreset = (localStorage.currentLevelPreset != undefined ? (localStorage.currentLevelPreset === 'true') : FiercePlanet.currentLevelPreset);
+    FiercePlanet.currentScore = (localStorage.currentScore != undefined ? parseInt(localStorage.currentScore) : FiercePlanet.currentScore);
+//    FiercePlanet.totalSaved = (localStorage.totalSaved != undefined ? parseInt(localStorage.totalSaved) : FiercePlanet.totalSaved);
+//    FiercePlanet.profileClass = (localStorage.profileClass != undefined ? localStorage.profileClass : FiercePlanet.profileClass);
+//    FiercePlanet.credits = (localStorage.credits != undefined ? parseInt(localStorage.credits) : FiercePlanet.credits);
+//    FiercePlanet.capabilities = (localStorage.capabilities != undefined ? localStorage.capabilities : FiercePlanet.capabilities);
+};
 
-function storeData() {
-    localStorage.currentScore = previousLevelScore;
-//    if (currentLevelNumber > 0 && currentLevelNumber <= MAX_DEFAULT_LEVELS)
-    localStorage.currentLevelNumber = currentLevelNumber;
-    localStorage.currentLevelPreset = currentLevel.isPresetLevel();
-    localStorage.totalSaved = totalSaved;
-    localStorage.profileClass = profileClass;
-    localStorage.credits = credits;
-    localStorage.capabilities = capabilities;
-    if (localStorage.highestScore == undefined || score > localStorage.highestScore)
-        localStorage.highestScore = score;
-    if (localStorage.highestLevel == undefined || currentLevelNumber > localStorage.highestLevel)
-        localStorage.highestLevel = currentLevelNumber;
-}
+/**
+ * Stores relevant profile data in local storage
+ */
+FiercePlanet.storeData = function() {
+    localStorage.currentScore = FiercePlanet.previousLevelScore;
+//    if (FiercePlanet.currentLevelNumber > 0 && FiercePlanet.currentLevelNumber <= PresetLevels.MAX_DEFAULT_LEVELS)
+    localStorage.currentLevelNumber = FiercePlanet.currentLevelNumber;
+    localStorage.currentLevelPreset = FiercePlanet.currentLevel.isPresetLevel();
+    localStorage.totalSaved = FiercePlanet.totalSaved;
+    localStorage.profileClass = FiercePlanet.profileClass;
+    localStorage.credits = FiercePlanet.credits;
+    localStorage.capabilities = FiercePlanet.capabilities;
+    if (localStorage.highestScore == undefined || FiercePlanet.currentScore > localStorage.highestScore)
+        localStorage.highestScore = FiercePlanet.currentScore;
+    if (localStorage.highestLevel == undefined || FiercePlanet.currentLevelNumber > localStorage.highestLevel)
+        localStorage.highestLevel = FiercePlanet.currentLevelNumber;
+};
 
 
-
-/* Stats functions  */
-function determineCreditsAndClass() {
-    credits += resourcesInStore;
-    totalSaved += savedAgentCount;
-    if (totalSaved > 5000) {
-        profileClass = "Genius";
+/**
+ * Determines credits and class
+ */
+FiercePlanet.determineCreditsAndClass = function() {
+    FiercePlanet.credits += FiercePlanet.resourcesInStore;
+    FiercePlanet.totalSaved += FiercePlanet.savedAgentCount;
+    if (FiercePlanet.totalSaved > 5000) {
+        FiercePlanet.profileClass = "Genius";
     }
-    else if (totalSaved > 2500) {
-        profileClass = "Visionary";
+    else if (FiercePlanet.totalSaved > 2500) {
+        FiercePlanet.profileClass = "Visionary";
     }
-    else if (totalSaved > 1000) {
-        profileClass = "Expert";
+    else if (FiercePlanet.totalSaved > 1000) {
+        FiercePlanet.profileClass = "Expert";
     }
-    else if (totalSaved > 500) {
-        profileClass = "Planner";
+    else if (FiercePlanet.totalSaved > 500) {
+        FiercePlanet.profileClass = "Planner";
     }
-}
+};
 
-function compileStats() {
-    var resourceCount = currentLevel.getResources().length;
+/**
+ * Compiles statistics for this level
+ */
+FiercePlanet.compileStats = function() {
+    var resourceCount = FiercePlanet.currentLevel.getResources().length;
     var progressTowardsNextClass = 0;
     var stats = {
-        "profile[current_level]": currentLevelNumber,
-        "profile[current_score]": score,
-        "profile[profile_class]": profileClass,
-        "profile[credits]": credits,
-        "profile[capabilities]": capabilities.join(','),
-        waves_survived: waves,
-        saved_agent_count: savedAgentCount,
-        expired_agent_count: expiredAgentCount,
-        resources_spent: resourcesSpent,
-        resources_in_store: resourcesInStore,
+        "profile[current_level]": FiercePlanet.currentLevelNumber,
+        "profile[current_score]": FiercePlanet.currentScore,
+        "profile[profile_class]": FiercePlanet.profileClass,
+        "profile[credits]": FiercePlanet.credits,
+        "profile[capabilities]": FiercePlanet.capabilities.join(','),
+        waves_survived: FiercePlanet.levelWaves,
+        saved_agent_count: FiercePlanet.savedAgentCount,
+        expired_agent_count: FiercePlanet.expiredAgentCount,
+        resources_spent: FiercePlanet.resourcesSpent,
+        resources_in_store: FiercePlanet.resourcesInStore,
         resources: resourceCount,
-        economic_resources: economicResourceCount,
-        environmental_resources: environmentalResourceCount,
-        social_resources: socialResourceCount,
+        economic_resources: FiercePlanet.economicResourceCount,
+        environmental_resources: FiercePlanet.environmentalResourceCount,
+        social_resources: FiercePlanet.socialResourceCount,
         progress_towards_next_class: progressTowardsNextClass
     };
     return stats;
-}
+};
 
-function generateStats() {
+/**
+ * Generates statistics for the current level
+ */
+FiercePlanet.generateStats = function() {
     var stats = "<table>" +
             "<tr>" +
             "<td>Score:</td>" +
-            "<td>" + score + "</td>" +
+            "<td>" + FiercePlanet.currentScore + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Level:</td>" +
-            "<td>" + currentLevelNumber + "</td>" +
+            "<td>" + FiercePlanet.currentLevel.getId() + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Waves survived:</td>" +
-            "<td>" + waves + "</td>" +
+            "<td>" + FiercePlanet.levelWaves + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Citizens saved:</td>" +
-            "<td>" + savedAgentCount + "</td>" +
+            "<td>" + FiercePlanet.savedAgentCount + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Citizens expired:</td>" +
-            "<td>" + expiredAgentCount + "</td>" +
+            "<td>" + FiercePlanet.expiredAgentCount + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Resources spent:</td>" +
-            "<td>" + resourcesSpent + "</td>" +
+            "<td>" + FiercePlanet.resourcesSpent + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Resources remaining:</td>" +
-            "<td>" + resourcesInStore + "</td>" +
+            "<td>" + FiercePlanet.resourcesInStore + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td></td>" +
@@ -112,21 +127,34 @@ function generateStats() {
             "</tr>" +
             "<tr>" +
             "<td>Total saved:</td>" +
-            "<td>" + totalSaved + "</td>" +
+            "<td>" + FiercePlanet.totalSaved + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Profile class:</td>" +
-            "<td>" + profileClass + "</td>" +
+            "<td>" + FiercePlanet.profileClass + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Credits:</td>" +
-            "<td>" + credits + "</td>" +
+            "<td>" + FiercePlanet.credits + "</td>" +
             "</tr>" +
             "</table>";
     return stats;
-}
+};
 
-function updateStats(func) {
-    var stats = compileStats();
-    $.post("/profiles/" + PROFILE_ID + "/update_stats", stats, func);
-}
+/**
+ * Updates the statistics for this profile
+ * @param func
+ */
+FiercePlanet.updateStats = function(func) {
+    var stats = FiercePlanet.compileStats();
+    $.post("/profiles/" + FiercePlanet.PROFILE_ID + "/update_stats", stats, func);
+};
+
+/**
+ * Saves current capabilities for this profile
+ */
+FiercePlanet.saveCapabilities = function() {
+    if (FiercePlanet.PROFILE_ID != undefined) {
+        FiercePlanet.updateStats(function(data) {});
+    }
+};

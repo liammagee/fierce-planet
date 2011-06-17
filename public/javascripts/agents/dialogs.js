@@ -2,23 +2,19 @@
  * Declares dialogs used in the game
  */
 
-// Main game dialogs
-var $gameOver;
-var $completeLevel;
-var $completeGame;
-var $levelList;
-var $upgradeDelete;
-var $resourceGallery;
+
+/**
+ * Declare the FiercePlanet namespace
+ */
+var FiercePlanet = FiercePlanet || {};
 
 
-// Level editor dialogs
-var $designFeatures;
-var $editProperties;
-
-
-function setupDialogs() {
+/**
+ *
+ */
+FiercePlanet.setupDialogs = function() {
     // Dialogs
-    $statsDialog = $('<div></div>')
+    FiercePlanet.$statsDialog = $('<div></div>')
         .dialog({
             autoOpen: false,
             modal: true,
@@ -29,7 +25,7 @@ function setupDialogs() {
                 }
             }
         });
-    $gameOver = $('<div></div>')
+    FiercePlanet.$gameOver = $('<div></div>')
         .html('Game Over!')
         .dialog({
             autoOpen: false,
@@ -37,38 +33,61 @@ function setupDialogs() {
             title: 'Game Over!',
             buttons: {
                 "Restart Level": function() {
-                    restartLevel();
+                    FiercePlanet.restartLevel();
                     $( this ).dialog( "close" );
                 },
                 "New Game": function() {
-                    newGame();
+                    FiercePlanet.newGame();
                     $( this ).dialog( "close" );
                 }
             }
         });
-    $completeLevel = $('<div></div>')
+    FiercePlanet.$newLevel = $('<div></div>')
+        .html('New Level')
+        .dialog({
+            width: 460,
+            autoOpen: false,
+            modal: true,
+            title: 'New Level',
+            buttons: {
+                "Play": function() {
+                    FiercePlanet.newWave();
+                    $( this ).dialog( "close" );
+                },
+                "Cancel": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+    FiercePlanet.$completeLevel = $('<div></div>')
         .html('Level Complete!')
         .dialog({
             autoOpen: false,
              modal: true,
             title: 'Level Complete!',
             buttons: {
-                "OK": function() {
-                    newLevel();
+                "Next Level": function() {
+                    FiercePlanet.newLevel();
+                    $( this ).dialog( "close" );
+                },
+                "Cancel": function() {
                     $( this ).dialog( "close" );
                 }
             }
         });
 
-    $completeGame = $('<div></div>')
+    FiercePlanet.$completeGame = $('<div></div>')
         .html('Complete game!')
         .dialog({
             autoOpen: false,
             modal: true,
             title: 'Fierce Planet Complete!',
             buttons: {
-                "OK": function() {
-                    newGame();
+                "New Game": function() {
+                    FiercePlanet.newGame();
+                    $( this ).dialog( "close" );
+                },
+                "Cancel": function() {
                     $( this ).dialog( "close" );
                 }
             }
@@ -76,7 +95,7 @@ function setupDialogs() {
         });
 
     /* Upgrade / delete dialog */
-    $upgradeDelete = $('#delete-upgrade-dialog')
+    FiercePlanet.$upgradeDelete = $('#delete-upgrade-dialog')
         .dialog({
             autoOpen: false,
             modal: true,
@@ -87,19 +106,22 @@ function setupDialogs() {
                 }
             }
         });
-    $('#del-button').click(function() {ResourceUI.deleteCurrentResource(); $upgradeDelete.dialog('close'); });
-    $('#upg-button').click(function() {ResourceUI.upgradeCurrentResource(); $upgradeDelete.dialog('close'); });
+    $('#del-button').click(function() {FiercePlanet.deleteCurrentResource(); FiercePlanet.$upgradeDelete.dialog('close'); });
+    $('#upg-button').click(function() {FiercePlanet.upgradeCurrentResource(); FiercePlanet.$upgradeDelete.dialog('close'); });
 
-    $resourceGallery = $('#resource-gallery')
+    FiercePlanet.$resourceGallery = $('#resource-gallery')
         .dialog({
             width: 460,
             autoOpen: false,
             modal: true,
             title: 'Resource Gallery',
             buttons: {
-                "OK": function() {
-                    refreshSwatch();
-                    saveCapabilities();
+                "Save Capabilities": function() {
+                    FiercePlanet.refreshSwatch();
+                    FiercePlanet.saveCapabilities();
+                    $( this ).dialog( "close" );
+                },
+                "Cancel": function() {
                     $( this ).dialog( "close" );
                 }
             }
@@ -112,20 +134,23 @@ function setupDialogs() {
             modal: true,
             title: 'Settings',
             buttons: {
-                "OK": function() {
-                    setAndStoreProperties();
+                "Save Settings": function() {
+                    FiercePlanet.setAndStoreProperties();
+                    $( this ).dialog( "close" );
+                },
+                "Cancel": function() {
                     $( this ).dialog( "close" );
                 }
             }
         });
 
     $('#tutorial').click(function(e) {
-        currentLevelNumber = 0;
-        currentLevelPreset = false;
-        restartLevel();
+        FiercePlanet.currentLevelNumber = 0;
+        FiercePlanet.currentLevelPreset = false;
+        FiercePlanet.restartLevel();
     }, false    );
 
-    $designFeatures = $('#level-features')
+    FiercePlanet.$designFeatures = $('#level-features')
         .dialog({
             autoOpen: false,
             modal: true,
@@ -138,7 +163,7 @@ function setupDialogs() {
 
         });
 
-    $editProperties = $('<div></div>')
+    FiercePlanet.$editProperties = $('<div></div>')
         .html('Edit level properties')
         .dialog({
             autoOpen: false,
@@ -147,7 +172,7 @@ function setupDialogs() {
             buttons: {
                 "Save Level": function() {
                     $(".edit_level_properties").submit();
-                    drawGame();
+                    FiercePlanet.drawGame();
                     $( this ).dialog( "close" );
                 },
                 "Cancel": function() {
@@ -157,135 +182,157 @@ function setupDialogs() {
 
         });
     
-}
+};
 
-
-function showGameOverDialog() {
-    determineCreditsAndClass();
+/**
+ *
+ */
+FiercePlanet.showGameOverDialog = function () {
+    FiercePlanet.determineCreditsAndClass();
     // Try to save results to the server
-    if (PROFILE_ID != undefined) {
-        updateStats(function(data) {
-               openGameOverDialog();
+    if (FiercePlanet.PROFILE_ID != undefined) {
+        FiercePlanet.updateStats(function(data) {
+               FiercePlanet.openGameOverDialog();
            });
     }
     else {
-        openGameOverDialog();
+        FiercePlanet.openGameOverDialog();
     }
-}
+};
 
-function openGameOverDialog() {
-    $gameOver
+/**
+ *
+ */
+FiercePlanet.openGameOverDialog = function() {
+    FiercePlanet.$gameOver
             .html(
             "Unfortunately Fierce Planet has gotten the better of its citizens! Click 'Restart Level' or 'New Game' to try again." +
-                    generateStats()
+                    FiercePlanet.generateStats()
             )
             .dialog('open');
-}
+};
 
-function showCompleteGameDialog() {
-    determineCreditsAndClass();
+/**
+ *
+ */
+FiercePlanet.showCompleteGameDialog = function() {
+    FiercePlanet.determineCreditsAndClass();
     // Try to save results to the server
-    if (PROFILE_ID != undefined) {
-        var stats = compileStats();
-        $.post("/profiles/" + PROFILE_ID + "/update_stats", stats,
+    if (FiercePlanet.PROFILE_ID != undefined) {
+        var stats = FiercePlanet.compileStats();
+        $.post("/profiles/" + FiercePlanet.PROFILE_ID + "/update_stats", stats,
            function(data) {
-               openCompleteGameDialog();
+               FiercePlanet.openCompleteGameDialog();
            });
     }
     else {
-        openCompleteGameDialog();
+        FiercePlanet.openCompleteGameDialog();
     }
-}
+};
 
-function openCompleteGameDialog() {
-    $completeGame
+/**
+ *
+ */
+FiercePlanet.openCompleteGameDialog = function() {
+    FiercePlanet.$completeGame
             .html(
             "Congratulations! In spite of challenges ahead, the citizens of Fierce Planet look forward to a bright and sustainable future!" +
-                    generateStats())
+                    FiercePlanet.generateStats())
             .dialog('open');
-}
+};
 
-// Show the completed level dialog
-function showCompleteLevelDialog() {
+/**
+ * Show the completed level dialog
+ */
+FiercePlanet.showCompleteLevelDialog = function() {
     // Try to save results to the server
-    determineCreditsAndClass();
-    if (PROFILE_ID != undefined) {
-        var stats = compileStats();
-        $.post("/profiles/" + PROFILE_ID + "/update_stats", stats,
+    FiercePlanet.determineCreditsAndClass();
+    if (FiercePlanet.PROFILE_ID != undefined) {
+        var stats = FiercePlanet.compileStats();
+        $.post("/profiles/" + FiercePlanet.PROFILE_ID + "/update_stats", stats,
            function(data) {
-               openCompleteLevelDialog();
+               FiercePlanet.openCompleteLevelDialog();
            });
     }
     else {
-        openCompleteLevelDialog();
+        FiercePlanet.openCompleteLevelDialog();
     }
-}
+};
 
-function openCompleteLevelDialog() {
-    $completeLevel
-            .html(
-                "<p>Congratulations! You have completed level " + currentLevel.getId() + ". </p>" +
-                 generateStats() +
+/**
+ *
+ */
+FiercePlanet.openCompleteLevelDialog = function() {
+    FiercePlanet.$completeLevel
+            .html("<p>Congratulations! You have completed level " + FiercePlanet.currentLevel.getId() + ". </p>" +
+                 FiercePlanet.generateStats() +
                 "<p>Click 'OK' to start the next level.</p>")
             .dialog('open');
-}
+};
 
-function showUpgradeDeleteDialog(e) {
-    var __ret = getCurrentPosition(e);
+/**
+ *
+ * @param e
+ */
+FiercePlanet.showUpgradeDeleteDialog = function(e) {
+    var __ret = FiercePlanet.getCurrentPosition(e);
     var posX = __ret.posX;
     var posY = __ret.posY;
     var foundResource = false;
-    for (var i = 0; i < currentLevel.getResources().length; i++) {
-        var p = currentLevel.getResources()[i];
+    for (var i = 0; i < FiercePlanet.currentLevel.getResources().length; i++) {
+        var p = FiercePlanet.currentLevel.getResources()[i];
         if (p.getX() == posX && p.getY() == posY) {
-            currentResource = p;
-            $upgradeDelete.dialog('open');
+            FiercePlanet.currentResource = p;
+            FiercePlanet.$upgradeDelete.dialog('open');
             return;
         }
     }
-    var currentTile = currentLevel.getTile(posX, posY);
-    if (tilesMutable) {
+    var currentTile = FiercePlanet.currentLevel.getTile(posX, posY);
+    if (FiercePlanet.tilesMutable) {
         if (currentTile == undefined) {
-            currentLevel.addTile(new Tile(DEFAULT_TILE_COLOR, posX, posY));
-            drawGame();
+            FiercePlanet.currentLevel.addTile(new Tile(DEFAULT_TILE_COLOR, posX, posY));
+            FiercePlanet.drawGame();
         }
-        else if (!foundResource && currentResourceId != null) {
-            dropItem(e);
+        else if (!foundResource && FiercePlanet.currentResourceId != null) {
+            FiercePlanet.dropItem(e);
         }
         else {
-            var __ret = getCurrentPosition(e);
-            currentLevel.removeTile(__ret.posX, __ret.posY);
-            drawGame();
+            var __ret = FiercePlanet.getCurrentPosition(e);
+            FiercePlanet.currentLevel.removeTile(__ret.posX, __ret.posY);
+            FiercePlanet.drawGame();
         }
     }
-    else if (!foundResource && currentResourceId != null) {
-        dropItem(e);
+    else if (!foundResource && FiercePlanet.currentResourceId != null) {
+        FiercePlanet.dropItem(e);
     }
-}
+};
 
-function showResourceGallery() {
+/**
+ *
+ */
+FiercePlanet.showResourceGallery = function() {
     // Try to save results to the server
-    $('#current-profile-class')[0].innerHTML = profileClass;
-    $('#current-credits')[0].innerHTML = credits;
-    $('#current-capabilities')[0].innerHTML = capabilities.join(",");
+    $('#current-profile-class')[0].innerHTML = FiercePlanet.profileClass;
+    $('#current-credits')[0].innerHTML = FiercePlanet.credits;
+    $('#current-capabilities')[0].innerHTML = FiercePlanet.capabilities.join(",");
 
-    var accessibleCapabilities = new Array();
-    var purchasableItems = new Array();
+    var accessibleCapabilities = [];
+    var purchasableItems = [];
 
-    if (profileClass == "Novice") {
-        accessibleCapabilities = NOVICE_CAPABILITIES;
+    if (FiercePlanet.profileClass == "Novice") {
+        accessibleCapabilities = FiercePlanet.NOVICE_CAPABILITIES;
     }
-    else if (profileClass == "Planner") {
-        accessibleCapabilities = PLANNER_CAPABILITIES;
+    else if (FiercePlanet.profileClass == "Planner") {
+        accessibleCapabilities = FiercePlanet.PLANNER_CAPABILITIES;
     }
-    else if (profileClass == "Expert") {
-        accessibleCapabilities = EXPERT_CAPABILITIES;
+    else if (FiercePlanet.profileClass == "Expert") {
+        accessibleCapabilities = FiercePlanet.EXPERT_CAPABILITIES;
     }
-    else if (profileClass == "Visionary") {
-        accessibleCapabilities = VISIONARY_CAPABILITIES;
+    else if (FiercePlanet.profileClass == "Visionary") {
+        accessibleCapabilities = FiercePlanet.VISIONARY_CAPABILITIES;
     }
-    else if (profileClass == "Genius") {
-        accessibleCapabilities = GENIUS_CAPABILITIES;
+    else if (FiercePlanet.profileClass == "Genius") {
+        accessibleCapabilities = FiercePlanet.GENIUS_CAPABILITIES;
     }
 
 
@@ -296,20 +343,20 @@ function showResourceGallery() {
         var id = purchasableItem.id;
         var itemName = id.split("-purchase")[0];
         var cost = 0;
-        if ($.inArray(itemName, PLANNER_CAPABILITIES)) {
-            cost = CAPABILITY_COSTS [1];
+        if ($.inArray(itemName, FiercePlanet.PLANNER_CAPABILITIES)) {
+            cost = FiercePlanet.CAPABILITY_COSTS [1];
         }
-        else if ($.inArray(itemName, EXPERT_CAPABILITIES)) {
-            cost = CAPABILITY_COSTS [2];
+        else if ($.inArray(itemName, FiercePlanet.EXPERT_CAPABILITIES)) {
+            cost = FiercePlanet.CAPABILITY_COSTS [2];
         }
-        else if ($.inArray(itemName, VISIONARY_CAPABILITIES)) {
-            cost = CAPABILITY_COSTS [3];
+        else if ($.inArray(itemName, FiercePlanet.VISIONARY_CAPABILITIES)) {
+            cost = FiercePlanet.CAPABILITY_COSTS [3];
         }
-        else if ($.inArray(itemName, GENIUS_CAPABILITIES)) {
-            cost = CAPABILITY_COSTS [4];
+        else if ($.inArray(itemName, FiercePlanet.GENIUS_CAPABILITIES)) {
+            cost = FiercePlanet.CAPABILITY_COSTS [4];
         }
         // Make item available for purchase if: (1) the player's level permits it; (2) it is not among existing capabilities and (3) there is enough money
-        if ($.inArray(itemName, accessibleCapabilities) > -1 && $.inArray(itemName, capabilities) == -1 && cost < credits) {
+        if ($.inArray(itemName, accessibleCapabilities) > -1 && $.inArray(itemName, FiercePlanet.capabilities) == -1 && cost < FiercePlanet.credits) {
             // Make item purchasable
             purchasableItems.push(purchasableItem);
         }
@@ -324,30 +371,30 @@ function showResourceGallery() {
         var id = purchasableItem.id;
         var itemName = id.split("-purchase")[0];
         var cost = 0;
-        if ($.inArray(itemName, PLANNER_CAPABILITIES)) {
-            cost = CAPABILITY_COSTS [1];
+        if ($.inArray(itemName, FiercePlanet.PLANNER_CAPABILITIES)) {
+            cost = FiercePlanet.CAPABILITY_COSTS [1];
         }
-        else if ($.inArray(itemName, EXPERT_CAPABILITIES)) {
-            cost = CAPABILITY_COSTS [2];
+        else if ($.inArray(itemName, FiercePlanet.EXPERT_CAPABILITIES)) {
+            cost = FiercePlanet.CAPABILITY_COSTS [2];
         }
-        else if ($.inArray(itemName, VISIONARY_CAPABILITIES)) {
-            cost = CAPABILITY_COSTS [3];
+        else if ($.inArray(itemName, FiercePlanet.VISIONARY_CAPABILITIES)) {
+            cost = FiercePlanet.CAPABILITY_COSTS [3];
         }
-        else if ($.inArray(itemName, GENIUS_CAPABILITIES)) {
-            cost = CAPABILITY_COSTS [4];
+        else if ($.inArray(itemName, FiercePlanet.GENIUS_CAPABILITIES)) {
+            cost = FiercePlanet.CAPABILITY_COSTS [4];
         }
 
         purchasableItem.addEventListener('click', function(e) {
             var id = this.id;
             var swatchId = id.split("-purchase")[0];
             var itemName = $('#' + id + ' > a > img')[0].title;
-            if ($.inArray(swatchId, capabilities) == -1) {
+            if ($.inArray(swatchId, FiercePlanet.capabilities) == -1) {
                 var purchase = confirm('Purchase item "' + itemName + '"?');
                 if (purchase) {
-                    credits -= cost;
-                    capabilities.push(swatchId);
-                    $('#current-credits')[0].innerHTML = credits;
-                    $('#current-capabilities')[0].innerHTML = capabilities.join(", ");
+                    FiercePlanet.credits -= cost;
+                    FiercePlanet.capabilities.push(swatchId);
+                    $('#current-credits')[0].innerHTML = FiercePlanet.credits;
+                    $('#current-capabilities')[0].innerHTML = FiercePlanet.capabilities.join(", ");
                     $('#' + id).css("border","1px solid black");
                 }
             }
@@ -358,9 +405,12 @@ function showResourceGallery() {
         $('#' + purchasableItem.id).css("border","3px solid black");
     }
 
-    $resourceGallery.dialog('open');
-}
+    FiercePlanet.$resourceGallery.dialog('open');
+};
 
-function showSettings() {
+/**
+ * 
+ */
+FiercePlanet.showSettings = function() {
     $settingsDialog.dialog('open');
-}
+};
