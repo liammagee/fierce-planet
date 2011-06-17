@@ -65,7 +65,7 @@ FiercePlanet.hookUpUIEventListeners = function() {
         $('#clearExitPoints').click(FiercePlanet.clearExitPoints);
     }
     catch (err){
-        console.log(err);
+//        console.log(err);
     }
 
     // Set admin functions to previously stored defaults

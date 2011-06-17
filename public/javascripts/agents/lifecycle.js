@@ -187,7 +187,7 @@ FiercePlanet.speedUp = function() {
  * Initialises level data
  */
 FiercePlanet._initialiseGame = function () {
-    console.log("Initialising world...");
+//    console.log("Initialising world...");
 
     // Stop any existing timers
     FiercePlanet._stopAgents();
@@ -259,7 +259,7 @@ FiercePlanet._finaliseGame = function() {
  * Starts the processing of agents
  */
 FiercePlanet._startAgents = function () {
-    console.log("Starting agents...");
+//    console.log("Starting agents...");
 
     clearInterval(FiercePlanet.agentTimerId);
     FiercePlanet.agentTimerId = setInterval("FiercePlanet.processAgents()", FiercePlanet.interval);
@@ -284,7 +284,7 @@ FiercePlanet._startAgents = function () {
  * Stops the processing of agents
  */
 FiercePlanet._stopAgents = function () {
-    console.log("Pausing agents...");
+//    console.log("Pausing agents...");
 
     clearInterval(FiercePlanet.agentTimerId);
     FiercePlanet.inPlay = false;
