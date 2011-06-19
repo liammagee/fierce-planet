@@ -60,6 +60,8 @@ FiercePlanet.newLevel = function() {
     FiercePlanet.levelInfo(FiercePlanet.currentLevel.getNotice());
     FiercePlanet.notify("Starting level " + FiercePlanet.currentLevel.getId() + "...");
 
+    if (FiercePlanet.recording)
+        FiercePlanet.recordNewLevel();
 //    newWave();
 };
 
@@ -87,11 +89,18 @@ FiercePlanet.newWave = function() {
 
     FiercePlanet.currentLevel.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, FiercePlanet.numAgents, FiercePlanet.agentsCanCommunicate);
 
+    if (FiercePlanet.recording)
+        FiercePlanet.recordNewAgents();
+
     FiercePlanet.notify("New wave coming...");
     FiercePlanet.waveNoticeX = Math.random() * (FiercePlanet.WORLD_WIDTH - FiercePlanet.WAVE_NOTICE_WIDTH);
     FiercePlanet.waveNoticeY = Math.random() * (FiercePlanet.WORLD_HEIGHT - FiercePlanet.WAVE_NOTICE_HEIGHT);
     FiercePlanet.drawEntryPoints();
     FiercePlanet.drawExitPoints();
+
+    if (FiercePlanet.recording)
+        FiercePlanet.recordNewWave();
+
     FiercePlanet._startAgents();
 };
 

@@ -157,8 +157,8 @@ FiercePlanet.processAgents = function() {
     }
 
     // Post-move processing
-    if (FiercePlanet.recording)
-        FiercePlanet.recordWorld();
+//    if (FiercePlanet.recording)
+//        FiercePlanet.recordWorld();
 
 };
 
