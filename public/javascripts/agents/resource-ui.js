@@ -27,7 +27,7 @@ FiercePlanet.setupResourceInteraction = function () {
           }, false);
         }
 
-        var resourceCanvas = $('#c4')[0];
+        var resourceCanvas = $('#agentCanvas')[0];
 
 
         resourceCanvas.addEventListener('click', function (e) {
@@ -36,7 +36,7 @@ FiercePlanet.setupResourceInteraction = function () {
                 FiercePlanet.showUpgradeDeleteDialog(e);
             return false;
           }, false);
-        resourceCanvas.setAttribute('draggable', 'true');
+//        resourceCanvas.setAttribute('draggable', 'true');
 
         resourceCanvas.addEventListener('dragstart', function (e) {
             if (e.preventDefault) e.preventDefault(); // allows us to drop
@@ -87,7 +87,7 @@ FiercePlanet.deleteCurrentResource = function () {
             FiercePlanet.resourcesSpent -= 5;
             FiercePlanet.currentLevel.getResources().splice(foundResource, 1);
             FiercePlanet.drawResourcesInStore();
-            FiercePlanet.clearCanvas('c2');
+            FiercePlanet.clearCanvas('resourceCanvas');
             FiercePlanet.drawResources();
         }
     };
@@ -150,6 +150,8 @@ FiercePlanet.dropItem = function(e) {
 
             FiercePlanet.drawResource(resource);
             FiercePlanet.drawResourcesInStore();
+
+            FiercePlanet.eventTarget.fire(new Event("resource", resource, "added", FiercePlanet.gameCounter, FiercePlanet.currentLevel));
         }
     };
 

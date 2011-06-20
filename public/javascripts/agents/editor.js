@@ -54,7 +54,7 @@ FiercePlanet.setupLevelEditor = function() {
     $('#swatch').hide();
     $('#level-editor').show();
 
-    var canvas = $('#c4');
+    var canvas = $('#agentCanvas');
     canvas.unbind('click');
 //    canvas.click(function() {return false;});
     canvas.mousedown(FiercePlanet.handleEditorMouseDown);
@@ -121,7 +121,7 @@ FiercePlanet.handleEditorMouseUp = function(e) {
  */
 FiercePlanet.cancelLevelEditor = function() {
     FiercePlanet.inDesignMode = false;
-    var canvas = $('#c4');
+    var canvas = $('#agentCanvas');
     canvas.unbind('mousedown', FiercePlanet.handleEditorMouseDown);
     canvas.unbind('mousemove', FiercePlanet.handleEditorMouseMove);
     canvas.unbind('mouseup', FiercePlanet.handleEditorMouseUp);
@@ -149,6 +149,15 @@ FiercePlanet.showLevelProperties = function() {
  */
 FiercePlanet.refreshTiles = function() {
     FiercePlanet.currentLevel.fillWithTiles();
+    FiercePlanet.currentLevel.addEntryPoint(0, 0);
+    FiercePlanet.drawGame();
+};
+
+/**
+ *
+ */
+FiercePlanet.fillAllTiles = function() {
+    FiercePlanet.currentLevel.removeAllTiles();
     FiercePlanet.currentLevel.addEntryPoint(0, 0);
     FiercePlanet.drawGame();
 };

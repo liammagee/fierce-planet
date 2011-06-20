@@ -159,6 +159,16 @@ Level.prototype.removeTile = function(x, y) {
     this._tiles[tilePosition] = undefined;
     this.annulCell(x, y);
 };
+Level.prototype.removeAllTiles = function() {
+    for (var i = 0; i < this.getWorldWidth(); i++) {
+        for (var j = 0; j < this.getWorldHeight(); j++) {
+            var tilePosition = j * this.getWorldWidth() + i;
+            this._tiles[tilePosition] = undefined;
+            this._cells[[i, j]] = undefined;
+        }
+
+    }
+};
 Level.prototype.getMapOptions = function() { return this._mapOptions; };
 Level.prototype.setMapOptions = function(mapOptions) { this._mapOptions = mapOptions; };
 Level.prototype.getMapURL = function() { return this._mapURL; };

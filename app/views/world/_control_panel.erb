@@ -1,134 +1,40 @@
+<!-- Should always be visible -->
 <div id="controls">
-  <div id="notifications">
-    <p><%= flash[:notice] %></p>
-  </div>
-  <table style="clear:both">
-    <tr>
-      <td>
-        <div>
-          <img src="/images/8bit/play.png" id="playAgents" title="Play" /> Play
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <img src="/images/8bit/pause.png" id="pauseAgents" title="Pause"/> Pause
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <img src="/images/8bit/backward.png" id="slowDown" title="Slow down"/> Slower
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <img src="/images/8bit/forward.png" id="speedUp" title="Speed up"/> Faster
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <img src="/images/8bit/new.png" id="newGame" title="New Game"/> New
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <img src="/images/8bit/restart.png" id="restartLevel" title="Restart Level"/> Restart
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <img src="/images/8bit/resource.png" id="showResourceGallery" title="Resource Gallery"/> Resources
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <%= link_to image_tag("/images/8bit/level.png", :id => "showLevelGallery", :title => "Level Gallery"), gallery_levels_path, :method => :get, :remote => true %> Level Menu
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <table>
-          <tr>
-            <td colspan="3">Pan
-            </td>
-          </tr>
-          <tr>
-            <td>
-            </td>
-            <td>
-              <img src="/images/8bit/up.png" id="panUp"/>
-            </td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>
-              <img src="/images/8bit/left.png" id="panLeft"/>
-            </td>
-            <td>
-              <img src="/images/8bit/home.png" id="panReset"/>
-            </td>
-            <td>
-              <img src="/images/8bit/right.png" id="panRight"/>
-            </td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <img src="/images/8bit/down.png" id="panDown"/>
-            </td>
-            <td></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <table>
-          <tr>
-            <td colspan="3">Zoom
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <img src="/images/8bit/out.png" id="zoomOut"/>
-            </td>
-            <td>
-              <img src="/images/8bit/zero.png" id="zoomReset"/>
-            </td>
-            <td>
-              <img src="/images/8bit/in.png" id="zoomIn"/>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+    <div id="playAgents"><span class="hide">Play</span></div>
+    <div id="slowDown"><span class="hide">Slower</span></div>
+    <div id="speedUp"><span class="hide">Faster</span></div>
+    <div id="newGame"><span class="hide">New</span></div>
+    <div id="restartLevel"><span class="hide">Restart</span></div>
 
-    <tr>
-      <td>
-        <%= link_to "Level Editor", levels_path, :method => :get, :remote => true %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <a href="#" id="settings">Settings</a>
-      </td>
-    </tr>
-  </table>
+    <div class="divide"></div>
+
+    <div id="panUp"><span class="hide">pan Up</span></div>
+    <div id="panLeft"><span class="hide">pan Left</span></div>
+    <div id="panReset"><span class="hide">pan Reset</span></div>
+    <div id="panRight"><span class="hide">pan Right</span></div>
+    <div id="panDown"><span class="hide">pan Down</span></div>
+
+    <div class="divide"></div>
+
+    <div id="zoomOut"><span class="hide">zoom Out</span></div>
+    <div id="zoomReset"><span class="hide">zoom Reset</span></div>
+    <div id="zoomIn"><span class="hide">zoom In</span></div>
+    <a href="#" id="tutorial">Tutorial</a>
 
 
+    <a href="#" id="pauseAgents">Pause</a>
+    <a href="#" id="showResourceGallery" title="Resource Gallery">Resources</a>
+    <a href="#" id="settings">Settings</a>
+    <%= link_to "Gallery", gallery_levels_path, :method => :get, :remote => true %>
+    <%= link_to "Editor", levels_path, :method => :get, :remote => true %>
+    <div id="admin-controls" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
+        <button id="debug">Debug</button>
+        <button id="replay">Replay</button>
+        <button id="editor">Script Editor</button>
+    </div>
+    <div class="divide"></div>
+</div>
 
-  <br/>
-  <div id="admin-controls" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
-      <h3>Dev functions:</h3>
-    <button id="debug">Debug</button>
-       <br/>
-    <button id="replay">Replay</button>
-       <br/>
-    <button id="editor">Script Editor</button>
-
-  </div>
-  <br/>
+<div id="notifications" style="display: none">
+  <p><%= flash[:notice] %></p>
 </div>

@@ -32,22 +32,22 @@ FiercePlanet.hookUpUIEventListeners = function() {
     $('#zoomReset').click(function() { FiercePlanet.zoom(0);});
     $('#settings').click(FiercePlanet.showSettings);
 
-    FiercePlanet.addButtonEffects($('#playAgents')[0]);
-    FiercePlanet.addButtonEffects($('#pauseAgents')[0]);
-    FiercePlanet.addButtonEffects($('#slowDown')[0]);
-    FiercePlanet.addButtonEffects($('#speedUp')[0]);
-    FiercePlanet.addButtonEffects($('#newGame')[0]);
-    FiercePlanet.addButtonEffects($('#restartLevel')[0]);
-    FiercePlanet.addButtonEffects($('#showResourceGallery')[0]);
-    FiercePlanet.addButtonEffects($('#showLevelGallery')[0]);
-    FiercePlanet.addButtonEffects($('#panUp')[0]);
-    FiercePlanet.addButtonEffects($('#panDown')[0]);
-    FiercePlanet.addButtonEffects($('#panLeft')[0]);
-    FiercePlanet.addButtonEffects($('#panRight')[0]);
-    FiercePlanet.addButtonEffects($('#panReset')[0]);
-    FiercePlanet.addButtonEffects($('#zoomIn')[0]);
-    FiercePlanet.addButtonEffects($('#zoomOut')[0]);
-    FiercePlanet.addButtonEffects($('#zoomReset')[0]);
+//    FiercePlanet.addButtonEffects($('#playAgents')[0]);
+//    FiercePlanet.addButtonEffects($('#pauseAgents')[0]);
+//    FiercePlanet.addButtonEffects($('#slowDown')[0]);
+//    FiercePlanet.addButtonEffects($('#speedUp')[0]);
+//    FiercePlanet.addButtonEffects($('#newGame')[0]);
+//    FiercePlanet.addButtonEffects($('#restartLevel')[0]);
+//    FiercePlanet.addButtonEffects($('#showResourceGallery')[0]);
+//    FiercePlanet.addButtonEffects($('#showLevelGallery')[0]);
+//    FiercePlanet.addButtonEffects($('#panUp')[0]);
+//    FiercePlanet.addButtonEffects($('#panDown')[0]);
+//    FiercePlanet.addButtonEffects($('#panLeft')[0]);
+//    FiercePlanet.addButtonEffects($('#panRight')[0]);
+//    FiercePlanet.addButtonEffects($('#panReset')[0]);
+//    FiercePlanet.addButtonEffects($('#zoomIn')[0]);
+//    FiercePlanet.addButtonEffects($('#zoomOut')[0]);
+//    FiercePlanet.addButtonEffects($('#zoomReset')[0]);
 
 
     // Admin functions
@@ -59,6 +59,7 @@ FiercePlanet.hookUpUIEventListeners = function() {
     try {
         $('#showLevelProperties').click(FiercePlanet.showLevelProperties);
         $('#refreshTiles').click(FiercePlanet.refreshTiles);
+        $('#fillAll').click(FiercePlanet.fillAllTiles);
         $('#undoAction').click(FiercePlanet.undoAction);
         $('#cancelLevelEditor').click(FiercePlanet.cancelLevelEditor);
         $('#clearEntryPoints').click(FiercePlanet.clearEntryPoints);
@@ -71,7 +72,7 @@ FiercePlanet.hookUpUIEventListeners = function() {
     // Set admin functions to previously stored defaults
     FiercePlanet.getAndRetrieveProperties();
 
-    $('#c4').mousewheel(function(event, delta) {
+    $('#agentCanvas').mousewheel(function(event, delta) {
         FiercePlanet.zoom(delta);
         event.preventDefault();
         return false; // prevent default

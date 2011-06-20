@@ -136,11 +136,13 @@ Agent.prototype.getAge = function() { return this._age; };
 Agent.prototype.setAge = function(age) { this._age = age; };
 Agent.prototype.getPosition = function() { return [this._x, this._y]; };
 Agent.prototype.setPosition = function(x, y) { this._x = x; this._y = y; };
-Agent.prototype.lastPosition = function() { return this._lastMemory; };
+Agent.prototype.lastPosition = function() { return this.getLastMemory(); };
 Agent.prototype.getX = function() { return this._x; };
 Agent.prototype.setX = function(x) { this._x = x; };
 Agent.prototype.getY = function() { return this._y; };
 Agent.prototype.setY = function(y) { this._y = y; };
+Agent.prototype.getLastMemory = function() { return this._lastMemory; };
+Agent.prototype.setLastMemory = function(lastMemory) { this._lastMemory = lastMemory; };
 Agent.prototype.getMemories = function() { return this._memoriesOfPlacesVisited; };
 Agent.prototype.setMemories = function(memories) { this._memoriesOfPlacesVisited = memories; };
 Agent.prototype.getCanCommunicateWithOtherAgents = function() { return this._canCommunicateWithOtherAgents; }

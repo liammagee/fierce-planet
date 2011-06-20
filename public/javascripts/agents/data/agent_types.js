@@ -14,7 +14,7 @@ var AgentTypes = function() {};
 
 AgentTypes.CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000");
 AgentTypes.CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, pieceHeight, newColor, counter, direction) {
-    if (pieceWidth < 12 || pieceHeight < 12) {
+    if (pieceWidth < 8 || pieceHeight < 8) {
         var radius = (pieceWidth / 4);
 
         ctx.lineWidth = 2;
@@ -29,7 +29,7 @@ AgentTypes.CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWi
     else {
         var radius = (pieceWidth / 4);
 
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, Math.PI * 2, false);
         ctx.closePath();
@@ -41,46 +41,46 @@ AgentTypes.CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWi
         var bodyLength = (pieceWidth / 2);
 
         ctx.beginPath();
-        ctx.moveTo(x, y - radius + 8);
-        ctx.lineTo(x - 1, y - radius + 8 + bodyLength);
+        ctx.moveTo(x, y - radius + 6);
+        ctx.lineTo(x - 1, y - radius + 6 + bodyLength);
 
         if (counter % 2 == 1) {
             var start = (direction == 0 ? -1 : 1);
-            var end = (direction == 0 ? -6 : 6);
+            var end = (direction == 0 ? -4 : 4);
 
             // Arms
-            ctx.moveTo(x + 4, y + 13 + 2 * start);
-            ctx.lineTo(x - 4, y + 13 - 2 * start);
+            ctx.moveTo(x + 4, y + 8 + 2 * start);
+            ctx.lineTo(x - 4, y + 8 - 2 * start);
 
             // 1st leg
-            ctx.moveTo(x, y - radius + 8 + bodyLength);
-            ctx.lineTo(x + start + end, y - radius + 8 + bodyLength + Math.abs(end));
+            ctx.moveTo(x, y - radius + 6 + bodyLength);
+            ctx.lineTo(x + start + end, y - radius + 6 + bodyLength + Math.abs(end));
 
             // 2nd leg
-            ctx.moveTo(x, y - radius + 8 + bodyLength);
-            ctx.lineTo(x - start - end / 2, y - radius + 8 + bodyLength);
-            ctx.moveTo(x - start - end / 2, y - radius + 8 + bodyLength);
-            ctx.lineTo(x - start - end / 2, y - radius + 8 + bodyLength + Math.abs(end) / 2);
+            ctx.moveTo(x, y - radius + 5 + bodyLength);
+            ctx.lineTo(x - start - end / 2, y - radius + 6 + bodyLength);
+            ctx.moveTo(x - start - end / 2, y - radius + 6 + bodyLength);
+            ctx.lineTo(x - start - end / 2, y - radius + 6 + bodyLength + Math.abs(end) / 2);
         }
         else {
             var start = (direction == 0 ? 1 : -1);
-            var end = (direction == 0 ? 6 : -6);
+            var end = (direction == 0 ? 4 : -4);
 
             // Arms
-            ctx.moveTo(x + 4, y + 13 + 2 * start);
-            ctx.lineTo(x - 4, y + 13 - 2 * start);
+            ctx.moveTo(x + 4, y + 8 + 2 * start);
+            ctx.lineTo(x - 4, y + 8 - 2 * start);
 
             // 1st leg
-            ctx.moveTo(x, y - radius + 8 + bodyLength);
+            ctx.moveTo(x, y - radius + 6 + bodyLength);
 //        ctx.lineTo(x + end, y  - radius + 8 + bodyLength);
 //        ctx.moveTo(x + end, y - radius + 8 + bodyLength);
-            ctx.lineTo(x + end, y - radius + 8 + bodyLength + Math.abs(end));
+            ctx.lineTo(x + end, y - radius + 6 + bodyLength + Math.abs(end));
 
             // 2nd leg
-            ctx.moveTo(x, y - radius + 8 + bodyLength);
-            ctx.lineTo(x - end / 2, y - radius + 8 + bodyLength + Math.abs(end) / 2);
-            ctx.moveTo(x - end / 2, y - radius + 8 + bodyLength + Math.abs(end) / 2);
-            ctx.lineTo(x - end, y - radius + 8 + bodyLength);
+            ctx.moveTo(x, y - radius + 6 + bodyLength);
+            ctx.lineTo(x - end / 2, y - radius + 6 + bodyLength + Math.abs(end) / 2);
+            ctx.moveTo(x - end / 2, y - radius + 6 + bodyLength + Math.abs(end) / 2);
+            ctx.lineTo(x - end, y - radius + 6 + bodyLength);
         }
         ctx.closePath();
         ctx.strokeStyle = "#" + newColor;

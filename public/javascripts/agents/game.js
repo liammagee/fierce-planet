@@ -4,7 +4,7 @@
 
 /* Constants */
 var FiercePlanet = FiercePlanet || {};
-var fp = fp || FiercePlanet;
+var $fp = $fp || FiercePlanet;
 
 
 /* Initialisation code: start game and dialog boxes */
@@ -26,8 +26,9 @@ FiercePlanet.processAgents = function() {
     FiercePlanet.drawScrollingLayer();
 
     // Draw any notices
-    if (FiercePlanet.noticesVisible)
-        FiercePlanet.drawNotice();
+    if (FiercePlanet.noticesVisible && FiercePlanet.currentNotice != undefined) {
+        FiercePlanet.drawNotice(FiercePlanet.currentNotice);
+    }
 
     // Delay, until we are ready for the first wave
     if (FiercePlanet.levelDelayCounter < FiercePlanet.NEW_LEVEL_DELAY / FiercePlanet.interval) {
@@ -44,7 +45,7 @@ FiercePlanet.processAgents = function() {
     // Increment counters
     FiercePlanet.waveCounter++;
     FiercePlanet.levelCounter++;
-    FiercePlanet.globalCounter++;
+    FiercePlanet.gameCounter++;
 
 
     FiercePlanet.clearAgents();
@@ -157,8 +158,8 @@ FiercePlanet.processAgents = function() {
     }
 
     // Post-move processing
-//    if (FiercePlanet.recording)
-//        FiercePlanet.recordWorld();
+    if (FiercePlanet.recording)
+        FiercePlanet.recordWorld();
 
 };
 

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fierce Planet</title>
+<link href="stylesheets/styles.css" media="screen" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="content-pane">
+	<div id="global-info-panel">
+		<div id="resourceLevels"> Resource Levels: <span id="goodness-display">100</span> </div>
+		<div id="waves" > Waves: <span id="waves-display">1/20</span> </div>
+		<div id="score"> Score: <span id="score-display">&nbsp; &nbsp;500</span> </div>
+		<div id="expired"> Expired: <span id="expired-display">0</span> </div>
+		<div id="saved"> Saved: <span id="saved-display">0</span> </div>
+		<div id="highscore"> Highest Score: <span id="highest-score-display">0</span> </div>
+	</div>
+	<div id="gameworld">
+		<div id="world">
+			<div id="map_canvas" width="480" height="400" style="z-index: 1;"></div>
+			<canvas id="c1" width="480" height="400" style="z-index: 2;">A Canvas</canvas>
+			<canvas id="c2" width="480" height="400" style="z-index: 3;">A Canvas</canvas>
+			<canvas id="c3" width="480" height="400" style="z-index: 4;">A Canvas</canvas>
+			<canvas id="c4" width="480" height="400" style="z-index: 5;">A Canvas</canvas>
+		</div>
+	</div>
+	<div id="info">
+		<div id="global-info">
+			<div id="user-links">
+				Class: <span id="profile-class-display">Novice</span> | <a href="/users/sign_in">Login</a>
+			</div>
+		</div>
+	</div>
+	<!-- Should always be visible -->
+	<div id="controls">
+		<div id="playAgents"><span class="hide">Play</span></div>
+		<div id="slowDown"><span class="hide">Slower</span></div>
+		<div id="speedUp"><span class="hide">Faster</span></div>
+		<div id="newGame"><span class="hide">New</span></div>
+		<div id="restartLevel"><span class="hide">Restart</span></div>
+		
+		<div class="divide"></div>
+		
+		<div id="panUp"><span class="hide">pan Up</span></div>
+		<div id="panLeft"><span class="hide">pan Left</span></div>
+		<div id="panReset"><span class="hide">pan Reset</span></div>
+		<div id="panRight"><span class="hide">pan Right</span></div>
+		<div id="panDown"><span class="hide">pan Down</span></div>
+		
+		<div class="divide"></div>
+		
+		<div id="zoomOut"><span class="hide">zoom Out</span></div>
+		<div id="zoomReset"><span class="hide">zoom Reset</span></div>
+		<div id="zoomIn"><span class="hide">zoom In</span></div>
+		<a href="#" id="tutorial">Tutorial</a>
+		<div id="admin-controls" style="display: none">
+			<h3>Dev functions:</h3>
+			<button id="debug">Debug</button>
+			<br/>
+			<button id="replay">Replay</button>
+			<br/>
+			<button id="editor">Script Editor</button>
+		</div>
+		<div class="divide"></div>
+	</div>
+	
+	<div id="notifications">
+		Level:<span id="level-display">1</span> <span id="level-name" >Opening Level 1...</span>
+	</div>
+	<!-- Should only be visible when NOT in design mode -->
+	<div id="swatch">
+		<div id="swatch_economic">
+			<div class="title">Ecoonmic</div>
+			<div class="eco" id="farm" title="Farm (Cost: 10; PAY: 20)"> <a href="#"><img src="layout/icon.jpg" title="Farm (Cost: 10; PAY: 20)"> 5 </a> </div>
+			<div class="eco" id="shop" title="Shop (Cost: 15; PAY: 30)"> <a href="#"><img src="layout/icon.jpg" title="Shop (Cost: 15; PAY: 30)"> 15 </a> </div>
+			<div class="eco" id="bank" title="Bank (Cost: 20; PAY: 50)"> <a href="#"><img src="layout/icon.jpg" title="Bank (Cost: 20; PAY: 50)"> 25 </a> </div>
+			<div class="eco inactive" id="factory" title="Factory (Cost: 25; PAY: 70)"> <a href="#"><img src="layout/icon.jpg" title="Factory (Cost: 25; PAY: 70)"> 50 </a> </div>
+			<div class="eco inactive" id="stockmarket" title="Stockmarket (Cost: 30; PAY: 90)"> <a href="#"><img src="layout/icon.jpg" title="Stockmarket (Cost: 30; PAY: 90)"> 100 </a> </div>
+		</div>
+		<div id="swatch_environmental">
+			<div class="title">Environmental</div>
+			<div class="env" id="water" title="Fresh Water (Cost: 10; PAY: 10)"> <a href="#"><img src="layout/icon.jpg" title="Fresh Water (Cost: 10; PAY: 10)"> 5 </a> </div>
+			<div class="env" id="park" title="Wildlife Park (Cost: 15; PAY: 15)"> <a href="#"><img src="layout/icon.jpg" title="Wildlife Park (Cost: 15; PAY: 15)"> 15 </a> </div>
+			<div class="env" id="air" title="Clean Air (Cost: 20; PAY: 25)"> <a href="#"><img src="layout/icon.jpg" title="Clean Air (Cost: 20; PAY: 25)"> 25 </a> </div>
+			<div class="env inactive" id="energy" title="Green Energy (Cost: 25; PAY: 35)"> <a href="#"><img src="layout/icon.jpg" title="Green Energy (Cost: 25; PAY: 35)"> 50</a> </div>
+			<div class="env inactive" id="biodiversity" title="Cost: 30; PAY: 45"> <a href="#"><img src="layout/icon.jpg" title="Biodiversity (Cost: 30; PAY: 45)"> 100 </a> </div>
+		</div>
+		<div id="swatch_social">
+			<div class="title">Social</div>
+			<div class="soc" id="clinic" title="Cost: 10; PAY: 5"> <a href="#"><img src="layout/icon.jpg" title="Clinic (Cost: 10; PAY: 5)"> 5 </a> </div>
+			<div class="soc" id="school" title="Cost: 15; PAY: 8"> <a href="#"><img src="layout/icon.jpg" title="School (Cost: 15; PAY: 8)"> 15 </a> </div>
+			<div class="soc" id="legal" title="Cost: 20; PAY: 15"> <a href="#"><img src="layout/icon.jpg" title="Legal System (Cost: 20; PAY: 15)"> 25 </a> </div>
+			<div class="soc inactive" id="democracy" title="Cost: 25; PAY: 20"> <a href="#"><img src="layout/icon.jpg" title="Democracy (Cost: 25; PAY: 20)"> 50 </a> </div>
+			<div class="soc inactive" id="festival" title="Cost: 30; PAY: 25"> <a href="#"><img src="layout/icon.jpg" title="Festival (Cost: 30; PAY: 25)"> 100 </a> </div>
+		</div>
+	</div>
+	<!-- Should only be visible when in design mode -->
+	<div id="level-features" style="display: none;">
+		<div><a href="#" id="addEntryPoint">Add Entry Point</a></div>
+		<div><a href="#" id="removeEntryPoint">Delete Entry Point</a></div>
+		<div><a href="#" id="addExitPoint">Add Exit Point</a></div>
+		<div><a href="#" id="removeExitPoint">Delete Exit Point</a></div>
+		<div><a href="#" id="makeTile">Add Tile</a></div>
+	</div>
+	<div id="level-editor" style="display: none;">
+		<div><a href="#" id="refreshTiles">Clear all</a></div>
+		<div><a href="#" id="undoAction">Undo (last action only)</a></div>
+		<div><a href="#" id="clearEntryPoints">Clear Entry Points</a></div>
+		<div><a href="#" id="clearExitPoints">Clear Exit Points</a></div>
+		<div style="clear: both"><a href="#" id="cancelLevelEditor">Close Editor</a></div>
+		<div><a href="#" id="showLevelProperties">Properties</a></div>
+		<div id="level-editor-form"></div>
+	</div>
+	<!-- Dialog boxes - should only be visible when explicitly invoked -->
+	<div id="level-list"> </div>
+	<div id="delete-upgrade-dialog" style="display: none;">
+		<div> <a href="#" id="del-button">Delete <br/>
+			<small>(Revenue: 5)</small> </a> </div>
+		<div style="display: none"> <a href="#" id="upg-button">Upgrade <br/>
+			<small>(Cost: 20; PAY: 20)</small> </a> </div>
+	</div>
+	<div id="resource-gallery" style="display: none;">
+		<div> Current class: <span id="current-profile-class"></span> <br/>
+			Credits: <span id="current-credits"></span> <br/>
+			Capabilities: <span id="current-capabilities"></span> <br/>
+			<em>Click on a resource to purchase:</em> <br/>
+		</div>
+		<div id="gallery-items">
+			<div>
+				<div>Economic</div>
+				<div class="purchase eco" id="farm-purchase" title="Farm (Cost: 10; PAY: 20)"> <a href="#"><img src="layout/icon.jpg" title="Farm (Cost: 10; PAY: 20)"></a> </div>
+				<div class="purchase eco" id="shop-purchase" title="Cost: 15; PAY: 30"> <a href="#"><img src="layout/icon.jpg" title="Shop (Cost: 15; PAY: 30)"></a> </div>
+				<div class="purchase eco" id="bank-purchase" title="Cost: 20; PAY: 50"> <a href="#"><img src="layout/icon.jpg" title="Bank (Cost: 20; PAY: 50)"></a> </div>
+				<div class="purchase eco" id="factory-purchase" title="Cost: 25; PAY: 70"> <a href="#"><img src="layout/icon.jpg" title="Factory (Cost: 25; PAY: 70)"></a> </div>
+				<div class="purchase eco" id="stockmarket-purchase" title="Cost: 30; PAY: 90"> <a href="#"><img src="layout/icon.jpg" title="Stockmarket (Cost: 30; PAY: 90)"></a> </div>
+			</div>
+			<div>
+				<div>Environmental</div>
+				<div class="purchase env" id="water-purchase" title="Cost: 10; PAY: 10"> <a href="#"><img src="layout/icon.jpg" title="Fresh Water (Cost: 10; PAY: 10)"></a> </div>
+				<div class="purchase env" id="park-purchase" title="Cost: 15; PAY: 15"> <a href="#"><img src="layout/icon.jpg" title="Wildlife Park (Cost: 15; PAY: 15)"></a> </div>
+				<div class="purchase env" id="air-purchase" title="Cost: 20; PAY: 25"> <a href="#"><img src="layout/icon.jpg" title="Clean Air (Cost: 20; PAY: 25)"></a> </div>
+				<div class="purchase env" id="energy-purchase" title="Cost: 25; PAY: 35"> <a href="#"><img src="layout/icon.jpg" title="Green Energy (Cost: 25; PAY: 35)"></a> </div>
+				<div class="purchase env" id="biodiversity-purchase" title="Cost: 30; PAY: 45"> <a href="#"><img src="layout/icon.jpg" title="Biodiversity (Cost: 30; PAY: 45)"></a> </div>
+			</div>
+			<div>
+				<div>Social</div>
+				<div class="purchase soc" id="clinic-purchase" title="Cost: 10; PAY: 5"> <a href="#"><img src="layout/icon.jpg" title="Clinic (Cost: 10; PAY: 5)"></a> </div>
+				<div class="purchase soc" id="school-purchase" title="Cost: 15; PAY: 8"> <a href="#"><img src="layout/icon.jpg" title="School (Cost: 15; PAY: 8)"></a> </div>
+				<div class="purchase soc" id="legal-purchase" title="Cost: 20; PAY: 15"> <a href="#"><img src="layout/icon.jpg" title="Legal System (Cost: 20; PAY: 15)"></a> </div>
+				<div class="purchase soc" id="democracy-purchase" title="Cost: 25; PAY: 20"> <a href="#"><img src="layout/icon.jpg" title="Democracy (Cost: 25; PAY: 20)"></a> </div>
+				<div class="purchase soc" id="festival-purchase" title="Cost: 30; PAY: 25"> <a href="#"><img src="layout/icon.jpg" title="Festival (Cost: 30; PAY: 25)"></a> </div>
+			</div>
+		</div>
+	</div>
+	<div id="settings-dialog" style="display: none;"> <br/>
+		God mode:
+		<input id="godModeInput" name="godModeInput" type="checkbox"/>
+		<br/>
+		Agents can communicate:
+		<input id="agentsCanCommunicateInput" name="agentsCanCommunicateInput" type="checkbox" checked="checked"/>
+		<br/>
+		Agent tracing:
+		<input id="agentTracingInput" name="agentTracingInput" type="checkbox"/>
+		<br/>
+		Recording:
+		<input id="recordingInput" name="recordingInput" type="checkbox"/>
+		<br/>
+		Invisible path:
+		<input id="invisiblePathInput" name="invisiblePathInput" type="checkbox"/>
+		<br/>
+		Notices visible:
+		<input id="noticesVisibleInput" name="noticesVisibleInput" type="checkbox"/>
+		<br/>
+		Scrolling image:
+		<input id="scrollingImageVisibleInput" name="scrollingImageVisibleInput" type="checkbox"/>
+		<br/>
+		Rivals:
+		<input id="rivalsVisibleInput" name="rivalsVisibleInput" type="checkbox"/>
+		<br/>
+		Predators:
+		<input id="predatorsVisibleInput" name="predatorsVisibleInput" type="checkbox"/>
+		<br/>
+		Change tiles:
+		<input id="tilesMutableInput" name="tilesMutableInput" type="checkbox"/>
+		<br/>
+		Sounds:
+		<input id="soundsPlayable" name="soundsPlayable" type="checkbox"/>
+		<br/>
+		Background icons:
+		<input id="backgroundIconsVisibleInput" name="backgroundIconsVisibleInput" type="checkbox"/>
+		<br/>
+		<!--Resource handling-->
+		Resource weakening:
+		<input id="resourcesInTensionInput" name="resourcesInTensionInput" type="checkbox"/>
+		<br/>
+		Ignore resource balance:
+		<input id="ignoreResourceBalanceInput" name="ignoreResourceBalanceInput" type="checkbox"/>
+		<br/>
+		Resource bonus:
+		<input id="resourceBonusInput" name="resourceBonusInput" type="checkbox"/>
+		<br/>
+		Use general health:
+		<input id="applyGeneralHealthInput" name="applyGeneralHealthInput" type="checkbox"/>
+	</div>
+	<!--<audio id="background-sound" autoplay controls preload loop>-->
+	<!--<source src="http://forestmist.org/wp-content/uploads/2010/04/html5-audio-loop.mp3">-->
+	<!--</audio>-->
+</div>
+</body>
+</html>

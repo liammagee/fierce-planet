@@ -23,6 +23,7 @@ gem "omniauth"
 
 gem "paperclip", "~> 2.3"
 
+gem "jasmine"
 
 # Deploy with Capistrano
 # gem 'capistrano'

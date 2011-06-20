@@ -1,0 +1,205 @@
+
+
+body {
+    zoom = 100%;
+}
+
+@font-face  {
+    font-family: cool_font;
+    src: url('/fonts/m53.ttf');
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: cool_font; //, "Trebuchet MS", "Helvetica", "Arial",  "Verdana", "sans-serif";
+    font-size: 80%;
+
+}
+#left-pane {
+    position:relative;
+    float: left;
+    width: 0%;
+}
+#content-pane {
+    position:relative;
+    float: left;
+    width: 97%;
+    border: 5px solid #fff;
+    margin: 4px;
+    padding: 8px;
+    height: 861px;
+}
+#right-pane {
+    position:relative;
+    float: left;
+    width: 0%;
+}
+#main-panel {
+    position:relative;
+}
+#global-info-panel {
+    position:relative;
+    padding-bottom: 20px;
+}
+#user-info {
+    clear:both; float: right; position: relative; color: #add8e6; padding: 0; text-align: right
+}
+
+
+#info {
+    float: left;
+    position:absolute;
+    left:1061px;
+}
+#gameworld {
+    margin-top: 20px;
+    clear:both;
+    position:relative;
+
+}
+#world {
+    position:absolute;
+    left:200px;
+    top:0px;
+    float: left;
+}
+
+
+#controls {
+    margin-top: 20px;
+    clear: both;
+    position:relative;
+    left:0px;
+    top:0px;
+    width:180px;
+    padding-right: 1em;
+}
+#notifications {
+    float: left; position: relative; width: 100%; color: #add8e6; padding: 0; min-height: 70px
+}
+/*#controls img {*/
+    /*width: 16px;*/
+    /*height: 16px;*/
+/*}*/
+
+#swatch, #level-editor {
+    margin-top: 20px;
+    clear: both;
+    position:absolute;
+    left:200px;
+    top: 641px;
+}
+
+canvas {
+    position:absolute;
+}
+
+#map_canvas {
+    height: 601px;
+    width: 801px;
+  position: absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  top:0;
+    border: #fff 6px solid;
+}
+
+#baseCanvas, #resourceCanvas, #scrollingCanvas, #agentCanvas, #c5 {
+  border: #fff 6px solid;
+}
+
+#baseCanvas.over, #resourceCanvas.over, #scrollingCanvas.over, #agentCanvas.over, #c5.over {
+  border: #fff 6px solid;
+}
+
+
+a {
+    color: #add8e6;
+
+}
+li {
+  list-style: none;
+}
+ul, li {
+    margin: 0px;
+    padding: 0px;
+}
+
+#gallery-items > div, #level-editor > div {
+  width: 110px;
+}
+#swatch > div, #swatch > div, #gallery-items > div, #level-editor > div {
+    float: left;
+    position: relative;
+  text-decoration: none;
+
+  padding: 2px;
+  margin-right: 10px;
+}
+#swatch > div > div {
+    clear: both
+}
+.eco, .env, .soc {
+    padding: 1px;
+    margin: 2px;
+}
+.title {
+    border: solid 4px #fff;
+   float: left;
+     width: 160px;
+    height: 28px;
+    font-size: 0.9em;
+    padding: 4px;
+    margin: 2px;
+}
+
+#swatch div.eco, #gallery-items div.eco {
+    float: left;
+    border: solid 4px #99ccff;
+}
+
+#swatch div.env, #gallery-items div.env {
+    float: left;
+    border: solid 4px #00ff00;
+}
+
+#swatch div.soc, #gallery-items div.soc {
+    float: left;
+    border: solid 4px #ff3300;
+}
+
+
+*[draggable=true] {
+  -moz-user-select:none;
+  -khtml-user-drag: element;
+  cursor: move;
+}
+
+*:-khtml-drag {
+  background-color: rgba(238,238,238, 0.5);
+}
+
+li a:hover {
+    border: #999 3px solid;
+    background: #fff;
+}
+/*
+li a:hover:after {
+  content: ' (drag me)';
+}
+*/
+
+
+
+
+li.over {
+  border-color: #333;
+  background: #ccc;
+}
+
+
+#info h2 {
+    margin-top: 0px;
+}

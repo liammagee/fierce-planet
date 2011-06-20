@@ -13,10 +13,11 @@ var FiercePlanet = FiercePlanet || {};
 FiercePlanet.drawGame = function() {
     // Clear canvases
     $('#map_canvas').empty();
-    FiercePlanet.clearCanvas('c1');
-    FiercePlanet.clearCanvas('c2');
-    FiercePlanet.clearCanvas('c3');
-    FiercePlanet.clearCanvas('c4');
+    FiercePlanet.clearCanvas('baseCanvas');
+    FiercePlanet.clearCanvas('resourceCanvas');
+    FiercePlanet.clearCanvas('scrollingCanvas');
+    FiercePlanet.clearCanvas('noticeCanvas');
+    FiercePlanet.clearCanvas('agentCanvas');
 
     // Draw basic elements
     if ((FiercePlanet.currentLevel.getMapOptions() != undefined  && FiercePlanet.currentLevel.getMapOptions()['lat'] != undefined && FiercePlanet.currentLevel.getMapOptions()['long'] != undefined)
@@ -55,7 +56,7 @@ FiercePlanet.drawTiles = function() {
  * @param tile
  */
 FiercePlanet.drawTile = function(tile) {
-    var canvas = $('#c1')[0];
+    var canvas = $('#baseCanvas')[0];
     var ctx = canvas.getContext('2d');
 
     var x = tile._x * FiercePlanet.cellWidth;
@@ -79,7 +80,7 @@ FiercePlanet.drawTile = function(tile) {
  *
  */
 FiercePlanet.drawPath = function() {
-    var canvas = $('#c1')[0];
+    var canvas = $('#baseCanvas')[0];
     var ctx = canvas.getContext('2d');
     var pathTiles = FiercePlanet.currentLevel.getPath();
     for (var i = 0; i < pathTiles.length; i+= 1) {
@@ -114,7 +115,7 @@ FiercePlanet.drawPath = function() {
  */
 FiercePlanet.drawBackgroundImage = function() {
     if (FiercePlanet.currentLevel.getImage() != undefined) {
-        var canvas = $('#c1')[0];
+        var canvas = $('#baseCanvas')[0];
         var ctx = canvas.getContext('2d');
         ctx.drawImage(FiercePlanet.currentLevel.getImage(), 0, 0);
     }
@@ -171,11 +172,11 @@ FiercePlanet.drawMap = function() {
  *
  */
 FiercePlanet.drawExitPoints = function() {
-    var canvas = $('#c1')[0];
+    var canvas = $('#baseCanvas')[0];
     var ctx = canvas.getContext('2d');
 
-    for (var i = 0; i < FiercePlanet.currentLevel.getExitPoints().length; i++) {
-        var point = FiercePlanet.currentLevel.getExitPoints()[i];
+    for (var i = 0; i < FiercePlanet.currentLevel._exitPoints.length; i++) {
+        var point = FiercePlanet.currentLevel._exitPoints[i];
         var x = point[0] * FiercePlanet.cellWidth + FiercePlanet.cellWidth / 2;
         var y = point[1] * FiercePlanet.cellHeight + FiercePlanet.cellHeight / 2;
         var width = (FiercePlanet.pieceWidth / 2);
@@ -199,7 +200,7 @@ FiercePlanet.drawExitPoints = function() {
         ctx.fill();
 
         // Draw progress
-        var progressRatio = (FiercePlanet.currentWave - 1) / FiercePlanet.currentLevel.getWaveNumber();
+        var progressRatio = (FiercePlanet.currentWave - 1) / FiercePlanet.currentLevel._waveNumber;
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.arc(x, y, width, - Math.PI / 2, - Math.PI / 2 + Math.PI * 2 * progressRatio, false);
@@ -216,11 +217,11 @@ FiercePlanet.drawExitPoints = function() {
  *
  */
 FiercePlanet.drawEntryPoints = function() {
-    var canvas = $('#c1')[0];
+    var canvas = $('#baseCanvas')[0];
     var ctx = canvas.getContext('2d');
 
-    for (var i = 0; i < FiercePlanet.currentLevel.getEntryPoints().length; i++) {
-        var point = FiercePlanet.currentLevel.getEntryPoints()[i];
+    for (var i = 0; i < FiercePlanet.currentLevel._entryPoints.length; i++) {
+        var point = FiercePlanet.currentLevel._entryPoints[i];
         var x = point[0] * FiercePlanet.cellWidth + FiercePlanet.cellWidth / 2;
         var y = point[1] * FiercePlanet.cellHeight + FiercePlanet.cellHeight / 2;
         var width = (FiercePlanet.pieceWidth / 2);
@@ -241,7 +242,7 @@ FiercePlanet.drawEntryPoints = function() {
         ctx.fill();
 
         // Draw progress
-        var progressRatio = (FiercePlanet.currentWave - 1) / FiercePlanet.currentLevel.getWaveNumber();
+        var progressRatio = (FiercePlanet.currentWave - 1) / FiercePlanet.currentLevel._waveNumber;
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.arc(x, y, width, - Math.PI / 2, - Math.PI / 2 + Math.PI * 2 * progressRatio, false);
@@ -257,39 +258,122 @@ FiercePlanet.drawEntryPoints = function() {
 /**
  *
  */
-FiercePlanet.drawNotice = function() {
-    var canvas = $('#c3')[0];
-    var ctx = canvas.getContext('2d');
-    ctx.font = '500 16px/2 Unknown Font, sans-serif';
+FiercePlanet.drawNotice = function(notice) {
+    if (FiercePlanet.currentNotice != null) {
+        FiercePlanet.clearCanvas('noticeCanvas');
+        var canvas = $('#noticeCanvas')[0];
+        var ctx = canvas.getContext('2d');
 
-    ctx.lineWidth = 2;
-    var showForTicks = 150;
-    var startingTransparency = 0.1;
-    FiercePlanet.alphaLevel = FiercePlanet.waveCounter > showForTicks ? 0 : Math.pow((showForTicks - FiercePlanet.waveCounter) / showForTicks - startingTransparency, 0.5);
-    var width = FiercePlanet.WAVE_NOTICE_WIDTH, height = FiercePlanet.WAVE_NOTICE_HEIGHT, roundedEdge = 10;
-    var x = FiercePlanet.waveNoticeX, y = FiercePlanet.waveNoticeY;
-    ctx.clearRect(x - 1, y - 1, width + 2, height + 2);
-    ctx.beginPath();
-    ctx.moveTo(x + roundedEdge, y);
-    ctx.lineTo(x + width - roundedEdge, y);
-    ctx.arcTo(x + width, y, x + width, y + roundedEdge, roundedEdge);
-    ctx.lineTo(x + width, y + height - roundedEdge);
-    ctx.arcTo(x + width, y + height, x + width - roundedEdge, y + height, roundedEdge);
-    ctx.lineTo(x + roundedEdge, y + height);
-    ctx.arcTo(x, y + height, x, y + height - roundedEdge, roundedEdge);
-    ctx.lineTo(x, y + roundedEdge);
-    ctx.arcTo(x, y, x + roundedEdge, y, roundedEdge);
-    ctx.closePath();
-    ctx.strokeStyle = "rgba(255, 255, 255, " + FiercePlanet.alphaLevel + ")";
-    ctx.stroke();
-//    ctx.fillStyle = "rgba(251, 228, 60, 0.1)";
-    ctx.fillStyle = "rgba(32, 98, 210, " + FiercePlanet.alphaLevel + ")";
-    ctx.fill();//2062c2
-    ctx.fillStyle = "rgba(255, 255, 255, " + FiercePlanet.alphaLevel + ")";
-    ctx.fillText("Hello Fierce Planet Player! ", x + 10, y + 20, 20);
-    ctx.fillText("Well done, you saved a", x + 10, y + 40, 20);
-    ctx.fillText("citizen!", x + 10, y + 60, 20);
+
+        // Get parameters of the notice
+        var text = FiercePlanet.currentNotice._text;
+        var start = FiercePlanet.currentNotice._start;
+        var duration = FiercePlanet.currentNotice._duration;
+        var strengthOfNotice = (duration - (FiercePlanet.gameCounter - start)) / duration;
+        var startingTransparency = 0.1;
+        var alphaLevel = Math.pow(strengthOfNotice - startingTransparency, 0.5);
+
+
+        // Notice dimensions
+        var x = FiercePlanet.currentNotice._x;
+        var y = FiercePlanet.currentNotice._y;
+        var width = FiercePlanet.currentNotice._width;
+        var height = FiercePlanet.currentNotice._height;
+
+        // Styles
+        var foregroundColor = FiercePlanet.insertAlpha(FiercePlanet.currentNotice._foregroundColor, alphaLevel);
+        var backgroundColor = FiercePlanet.insertAlpha(FiercePlanet.currentNotice._backgroundColor, alphaLevel);
+        var lineWidth = FiercePlanet.currentNotice._lineWidth;
+        var font = FiercePlanet.currentNotice._font;
+
+
+        // Draw the notice
+        ctx.font = font;
+        ctx.lineWidth = lineWidth;
+
+        var roundedEdge = 10;
+        ctx.clearRect(x - 1, y - 1, width + 2, height + 2);
+
+        // Don't draw any more, if the notice is expired
+        if (start > FiercePlanet.gameCounter || start + duration < FiercePlanet.gameCounter)
+            return;
+
+        ctx.beginPath();
+        ctx.moveTo(x + roundedEdge, y);
+        ctx.lineTo(x + width - roundedEdge, y);
+        ctx.arcTo(x + width, y, x + width, y + roundedEdge, roundedEdge);
+        ctx.lineTo(x + width, y + height - roundedEdge);
+        ctx.arcTo(x + width, y + height, x + width - roundedEdge, y + height, roundedEdge);
+        ctx.lineTo(x + roundedEdge, y + height);
+        ctx.arcTo(x, y + height, x, y + height - roundedEdge, roundedEdge);
+        ctx.lineTo(x, y + roundedEdge);
+        ctx.arcTo(x, y, x + roundedEdge, y, roundedEdge);
+        ctx.closePath();
+
+        ctx.strokeStyle = foregroundColor;
+        ctx.stroke();
+        ctx.fillStyle = backgroundColor;
+        ctx.fill();
+
+        // Draw the text lines
+        var lines = FiercePlanet.getTextLines(ctx, text, width - 20);
+        ctx.fillStyle = foregroundColor;
+        for (var i  = 0; i < lines.length; i++) {
+            ctx.fillText(lines[i], x + 10, y + (20 * (i + 1)));
+        }
+    }
 };
+
+/**
+ *
+ * @param context
+ * @param text
+ * @param targetWidth
+ */
+FiercePlanet.getTextLines = function(context, text, targetWidth) {
+    var w = context.measureText(text).width;
+    if (w < targetWidth)
+        return [text];
+    var numberOfLines = Math.ceil(w / targetWidth);
+    var l = text.length / numberOfLines;
+    var lines = [];
+    var simpleTokens = text.split(' ');
+    var line = '';
+
+    for (var j = 0; j < simpleTokens.length; j++) {
+        var token = simpleTokens[j];
+        if (context.measureText(line + token + ' ').width < targetWidth) {
+            line += token + ' ';
+        }
+        else if (line.length == 0 && context.measureText(token).width >= l) {
+            var wt = context.measureText(token).width;
+            var numberOfTokenLines = Math.ceil(wt / targetWidth);
+            var tokenMarker = token.length / numberOfTokenLines;
+            line += token.substring(0, tokenMarker - 1) + '-';
+            var newToken = token.substring(tokenMarker, token.length);
+            simpleTokens.splice(j, 0, newToken) = newToken;
+            lines.push(line);
+            line = '';
+        }
+        else {
+            lines.push(line);
+            line = '';
+        }
+    }
+    lines.push(line);
+    return lines;
+};
+
+/**
+ *
+ * @param color
+ * @param alphaLevel
+ */
+FiercePlanet.insertAlpha = function(color, alphaLevel) {
+    var newColor = color.split(')').join(', ' + alphaLevel + ')');
+    return newColor;
+};
+
 
 /**
  *
@@ -305,7 +389,7 @@ FiercePlanet.drawResources = function() {
  * @param p
  */
 FiercePlanet.drawResource = function(p) {
-    var canvas = $('#c2')[0];
+    var canvas = $('#resourceCanvas')[0];
     var ctx = canvas.getContext('2d');
 
     var x = p._x * FiercePlanet.cellWidth;
@@ -370,7 +454,7 @@ FiercePlanet.clearCanvas = function(canvasID) {
  *
  */
 FiercePlanet.clearAgents = function() {
-    var canvas = $('#c4')[0];
+    var canvas = $('#agentCanvas')[0];
     var ctx = canvas.getContext('2d');
     var agents = FiercePlanet.currentLevel._currentAgents;
     if (FiercePlanet.waveCounter > 0) {
@@ -442,7 +526,7 @@ FiercePlanet.getAgentDirection = function(agent) {
 /**
  *
  */
-FiercePlanet.getDrawingPosition = function(agent, count) {
+FiercePlanet.getDrawingPosition = function(agent, counter) {
     var lastX = agent._lastMemory._x;
     var lastY = agent._lastMemory._y;
     var x = agent._x;
@@ -450,7 +534,8 @@ FiercePlanet.getDrawingPosition = function(agent, count) {
     var wx = agent._wanderX;
     var wy = agent._wanderY;
     var speed = agent._speed;
-    var increment = (speed - (count - agent._delay) % speed) / speed;
+    var delay = agent._delay;
+    var increment = (speed - (counter - agent._delay) % speed) / speed;
 
 
     var offsetX = (x - lastX) * (increment);
@@ -509,16 +594,16 @@ FiercePlanet.getDrawingPosition = function(agent, count) {
  *
  */
 FiercePlanet.drawAgents = function() {
-    var canvas = $('#c4')[0];
+    var canvas = $('#agentCanvas')[0];
     var ctx = canvas.getContext('2d');
     var agents = FiercePlanet.currentLevel._currentAgents;
     for (var i = 0; i < agents.length; i += 1) {
         var agent = agents[i];
 
         // Don't process agents we want to block
-        if (! FiercePlanet.rivalsVisible && agent._agentType == AgentTypes.RIVAL_AGENT_TYPE)
+        if (! FiercePlanet.rivalsVisible && agent._agentType._name == AgentTypes.RIVAL_AGENT_TYPE._name)
             continue;
-        if (! FiercePlanet.predatorsVisible && agent._agentType == AgentTypes.PREDATOR_AGENT_TYPE)
+        if (! FiercePlanet.predatorsVisible && agent._agentType._name == AgentTypes.PREDATOR_AGENT_TYPE._name)
             continue;
 
         // Get co-ordinates
@@ -541,7 +626,7 @@ FiercePlanet.drawAgents = function() {
         try {
             eval(agent.getType().getDrawFunction())(ctx, agent, intX, intY, FiercePlanet.pieceWidth, FiercePlanet.pieceHeight, newColor, FiercePlanet.waveCounter, direction);
         } catch(e) {
-            eval(CITIZEN_AGENT_TYPE.getDrawFunction())(ctx, agent, intX, intY, FiercePlanet.pieceWidth, FiercePlanet.pieceHeight, newColor, FiercePlanet.waveCounter, direction);
+            eval(AgentTypes.CITIZEN_AGENT_TYPE.getDrawFunction())(ctx, agent, intX, intY, FiercePlanet.pieceWidth, FiercePlanet.pieceHeight, newColor, FiercePlanet.waveCounter, direction);
         }
 
 
@@ -553,8 +638,8 @@ FiercePlanet.drawAgents = function() {
  */
 FiercePlanet.drawScrollingLayer = function() {
     if (FiercePlanet.scrollingImageVisible) {
-        FiercePlanet.clearCanvas('c3');
-        var canvas = $('#c3')[0];
+        FiercePlanet.clearCanvas('scrollingCanvas');
+        var canvas = $('#scrollingCanvas')[0];
         var ctx = canvas.getContext('2d');
 
         if ((FiercePlanet.scrollingImageX + FiercePlanet.scrollingImageOffset) < (400 - FiercePlanet.scrollingImageOffset)){

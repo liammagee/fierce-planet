@@ -7,75 +7,30 @@
  */
 var FiercePlanet = FiercePlanet || {};
 
-FiercePlanet.recordNewGame = function() {
-        if (FiercePlanet.currentGameRecord == undefined) {
-            try {
-                FiercePlanet.currentGameRecord = new GameRecord();
-            }
-            catch (err) {
-                console.log(err);
-            }
-        }
-    };
 
-FiercePlanet.recordNewLevel = function() {
-        if (FiercePlanet.currentLevel != undefined) {
-            console.log("Recording at: " + FiercePlanet.globalRecordingCounter);
-            try {
-                var level = new Level(FiercePlanet.currentLevel._id);
-                level.setTiles(FiercePlanet.currentLevel.getTiles());
-                FiercePlanet.currentGameRecord._levelLog[FiercePlanet.gameCounter] = level;
-                FiercePlanet.currentGameRecord._currentLevel = level;
-            }
-            catch (err) {
-                console.log(err);
-            }
-        }
-    };
-
-FiercePlanet.recordNewWave = function() {
-        if (FiercePlanet.currentLevel != undefined) {
-            console.log("Recording at: " + FiercePlanet.globalRecordingCounter);
-            try {
-//                var level = new Level(FiercePlanet.currentLevel._id);
-//                level.setTiles(FiercePlanet.currentLevel.getTiles());
-//                FiercePlanet.currentGameRecord._level = level;
-            }
-            catch (err) {
-                console.log(err);
-            }
-        }
-    };
-
-FiercePlanet.recordNewAgents = function() {
-        if (FiercePlanet.currentLevel != undefined) {
-            console.log("Recording at: " + FiercePlanet.globalRecordingCounter);
-            try {
-                var proxyAgents = [];
-                var agents = FiercePlanet.currentLevel.getCurrentAgents();
-                for (var i = 0; i < agents.length; i++) {
-                    var agent = agents[i];
-                    var proxyAgent = new Agent(agent._agentType, agent._x, agent._y);
-                    proxyAgent._id = agent._id;
-                    proxyAgents.push(proxyAgent);
-                }
-                FiercePlanet.currentGameRecord._agentLog[FiercePlanet.gameCounter] = proxyAgents;
-            }
-            catch (err) {
-                console.log(err);
-            }
-        }
-    };
-
-
+/**
+ *
+ */
 FiercePlanet.recordWorld = function() {
         if (FiercePlanet.currentLevel != undefined) {
             console.log("Recording at: " + FiercePlanet.globalRecordingCounter);
             try {
                 var level = new Level(FiercePlanet.currentLevel._id);
-                level.setCurrentAgents(FiercePlanet.currentLevel.getCurrentAgents());
+                var agents = [];
+                for (var i = 0, len = FiercePlanet.currentLevel.getCurrentAgents().length; i < len; i++) {
+                    var actualAgent = FiercePlanet.currentLevel.getCurrentAgents()[i];
+                    var proxyAgent = new Agent(actualAgent.getType(), actualAgent.getX(), actualAgent.getY());
+                    proxyAgent.setLastMemory(actualAgent.getLastMemory());
+                    proxyAgent.setDelay(actualAgent.getDelay());
+                    proxyAgent.setSpeed(actualAgent.getSpeed());
+                    agents.push(proxyAgent);
+                }
+                level.setCurrentAgents(agents);
                 level.setResources(FiercePlanet.currentLevel.getResources());
+                // Serialised option, for remote persistence
                 FiercePlanet.recordedLevels[FiercePlanet.globalRecordingCounter] = $.toJSON(level);
+                // Local option
+//                FiercePlanet.recordedLevels[FiercePlanet.globalRecordingCounter] = level;
                 FiercePlanet.globalRecordingCounter++;
             }
             catch (err) {
@@ -84,39 +39,57 @@ FiercePlanet.recordWorld = function() {
         }
     };
 
+/**
+ *
+ */
 FiercePlanet.replayWorld = function() {
         FiercePlanet._stopAgents();
         FiercePlanet.existingCurrentLevel = FiercePlanet.currentLevel;
         clearInterval(FiercePlanet.agentTimerId);
         FiercePlanet.globalRecordingCounter = 0;
+        FiercePlanet.waveCounter = 0;
         FiercePlanet.drawGame();
         FiercePlanet.inPlay = true;
 
-        setTimeout("this.replayStart()", 3000);
+        setTimeout("FiercePlanet.replayStart()", 100);
     };
 
+/**
+ *
+ */
 FiercePlanet.replayStart = function() {
-        FiercePlanet.agentTimerId = setInterval("this.replayStep()", FiercePlanet.interval);
+        FiercePlanet.agentTimerId = setInterval("FiercePlanet.replayStep()", FiercePlanet.interval * 2);
+};
 
-    };
-
+/**
+ *
+ */
 FiercePlanet.replayStep = function () {
         var level = FiercePlanet.recordedLevels[FiercePlanet.globalRecordingCounter];
         console.log("Replaying at: " + FiercePlanet.globalRecordingCounter);
-        console.log("Level: " + level);
         if (level == undefined) {
             FiercePlanet.replayStop();
         }
         else {
             try {
                 FiercePlanet.clearAgents();
+                // Serialised option, for remote persistence
                 FiercePlanet.currentLevel = $.evalJSON(level);
+                // Local option
+//                FiercePlanet.currentLevel = level;
                 FiercePlanet.globalRecordingCounter++;
+                FiercePlanet.waveCounter++;
+                FiercePlanet.clearCanvas('resourceCanvas');
+                FiercePlanet.clearCanvas('scrollingCanvas');
+                FiercePlanet.clearCanvas('noticeCanvas');
+                FiercePlanet.clearCanvas('agentCanvas');
+
+                FiercePlanet.drawEntryPoints();
+                FiercePlanet.drawExitPoints();
                 FiercePlanet.drawResources();
                 FiercePlanet.drawScrollingLayer();
     //            FiercePlanet.drawScoreboard();
                 FiercePlanet.drawAgents();
-
             }
             catch(err) {
                 console.log(err);
@@ -124,6 +97,9 @@ FiercePlanet.replayStep = function () {
         }
     };
 
+/**
+ *
+ */
 FiercePlanet.replayStop = function () {
         FiercePlanet.agentTimerId = clearInterval(FiercePlanet.agentTimerId);
         FiercePlanet.globalRecordingCounter = 0;

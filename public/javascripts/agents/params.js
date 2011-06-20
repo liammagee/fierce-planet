@@ -29,10 +29,10 @@ FiercePlanet.HARD_DIFFICULTY = 3;
 FiercePlanet.EXTREME_DIFFICULTY = 4;
 
 // Dimension constants
-FiercePlanet.WORLD_WIDTH = 800;
-FiercePlanet.WORLD_HEIGHT = 600;
+FiercePlanet.WORLD_WIDTH = 480;
+FiercePlanet.WORLD_HEIGHT = 400;
 FiercePlanet.WAVE_NOTICE_WIDTH = 200;
-FiercePlanet.WAVE_NOTICE_HEIGHT = 150;
+FiercePlanet.WAVE_NOTICE_HEIGHT = 100;
 
 
 
@@ -85,7 +85,7 @@ FiercePlanet.tilesMutable = false;
 
 // Timer variables
 FiercePlanet.agentTimerId = 0;
-
+FiercePlanet.eventTarget = new EventTarget();
 FiercePlanet.recordedLevels = [];
 
 // Current state
@@ -96,6 +96,7 @@ FiercePlanet.currentLevel = null;
 FiercePlanet.existingCurrentLevel = null;
 FiercePlanet.currentResourceId = null;
 FiercePlanet.currentResource = null;
+FiercePlanet.currentNotice = null;
 
 
 // Game play variables

@@ -1,36 +1,30 @@
 
-  <div id="main-panel">
-
     <%= render "score_board" %>
 
     <div id="gameworld">
       <div id="world">
-        <div id="map_canvas" width="801" height="601" style="z-index: 1;"></div>
-        <canvas id="c1" width="801" height="601" style="z-index: 2;">A Canvas</canvas>
-        <canvas id="c2" width="801" height="601" style="z-index: 3;">A Canvas</canvas>
-        <canvas id="c3" width="801" height="601" style="z-index: 4;">A Canvas</canvas>
-        <canvas id="c4" width="801" height="601" style="z-index: 5;">A Canvas</canvas>
+        <div id="map_canvas" width="481" height="401" style="z-index: 1;"></div>
+        <canvas id="baseCanvas" width="481" height="401" style="z-index: 2;">A Canvas</canvas>
+        <canvas id="resourceCanvas" width="481" height="401" style="z-index: 3;">A Canvas</canvas>
+        <canvas id="scrollingCanvas" width="481" height="401" style="z-index: 4;">A Canvas</canvas>
+        <canvas id="noticeCanvas" width="481" height="401" style="z-index: 5;">A Canvas</canvas>
+        <canvas id="agentCanvas" width="481" height="401" style="z-index: 5;">A Canvas</canvas>
       </div>
     </div>
 
+
     <div id="info">
-      <div id="global-info"  style="clear:both;">
-        <div id="user-links" style="clear:both; float: right; position: relative; color: #add8e6; padding: 0; text-align: right">
-          <p>
+      <div id="global-info">
+        <div id="user-links">
             <% if user_signed_in? %>
-                <%= 'Welcome, ' + current_user.profile.nickname + ' | '  if current_user and current_user.profile.nickname %>
+                <%= 'Welcome, ' + current_user.profile.nickname + ', [' + current_user.profile.profile_class + '] ' + ' | '  if current_user and current_user.profile.nickname %>
                 <%= link_to('Profile', edit_profile_path(current_user.profile)) %> |
-                <a href="#" id="tutorial">Tutorial</a> |
                 <%= link_to('Feedback', new_feedback_path) %> |
                 <%= link_to('Logout', destroy_user_session_path) %>
             <% else %>
-                <a href="#" id="tutorial">Tutorial</a> |
                 <%= link_to('Login', new_user_session_path) %>
             <% end %>
-          </p>
         </div>
-      </div>
-      <div id="level-info"  style="clear:both;" >
       </div>
     </div>
 
@@ -51,9 +45,3 @@
     <!--<audio id="background-sound" autoplay controls preload loop>-->
       <!--<source src="http://forestmist.org/wp-content/uploads/2010/04/html5-audio-loop.mp3">-->
     <!--</audio>-->
-  </div>
-
-
-
-
-

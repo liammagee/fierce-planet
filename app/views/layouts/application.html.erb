@@ -29,6 +29,9 @@
   <%= javascript_include_tag "agents/framework/resource" %>
   <%= javascript_include_tag "agents/framework/player_class" %>
   <%= javascript_include_tag "agents/framework/tile" %>
+  <%= javascript_include_tag "agents/ui/game_record" %>
+  <%= javascript_include_tag "agents/ui/notice" %>
+  <%= javascript_include_tag "agents/ui/event" %>
   <%= javascript_include_tag "agents/data/resource_kinds" %>
   <%= javascript_include_tag "agents/data/player_classes" %>
   <%= javascript_include_tag "agents/data/agent_types" %>
@@ -66,19 +69,9 @@
 
 </head>
 <body>
-
-
-
-<div id="left-pane">
-  <p></p>
-</div>
 <div id="content-pane">
 
   <%= yield %>
 </div>
-<div id="right-pane">
-  <p></p>
-</div>
-
 </body>
 </html>
