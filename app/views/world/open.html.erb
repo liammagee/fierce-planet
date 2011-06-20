@@ -17,6 +17,7 @@
       <div id="global-info">
         <div id="user-links">
             <% if user_signed_in? %>
+                <div id="profile" style="display:none"> Profile: <span id="profile-class-display">0</span> </div>
                 <%= 'Welcome, ' + current_user.profile.nickname + ', [' + current_user.profile.profile_class + '] ' + ' | '  if current_user and current_user.profile.nickname %>
                 <%= link_to('Profile', edit_profile_path(current_user.profile)) %> |
                 <%= link_to('Feedback', new_feedback_path) %> |
