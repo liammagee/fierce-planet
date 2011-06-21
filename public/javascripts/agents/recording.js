@@ -13,7 +13,8 @@ var FiercePlanet = FiercePlanet || {};
  */
 FiercePlanet.recordWorld = function() {
         if (FiercePlanet.currentLevel != undefined) {
-            console.log("Recording at: " + FiercePlanet.globalRecordingCounter);
+            if (typeof console != "undefined")
+                console.log("Recording at: " + FiercePlanet.globalRecordingCounter);
             try {
                 var level = new Level(FiercePlanet.currentLevel._id);
                 var agents = [];
@@ -34,7 +35,7 @@ FiercePlanet.recordWorld = function() {
                 FiercePlanet.globalRecordingCounter++;
             }
             catch (err) {
-                console.log(err);
+//                console.log(err);
             }
         }
     };
@@ -66,7 +67,8 @@ FiercePlanet.replayStart = function() {
  */
 FiercePlanet.replayStep = function () {
         var level = FiercePlanet.recordedLevels[FiercePlanet.globalRecordingCounter];
-        console.log("Replaying at: " + FiercePlanet.globalRecordingCounter);
+        if (typeof console != "undefined")
+            console.log("Replaying at: " + FiercePlanet.globalRecordingCounter);
         if (level == undefined) {
             FiercePlanet.replayStop();
         }
@@ -92,7 +94,7 @@ FiercePlanet.replayStep = function () {
                 FiercePlanet.drawAgents();
             }
             catch(err) {
-                console.log(err);
+//                console.log(err);
             }
         }
     };

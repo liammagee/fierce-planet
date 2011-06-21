@@ -88,7 +88,8 @@ FiercePlanet.hookUpCustomEventListeners = function() {
 
     // Add logging event listeners
     FiercePlanet.eventTarget.addListener("game", function(e) {
-       console.log("Game event " + e._event + " logged at:" + e._time);
+        if (typeof console != "undefined")
+           console.log("Game event " + e._event + " logged at:" + e._time);
     });
 
     // Add resource listener

@@ -354,7 +354,6 @@ Agent.prototype.memorise = function(level, x, y) {
 //                if (agentX == x && agentY == y && (agent.lastPosition().getX() != this.lastPosition().getX() || agent.lastPosition().getY() != this.lastPosition().getY())) {
                 // TODO: This is very slow - consider ways to optimise
                 if ((agent.lastPosition().getX() != this.lastPosition().getX() || agent.lastPosition().getY() != this.lastPosition().getY()) && (Math.abs(agentX - x) <= 1 && Math.abs(agentY - y) <= 1)) {
-//                    console.log("Agent " + this._id + " meeting agent " + agent._id);
                     // Add agent to memory
                     this._memoriesOfAgents[agent._id] = new MemoryOfAgent(this._id, this._age, x, y, agent._id);
                     var mpv = [];
