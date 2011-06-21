@@ -416,16 +416,16 @@ Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, wi
         var toContinue = false;
         switch (dir) {
             case 0:
-                (newX == offScreen1 ? (withOffscreenCycling ? newX = offScreenWidth : toContinue = true) : newX = newX - offset);
+                (x == offScreen1 ? (withOffscreenCycling ? newX = offScreenWidth : toContinue = true) : newX = newX - offset);
                 break;
             case 1:
-                (newX == offScreenWidth ? (withOffscreenCycling ? newX = offScreen1 : toContinue = true) : newX = newX + offset);
+                (x == offScreenWidth ? (withOffscreenCycling ? newX = offScreen1 : toContinue = true) : newX = newX + offset);
                 break;
             case 2:
-                (newY == offScreen1 ? (withOffscreenCycling ? newY = offScreenHeight : toContinue = true) : newY = newY - offset);
+                (y == offScreen1 ? (withOffscreenCycling ? newY = offScreenHeight : toContinue = true) : newY = newY - offset);
                 break;
             case 3:
-                (newY == offScreenHeight ? (withOffscreenCycling ? newY = offScreen1 : toContinue = true) : newY = newY + offset);
+                (y == offScreenHeight ? (withOffscreenCycling ? newY = offScreen1 : toContinue = true) : newY = newY + offset);
                 break;
         }
         if ((withNoRepeat && lastX == newX && lastY == newY) || toContinue) {
@@ -640,32 +640,11 @@ Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, wi
         }
         */
 
-        // Placeholder for debugging
+        // Return the best candidate we can find
         return bestCandidate;
     }
 
-
-    // Allow for movement off-screen, if no other option is available
-    if (withOffscreenCycling) {
-        if (x == offScreenWidth || x == offScreen1 || y == offScreenHeight || y == offScreen1) {
-            if (x == offScreenWidth) {
-                newX = offScreenWidth + 1;
-            }
-            else if (x == offScreen1) {
-                newX = offScreen1 - 1;
-            }
-            else if (y == offScreenHeight) {
-                newY = offScreenHeight + 1;
-            }
-            else if (y == offScreen1) {
-                newY = offScreen1 - 1;
-            }
-            return [newX, newY];
-        }
-    }
-
-
-    // Use the first NON-candidate cell to use if no candidate is found
+    // Use the first candidate cell if we get through to here
     return candidateCells[0];
 };
 

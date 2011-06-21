@@ -71,6 +71,7 @@ FiercePlanet.setupDialogs = function() {
                     $( this ).dialog( "close" );
                 },
                 "Cancel": function() {
+                    FiercePlanet.newLevel();
                     $( this ).dialog( "close" );
                 }
             }

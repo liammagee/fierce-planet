@@ -16,9 +16,7 @@ FiercePlanet.setupResourceInteraction = function () {
         for (var i = 0; i < links.length; i++) {
             el = links[i];
             if (el.id && $.inArray(el.id, FiercePlanet.capabilities) != -1) {
-                console.log("making " + el.id + " active");
                 FiercePlanet.makeResourceActive(el);
-
             }
         }
 

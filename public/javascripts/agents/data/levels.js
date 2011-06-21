@@ -355,7 +355,7 @@ PresetLevels.level6.addEntryPoint(0, 1);
 PresetLevels.level6.addExitPoint(2, 14);
 PresetLevels.level6.setWorldWidth(16);
 PresetLevels.level6.setWorldHeight(16);
-PresetLevels.level6.setInitialAgentNumber(1);
+PresetLevels.level6.setInitialAgentNumber(10);
 PresetLevels.level6.setWaveNumber(10);
 PresetLevels.level6.setExpiryLimit(10);
 PresetLevels.level6.setAllowOffscreenCycling(true);

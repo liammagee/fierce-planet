@@ -229,8 +229,11 @@ body {
 	margin-top: 20px;
 	clear: both;
 	position:absolute;
-	left:200px;
-	top: 641px;
+	left:400px;
+	top: 520px;
+    background-color: #1F62C1;
+    border-radius:4px;
+    padding:4px;
 }
 #swatch > div, #gallery-items > div, #level-editor > div {
 	float: left;

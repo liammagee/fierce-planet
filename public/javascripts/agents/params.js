@@ -65,10 +65,10 @@ FiercePlanet.isMouseDown = false;
 FiercePlanet.isMouseMoving = false;
 
 // Setting variables
+FiercePlanet.scrollingImageVisible = true;
+FiercePlanet.agentsCanCommunicate = true;
 FiercePlanet.godMode = false;
 FiercePlanet.invisiblePath = false;
-FiercePlanet.scrollingImageVisible = false;
-FiercePlanet.agentsCanCommunicate = true;
 FiercePlanet.noticesVisible = false;
 FiercePlanet.agentTracing = false;
 FiercePlanet.recording = false;

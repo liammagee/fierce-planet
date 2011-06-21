@@ -28,7 +28,7 @@ FiercePlanet.loadGame = function() {
     FiercePlanet.hookUpCustomEventListeners();
 
     // Draw the game
-    FiercePlanet._initialiseGame();
+    FiercePlanet.newLevel();
 };
 
 
@@ -113,9 +113,9 @@ FiercePlanet.completeWave = function() {
  * Called when a level is completed
  */
 FiercePlanet.completeLevel = function() {
-    FiercePlanet._finaliseGame();
     if (FiercePlanet.currentLevel.isPresetLevel())
         FiercePlanet.currentLevelNumber++;
+    FiercePlanet._finaliseGame();
     FiercePlanet.showCompleteLevelDialog();
 };
 
@@ -143,12 +143,15 @@ FiercePlanet.completeGame = function() {
  * Plays the current game
  */
 FiercePlanet.playGame = function() {
-    if (FiercePlanet.inPlay)
-        return;
-    if (FiercePlanet.waveCounter == 0)
-        FiercePlanet.newWave();
-    else
-        FiercePlanet._startAgents();
+    if (FiercePlanet.inPlay) {
+        FiercePlanet.pauseGame();
+    }
+    else {
+        if (FiercePlanet.waveCounter == 0)
+            FiercePlanet.newWave();
+        else
+            FiercePlanet._startAgents();
+    }
 };
 
 
@@ -200,15 +203,15 @@ FiercePlanet._initialiseGame = function () {
 
     if (FiercePlanet.currentLevelNumber < 0 || FiercePlanet.currentLevelNumber > 10)
         FiercePlanet.currentLevelNumber = 1;
-    if (FiercePlanet.currentLevel != undefined && FiercePlanet.currentLevelPreset) {
+    if (FiercePlanet.currentLevelPreset) {
         try {
             FiercePlanet.currentLevel = eval("PresetLevels.level" + FiercePlanet.currentLevelNumber.toString());
         }
         catch(err) {
-            // Silently fail - current level stays the same if undefined
+            FiercePlanet.currentLevel = eval("PresetLevels.level1");
         }
     }
-    else if (FiercePlanet.currentLevel == undefined) {
+    else {
         FiercePlanet.currentLevel = eval("PresetLevels.level1");
     }
 

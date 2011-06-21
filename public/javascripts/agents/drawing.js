@@ -642,7 +642,7 @@ FiercePlanet.drawScrollingLayer = function() {
         var canvas = $('#scrollingCanvas')[0];
         var ctx = canvas.getContext('2d');
 
-        if ((FiercePlanet.scrollingImageX + FiercePlanet.scrollingImageOffset) < (400 - FiercePlanet.scrollingImageOffset)){
+        if ((FiercePlanet.scrollingImageX + FiercePlanet.scrollingImageOffset) < (480 - FiercePlanet.scrollingImageOffset)){
             FiercePlanet.scrollingImageX += FiercePlanet.scrollingImageOffset;
         }
         else {
@@ -731,7 +731,7 @@ FiercePlanet.drawWaves = function() {
  */
 FiercePlanet.drawScoreboard = function() {
     FiercePlanet.drawLevel();
-    FiercePlanet.drawProfileClass();
+//    FiercePlanet.drawProfileClass();
     FiercePlanet.drawScore();
     FiercePlanet.drawHighestScore();
     FiercePlanet.drawWaves();
