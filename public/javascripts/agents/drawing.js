@@ -650,7 +650,7 @@ FiercePlanet.drawScrollingLayer = function() {
         }
         // Need exception handling for Safari
         try {
-            ctx.drawImage(FiercePlanet.scrollingImage, FiercePlanet.scrollingImageX, 1, 800, 600, 0, 0, 800, 600);
+            ctx.drawImage(FiercePlanet.scrollingImage, FiercePlanet.scrollingImageX, 1, 480, 400, 0, 0, 480, 400);
         }
         catch(err) {
         }
@@ -725,6 +725,7 @@ FiercePlanet.drawWaves = function() {
     e.innerHTML = FiercePlanet.currentWave.toString() + " out of " + FiercePlanet.currentLevel.getWaveNumber();
 };
 
+
 /**
  *
  */
@@ -738,7 +739,6 @@ FiercePlanet.drawScoreboard = function() {
     FiercePlanet.drawExpired();
     FiercePlanet.drawResourcesInStore();
 };
-
 
 
 /**

@@ -14,17 +14,12 @@ var FiercePlanet = FiercePlanet || {};
 FiercePlanet.setupResourceInteraction = function () {
         var links = $('.eco, .env, .soc'), el = null;
         for (var i = 0; i < links.length; i++) {
-          el = links[i];
+            el = links[i];
+            if (el.id && $.inArray(el.id, FiercePlanet.capabilities) != -1) {
+                console.log("making " + el.id + " active");
+                FiercePlanet.makeResourceActive(el);
 
-          el.setAttribute('draggable', 'true');
-          el.addEventListener('dragstart', function (e) {
-            e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
-            e.dataTransfer.setData('Text', this.id); // required otherwise doesn't work
-              FiercePlanet.currentResourceId = this.id;
-          }, false);
-          el.addEventListener('click', function (e) {
-              FiercePlanet.currentResourceId = this.id;
-          }, false);
+            }
         }
 
         var resourceCanvas = $('#agentCanvas')[0];
@@ -76,6 +71,19 @@ FiercePlanet.setupResourceInteraction = function () {
             FiercePlanet.dropItem(e);
           }, false);
     };
+
+FiercePlanet.makeResourceActive = function (el) {
+    el.setAttribute('draggable', 'true');
+    el.addEventListener('dragstart', function (e) {
+        e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
+        e.dataTransfer.setData('Text', this.id); // required otherwise doesn't work
+        FiercePlanet.currentResourceId = this.id;
+    }, false);
+    el.addEventListener('click', function (e) {
+        FiercePlanet.currentResourceId = this.id;
+    }, false);
+}
+
 
 /**
  * Delete the current resource

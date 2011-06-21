@@ -106,7 +106,7 @@ FiercePlanet.maxLevelMoves = 0;
 
 FiercePlanet.levelOfDifficulty = FiercePlanet.MEDIUM_DIFFICULTY;
 FiercePlanet.resourceRecoveryCycle = 5;
-FiercePlanet.interval = 20;
+FiercePlanet.interval = 50;
 
 FiercePlanet.levelDelayCounter = 0;
 FiercePlanet.waveDelayCounter = 0;

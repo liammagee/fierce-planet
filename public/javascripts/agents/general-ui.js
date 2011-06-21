@@ -15,11 +15,11 @@ FiercePlanet.hookUpUIEventListeners = function() {
     // Control panel functions
     $('#playAgents').click(FiercePlanet.playGame);
     $('#pauseAgents').click(FiercePlanet.pauseGame);
-   $('#slowDown').click(FiercePlanet.slowDown);
-   $('#speedUp').click(FiercePlanet.speedUp);
+    $('#slowDown').click(FiercePlanet.slowDown);
+    $('#speedUp').click(FiercePlanet.speedUp);
     $('#newGame').click(FiercePlanet.newGame);
-   $('#restartLevel').click(FiercePlanet.restartLevel);
-   $('#showResourceGallery').click(FiercePlanet.showResourceGallery);
+    $('#restartLevel').click(FiercePlanet.restartLevel);
+    $('#showResourceGallery').click(FiercePlanet.showResourceGallery);
 
     // Pan/zoomFunctions
     $('#panUp').click(function() { FiercePlanet.pan(0);});
@@ -122,8 +122,8 @@ FiercePlanet.getCurrentPosition = function(e) {
     y /= FiercePlanet.externalZoomLevel;
 
     // Compensate for border
-    x -= (6 / FiercePlanet.zoomLevel);
-    y -= (6 / FiercePlanet.zoomLevel);
+    x -= (1 / FiercePlanet.zoomLevel);
+    y -= (1 / FiercePlanet.zoomLevel);
     var posX = Math.floor(x / FiercePlanet.cellWidth);
     var posY = Math.floor(y / FiercePlanet.cellHeight);
     return {posX:posX, posY:posY};
@@ -158,7 +158,10 @@ FiercePlanet.refreshSwatch = function() {
     for (var i = 0; i < FiercePlanet.capabilities.length; i++) {
         var capability = $.trim(FiercePlanet.capabilities[i]);
         try {
-            $('#' + capability)[0].style.display = 'block';
+//            $('#' + capability)[0].style.display = 'block';
+            var el = $('#' + capability);
+            el.removeClass("inactive");
+            makeResourceActive(el[0]);
         }
         catch (err) {
         }
