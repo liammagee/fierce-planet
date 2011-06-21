@@ -670,7 +670,8 @@ FiercePlanet.drawLevel = function() {
  */
 FiercePlanet.drawProfileClass = function() {
     var e = $('#profile-class-display')[0];
-    e.innerHTML = FiercePlanet.profileClass;
+    if (e != undefined)
+        e.innerHTML = FiercePlanet.profileClass;
 };
 
 /**
