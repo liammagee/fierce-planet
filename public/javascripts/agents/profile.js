@@ -1,11 +1,8 @@
-/**
+/*
  * Profile related functions
  */
 
 
-/**
- * Declare the FiercePlanet namespace
- */
 var FiercePlanet = FiercePlanet || {};
 
 

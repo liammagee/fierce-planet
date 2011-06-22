@@ -1,9 +1,7 @@
 
 /* Level editor functions */
 
-/**
- * Declare the FiercePlanet namespace
- */
+
 var FiercePlanet = FiercePlanet || {};
 
 

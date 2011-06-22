@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>Fierce Planet</title>
-  <!--<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />-->
   <%= stylesheet_link_tag "styles" %>
   <!--<%= stylesheet_link_tag "smoothness/jquery-ui-1.8.11.custom" %>-->
   <%= stylesheet_link_tag "custom/jquery-ui-1.8.13.custom" %>
@@ -17,39 +16,39 @@
 
 
   <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? -%>
-  <%= javascript_tag "var FiercePlanet = FiercePlanet || {};" -%>
-  <%= javascript_tag "FiercePlanet.PROFILE_ID;" -%>
-  <%= javascript_tag "FiercePlanet.PROFILE_ID = #{current_user.profile.id};" if current_user -%>
-
   <%= javascript_include_tag "rails" %>
 
   <!-- Load FiercePlanet classes here -->
-  <%= javascript_include_tag "agents/framework/agent" %>
-  <%= javascript_include_tag "agents/framework/level" %>
-  <%= javascript_include_tag "agents/framework/resource" %>
-  <%= javascript_include_tag "agents/framework/player_class" %>
-  <%= javascript_include_tag "agents/framework/tile" %>
-  <%= javascript_include_tag "agents/ui/game_record" %>
-  <%= javascript_include_tag "agents/ui/notice" %>
-  <%= javascript_include_tag "agents/ui/event" %>
-  <%= javascript_include_tag "agents/data/resource_kinds" %>
-  <%= javascript_include_tag "agents/data/player_classes" %>
-  <%= javascript_include_tag "agents/data/agent_types" %>
-  <%= javascript_include_tag "agents/data/levels" %>
-  <%= javascript_include_tag "agents/dialogs" %>
-  <%= javascript_include_tag "agents/drawing" %>
-  <%= javascript_include_tag "agents/editor" %>
-  <%= javascript_include_tag "agents/general-ui" %>
-  <%= javascript_include_tag "agents/lifecycle" %>
-  <%= javascript_include_tag "agents/params" %>
-  <%= javascript_include_tag "agents/profile" %>
-  <%= javascript_include_tag "agents/recording" %>
-  <%= javascript_include_tag "agents/resource-ui" %>
-  <%= javascript_include_tag "agents/utils" %>
-  <%= javascript_include_tag "agents/game" %>
+  <%= javascript_tag "var FiercePlanet = FiercePlanet || {};" -%>
+  <!--<%= javascript_include_tag "agents/framework/agent" %>-->
+  <!--<%= javascript_include_tag "agents/framework/level" %>-->
+  <!--<%= javascript_include_tag "agents/framework/resource" %>-->
+  <!--<%= javascript_include_tag "agents/framework/player_class" %>-->
+  <!--<%= javascript_include_tag "agents/framework/tile" %>-->
+  <!--<%= javascript_include_tag "agents/ui/game_record" %>-->
+  <!--<%= javascript_include_tag "agents/ui/notice" %>-->
+  <!--<%= javascript_include_tag "agents/ui/event" %>-->
+  <!--<%= javascript_include_tag "agents/data/resource_kinds" %>-->
+  <!--<%= javascript_include_tag "agents/data/player_classes" %>-->
+  <!--<%= javascript_include_tag "agents/data/agent_types" %>-->
+  <!--<%= javascript_include_tag "agents/dialogs" %>-->
+  <!--<%= javascript_include_tag "agents/drawing" %>-->
+  <!--<%= javascript_include_tag "agents/editor" %>-->
+  <!--<%= javascript_include_tag "agents/general-ui" %>-->
+  <!--<%= javascript_include_tag "agents/lifecycle" %>-->
+  <!--<%= javascript_include_tag "agents/params" %>-->
+  <!--<%= javascript_include_tag "agents/profile" %>-->
+  <!--<%= javascript_include_tag "agents/recording" %>-->
+  <!--<%= javascript_include_tag "agents/resource-ui" %>-->
+  <!--<%= javascript_include_tag "agents/utils" %>-->
+  <!--<%= javascript_include_tag "agents/game" %>-->
+  <!--<%= javascript_include_tag "agents/data/levels" %>-->
+  <%= javascript_include_tag "agents/fierce-planet.min" %>
 
+  <%= javascript_tag "FiercePlanet.PROFILE_ID;" -%>
   <!-- If a user is logged in, set their properties here -->
   <% if current_user %>
+      <%= javascript_tag "FiercePlanet.PROFILE_ID = #{current_user.profile.id};" -%>
       <script>
           FiercePlanet.profileClass = '<%= current_user.profile.profile_class ? current_user.profile.profile_class : "Novice" %>';
           FiercePlanet.credits = parseInt('<%= current_user.profile.credits ? current_user.profile.credits : 0 %>');
@@ -63,8 +62,8 @@
 
   <!-- If test parameter is passed, showed the QUnit test runner -->
   <% if params[:test] %>
-    <%= raw include_qunit %>
-  <% end%>
+      <%= raw include_qunit %>
+  <% end %>
   <%= csrf_meta_tag %>
 
 </head>

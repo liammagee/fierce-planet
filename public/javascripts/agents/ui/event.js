@@ -84,6 +84,9 @@ EventTarget.prototype = {
     }
 };
 
+/**
+ *
+ */
 FiercePlanet.hookUpCustomEventListeners = function() {
 
     // Add logging event listeners

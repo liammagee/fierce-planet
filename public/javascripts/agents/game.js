@@ -2,7 +2,10 @@
 
 /* NB: classes.js and relevant level sources must be pre-loaded */
 
-/* Constants */
+
+/**
+ * @namespace Holds functionality related to FiercePlanet
+ */
 var FiercePlanet = FiercePlanet || {};
 var $fp = $fp || FiercePlanet;
 

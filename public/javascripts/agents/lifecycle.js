@@ -1,10 +1,8 @@
-/**
+/*
  * Lifecycle related methods
  */
 
-/**
- * Declare the FiercePlanet namespace
- */
+
 var FiercePlanet = FiercePlanet || {};
 
 

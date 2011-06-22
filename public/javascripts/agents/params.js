@@ -1,20 +1,35 @@
-/**
+/*
  * Declares game parameters
  */
 
-/**
- * Declare the FiercePlanet namespace
- */
+
 var FiercePlanet = FiercePlanet || {};
 
-// Profile ID
+/**
+ * @constant the profile ID of the current user
+ */
 FiercePlanet.PROFILE_ID = null;
 
 // Game variable constants
+/**
+ * @constant The cost of making a move
+ */
 FiercePlanet.MOVE_HEALTH_COST = -2;
+/**
+ * @constant The resource bonus for saving a single agent
+ */
 FiercePlanet.SAVE_SCORE = 10;
+/**
+ * @constant The default starting resource level
+ */
 FiercePlanet.STARTING_STORE = 100;
+/**
+ * @constant The default rate of resource recovery
+ */
 FiercePlanet.DEFAULT_RESOURCE_RECOVERY = 2;
+/**
+ * @constant The credit bonus accruing from surviving a level
+ */
 FiercePlanet.WAVE_GOODNESS_BONUS = 5;
 
 // Timer constants

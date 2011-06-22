@@ -1,11 +1,9 @@
-/**
+/*
  * Declares dialogs used in the game
  */
 
 
-/**
- * Declare the FiercePlanet namespace
- */
+
 var FiercePlanet = FiercePlanet || {};
 
 

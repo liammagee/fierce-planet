@@ -1,10 +1,8 @@
-/**
+/*
  * Functions for handling resource-related UI events
  */
 
-/**
- * Declare the FiercePlanet namespace
- */
+
 var FiercePlanet = FiercePlanet || {};
 
 
@@ -70,6 +68,10 @@ FiercePlanet.setupResourceInteraction = function () {
           }, false);
     };
 
+/**
+ *
+ * @param el
+ */
 FiercePlanet.makeResourceActive = function (el) {
     el.setAttribute('draggable', 'true');
     el.addEventListener('dragstart', function (e) {
@@ -263,7 +265,7 @@ FiercePlanet.calculateSurroundingResourcesEffects = function (resource) {
     };
 
 /**
- *
+ * Recover resources to a maximum of their initial state
  */
 FiercePlanet.recoverResources = function () {
         for (var j = 0; j < FiercePlanet.currentLevel.getResources().length; j++) {

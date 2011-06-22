@@ -1,14 +1,14 @@
-/**
+/*
  * Utility methods
  */
 
-/**
- * Declare the FiercePlanet namespace
- */
+
 var FiercePlanet = FiercePlanet || {};
 
 
-// Always send the authenticity_token with ajax
+/**
+ * Always send the authenticity_token with ajax
+ */
 $(document).ajaxSend(function(event, request, settings) {
     if ( settings.type == 'post' ) {
         settings.data = (settings.data ? settings.data + "&" : "")
@@ -16,7 +16,9 @@ $(document).ajaxSend(function(event, request, settings) {
     }
 });
 
-// Handle zoom, as best as possible
+/**
+ * Handle zoom, as best as possible
+ */
 $(function(){
     $().zoom(function(direction){
         switch(direction) {

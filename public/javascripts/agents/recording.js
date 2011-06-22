@@ -1,15 +1,12 @@
-/**
+/*
  * Handles recording-related functions
  */
 
-/**
- * Declare the FiercePlanet namespace
- */
 var FiercePlanet = FiercePlanet || {};
 
 
 /**
- *
+ * Record the current state of the game
  */
 FiercePlanet.recordWorld = function() {
         if (FiercePlanet.currentLevel != undefined) {
@@ -41,7 +38,7 @@ FiercePlanet.recordWorld = function() {
     };
 
 /**
- *
+ * Replay the game
  */
 FiercePlanet.replayWorld = function() {
         FiercePlanet._stopAgents();
@@ -55,15 +52,16 @@ FiercePlanet.replayWorld = function() {
         setTimeout("FiercePlanet.replayStart()", 100);
     };
 
+
 /**
- *
+ * Begin the replay of the game, by adding a new interval
  */
 FiercePlanet.replayStart = function() {
         FiercePlanet.agentTimerId = setInterval("FiercePlanet.replayStep()", FiercePlanet.interval * 2);
 };
 
 /**
- *
+ * Replay a single step in a recorded game
  */
 FiercePlanet.replayStep = function () {
         var level = FiercePlanet.recordedLevels[FiercePlanet.globalRecordingCounter];
@@ -99,8 +97,9 @@ FiercePlanet.replayStep = function () {
         }
     };
 
+
 /**
- *
+ * Stop the replay of a recorded game
  */
 FiercePlanet.replayStop = function () {
         FiercePlanet.agentTimerId = clearInterval(FiercePlanet.agentTimerId);

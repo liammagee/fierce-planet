@@ -1,10 +1,8 @@
-/**
+/*
  * Functions for drawing aspects of the game
  */
 
-/**
- * Declare the FiercePlanet namespace
- */
+
 var FiercePlanet = FiercePlanet || {};
 
 /**
@@ -20,7 +18,7 @@ FiercePlanet.drawGame = function() {
     FiercePlanet.clearCanvas('agentCanvas');
 
     // Draw basic elements
-    if ((FiercePlanet.currentLevel.getMapOptions() != undefined  && FiercePlanet.currentLevel.getMapOptions()['lat'] != undefined && FiercePlanet.currentLevel.getMapOptions()['long'] != undefined)
+    if ((FiercePlanet.currentLevel.getMapOptions() != undefined  && FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined)
             || (FiercePlanet.currentLevel.getMapURL() != undefined && $.trim(FiercePlanet.currentLevel.getMapURL()).length > 0)) {
         FiercePlanet.drawMap();
         FiercePlanet.drawPath();
@@ -133,8 +131,8 @@ FiercePlanet.handleApiReady = function() {
         tilt: 45
     };
     if (FiercePlanet.currentLevel != undefined) {
-        if (FiercePlanet.currentLevel.getMapOptions()['lat'] != undefined && FiercePlanet.currentLevel.getMapOptions()['long'] != undefined)
-            mapOptions['center'] = new google.maps.LatLng(FiercePlanet.currentLevel.getMapOptions()['lat'], FiercePlanet.currentLevel.getMapOptions()['long']);
+        if (FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined)
+            mapOptions['center'] = new google.maps.LatLng(FiercePlanet.currentLevel.getMapOptions()['latitude'], FiercePlanet.currentLevel.getMapOptions()['longitude']);
         if (FiercePlanet.currentLevel.getMapOptions()['zoom'] != undefined)
             mapOptions['zoom'] = parseInt(FiercePlanet.currentLevel.getMapOptions()['zoom']);
         if (FiercePlanet.currentLevel.getMapOptions()['tilt'] != undefined)
@@ -157,7 +155,7 @@ FiercePlanet.handleApiReady = function() {
  *
  */
 FiercePlanet.drawMap = function() {
-    if (FiercePlanet.currentLevel.getMapOptions() != undefined && FiercePlanet.currentLevel.getMapOptions()['lat'] != undefined && FiercePlanet.currentLevel.getMapOptions()['long'] != undefined) {
+    if (FiercePlanet.currentLevel.getMapOptions() != undefined && FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined) {
         var script = document.createElement("script");
         script.type = "text/javascript";
         script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=FiercePlanet.handleApiReady";
@@ -351,7 +349,7 @@ FiercePlanet.getTextLines = function(context, text, targetWidth) {
             var tokenMarker = token.length / numberOfTokenLines;
             line += token.substring(0, tokenMarker - 1) + '-';
             var newToken = token.substring(tokenMarker, token.length);
-            simpleTokens.splice(j, 0, newToken) = newToken;
+            simpleTokens.splice(j, 0, newToken);
             lines.push(line);
             line = '';
         }

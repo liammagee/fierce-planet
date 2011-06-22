@@ -2,8 +2,14 @@
 /* NB: Level is defined in level.js */
 
 
+/**
+ * @namespace The namespace for preset levels
+ */
 var PresetLevels = function(){};
 
+/**
+ * @constant The number of preset levels
+ */
 PresetLevels.MAX_DEFAULT_LEVELS = 10;
 
 /* Level 0 Definition */
@@ -57,7 +63,7 @@ PresetLevels.level1.setNotice("<h2>Level 1: Welcome to Fierce Planet!</h2> " +
         "<p>The citizens of Fierce Planet are under threat. They are migrating in ever increasing numbers, seeking a promised land of peace and prosperity.</p>" +
         "<p>Help them by placing 'Economic', 'Environmental' and 'Social' resources beside their path before they expire! Drag or click the blue, green and red swatches onto the grey patches of the maze.</p> " +
         "<p><em>Tip: Keep watch on your resource and expired levels - once the maximum number of citizens have expired, it's Game Over!</em></p> ");
-//PresetLevels.level1.setMapOptions({ lat: 30.9376, long: 79.4292, zoom: 10});
+//PresetLevels.level1.setMapOptions({ latitude: 30.9376, longitude: 79.4292, zoom: 10});
 
 PresetLevels.level1.setup = function() {
     this.fillWithTiles();
@@ -684,13 +690,13 @@ PresetLevels.level10.setup = function() {
 
 
 /* Google Map links */
-PresetLevels.level1.setMapOptions({lat: 47.5153, long: 19.0782, zoom: 20}); // Rome: 47.5153, 19.0782
-PresetLevels.level2.setMapOptions({lat: 37.390296, long: -5.954579, zoom: 18}); // Seville: 37.390296,-5.954579
-PresetLevels.level3.setMapOptions({lat: 45.433607, long: 12.338124, zoom: 18}); // Venice: 45.433607,12.338124
-PresetLevels.level4.setMapOptions({lat: -33.909092, long: 18.406061, zoom: 19}); // Cape Town: -33.909092,18.406061
-PresetLevels.level5.setMapOptions({lat: -33.434969, long: -70.655254}); // Santiago: -33.434969,-70.655254
-PresetLevels.level6.setMapOptions({lat: 47.487229, long: 19.07513}); // Budapest: 47.487229,19.07513
-PresetLevels.level7.setMapOptions({lat: 30.006533, long: -90.158792}); // New Orleans: 30.006533,-90.158792
-PresetLevels.level8.setMapOptions({lat: 21.283355, long: -157.837787}); // Honululu: 21.283355,-157.837787
-PresetLevels.level9.setMapOptions({lat: 33.441393, long: -112.077407}); // Phoenix, Arizona: 33.441393,-112.077407
-PresetLevels.level10.setMapOptions({lat: 30.265452, long: -97.744524, zoom: 18}); // Austin, Texas: 30.265452,-97.744524
+PresetLevels.level1.setMapOptions({latitude: 47.5153, longitude: 19.0782, zoom: 20}); // Rome: 47.5153, 19.0782
+PresetLevels.level2.setMapOptions({latitude: 37.390296, longitude: -5.954579, zoom: 18}); // Seville: 37.390296,-5.954579
+PresetLevels.level3.setMapOptions({latitude: 45.433607, longitude: 12.338124, zoom: 18}); // Venice: 45.433607,12.338124
+PresetLevels.level4.setMapOptions({latitude: -33.909092, longitude: 18.406061, zoom: 19}); // Cape Town: -33.909092,18.406061
+PresetLevels.level5.setMapOptions({latitude: -33.434969, longitude: -70.655254}); // Santiago: -33.434969,-70.655254
+PresetLevels.level6.setMapOptions({latitude: 47.487229, longitude: 19.07513}); // Budapest: 47.487229,19.07513
+PresetLevels.level7.setMapOptions({latitude: 30.006533, longitude: -90.158792}); // New Orleans: 30.006533,-90.158792
+PresetLevels.level8.setMapOptions({latitude: 21.283355, longitude: -157.837787}); // Honululu: 21.283355,-157.837787
+PresetLevels.level9.setMapOptions({latitude: 33.441393, longitude: -112.077407}); // Phoenix, Arizona: 33.441393,-112.077407
+PresetLevels.level10.setMapOptions({latitude: 30.265452, longitude: -97.744524, zoom: 18}); // Austin, Texas: 30.265452,-97.744524

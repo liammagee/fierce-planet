@@ -67,7 +67,7 @@ Level.prototype.removeEntryPoint = function(x, y) {
         this._entryPoints.splice(position, 1);
     }
 };
-Level.prototype.getFirstEntryPoint = function() { this._entryPoints[0]; };
+Level.prototype.getFirstEntryPoint = function() { return this._entryPoints[0]; };
 Level.prototype.getExitPoints = function() { return this._exitPoints; };
 Level.prototype.setExitPoints = function(exitPoints) { this._exitPoints = exitPoints; };
 Level.prototype.isExitPoint = function(x, y) {
