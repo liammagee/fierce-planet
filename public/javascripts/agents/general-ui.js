@@ -12,7 +12,7 @@ var FiercePlanet = FiercePlanet || {};
 FiercePlanet.hookUpUIEventListeners = function() {
     // Control panel functions
     $('#playAgents').click(FiercePlanet.playGame);
-    $('#pauseAgents').click(FiercePlanet.pauseGame);
+//    $('#pauseAgents').click(FiercePlanet.pauseGame);
     $('#slowDown').click(FiercePlanet.slowDown);
     $('#speedUp').click(FiercePlanet.speedUp);
     $('#newGame').click(FiercePlanet.newGame);

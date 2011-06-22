@@ -18,7 +18,7 @@
         <div id="user-links">
             <% if user_signed_in? %>
                 <div id="profile" style="display:none"> <span id="profile-class-display">0</span> </div>
-                <%= link_to("Welcome, #{current_user.profile.nickname}, (#{current_user.profile.profile_class})", edit_profile_path(current_user.profile)) %> |
+                <%= link_to("Welcome #{current_user.profile.nickname} (#{current_user.profile.profile_class})", edit_profile_path(current_user.profile)) %> |
                 <%= link_to('Feedback', new_feedback_path) %> |
                 <%= link_to('Logout', destroy_user_session_path) %>
             <% else %>

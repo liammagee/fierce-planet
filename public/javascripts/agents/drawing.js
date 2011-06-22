@@ -677,7 +677,7 @@ FiercePlanet.drawProfileClass = function() {
  */
 FiercePlanet.drawScore = function() {
     var e = $('#score-display')[0];
-    e.innerHTML = FiercePlanet.currentScore.toString();
+    e.innerHTML = FiercePlanet.zeroFill(FiercePlanet.currentScore, 5);
 };
 
 /**

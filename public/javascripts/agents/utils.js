@@ -109,3 +109,16 @@ FiercePlanet.setAndStoreProperties = function() {
 
     FiercePlanet.restartLevel();
 };
+
+/**
+ * Sourced from: http://stackoverflow.com/questions/1267283/how-can-i-create-a-zerofilled-value-using-javascript/1267338#1267338
+ * @param number
+ * @param width
+ */
+FiercePlanet.zeroFill = function ( number, width ){
+  width -= number.toString().length;
+  if ( width > 0 ) {
+    return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+  }
+  return number;
+}

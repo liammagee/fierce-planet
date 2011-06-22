@@ -4,9 +4,11 @@ if (FiercePlanet.$levelList != undefined)
 FiercePlanet.$levelList = $('<div></div>')
         .html("<%=  escape_javascript(render('levels/index', :locals => { :levels => @levels})) %>")
         .dialog({
+                                              position: [FiercePlanet.calculateWorldLeft(), 110],
+                                              width: 487,
+                                              height: 407,
                     autoOpen: false,
                     modal: true,
-                    width: 300,
                     title: 'Level Setup',
                     buttons: {
                         "Cancel": function() {

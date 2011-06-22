@@ -209,7 +209,7 @@ FiercePlanet._initialiseGame = function () {
             FiercePlanet.currentLevel = eval("PresetLevels.level1");
         }
     }
-    else {
+    else if (FiercePlanet.currentLevel == undefined) {
         FiercePlanet.currentLevel = eval("PresetLevels.level1");
     }
 

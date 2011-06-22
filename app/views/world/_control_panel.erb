@@ -14,25 +14,23 @@
     <div id="panRight"><span class="hide">pan Right</span></div>
     <div id="panDown"><span class="hide">pan Down</span></div>
 
-    <div class="divide"></div>
-
+  <div class="divide"></div>
     <div id="zoomOut"><span class="hide">zoom Out</span></div>
     <div id="zoomReset"><span class="hide">zoom Reset</span></div>
     <div id="zoomIn"><span class="hide">zoom In</span></div>
+  <div class="divide"></div>
+
     <a href="#" id="tutorial">Tutorial</a>
-
-
-    <a href="#" id="pauseAgents">Pause</a>
-    <a href="#" id="showResourceGallery" title="Resource Gallery">Resources</a>
-    <a href="#" id="settings">Settings</a>
     <%= link_to "Gallery", gallery_levels_path, :method => :get, :remote => true %>
+  <a href="#" id="settings">Settings</a>
     <%= link_to "Editor", levels_path, :method => :get, :remote => true %>
-    <div id="admin-controls" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
-        <button id="debug">Debug</button>
-        <button id="replay">Replay</button>
-        <button id="editor">Script Editor</button>
-    </div>
     <div class="divide"></div>
+      <div id="admin-controls" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
+          <button id="debug">Debug</button>
+          <button id="replay">Replay</button>
+          <button id="editor">Script Editor</button>
+        <div class="divide"></div>
+      </div>
 </div>
 
 <div id="notifications" style="display: none">

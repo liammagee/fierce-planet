@@ -73,6 +73,14 @@ body {
 	width:170px;
 	font-size:14px;
 }
+#showResourceGallery {
+	position:absolute;
+    text-align: right;
+	left:910px;
+	top:270px;
+	width:170px;
+	font-size:14px;
+}
 #highscore{
 	position:absolute;
 	left:900px;
@@ -231,7 +239,8 @@ body {
 	position:absolute;
 	left:400px;
 	top: 520px;
-    background-color: #1F62C1;
+    background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#203275), to(#1F62C1));
+    background: -moz-linear-gradient(0% 100% 0deg, #203275,#1F62C1);
     border-radius:4px;
     padding:4px;
 }
