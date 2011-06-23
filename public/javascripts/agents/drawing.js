@@ -355,7 +355,7 @@ FiercePlanet.getTextLines = function(context, text, targetWidth) {
         }
         else {
             lines.push(line);
-            line = '';
+            line = token + ' ';
         }
     }
     lines.push(line);

@@ -54,6 +54,7 @@ FiercePlanet.newLevel = function() {
     FiercePlanet.previousLevelScore = FiercePlanet.currentScore;
     if (FiercePlanet.currentLevel != undefined)
         FiercePlanet.currentLevel.setResources([]);
+    FiercePlanet.currentNotice = null;
     FiercePlanet.recordedLevels = [];
 
     FiercePlanet._initialiseGame();

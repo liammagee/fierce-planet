@@ -95,6 +95,13 @@ FiercePlanet.hookUpCustomEventListeners = function() {
            console.log("Game event " + e._event + " logged at:" + e._time);
     });
 
+    // Add notice event listeners
+    FiercePlanet.eventTarget.addListener("game", function(e) {
+        if (e._event == "newWave" && e._levelContext._id == 1 && e._time == 0) {
+            FiercePlanet.currentNotice = new Notice("Drag or click the resources on the right (->), then add them to the map.", FiercePlanet.WORLD_WIDTH - FiercePlanet.WAVE_NOTICE_WIDTH, FiercePlanet.WORLD_HEIGHT / 2);
+        }
+    });
+
     // Add resource listener
     FiercePlanet.eventTarget.addListener("resource", function(e) {
         var resource = e._source;

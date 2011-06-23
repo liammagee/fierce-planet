@@ -52,13 +52,22 @@ FiercePlanet.setupDialogs = function() {
             buttons: {
                 "Play": function() {
                     // Animation effect
+                    // For spinning, try: http://www.zachstronaut.com/posts/2009/08/07/jquery-animate-css-rotate-scale.html
                     $( this ).dialog( "close" );
-                    var world = $('#world, #map_canvas, #baseCanvas, #resourceCanvas, #scrollingCanvas, #noticeCanvas, #agentCanvas');
+                    var canvases = $('#map_canvas, #baseCanvas, #resourceCanvas, #scrollingCanvas, #noticeCanvas, #agentCanvas');
+                    var world = $('#world');
+                    var rwl = world.position().left;
+                    var rwt = world.position().top;
                     var ww = world.width();
                     var wh = world.height();
-                    world.css({'width': 0, 'height' : 0});
-                    world.css('height', 0);
-                    world.animate({'width': ww, 'height': wh}, 2000);
+                    var rw = rwl + Math.floor(Math.random() * ww);
+                    var rh = rwt + Math.floor(Math.random() * wh);
+                    world.css({'width': 0, 'height' : 0, 'left': rw, 'top': rh});
+                    canvases.css({'width': 0, 'height' : 0});
+
+//                    world.animate({rotate: '360deg'}, 2000);
+                    world.animate({'width': ww, 'height': wh, 'left': rwl, 'top': rwt}, 2000);
+                    canvases.animate({'width': ww, 'height': wh}, 2000);
                     FiercePlanet.newWave();
                 },
                 "Cancel": function() {

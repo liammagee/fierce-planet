@@ -142,10 +142,13 @@ FiercePlanet.notify = function(notice) {
  * @param notice
  */
 FiercePlanet.levelInfo = function(notice) {
-//    $("#level-info")[0].innerHTML = notice;
-    FiercePlanet.$newLevel
-            .html("<p>" + notice +"</p>")
-            .dialog('open');
+
+    var levelHTML = "";
+    if (FiercePlanet.currentLevelPreset) {
+        levelHTML += '<img src="http://t1.gstatic.com/images?q=tbn:ANd9GcTPM0pPCj-LQNtsrdc1htNYinCKea9-JrAkGkNzZgzP1J26kmfNXA&t=1" alt="City Image" width="460" height="140">';
+    }
+    levelHTML += notice;
+    FiercePlanet.$newLevel.html(levelHTML).dialog('open');
 };
 
 
