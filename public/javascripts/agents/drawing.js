@@ -465,9 +465,6 @@ FiercePlanet.clearAgents = function() {
             var intY = __ret.intY * FiercePlanet.cellHeight + wy + 1;
             ctx.clearRect(intX, intY, FiercePlanet.cellWidth + wx + 1, FiercePlanet.cellHeight + wy + 1);
             if (FiercePlanet.agentTracing) {
-                var __ret = FiercePlanet.getDrawingPosition(agent, FiercePlanet.waveCounter - 1);
-                var intX = __ret.intX * FiercePlanet.cellWidth;
-                var intY = __ret.intY * FiercePlanet.cellHeight;
                 ctx.beginPath();
                 ctx.arc(intX + FiercePlanet.cellWidth / 2, intY + FiercePlanet.cellHeight * 1.2, 2, 0, Math.PI * 2, false);
                 ctx.closePath();
@@ -533,14 +530,14 @@ FiercePlanet.getDrawingPosition = function(agent, counter) {
     var wy = agent._wanderY;
     var speed = agent._speed;
     var delay = agent._delay;
-    var increment = (speed - (counter - agent._delay) % speed) / speed;
-
+    var countdown = agent._countdownToMove;
+    var incrementTest = (speed - (counter - agent._delay) % speed) / speed;
+    var increment = (speed - countdown) / speed;
 
     var offsetX = (x - lastX) * (increment);
     var offsetY = (y - lastY) * (increment);
     var intX = (x - offsetX);
     var intY = (y - offsetY);
-
 
     if (FiercePlanet.currentLevel._allowOffscreenCycling) {
         var halfWay = (increment < 0.5);

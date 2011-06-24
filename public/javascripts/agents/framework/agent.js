@@ -117,6 +117,7 @@ function Agent(agentType, x, y) {
     this._wanderX = 0;
     this._wanderY = 0;
     this._speed = MOVE_INCREMENTS;
+    this._countdownToMove = 0;
 
     // Health related
     this._health = INITIAL_HEALTH;
@@ -212,6 +213,11 @@ Agent.prototype.adjustWander = function() {
     if (limit - Math.abs(wy) >= 0)
         this._wanderY = wy;
 };
+Agent.prototype.getCountdownToMove = function() { return this._countdownToMove; };
+Agent.prototype.setCountdownToMove = function(countdownToMove) { this._countdownToMove = countdownToMove; };
+Agent.prototype.incrementCountdownToMove = function() { this._countdownToMove ++; };
+Agent.prototype.resetCountdownToMove = function() { this._countdownToMove = 0; };
+Agent.prototype.readyToMove = function() { return this._countdownToMove == 0; };
 Agent.prototype.getSpeed = function() { return this._speed; };
 Agent.prototype.setSpeed = function(speed) { this._speed = speed; };
 Agent.prototype.getMoves = function() { return this._age; };
@@ -231,6 +237,7 @@ Agent.prototype.adjustSpeed = function() {
     // Makes movement away from MOVE_INCREMENTS an even chance
 //    var prob = 1;
 //    prob = (prob == 0 ? 1 : prob);
+
 
     var r = Math.floor(Math.random() * 3 * prob - 1);
     // Set the speed to above, equal or below the current speed

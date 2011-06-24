@@ -61,7 +61,8 @@ FiercePlanet.processAgents = function() {
     for (var i = 0; i < agents.length; i++) {
         var agent = agents[i];
         var speed = agent.getSpeed();
-        if (FiercePlanet.waveCounter >= agent.getDelay() && (FiercePlanet.waveCounter - agent.getDelay()) % speed == 0) {
+        var countDown = (agent.getCountdownToMove()) % speed;
+        if (FiercePlanet.waveCounter >= agent.getDelay() && countDown % speed == 0) {
             agent.evaluatePosition(FiercePlanet.currentLevel);
         }
     }
@@ -80,51 +81,63 @@ FiercePlanet.processAgents = function() {
         var speed = agent.getSpeed();
         if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE)
             citizenCount++;
-        if (FiercePlanet.waveCounter >= agent.getDelay() && (FiercePlanet.waveCounter - agent.getDelay()) % speed == 0) {
-            recordableChangeMade = true;
-            // TODO: move this logic elsewhere
-            if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE) {
-                if (FiercePlanet.currentLevel.isExitPoint(agent.getX(), agent.getY())) {
-                    FiercePlanet.currentScore += FiercePlanet.SAVE_SCORE;
-                    FiercePlanet.savedAgentCount++;
-                    FiercePlanet.savedAgentThisWaveCount++;
-                    nullifiedAgents.push(i);
-                    var multiplier = (FiercePlanet.currentWave < 5 ? 4 : (FiercePlanet.currentWave < 10 ? 3 : (FiercePlanet.currentWave < 20 ? 2 : 1)));
-                    FiercePlanet.resourcesInStore += multiplier; //FiercePlanet.WAVE_GOODNESS_BONUS;
-                    FiercePlanet.drawScore();
-                    FiercePlanet.drawResourcesInStore();
-                    FiercePlanet.drawSaved();
+//        if (FiercePlanet.waveCounter >= agent.getDelay() && (FiercePlanet.waveCounter - agent.getDelay()) % speed == 0) {
+        if (FiercePlanet.waveCounter >= agent.getDelay()) {
+            var countDownTest = (FiercePlanet.waveCounter - agent.getDelay()) % speed;
+            var countDown = (agent.getCountdownToMove()) % speed;
+
+            if (countDown == 0) {
+                recordableChangeMade = true;
+                // TODO: move this logic elsewhere
+                if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE) {
+                    if (FiercePlanet.currentLevel.isExitPoint(agent.getX(), agent.getY())) {
+                        FiercePlanet.currentScore += FiercePlanet.SAVE_SCORE;
+                        FiercePlanet.savedAgentCount++;
+                        FiercePlanet.savedAgentThisWaveCount++;
+                        nullifiedAgents.push(i);
+                        var multiplier = (FiercePlanet.currentWave < 5 ? 4 : (FiercePlanet.currentWave < 10 ? 3 : (FiercePlanet.currentWave < 20 ? 2 : 1)));
+                        FiercePlanet.resourcesInStore += multiplier; //FiercePlanet.WAVE_GOODNESS_BONUS;
+                        FiercePlanet.drawScore();
+                        FiercePlanet.drawResourcesInStore();
+                        FiercePlanet.drawSaved();
+                    }
+                }
+
+                // Do for all agents
+                agent.evaluateMove(FiercePlanet.currentLevel, options);
+
+                if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE) {
+                    agent.resetCountdownToMove();
+                    agent.adjustSpeed();
+                    agent.adjustWander();
+                }
+
+                if (agent.getMoves() > FiercePlanet.maxWaveMoves)
+                    FiercePlanet.maxWaveMoves = agent.getMoves();
+
+                // TODO: should be in-lined?
+                if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE || agent.getType() == AgentTypes.RIVAL_AGENT_TYPE) {
+                    if (!FiercePlanet.godMode)
+                        agent.adjustHealth(FiercePlanet.MOVE_HEALTH_COST);
+                    if (agent.getHealth() <= 0) {
+                        nullifiedAgents.push(i);
+                        if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE)
+                            FiercePlanet.expiredAgentCount++;
+                       FiercePlanet.drawExpired();
+                    }
+                    else {
+                        // Hook for detecting 'active' resources
+                        FiercePlanet.processNeighbouringResources(agent);
+
+                        // Hook for detecting other agents
+                        FiercePlanet.processNeighbouringAgents(agent);
+                    }
                 }
             }
-
-            // Do for all agents
-            agent.evaluateMove(FiercePlanet.currentLevel, options);
-
+//            else {
+//            }
             if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE) {
-                agent.adjustSpeed();
-                agent.adjustWander();
-            }
-
-            if (agent.getMoves() > FiercePlanet.maxWaveMoves)
-                FiercePlanet.maxWaveMoves = agent.getMoves();
-
-            // TODO: should be in-lined?
-            if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE || agent.getType() == AgentTypes.RIVAL_AGENT_TYPE) {
-                if (!FiercePlanet.godMode)
-                    agent.adjustHealth(FiercePlanet.MOVE_HEALTH_COST);
-                if (agent.getHealth() <= 0) {
-                    nullifiedAgents.push(i);
-                    if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE)
-                        FiercePlanet.expiredAgentCount++;
-                   FiercePlanet.drawExpired();
-                }
-                else {
-                    // Hook for detecting 'active' resources
-                    FiercePlanet.processNeighbouringResources(agent);
-
-                    // Hook for detecting other agents
-                    FiercePlanet.processNeighbouringAgents(agent);
-                }
+                agent.incrementCountdownToMove();
             }
         }
     }
