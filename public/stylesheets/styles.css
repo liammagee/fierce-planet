@@ -1,6 +1,6 @@
 body {
 	zoom = 100%;
-	background: #000 url(../layout/stars.jpg) 50% 0%;
+    background: #000 url(../layout/stars.jpg);
 	color: #fff;
 	font-family:Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
@@ -11,7 +11,7 @@ body {
 }
 #content-pane {
 	position:relative;
-	margin:0 auto; padding:0;
+	margin:0; padding:0;
 	width:1200px;
 	height:810px;
 	background: url(../layout/backgound.jpg);
@@ -135,6 +135,27 @@ body {
 	top:220px;
 	width: 180px;
 }
+#expired-citizens {
+	color:#DE1F2A;
+	position:absolute;
+	left:910px;
+	top:220px;
+    width: 160px; height:23px;
+    float:left;
+    background-repeat:repeat-x;
+}
+#healthy-citizen {
+    background:url(../layout/expired_men.png) 0px 0;
+    width: 16px; height:23px;
+    position:relative;
+    float:left;
+}
+#expired-citizen {
+    background:url(../layout/expired_men.png) -16px 0;
+    width: 16px; height:23px;
+    position:relative;
+    float:left;
+}
 
 /*controls*/
 #controls {
@@ -160,63 +181,92 @@ body {
 	top:-50px;
 	left:-10px;
 }
+#playAgents:hover{
+background-position: -101px 0;
+}
+#pauseAgents{
+	background:url(../layout/play.png) 0 -101px;
+	width:101px; height:101px;
+	position:absolute;
+	top:-50px;
+	left:-10px;
+}
+#pauseAgents:hover{
+background-position: -101px -101px;
+}
+#slowDown:hover, #speedUp:hover, #newGame:hover, #restartLevel:hover, #panUp:hover, #panLeft:hover, #panReset:hover, #panRight:hover, #panDown:hover, #zoomOut:hover, #zoomReset:hover, #zoomIn:hover{
+	background-image:url(../layout/buttons_hover.png);
+}
+
 #slowDown{
-	background:url(../layout/buttons.png) 0 0;
-	width: 31px; height:20px;
+	background-image:url(../layout/buttons.png);
+	background-position: -5px -3px;
+	width: 31px; height:22px;
 	float:left;
 }
 #speedUp{
-	background:url(../layout/buttons.png) 30px 0;
-	width: 30px; height:20px;
+	background-image:url(../layout/buttons.png);
+	background-position: 34px -3px;
+	width: 30px; height:22px;
 	float:left;
 }
 #newGame{
-	background:url(../layout/buttons.png) 0px -20px;
+	background-image:url(../layout/buttons.png);
+	background-position: -5px -25px;
 	width: 32px; height:36px;
 	float:left;
 }
 #restartLevel{
-	background:url(../layout/buttons.png) 32px -20px;
+	background-image:url(../layout/buttons.png);
+	background-position: 32px -25px;
 	width: 29px; height:36px;
 	float:left;
 }
 #panUp{
-	background:url(../layout/buttons.png) 0 -66px;
-	width: 61px; height:16px;
+	background-image:url(../layout/buttons.png);
+	background-position: -5px -70px;
+	width: 61px; height:18px;
 	float:left;
 }
 #panLeft{
-	background:url(../layout/buttons.png) 0 -82px;
+	background-image:url(../layout/buttons.png);
+	background-position: -3px -87px;
 	width: 17px; height:27px;
 	float:left;
 }
 #panReset{
-	background:url(../layout/buttons.png) -16px -82px;
+	background-image:url(../layout/buttons.png);
+	background-position: -21px -87px;
 	width: 26px; height:27px;
 	float:left;
 }
 #panRight{
-	background:url(../layout/buttons.png) -42px -82px;
+	background-image:url(../layout/buttons.png);
+	background-position: -49px -87px;
 	width: 17px; height:27px;
 	float:left;
 }
 #panDown{
-	background:url(../layout/buttons.png) 0 -109px;
-	width: 61px; height:16px;
+	background-image:url(../layout/buttons.png);
+	background-position: -5px -116px;
+	width: 61px; height:18px;
 	float:left;
 }
 #zoomOut{
-	background:url(../layout/buttons.png) 0 -140px;
+	background-image:url(../layout/buttons.png);
+	background-position: -5px -145px;
 	width: 20px; height:20px;
 	float:left;
 }
 #zoomReset{
-	background:url(../layout/buttons.png) -20px -140px;
+	background-image:url(../layout/buttons.png);
+	background-position: -25px -145px;
 	width: 21px; height:20px;
 	float:left;
 }
 #zoomIn{
-	background:url(../layout/buttons.png) -41px -140px;
+	background-image:url(../layout/buttons.png);
+	background-position: -46px -145px;
 	width: 20px; height:20px;
 	float:left;
 }
@@ -344,3 +394,4 @@ li.over {
 #info h2 {
 	margin-top: 0px;
 }
+

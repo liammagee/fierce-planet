@@ -700,8 +700,17 @@ FiercePlanet.drawResourcesInStore = function() {
  *
  */
 FiercePlanet.drawExpired = function() {
-    var e = $('#expired-display')[0];
-    e.innerHTML = FiercePlanet.expiredAgentCount.toString() + " out of " + FiercePlanet.currentLevel.getExpiryLimit();
+//    var e = $('#expired-display')[0];
+//    e.innerHTML = FiercePlanet.expiredAgentCount.toString() + " out of " + FiercePlanet.currentLevel.getExpiryLimit();
+    var e = $('#expired-citizens')[0];
+    var expiredHTML = '';
+    for (var i = 0, len = FiercePlanet.currentLevel.getExpiryLimit(); i < len; i++) {
+        if (i < FiercePlanet.expiredAgentCount)
+            expiredHTML += '<div id="expired-citizen"></div>';
+        else
+            expiredHTML += '<div id="healthy-citizen"></div>';
+    }
+    e.innerHTML = expiredHTML;
 };
 
 /**
