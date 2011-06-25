@@ -63,6 +63,7 @@ PresetLevels.level1.setNotice("<h3>Level 1: Welcome to Fierce Planet!</h3> " +
 //"<p>The citizens of Fierce Planet are under threat. They are migrating in ever increasing numbers, seeking a promised land of peace and prosperity.</p>" +
 //"<p>Help them by placing resources beside their path - before they expire!</p> "
 PresetLevels.level1.setTip(new Notice("Drag or click the resources on the right (->), then add them to the map.", FiercePlanet.WORLD_WIDTH - FiercePlanet.WAVE_NOTICE_WIDTH, FiercePlanet.WORLD_HEIGHT / 2));
+PresetLevels.level1.setSoundSrc("/scrap/technophobic_android-creeping_0.mp3");
 
 
 PresetLevels.level1.setup = function() {
@@ -95,7 +96,7 @@ PresetLevels.level2.setInitialAgentNumber(1);
 PresetLevels.level2.setWaveNumber(10);
 PresetLevels.level2.setExpiryLimit(10);
 PresetLevels.level2.setInitialResourceStore(120);
-PresetLevels.level2.setImage("http://www.surrealplaces.com/cities/gotham.jpg");
+PresetLevels.level2.setImage("http://t1.gstatic.com/images?q=tbn:ANd9GcTPM0pPCj-LQNtsrdc1htNYinCKea9-JrAkGkNzZgzP1J26kmfNXA&t=1");
 PresetLevels.level2.setNotice("<h3>Level 2: Twists and Turns</h3>" +
         "<p>Congratulations! You successfully navigated Level 1!</p>" +
         "<p>The citizens of Fierce Planet now face a greater challenge... Can you supply them with resources to reach their goal?</p>"
