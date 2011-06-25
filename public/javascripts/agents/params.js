@@ -83,11 +83,12 @@ FiercePlanet.isMouseMoving = false;
 FiercePlanet.scrollingImageVisible = true;
 FiercePlanet.noticesVisible = true;
 FiercePlanet.agentsCanCommunicate = true;
+
 FiercePlanet.godMode = false;
 FiercePlanet.invisiblePath = false;
 FiercePlanet.agentTracing = false;
 FiercePlanet.recording = false;
-FiercePlanet.soundsPlayable = true;
+FiercePlanet.soundsPlayable = false;
 FiercePlanet.resourcesInTension = false;
 FiercePlanet.resourceBonus = false;
 FiercePlanet.predatorsVisible = false;

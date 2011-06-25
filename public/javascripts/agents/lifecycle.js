@@ -283,16 +283,19 @@ FiercePlanet._startAgents = function () {
 
 
     // Play sound, if any are set
-    if (FiercePlanet.audio != undefined)
-        FiercePlanet.audio.pause();
-    if (FiercePlanet.currentLevel.getSoundSrc() != undefined) {
+    if (FiercePlanet.soundsPlayable) {
+        if (FiercePlanet.audio != undefined) {
+            FiercePlanet.audio.play();
+        }
+        else if (FiercePlanet.currentLevel.getSoundSrc() != undefined) {
 //        var audio = $("background-sound")[0];
 //        audio.src = FiercePlanet.currentLevel.getSoundSrc();
 
-        FiercePlanet.audio = new Audio(FiercePlanet.currentLevel.getSoundSrc());
-        FiercePlanet.audio.loop = true;
-        FiercePlanet.audio.addEventListener("ended", function(){FiercePlanet.audio.currentTime = 0; FiercePlanet.audio.play();}, false);
-        FiercePlanet.audio.play();
+            FiercePlanet.audio = new Audio(FiercePlanet.currentLevel.getSoundSrc());
+            FiercePlanet.audio.loop = true;
+            FiercePlanet.audio.addEventListener("ended", function(){FiercePlanet.audio.currentTime = 0; FiercePlanet.audio.play();}, false);
+            FiercePlanet.audio.play();
+        }
     }
 };
 
@@ -310,6 +313,8 @@ FiercePlanet._stopAgents = function () {
     clearInterval(FiercePlanet.agentTimerId);
     FiercePlanet.inPlay = false;
 
-    if (FiercePlanet.audio != undefined)
-        FiercePlanet.audio.pause();
+    if (FiercePlanet.soundsPlayable) {
+        if (FiercePlanet.audio != undefined)
+            FiercePlanet.audio.pause();
+    }
 };
