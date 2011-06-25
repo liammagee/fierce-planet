@@ -388,6 +388,8 @@ FiercePlanet.showResourceGallery = function() {
     else if (FiercePlanet.profileClass == "Genius") {
         accessibleCapabilities = FiercePlanet.GENIUS_CAPABILITIES;
     }
+    // TODO: Temporarily enable all capabilities
+    accessibleCapabilities = FiercePlanet.GENIUS_CAPABILITIES;
 
 
     // Evaluate available capabilities
@@ -397,29 +399,37 @@ FiercePlanet.showResourceGallery = function() {
         var id = purchasableItem.id;
         var itemName = id.split("-purchase")[0];
         var cost = 0;
-        if ($.inArray(itemName, FiercePlanet.PLANNER_CAPABILITIES)) {
+        if ($.inArray(itemName, FiercePlanet.PLANNER_CAPABILITIES) > -1) {
             cost = FiercePlanet.CAPABILITY_COSTS [1];
         }
-        else if ($.inArray(itemName, FiercePlanet.EXPERT_CAPABILITIES)) {
+        else if ($.inArray(itemName, FiercePlanet.EXPERT_CAPABILITIES) > -1) {
             cost = FiercePlanet.CAPABILITY_COSTS [2];
         }
-        else if ($.inArray(itemName, FiercePlanet.VISIONARY_CAPABILITIES)) {
+        else if ($.inArray(itemName, FiercePlanet.VISIONARY_CAPABILITIES) > -1) {
             cost = FiercePlanet.CAPABILITY_COSTS [3];
         }
-        else if ($.inArray(itemName, FiercePlanet.GENIUS_CAPABILITIES)) {
+        else if ($.inArray(itemName, FiercePlanet.GENIUS_CAPABILITIES) > -1) {
             cost = FiercePlanet.CAPABILITY_COSTS [4];
         }
         // Make item available for purchase if: (1) the player's level permits it; (2) it is not among existing capabilities and (3) there is enough money
+//        console.log("---------------");
+//        console.log(itemName);
+//        console.log($.inArray(itemName, accessibleCapabilities));
+//        console.log($.inArray(itemName, FiercePlanet.capabilities));
+//        console.log(cost);
+//        console.log(FiercePlanet.credits);
+
         if ($.inArray(itemName, accessibleCapabilities) > -1 && $.inArray(itemName, FiercePlanet.capabilities) == -1 && cost < FiercePlanet.credits) {
             // Make item purchasable
             purchasableItems.push(purchasableItem);
         }
         else {
-            $('#' + purchasableItem.id).css("border","1px solid black");
+            $('#' + purchasableItem.id).css("border","1px solid white");
         }
         // Remove any existing event listeners
 //        purchasableItem.removeEventListener('click', handler, false);
     }
+    console.log(purchasableItems.length);
     for (var i = 0; i < purchasableItems.length; i++) {
         var purchasableItem = purchasableItems[i];
         var id = purchasableItem.id;
@@ -449,14 +459,17 @@ FiercePlanet.showResourceGallery = function() {
                     FiercePlanet.capabilities.push(swatchId);
                     $('#current-credits')[0].innerHTML = FiercePlanet.credits;
                     $('#current-capabilities')[0].innerHTML = FiercePlanet.capabilities.join(", ");
-                    $('#' + id).css("border","1px solid black");
+                    $('#' + id).removeClass('active');
+                    $('#' + id).addClass('inactive');
                 }
             }
             e.stopPropagation();
             return false;
         }, true );
 //        purchasableItem.css("border","9px solid red");
-        $('#' + purchasableItem.id).css("border","3px solid black");
+//        $('#' + purchasableItem.id).css("border","3px solid white");
+        $('#' + purchasableItem.id).removeClass('inactive');
+        $('#' + purchasableItem.id).addClass('active');
     }
 
     FiercePlanet.$resourceGallery.dialog('open');

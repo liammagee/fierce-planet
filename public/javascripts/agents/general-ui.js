@@ -145,7 +145,7 @@ FiercePlanet.refreshSwatch = function() {
 //            $('#' + capability)[0].style.display = 'block';
             var el = $('#' + capability);
             el.removeClass("inactive");
-            makeResourceActive(el[0]);
+            FiercePlanet.makeResourceActive(el[0]);
         }
         catch (err) {
         }

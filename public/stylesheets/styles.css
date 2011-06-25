@@ -371,7 +371,14 @@ ul, li {
 	margin: 0px;
 	padding: 0px;
 }
-#gallery-items > div, #level-editor > div {
+#gallery-items > div {
+	width: 400px;
+}
+.purchase {
+    border: 1px solid white;
+    padding: 5px;
+}
+#level-editor > div {
 	width: 110px;
 }
 
