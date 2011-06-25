@@ -55,6 +55,10 @@ FiercePlanet.newLevel = function() {
     if (FiercePlanet.currentLevel != undefined)
         FiercePlanet.currentLevel.setResources([]);
     FiercePlanet.currentNotice = null;
+    if (FiercePlanet.audio != undefined) {
+        FiercePlanet.audio.pause();
+        FiercePlanet.audio = undefined;
+    }
     FiercePlanet.recordedLevels = [];
 
     FiercePlanet._initialiseGame();
