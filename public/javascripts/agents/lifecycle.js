@@ -60,6 +60,7 @@ FiercePlanet.newLevel = function() {
     FiercePlanet._initialiseGame();
 
     FiercePlanet.levelInfo(FiercePlanet.currentLevel.getNotice());
+    FiercePlanet.currentNotice = FiercePlanet.currentLevel.getTip();
     FiercePlanet.notify("Starting level " + FiercePlanet.currentLevel.getId() + "...");
 
 };
@@ -92,7 +93,7 @@ FiercePlanet.newWave = function() {
 
     FiercePlanet.drawEntryPoints();
     FiercePlanet.drawExitPoints();
-    FiercePlanet.eventTarget.fire(new Event("game", this, "newWave", $fp.gameCounter, FiercePlanet.currentLevel));
+    FiercePlanet.eventTarget.fire(new Event("game", this, "newWave", $fp.levelCounter, FiercePlanet.currentLevel));
 
     FiercePlanet._startAgents();
 };
@@ -146,6 +147,8 @@ FiercePlanet.playGame = function() {
         FiercePlanet.pauseGame();
     }
     else {
+        $('#playAgents').removeClass('pausing');
+        $('#playAgents').addClass('playing');
         if (FiercePlanet.waveCounter == 0)
             FiercePlanet.newWave();
         else
@@ -274,6 +277,10 @@ FiercePlanet._startAgents = function () {
     FiercePlanet.agentTimerId = setInterval("FiercePlanet.processAgents()", FiercePlanet.interval);
     FiercePlanet.inPlay = true;
 
+    // Make sure button is on pause
+    $('#playAgents').removeClass('pausing');
+    $('#playAgents').addClass('playing');
+
 
     // Play sound, if any are set
     if (FiercePlanet.audio != undefined)
@@ -295,6 +302,10 @@ FiercePlanet._startAgents = function () {
 FiercePlanet._stopAgents = function () {
     if (typeof console != "undefined")
         console.log("Pausing agents...");
+
+    // Make sure button is on play
+    $('#playAgents').removeClass('playing');
+    $('#playAgents').addClass('pausing');
 
     clearInterval(FiercePlanet.agentTimerId);
     FiercePlanet.inPlay = false;

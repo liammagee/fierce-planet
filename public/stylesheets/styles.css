@@ -174,24 +174,24 @@ body {
 #playAgents, #slowDown, #speedUp, #newGame, #restartLevel, #panUp, #panLeft, #panReset, #panRight, #panDown, #zoomOut, #zoomReset, #zoomIn{
 	cursor:pointer;
 }
-#playAgents{
+.pausing{
 	background:url(../layout/play.png);
 	width:101px; height:101px;
 	position:absolute;
 	top:-50px;
 	left:-10px;
 }
-#playAgents:hover{
+.pausing{
 background-position: -101px 0;
 }
-#pauseAgents{
+.playing{
 	background:url(../layout/play.png) 0 -101px;
 	width:101px; height:101px;
 	position:absolute;
 	top:-50px;
 	left:-10px;
 }
-#pauseAgents:hover{
+.playing:hover{
 background-position: -101px -101px;
 }
 #slowDown:hover, #speedUp:hover, #newGame:hover, #restartLevel:hover, #panUp:hover, #panLeft:hover, #panReset:hover, #panRight:hover, #panDown:hover, #zoomOut:hover, #zoomReset:hover, #zoomIn:hover{

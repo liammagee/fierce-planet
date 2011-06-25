@@ -12,7 +12,6 @@ var FiercePlanet = FiercePlanet || {};
 FiercePlanet.hookUpUIEventListeners = function() {
     // Control panel functions
     $('#playAgents').click(FiercePlanet.playGame);
-//    $('#pauseAgents').click(FiercePlanet.pauseGame);
     $('#slowDown').click(FiercePlanet.slowDown);
     $('#speedUp').click(FiercePlanet.speedUp);
     $('#newGame').click(FiercePlanet.newGame);
@@ -29,23 +28,6 @@ FiercePlanet.hookUpUIEventListeners = function() {
     $('#zoomOut').click(function() { FiercePlanet.zoom(-1);});
     $('#zoomReset').click(function() { FiercePlanet.zoom(0);});
     $('#settings').click(FiercePlanet.showSettings);
-
-//    FiercePlanet.addButtonEffects($('#playAgents')[0]);
-//    FiercePlanet.addButtonEffects($('#pauseAgents')[0]);
-//    FiercePlanet.addButtonEffects($('#slowDown')[0]);
-//    FiercePlanet.addButtonEffects($('#speedUp')[0]);
-//    FiercePlanet.addButtonEffects($('#newGame')[0]);
-//    FiercePlanet.addButtonEffects($('#restartLevel')[0]);
-//    FiercePlanet.addButtonEffects($('#showResourceGallery')[0]);
-//    FiercePlanet.addButtonEffects($('#showLevelGallery')[0]);
-//    FiercePlanet.addButtonEffects($('#panUp')[0]);
-//    FiercePlanet.addButtonEffects($('#panDown')[0]);
-//    FiercePlanet.addButtonEffects($('#panLeft')[0]);
-//    FiercePlanet.addButtonEffects($('#panRight')[0]);
-//    FiercePlanet.addButtonEffects($('#panReset')[0]);
-//    FiercePlanet.addButtonEffects($('#zoomIn')[0]);
-//    FiercePlanet.addButtonEffects($('#zoomOut')[0]);
-//    FiercePlanet.addButtonEffects($('#zoomReset')[0]);
 
 
     // Admin functions
@@ -142,12 +124,13 @@ FiercePlanet.notify = function(notice) {
  * @param notice
  */
 FiercePlanet.levelInfo = function(notice) {
-
     var levelHTML = "";
-    if (FiercePlanet.currentLevelPreset) {
-        levelHTML += '<img src="http://t1.gstatic.com/images?q=tbn:ANd9GcTPM0pPCj-LQNtsrdc1htNYinCKea9-JrAkGkNzZgzP1J26kmfNXA&t=1" alt="City Image" width="460" height="140">';
+    if (FiercePlanet.currentLevel.getImage() != undefined) {
+        levelHTML += '<img src="' + FiercePlanet.currentLevel.getImage() + '" alt="City Image" width="460" height="140">';
     }
-    levelHTML += notice;
+    if (FiercePlanet.currentLevel.getNotice() != undefined) {
+        levelHTML += notice;
+    }
     FiercePlanet.$newLevel.html(levelHTML).dialog('open');
 };
 

@@ -112,7 +112,7 @@ FiercePlanet.drawPath = function() {
  *
  */
 FiercePlanet.drawBackgroundImage = function() {
-    if (FiercePlanet.currentLevel.getImage() != undefined) {
+    if (FiercePlanet.currentLevel.getBackgroundImage() != undefined) {
         var canvas = $('#baseCanvas')[0];
         var ctx = canvas.getContext('2d');
         ctx.drawImage(FiercePlanet.currentLevel.getImage(), 0, 0);
@@ -267,7 +267,7 @@ FiercePlanet.drawNotice = function(notice) {
         var text = FiercePlanet.currentNotice._text;
         var start = FiercePlanet.currentNotice._start;
         var duration = FiercePlanet.currentNotice._duration;
-        var strengthOfNotice = (duration - (FiercePlanet.gameCounter - start)) / duration;
+        var strengthOfNotice = (duration - (FiercePlanet.levelCounter - start)) / duration;
         var startingTransparency = 0.1;
         var alphaLevel = Math.pow(strengthOfNotice - startingTransparency, 0.5);
 
@@ -293,7 +293,7 @@ FiercePlanet.drawNotice = function(notice) {
         ctx.clearRect(x - 1, y - 1, width + 2, height + 2);
 
         // Don't draw any more, if the notice is expired
-        if (start > FiercePlanet.gameCounter || start + duration < FiercePlanet.gameCounter)
+        if (start > FiercePlanet.levelCounter || start + duration < FiercePlanet.levelCounter)
             return;
 
         ctx.beginPath();

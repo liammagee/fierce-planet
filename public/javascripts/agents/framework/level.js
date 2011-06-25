@@ -8,27 +8,39 @@ function Level(id) {
     this._entryPoints = [];
     this._exitPoints = [];
 
+    // Dimensions
     this._worldWidth = 11;
     this._worldHeight = 11;
+
+    // Parameters
     this._waveNumber = 10;
     this._expiryLimit = 20;
     this._initialResourceStore = 100;
     this._allowOffscreenCycling = false;
     this._allowResouresOnPath = false;
-    this._notice = "";
-    this._image = null;
-    this._soundSrc = null;
-    this._tiles = [];
-    this._tileMap = [];
+    this._customLevel = false;
+
+    // Google map options
     this._mapOptions = null;
     this._mapURL = null;
-    this._customLevel = false;
+    this._noticeImage = null;
+
+
+    // Current level state
+    this._tiles = [];
+    this._tileMap = [];
     this._levelAgents = [];
     this._waveAgents = [];
     this._currentAgents = [];
     this._currentAgentsMap = [];
     this._cells = [];
     this._resources = [];
+
+    // User interface elements
+    this._tip = "";
+    this._notice = "";
+    this._noticeImage = null;
+    this._soundSrc = null;
 }
 Level.prototype.getId = function() { return this._id; };
 Level.prototype.setId = function(id) { this._id = id; };
@@ -121,8 +133,10 @@ Level.prototype.getAllowResourcesOnPath = function() { return this._allowResoure
 Level.prototype.setAllowResourcesOnPath = function(allowResourcesOnPath) { this._allowResouresOnPath = allowResourcesOnPath; };
 Level.prototype.getNotice = function() { return this._notice; };
 Level.prototype.setNotice = function(notice) { this._notice = notice; };
-Level.prototype.getImage = function() { return this._image; };
-Level.prototype.setImage = function(imageSrc) { this._image = new Image();  this._image.src = imageSrc; };
+Level.prototype.getTip = function() { return this._tip; };
+Level.prototype.setTip = function(tip) { this._tip = tip; };
+Level.prototype.getImage = function() { return this._noticeImage; };
+Level.prototype.setImage = function(image) { this._noticeImage = image; };
 Level.prototype.getSoundSrc = function() { return this._soundSrc; };
 Level.prototype.setSoundSrc = function(soundSrc) { this._soundSrc = soundSrc; };
 Level.prototype.getTile = function(x, y) {
@@ -173,6 +187,8 @@ Level.prototype.getMapOptions = function() { return this._mapOptions; };
 Level.prototype.setMapOptions = function(mapOptions) { this._mapOptions = mapOptions; };
 Level.prototype.getMapURL = function() { return this._mapURL; };
 Level.prototype.setMapURL = function(mapURL) { this._mapURL = mapURL; };
+Level.prototype.getBackgroundImage = function() { return this._backgroundImage; };
+Level.prototype.setBackgroundImage = function(backgroundImage) { this._backgroundImage = backgroundImage; };
 Level.prototype.isCustomLevel = function() { return this._customLevel; };
 Level.prototype.setCustomLevel = function(customLevel) { this._customLevel = customLevel; };
 Level.prototype.getLevelAgents = function() { return this._levelAgents; };

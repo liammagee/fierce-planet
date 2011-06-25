@@ -47,7 +47,7 @@ FiercePlanet.EXTREME_DIFFICULTY = 4;
 FiercePlanet.WORLD_WIDTH = 480;
 FiercePlanet.WORLD_HEIGHT = 400;
 FiercePlanet.WAVE_NOTICE_WIDTH = 200;
-FiercePlanet.WAVE_NOTICE_HEIGHT = 100;
+FiercePlanet.WAVE_NOTICE_HEIGHT = 150;
 
 
 
@@ -81,10 +81,10 @@ FiercePlanet.isMouseMoving = false;
 
 // Setting variables
 FiercePlanet.scrollingImageVisible = true;
+FiercePlanet.noticesVisible = true;
 FiercePlanet.agentsCanCommunicate = true;
 FiercePlanet.godMode = false;
 FiercePlanet.invisiblePath = false;
-FiercePlanet.noticesVisible = false;
 FiercePlanet.agentTracing = false;
 FiercePlanet.recording = false;
 FiercePlanet.soundsPlayable = false;

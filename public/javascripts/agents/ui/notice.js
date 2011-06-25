@@ -19,6 +19,6 @@ function Notice(text, x, y, start, duration, width, height, backgroundColor, for
     this._backgroundColor = backgroundColor || 'rgba(32, 98, 210)';
     this._foregroundColor = foregroundColor || 'rgba(255, 255, 255)';
     this._lineWidth = lineWidth || 2;
-    this._font = font || '500 16px/2 Unknown Font, sans-serif';
+    this._font = font || '500 14px/2 Unknown Font, sans-serif';
 }
 

@@ -96,11 +96,11 @@ FiercePlanet.hookUpCustomEventListeners = function() {
     });
 
     // Add notice event listeners
-    FiercePlanet.eventTarget.addListener("game", function(e) {
-        if (e._event == "newWave" && e._levelContext._id == 1 && e._time == 0) {
-            FiercePlanet.currentNotice = new Notice("Drag or click the resources on the right (->), then add them to the map.", FiercePlanet.WORLD_WIDTH - FiercePlanet.WAVE_NOTICE_WIDTH, FiercePlanet.WORLD_HEIGHT / 2);
-        }
-    });
+//    FiercePlanet.eventTarget.addListener("game", function(e) {
+//        if (e._event == "newWave" && e._time == 0) {
+//            FiercePlanet.currentNotice = e._levelContext.getTip();
+//        }
+//    });
 
     // Add resource listener
     FiercePlanet.eventTarget.addListener("resource", function(e) {
@@ -129,6 +129,7 @@ FiercePlanet.hookUpCustomEventListeners = function() {
                 case 'eco':
                     if (ecoCount == 1) {
                         FiercePlanet.currentNotice = new Notice("Well done! You've added your first economic resource!");
+                        FiercePlanet.currentNotice._height = 80;
                         FiercePlanet.currentNotice._backgroundColor = 'rgba(136, 201, 255)';
                         FiercePlanet.currentNotice._foregroundColor = 'rgba(0, 0, 0)';
                     }
@@ -136,6 +137,7 @@ FiercePlanet.hookUpCustomEventListeners = function() {
                 case 'env':
                     if (envCount == 1) {
                         FiercePlanet.currentNotice = new Notice("Well done! You've added your first environmental resource!");
+                        FiercePlanet.currentNotice._height = 80;
                         FiercePlanet.currentNotice._backgroundColor = 'rgba(0, 255, 0)';
                         FiercePlanet.currentNotice._foregroundColor = 'rgba(0, 0, 0)';
                     }
@@ -143,6 +145,7 @@ FiercePlanet.hookUpCustomEventListeners = function() {
                 case 'soc':
                     if (socCount == 1) {
                         FiercePlanet.currentNotice = new Notice("Well done! You've added your first social resource!");
+                        FiercePlanet.currentNotice._height = 80;
                         FiercePlanet.currentNotice._foregroundColor = 'rgba(0, 0, 0)';
                         FiercePlanet.currentNotice._backgroundColor = 'rgba(255, 51, 0)';
                     }
