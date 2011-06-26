@@ -1,7 +1,19 @@
+/*!
+ * Fierce Planet - Catastrophe
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
+ */
 
 /**
- *  Catastrophe class definition
- *  @constructor
+ * Catastrophe class definition
+ *  
+ * @constructor
+ * @param kind
+ * @param start
+ * @param duration
+ * @param effect
+ * @param notice
  */
 function Catastrophe(kind, start, duration, effect, notice) {
     this._kind = kind || "env";
@@ -11,6 +23,10 @@ function Catastrophe(kind, start, duration, effect, notice) {
     this._notice = notice || new Notice("A catastrophe is taking place!", undefined, undefined, this._start, this._duration);
     this._applied = false;
 }
+
+/**
+ * 
+ */
 Catastrophe.prototype.apply = function() {
     if (!this._applied) {
         // Apply catastrophe effects

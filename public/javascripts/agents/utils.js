@@ -1,6 +1,11 @@
-/*
- * Utility methods
+/*!
+ * Fierce Planet - Utils
+ * Various utility methods
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
  */
+
+
 
 
 var FiercePlanet = FiercePlanet || {};
@@ -35,12 +40,18 @@ $(function(){
     });
 });
 
+
+/**
+ * Simple method for coercing a value to a floored integer
+ * @param value
+ */
 FiercePlanet.checkInteger = function(value) {
     return Math.floor(value);
 };
 
 /**
- * Gets a property from local storage, and sets this on the settings dialog
+ * Gets a property from local storage, and sets this on the settings dialog.
+ *
  * @param property
  */
 FiercePlanet.getAndRetrieveProperty = function(property) {
@@ -53,7 +64,8 @@ FiercePlanet.getAndRetrieveProperty = function(property) {
 };
 
 /**
- * Sets a property local storage based on values in the settings dialog
+ * Sets a property local storage based on values in the settings dialog.
+ *
  * @param property
  */
 FiercePlanet.setAndStoreProperty = function(property) {
@@ -65,7 +77,7 @@ FiercePlanet.setAndStoreProperty = function(property) {
 };
 
 /**
- * Gets all properties from local storage, and sets them on the settings dialog
+ * Gets all properties from local storage, and sets them on the settings dialog.
  */
 FiercePlanet.getAndRetrieveProperties = function() {
     FiercePlanet.getAndRetrieveProperty('noticesVisible');
@@ -89,7 +101,7 @@ FiercePlanet.getAndRetrieveProperties = function() {
 };
 
 /**
- * Sets all properties on settings dialog, and stores property values in local storage
+ * Sets all properties on settings dialog, and stores property values in local storage.
  */
 FiercePlanet.setAndStoreProperties = function() {
     FiercePlanet.setAndStoreProperty('scrollingImageVisible');
@@ -115,7 +127,8 @@ FiercePlanet.setAndStoreProperties = function() {
 };
 
 /**
- * Sourced from: http://stackoverflow.com/questions/1267283/how-can-i-create-a-zerofilled-value-using-javascript/1267338#1267338
+ * Sourced from: http://stackoverflow.com/questions/1267283/how-can-i-create-a-zerofilled-value-using-javascript/1267338#1267338.
+ *
  * @param number
  * @param width
  */
@@ -125,4 +138,4 @@ FiercePlanet.zeroFill = function ( number, width ){
     return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
   }
   return number;
-}
+};

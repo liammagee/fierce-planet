@@ -1,6 +1,10 @@
-/**
+/*!
+ * Fierce Planet - Event
  *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
  */
+
 
 /**
  * Possible events:
@@ -19,9 +23,15 @@
  *  - Data
  *  - Time (gameCounter)
  *  - Context (currentLevel)
+ *
+ * @constructor
+ * @param type
+ * @param source
+ * @param event
+ * @param time
+ * @param levelContext
+ * @param data
  */
-
-
 function Event(type, source, event, time, levelContext, data){
     this.type = type;
     this._source = source;

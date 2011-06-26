@@ -1,5 +1,15 @@
-/**
+/*!
+ * Fierce Planet - Notice
  *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
+ */
+
+
+/**
+ * Builds an inline notice.
+ *
+ * @constructor
  * @param text
  * @param x
  * @param y

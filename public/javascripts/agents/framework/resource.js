@@ -1,6 +1,24 @@
+/*!
+ * Fierce Planet - Resource
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
+ */
 
 
-/* ResourceKind class definition */
+
+/**
+ * ResourceKind class definition
+ * 
+ * @constructor
+ * @param name
+ * @param code
+ * @param domain
+ * @param cost
+ * @param upgradeCost
+ * @param totalYield
+ * @param perAgentYield
+ */
 function ResourceKind(name, code, domain, cost, upgradeCost, totalYield, perAgentYield) {
     this._name = name;
     this._code = code;
@@ -39,8 +57,12 @@ ResourceKind.prototype.setColor = function(color) { this._color = color; };
 
 
 /**
- *  Resource class definition
- *  @constructor
+ * Resource class definition
+ *
+ * @constructor
+ * @param kind
+ * @param x
+ * @param y
  */
 function Resource(kind, x, y) {
     // Kind properties

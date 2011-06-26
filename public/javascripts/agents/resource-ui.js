@@ -1,6 +1,11 @@
-/*
+/*!
+ * Fierce Planet - ResourceUI
  * Functions for handling resource-related UI events
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
  */
+
 
 
 var FiercePlanet = FiercePlanet || {};

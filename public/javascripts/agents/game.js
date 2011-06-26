@@ -1,6 +1,11 @@
-
-
-/* NB: classes.js and relevant level sources must be pre-loaded */
+/*!
+ * Fierce Planet - Game
+ * Core game initialisation and processing loop
+ * NB: classes.js and relevant level sources must be pre-loaded
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
+ */
 
 
 /**
@@ -19,7 +24,7 @@ $(document).ready(function() {
 
 
 /**
- * Core logic loop: processes agents
+ * Core logic loop: processes agents.
  */
 FiercePlanet.processAgents = function() {
 

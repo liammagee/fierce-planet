@@ -1,5 +1,9 @@
-/*
+/*!
+ * Fierce Planet - Dialogs
  * Declares dialogs used in the game
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
  */
 
 

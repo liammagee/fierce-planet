@@ -1,3 +1,9 @@
+/*!
+ * Fierce Planet - Levels
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
+ */
 
 /* NB: Level is defined in level.js */
 

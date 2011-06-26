@@ -1,10 +1,22 @@
+/*!
+ * Fierce Planet - Agent
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
+ */
+
 /**
  * Agent constants
  */
 var INITIAL_HEALTH = 100;
 var MOVE_INCREMENTS = 5;
 
-/* Agent type class definition */
+/**
+ * Agent type class definition
+ *
+ * @param name
+ * @param color
+ */
 function AgentType(name, color) {
     this._name = name;
     this._color = color;

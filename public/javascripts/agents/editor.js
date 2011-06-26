@@ -1,5 +1,10 @@
-
-/* Level editor functions */
+/*!
+ * Fierce Planet - Level Editor
+ * Level editor functions
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
+ */
 
 
 var FiercePlanet = FiercePlanet || {};

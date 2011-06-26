@@ -1,6 +1,11 @@
-/*
+/*!
+ * Fierce Planet - Drawing
  * Functions for drawing aspects of the game
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
  */
+
 
 
 var FiercePlanet = FiercePlanet || {};

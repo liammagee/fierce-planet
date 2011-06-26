@@ -1,6 +1,11 @@
-/*
+/*!
+ * Fierce Planet - Lifecycle
  * Lifecycle related methods
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
  */
+
 
 
 var FiercePlanet = FiercePlanet || {};

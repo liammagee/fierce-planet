@@ -1,6 +1,11 @@
-/*
+/*!
+ * Fierce Planet - Recording
  * Handles recording-related functions
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
  */
+
 
 var FiercePlanet = FiercePlanet || {};
 

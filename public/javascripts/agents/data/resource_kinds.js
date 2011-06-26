@@ -1,10 +1,10 @@
-/**
- * Created by .
- * User: Liam
- * Date: 26/03/11
- * Time: 10:44 PM
- * To change this template use File | Settings | File Templates.
+/*!
+ * Fierce Planet - ResourceKinds
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
  */
+
 
 /**
  * Declare the FiercePlanet namespace

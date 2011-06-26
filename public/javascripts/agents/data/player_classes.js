@@ -1,5 +1,9 @@
-
-/* NB: PlayerClass is defined in classes.js */
+/*!
+ * Fierce Planet - PlayerClass
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
+ */
 
 
 /**

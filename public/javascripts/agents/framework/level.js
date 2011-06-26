@@ -1,5 +1,17 @@
+/*!
+ * Fierce Planet - Level
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
+ */
 
-/* Level class definition */
+
+/**
+ * Level class definition
+ *
+ * @constructor
+ * @param id
+ */
 function Level(id) {
     this._id = id;
     this._isPresetLevel = false;

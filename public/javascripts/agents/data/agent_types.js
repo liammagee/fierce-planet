@@ -1,10 +1,10 @@
-/**
- * Created by .
- * User: Liam
- * Date: 24/04/11
- * Time: 11:18 PM
- * To change this template use File | Settings | File Templates.
+/*!
+ * Fierce Planet - AgentTypes
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
  */
+
 
 /*
 Agent Type setup
