@@ -160,7 +160,8 @@ PresetLevels.level3.setConclusion(
 );
 PresetLevels.level3.setTip(new Notice("Levels get progressively larger, requiring more planning about where you allocate resources. Aim to place resources at regular intervals."));
 PresetLevels.level3.setSoundSrc("/sounds/22688__DJ_Chronos__Loop_1.mp3");
-PresetLevels.level3.setCatastrophe(new Catastrophe("env", 100, 250, 0, new Notice("A tsumani has hit the planet - all resources will be depleted.", undefined, undefined, 100, 250)));
+PresetLevels.level3.setCatastrophe(new Catastrophe("env", 300, 250, 0, new Notice("A tsumani will soon hit the city - all resources will be depleted.", undefined, undefined, 250, 250)));
+//PresetLevels.level3.setCatastrophe(new Catastrophe("env", 500 + (Math.random() * 2000), 250, 0, new Notice("A tsumani will soon hit the city - all resources will be depleted.", undefined, undefined, 250, 250)));
 
 
 PresetLevels.level3.setup = function() {

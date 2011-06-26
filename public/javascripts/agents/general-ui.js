@@ -60,6 +60,8 @@ FiercePlanet.hookUpUIEventListeners = function() {
         return false; // prevent default
     });
 
+    $('#agentCanvas').click(FiercePlanet.handleNoticeEvents);
+
 };
 
 
@@ -76,6 +78,37 @@ FiercePlanet.addButtonEffects = function(e) {
         e.addEventListener('mouseout', function() { e.src = imgSrc;}, false);
         e.addEventListener('mousedown', function() { e.src = imgSrcDown;}, false);
         e.addEventListener('mouseup', function() { e.src = imgSrc;}, false);
+    }
+};
+
+/**
+ * Respond to clicks on the notice canvas
+ * @param e
+ */
+FiercePlanet.handleNoticeEvents = function(e) {
+    if (FiercePlanet.currentNotice != null) {
+        var notice = FiercePlanet.currentNotice;
+        var s = notice._start;
+        var d = notice._duration;
+        if (s > FiercePlanet.levelCounter || (s + d) < FiercePlanet.levelCounter)
+            return;
+        var x = notice._x;
+        var y = notice._y;
+        var w = notice._width;
+        var h = notice._height;
+        var ex;
+        var ey;
+        if (e.layerX || e.layerX == 0) { // Firefox
+            ex = e.layerX;
+            ey = e.layerY;
+        } else if (e.offsetX || e.offsetX == 0) { // Opera
+            ex = e.offsetX;
+            ey = e.offsetY;
+        }
+        if (ex >= x && ex <= x + w && ey >= y && ey <= y + h) {
+            FiercePlanet.currentNotice = undefined;
+            FiercePlanet.clearCanvas('noticeCanvas');
+        }
     }
 };
 

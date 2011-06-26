@@ -94,6 +94,7 @@ FiercePlanet.deleteCurrentResource = function () {
             FiercePlanet.resourcesInStore += 5;
             FiercePlanet.resourcesSpent -= 5;
             FiercePlanet.currentLevel.getResources().splice(foundResource, 1);
+//            FiercePlanet.currentLevel.annulCell(FiercePlanet.currentResource.getPosition()[0], FiercePlanet.currentResource.getPosition()[1]) ;
             FiercePlanet.drawResourcesInStore();
             FiercePlanet.clearCanvas('resourceCanvas');
             FiercePlanet.drawResources();
@@ -127,7 +128,9 @@ FiercePlanet.dropItem = function(e) {
         var posY = __ret.posY;
         if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
             return;
-        if (FiercePlanet.currentLevel.getCell(posX, posY) instanceof Resource)
+//        if (FiercePlanet.currentLevel.getCell(posX, posY) instanceof Resource)
+//            return;
+        if (FiercePlanet.isPositionOccupiedByResource(posX, posY))
             return;
 
         var resourceCode = FiercePlanet.currentResourceId;
@@ -144,7 +147,6 @@ FiercePlanet.dropItem = function(e) {
         else {
             FiercePlanet.resourcesInStore -= resource.getCost();
             FiercePlanet.resourcesSpent += resource.getCost();
-            FiercePlanet.currentLevel.getResources().push(resource);
             if (resource.getType() == 'eco') {
                 FiercePlanet.economicResourceCount += 1;
             }
@@ -154,7 +156,8 @@ FiercePlanet.dropItem = function(e) {
             else if (resource.getType() == 'soc') {
                 FiercePlanet.socialResourceCount += 1;
             }
-            FiercePlanet.currentLevel.addCell(posX, posY, resource);
+            FiercePlanet.currentLevel.getResources().push(resource);
+//            FiercePlanet.currentLevel.addCell(posX, posY, resource);
 
             FiercePlanet.drawResource(resource);
             FiercePlanet.drawResourcesInStore();
@@ -174,6 +177,20 @@ FiercePlanet.getCurrentResourceIndex = function () {
             }
         }
         return -1;
+    };
+
+
+/**
+ * Find the current resource index
+ */
+FiercePlanet.isPositionOccupiedByResource = function (x, y) {
+        for (var i = 0; i < FiercePlanet.currentLevel.getResources().length; i++) {
+            var r = FiercePlanet.currentLevel.getResources()[i];
+            if (r.getPosition()[0] == x && r.getPosition()[1] == y) {
+                return true;
+            }
+        }
+        return false;
     };
 
 

@@ -641,16 +641,24 @@ FiercePlanet.drawScrollingLayer = function() {
 
         if (FiercePlanet.currentLevel.getCatastrophe() != undefined) {
             var catastrophe = FiercePlanet.currentLevel.getCatastrophe();
+            if (catastrophe._notice._start <= FiercePlanet.levelCounter && (catastrophe._start + catastrophe._duration) >= FiercePlanet.levelCounter) {
+                FiercePlanet.currentNotice = catastrophe._notice;
+            }
             if (catastrophe._start <= FiercePlanet.levelCounter && (catastrophe._start + catastrophe._duration) >= FiercePlanet.levelCounter) {
                 // Apply catastrophe effects
-                catastrophe.apply();
+                if (FiercePlanet.levelCounter >= (catastrophe._start + catastrophe._duration)) {
+                    catastrophe.apply();
+                }
 
                 // Get effect dimensions
-                var increments = (catastrophe._start + catastrophe._duration) / FiercePlanet.WORLD_WIDTH;
-                var currentIncrement = (FiercePlanet.levelCounter - catastrophe._start) / increments;
-                var x = FiercePlanet.WORLD_WIDTH - currentIncrement;
+                var increments = catastrophe._duration / FiercePlanet.WORLD_WIDTH;
+                var leadIncrement = (FiercePlanet.levelCounter - catastrophe._start) / increments * 2;
+                var trailIncrement = ((catastrophe._start + catastrophe._duration) - FiercePlanet.levelCounter) / increments * 2;
+//                console.log(increments);
+//                console.log(currentIncrement);
+                var x = FiercePlanet.WORLD_WIDTH - leadIncrement;
                 var y = 0;
-                var w = currentIncrement;
+                var w = trailIncrement;
                 var h = FiercePlanet.WORLD_HEIGHT;
                 ctx.fillStyle = "rgba(128, 128, 255, 0.5)";
                 ctx.fillRect(x, y, w, h);
