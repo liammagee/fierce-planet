@@ -646,7 +646,7 @@ FiercePlanet.drawScrollingLayer = function() {
             }
             if (catastrophe._start <= FiercePlanet.levelCounter && (catastrophe._start + catastrophe._duration) >= FiercePlanet.levelCounter) {
                 // Apply catastrophe effects
-                if (FiercePlanet.levelCounter >= (catastrophe._start + catastrophe._duration)) {
+                if (FiercePlanet.levelCounter >= (catastrophe._start + catastrophe._duration) / 2) {
                     catastrophe.apply();
                 }
 
