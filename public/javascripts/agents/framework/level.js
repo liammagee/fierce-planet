@@ -35,12 +35,15 @@ function Level(id) {
     this._currentAgentsMap = [];
     this._cells = [];
     this._resources = [];
+    this._catastrophe = null;
 
     // User interface elements
     this._tip = "";
-    this._notice = "";
+    this._introduction = "Welcome to level " + this._id + ".";
+    this._conclusion = "Congratulations! You have completed level " + this._id + ".";
     this._noticeImage = null;
     this._soundSrc = null;
+
 }
 Level.prototype.getId = function() { return this._id; };
 Level.prototype.setId = function(id) { this._id = id; };
@@ -131,8 +134,10 @@ Level.prototype.getAllowOffscreenCycling = function() { return this._allowOffscr
 Level.prototype.setAllowOffscreenCycling = function(allowOffscreenCycling) { this._allowOffscreenCycling = allowOffscreenCycling; };
 Level.prototype.getAllowResourcesOnPath = function() { return this._allowResouresOnPath; };
 Level.prototype.setAllowResourcesOnPath = function(allowResourcesOnPath) { this._allowResouresOnPath = allowResourcesOnPath; };
-Level.prototype.getNotice = function() { return this._notice; };
-Level.prototype.setNotice = function(notice) { this._notice = notice; };
+Level.prototype.getIntroduction = function() { return this._introduction; };
+Level.prototype.setIntroduction = function(introduction) { this._introduction = introduction; };
+Level.prototype.getConclusion = function() { return this._conclusion; };
+Level.prototype.setConclusion = function(conclusion) { this._conclusion = conclusion; };
 Level.prototype.getTip = function() { return this._tip; };
 Level.prototype.setTip = function(tip) { this._tip = tip; };
 Level.prototype.getImage = function() { return this._noticeImage; };
@@ -207,6 +212,8 @@ Level.prototype.setCurrentAgents = function(currentAgents) {
 Level.prototype.getAgentByID = function(agentID) { return this._currentAgentsMap[agentID]; };
 Level.prototype.getResources = function() { return this._resources; };
 Level.prototype.setResources = function(resources) { this._resources = resources; };
+Level.prototype.getCatastrophe = function() { return this._catastrophe; };
+Level.prototype.setCatastrophe = function(catastrophe) { this._catastrophe = catastrophe; };
 Level.prototype.getCells = function() { return this._cells; };
 Level.prototype.getCell = function(x, y) { return this._cells[[x, y]]; };
 Level.prototype.setCells = function(cells) { this._cells = cells; };

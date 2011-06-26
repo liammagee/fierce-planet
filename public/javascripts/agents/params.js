@@ -189,6 +189,7 @@ FiercePlanet.$levelList = null;
 FiercePlanet.$upgradeDelete = null;
 FiercePlanet.$resourceGallery = null;
 FiercePlanet.$newLevel = null;
+FiercePlanet.$genericDialog = null;
 
 
 // Level editor dialogs

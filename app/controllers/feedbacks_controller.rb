@@ -30,6 +30,7 @@ class FeedbacksController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
+      format.js # new.js.erb
       format.xml  { render :xml => @feedback }
     end
   end

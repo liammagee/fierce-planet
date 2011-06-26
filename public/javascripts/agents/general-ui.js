@@ -30,6 +30,7 @@ FiercePlanet.hookUpUIEventListeners = function() {
     $('#settings').click(FiercePlanet.showSettings);
 
 
+
     // Admin functions
     $('#debug').click(FiercePlanet.processAgents);
     $('#replay').click(FiercePlanet.replayWorld);
@@ -123,13 +124,16 @@ FiercePlanet.notify = function(notice) {
  * Adds a notice to the level information area.
  * @param notice
  */
-FiercePlanet.levelInfo = function(notice) {
+FiercePlanet.levelInfo = function() {
     var levelHTML = "";
+    if (FiercePlanet.currentLevel.getName() != undefined) {
+        levelHTML += "<h3>" + FiercePlanet.currentLevel.getName() + "</h3>";
+    }
     if (FiercePlanet.currentLevel.getImage() != undefined) {
         levelHTML += '<img src="' + FiercePlanet.currentLevel.getImage() + '" alt="City Image" width="460" height="140">';
     }
-    if (FiercePlanet.currentLevel.getNotice() != undefined) {
-        levelHTML += notice;
+    if (FiercePlanet.currentLevel.getIntroduction() != undefined) {
+        levelHTML += FiercePlanet.currentLevel.getIntroduction();
     }
     FiercePlanet.$newLevel.html(levelHTML).dialog('open');
 };

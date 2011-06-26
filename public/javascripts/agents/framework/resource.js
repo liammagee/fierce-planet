@@ -38,7 +38,10 @@ ResourceKind.prototype.getColor = function() { return this._color; };
 ResourceKind.prototype.setColor = function(color) { this._color = color; };
 
 
-/* Resource class definition */
+/**
+ *  Resource class definition
+ *  @constructor
+ */
 function Resource(kind, x, y) {
     // Kind properties
     this._kind = kind;

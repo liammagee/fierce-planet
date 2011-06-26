@@ -25,20 +25,6 @@ FiercePlanet.calculateWorldLeft = function () {
 FiercePlanet.setupDialogs = function() {
     var dialogX = FiercePlanet.calculateWorldLeft();
     // Dialogs
-    FiercePlanet.$statsDialog = $('<div></div>')
-        .dialog({
-                                                position: [dialogX, 110],
-                                                width: 487,
-                                                height: 407,
-            autoOpen: false,
-            modal: true,
-            title: 'Vital Statistics',
-            buttons: {
-                "OK": function() {
-                    $( this ).dialog( "close" );
-                }
-            }
-        });
 
     FiercePlanet.$newLevel = $('<div></div>')
         .html('New Level')
@@ -150,6 +136,9 @@ FiercePlanet.setupDialogs = function() {
                 }
             }
         });
+
+
+
     $('#del-button').click(function() {FiercePlanet.deleteCurrentResource(); FiercePlanet.$upgradeDelete.dialog('close'); });
     $('#upg-button').click(function() {FiercePlanet.upgradeCurrentResource(); FiercePlanet.$upgradeDelete.dialog('close'); });
 
@@ -197,6 +186,22 @@ FiercePlanet.setupDialogs = function() {
         FiercePlanet.currentLevelPreset = true;
         FiercePlanet.restartLevel();
     });
+
+
+    FiercePlanet.$statsDialog = $('<div></div>')
+        .dialog({
+                                                position: [dialogX, 110],
+                                                width: 487,
+                                                height: 407,
+            autoOpen: false,
+            modal: true,
+            title: 'Vital Statistics',
+            buttons: {
+                "OK": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
 
     FiercePlanet.$designFeatures = $('#level-features')
         .dialog({
@@ -318,9 +323,10 @@ FiercePlanet.showCompleteLevelDialog = function() {
  */
 FiercePlanet.openCompleteLevelDialog = function() {
     FiercePlanet.$completeLevel
-            .html("<p>Congratulations! You have completed level " + FiercePlanet.currentLevel.getId() + ". </p>" +
-                 FiercePlanet.generateStats() +
-                "<p>Click 'OK' to start the next level.</p>")
+            .html(
+            "<p>" + FiercePlanet.currentLevel.getConclusion() + "</p>" +
+            FiercePlanet.generateStats() +
+            "<p>Click 'OK' to start the next level.</p>")
             .dialog('open');
 };
 

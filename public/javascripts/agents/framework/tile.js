@@ -5,7 +5,10 @@
 var DEFAULT_TILE_COLOR = "0FFF1F";
 
 
-/* Tile class definition */
+/**
+ * Tile class definition
+ * @constructor
+ */
 function Tile() {
     this._color = "0FFF1F";
 }

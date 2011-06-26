@@ -1,0 +1,22 @@
+
+FiercePlanet._stopAgents();
+
+// Construct and show the level gallery
+FiercePlanet.$genericDialog = $('<div></div>')
+        .html("<%=  escape_javascript(render('feedbacks/edit', :locals => { :levels => @levels})) %>")
+        .dialog({
+                                              position: [FiercePlanet.calculateWorldLeft(), 110],
+                                              width: 487,
+                                              height: 407,
+                    autoOpen: false,
+                    modal: true,
+                    title: 'Feedback',
+                    buttons: {
+                        "OK": function() {
+                            $(".edit_feedback").submit();
+                            $(this).dialog("close");
+                        }
+                    }
+
+                });
+FiercePlanet.$genericDialog.dialog('open');

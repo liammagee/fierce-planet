@@ -63,7 +63,7 @@ FiercePlanet.newLevel = function() {
 
     FiercePlanet._initialiseGame();
 
-    FiercePlanet.levelInfo(FiercePlanet.currentLevel.getNotice());
+    FiercePlanet.levelInfo();
     FiercePlanet.currentNotice = FiercePlanet.currentLevel.getTip();
     FiercePlanet.notify("Starting level " + FiercePlanet.currentLevel.getId() + "...");
 

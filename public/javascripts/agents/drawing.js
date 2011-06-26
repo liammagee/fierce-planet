@@ -637,6 +637,27 @@ FiercePlanet.drawScrollingLayer = function() {
         var canvas = $('#scrollingCanvas')[0];
         var ctx = canvas.getContext('2d');
 
+        // Add logic for catastrophe here
+
+        if (FiercePlanet.currentLevel.getCatastrophe() != undefined) {
+            var catastrophe = FiercePlanet.currentLevel.getCatastrophe();
+            if (catastrophe._start <= FiercePlanet.levelCounter && (catastrophe._start + catastrophe._duration) >= FiercePlanet.levelCounter) {
+                // Apply catastrophe effects
+                catastrophe.apply();
+
+                // Get effect dimensions
+                var increments = (catastrophe._start + catastrophe._duration) / FiercePlanet.WORLD_WIDTH;
+                var currentIncrement = (FiercePlanet.levelCounter - catastrophe._start) / increments;
+                var x = FiercePlanet.WORLD_WIDTH - currentIncrement;
+                var y = 0;
+                var w = currentIncrement;
+                var h = FiercePlanet.WORLD_HEIGHT;
+                ctx.fillStyle = "rgba(128, 128, 255, 0.5)";
+                ctx.fillRect(x, y, w, h);
+                return;
+            }
+        }
+
         if ((FiercePlanet.scrollingImageX + FiercePlanet.scrollingImageOffset) < (480 - FiercePlanet.scrollingImageOffset)){
             FiercePlanet.scrollingImageX += FiercePlanet.scrollingImageOffset;
         }
