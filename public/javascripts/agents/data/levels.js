@@ -102,7 +102,7 @@ PresetLevels.level2.setInitialResourceStore(120);
 PresetLevels.level2.setImage("http://www.publicdomainpictures.net/pictures/7000/nahled/2504-127160623953YH.jpg");
 PresetLevels.level2.setName("Level 2: Twists and Turns");
 PresetLevels.level2.setIntroduction(
-        "<p>The citizens of Fierce Planet have survived their first greater challenge. But life is about to get much tougher...</p>"
+        "<p>The citizens of Fierce Planet have survived their first great challenge. But life is about to get much tougher...</p>"
 );
 PresetLevels.level2.setConclusion(
         "<p>Congratulations, you have completed level 2. But the hard work must continue...</p>"

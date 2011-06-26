@@ -325,9 +325,8 @@ FiercePlanet.openCompleteLevelDialog = function() {
     FiercePlanet.$completeLevel
             .html(
             "<p>" + FiercePlanet.currentLevel.getConclusion() + "</p>" +
-            FiercePlanet.generateStats() +
-            "<p>Click 'OK' to start the next level.</p>")
-            .dialog('open');
+            FiercePlanet.generateStats()
+            ).dialog('open');
 };
 
 /**
