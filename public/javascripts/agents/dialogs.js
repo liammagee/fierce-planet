@@ -486,10 +486,13 @@ FiercePlanet.showCredits = function() {
     FiercePlanet.$genericDialog = $('<div></div>')
         .html(
             "<h3>Credits</h3>" +
-            "<div>Liam Magee (Development)</div>" +
-            "<div>Steven Harris (Design)</div>" +
-            "<div>Joshua Magee (Game Conception)</div>" +
-            "<div>Jakki Mann (Game Conception)</div>"
+            "<div class='credits'>Development Director</div>" +
+            "<div>Liam Magee</div>" +
+            "<div class='credits'>Art &amp; Design</div>" +
+            "<div>Steven Harris</div>" +
+            "<div class='credits'>Game Conception &amp; Testing</div>" +
+            "<div>Joshua Magee</div>" +
+            "<div>Jakki Mann</div>"
             )
         .dialog({
                                               position: [FiercePlanet.calculateWorldLeft(), 110],

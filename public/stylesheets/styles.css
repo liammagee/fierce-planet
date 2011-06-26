@@ -318,6 +318,10 @@ background-position: -101px -101px;
 	margin-bottom:2px;
 	padding: 1px 5px;
 }
+.credits {
+    margin-top: 1em;
+	font-style:italic;
+}
 #swatch_economic, #swatch_environmental, #swatch_social{
 	border-radius:4px;
 	margin-bottom:10px;
