@@ -83,6 +83,7 @@ FiercePlanet.isMouseMoving = false;
 FiercePlanet.scrollingImageVisible = true;
 FiercePlanet.noticesVisible = true;
 FiercePlanet.agentsCanCommunicate = true;
+FiercePlanet.catastrophesVisible = true;
 
 FiercePlanet.godMode = false;
 FiercePlanet.invisiblePath = false;
@@ -189,7 +190,9 @@ FiercePlanet.$levelList = null;
 FiercePlanet.$upgradeDelete = null;
 FiercePlanet.$resourceGallery = null;
 FiercePlanet.$newLevel = null;
+FiercePlanet.$settingsDialog = null;
 FiercePlanet.$genericDialog = null;
+
 
 
 // Level editor dialogs

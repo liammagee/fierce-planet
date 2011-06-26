@@ -57,7 +57,7 @@ PresetLevels.level1.setExpiryLimit(20);
 PresetLevels.level1.setImage("http://2.bp.blogspot.com/_bxhbymaUoNY/TSRcmaTzelI/AAAAAAAAAF8/YlOvN46t5uA/s1600/City_Ruins_by_Natiq_Aghayev_aka_Defonten.jpg");
 PresetLevels.level1.setName("Level 1: Welcome to Fierce Planet!");
 PresetLevels.level1.setIntroduction(
-        "<p>Fierce Planet is under threat. Cities have been destroyed, law and order has broken down, there is a shortage of food and water, and disease is rampant.</p>" +
+        "<p>Meltdown... The citizens of Fierce Planet are under threat of extinction. Cities have been destroyed, law and order has broken down, there is a shortage of food and water, and disease is rampant.</p>" +
                 "<p>Help the citizens re-build their world before they are wiped out!</p>"
 );
 PresetLevels.level1.setConclusion(
@@ -102,7 +102,8 @@ PresetLevels.level2.setInitialResourceStore(120);
 PresetLevels.level2.setImage("http://www.publicdomainpictures.net/pictures/7000/nahled/2504-127160623953YH.jpg");
 PresetLevels.level2.setName("Level 2: Twists and Turns");
 PresetLevels.level2.setIntroduction(
-        "<p>The citizens of Fierce Planet have survived their first great challenge. But life is about to get much tougher...</p>"
+        "<p>The citizens of Fierce Planet are slowly building their city. With your help they can make it a place of peace and prosperity.</p>"
+//        "<p>The citizens of Fierce Planet have survived their first great challenge. But life is about to get much tougher...</p>"
 );
 PresetLevels.level2.setConclusion(
         "<p>Congratulations, you have completed level 2. But the hard work must continue...</p>"
@@ -151,17 +152,18 @@ PresetLevels.level3.setWaveNumber(10);
 PresetLevels.level3.setExpiryLimit(10);
 PresetLevels.level3.setInitialResourceStore(130);
 PresetLevels.level3.setImage("http://t1.gstatic.com/images?q=tbn:ANd9GcTPM0pPCj-LQNtsrdc1htNYinCKea9-JrAkGkNzZgzP1J26kmfNXA&t=1");
-PresetLevels.level3.setName("Level 3: Around and About");
+PresetLevels.level3.setName("Level 3: Waves of Uncertainty");
 PresetLevels.level3.setIntroduction(
-        "<p>So far, everything seems to be proceeding as planned. But on Fierce Planet, learn to expect the unexpected... </p>"
+        "<p>The re-building of Fierce Planet is proceeding well…but how can you plan for a random act of nature??!!! </p>"
+//        "<p>So far, everything seems to be proceeding as planned. But on Fierce Planet, learn to expect the unexpected... </p>"
 );
 PresetLevels.level3.setConclusion(
         "<p>Phew - that was a rush! Perhaps the citizens need to stay inland for a while.</p>"
 );
 PresetLevels.level3.setTip(new Notice("Levels get progressively larger, requiring more planning about where you allocate resources. Aim to place resources at regular intervals."));
 PresetLevels.level3.setSoundSrc("/sounds/22688__DJ_Chronos__Loop_1.mp3");
-PresetLevels.level3.setCatastrophe(new Catastrophe("env", 300, 250, 0, new Notice("A tsumani will soon hit the city - all resources will be depleted.", undefined, undefined, 250, 250)));
-//PresetLevels.level3.setCatastrophe(new Catastrophe("env", 500 + (Math.random() * 2000), 250, 0, new Notice("A tsumani will soon hit the city - all resources will be depleted.", undefined, undefined, 250, 250)));
+//PresetLevels.level3.setCatastrophe(new Catastrophe("env", 300, 250, 0, new Notice("A tsumani will soon hit the city - all resources will be depleted.", undefined, undefined, 250, 250)));
+PresetLevels.level3.setCatastrophe(new Catastrophe("env", 500 + (Math.random() * 2000), 250, 0, new Notice("A tsumani will soon hit the city - all resources will be depleted.", undefined, undefined, 250, 250)));
 
 
 PresetLevels.level3.setup = function() {
@@ -217,7 +219,7 @@ PresetLevels.level4.setWaveNumber(10);
 PresetLevels.level4.setExpiryLimit(10);
 PresetLevels.level4.setInitialResourceStore(150);
 PresetLevels.level4.setImage("http://www.publicdomainpictures.net/pictures/11000/nahled/night-in-the-city-21851292200793awk.jpg");
-PresetLevels.level4.setName("Level 4: Spiral of uncertainty");
+PresetLevels.level4.setName("Level 4: Spiral of Doom");
 PresetLevels.level4.setIntroduction(
         "<p>The only way out is via the long and winding road...</p>"
         );

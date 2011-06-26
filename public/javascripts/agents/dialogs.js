@@ -162,7 +162,7 @@ FiercePlanet.setupDialogs = function() {
             }
         });
 
-    $settingsDialog = $('#settings-dialog')
+    FiercePlanet.$settingsDialog = $('#settings-dialog')
         .dialog({
                                           position: [dialogX, 110],
                                           width: 487,
@@ -298,6 +298,7 @@ FiercePlanet.openCompleteGameDialog = function() {
             "Congratulations! In spite of challenges ahead, the citizens of Fierce Planet look forward to a bright and sustainable future!" +
                     FiercePlanet.generateStats())
             .dialog('open');
+    $('#gotoResourceGallery').click(FiercePlanet.showResourceGallery);
 };
 
 /**
@@ -367,10 +368,9 @@ FiercePlanet.showUpgradeDeleteDialog = function(e) {
 };
 
 /**
- *
+ * Show the resource gallery, and allow the user to pick from a range of capabilities
  */
 FiercePlanet.showResourceGallery = function() {
-    // Try to save results to the server
     $('#current-profile-class')[0].innerHTML = FiercePlanet.profileClass;
     $('#current-credits')[0].innerHTML = FiercePlanet.credits;
     $('#current-capabilities')[0].innerHTML = FiercePlanet.capabilities.join(",");
@@ -417,13 +417,6 @@ FiercePlanet.showResourceGallery = function() {
             cost = FiercePlanet.CAPABILITY_COSTS [4];
         }
         // Make item available for purchase if: (1) the player's level permits it; (2) it is not among existing capabilities and (3) there is enough money
-//        console.log("---------------");
-//        console.log(itemName);
-//        console.log($.inArray(itemName, accessibleCapabilities));
-//        console.log($.inArray(itemName, FiercePlanet.capabilities));
-//        console.log(cost);
-//        console.log(FiercePlanet.credits);
-
         if ($.inArray(itemName, accessibleCapabilities) > -1 && $.inArray(itemName, FiercePlanet.capabilities) == -1 && cost < FiercePlanet.credits) {
             // Make item purchasable
             purchasableItems.push(purchasableItem);
@@ -431,10 +424,7 @@ FiercePlanet.showResourceGallery = function() {
         else {
             $('#' + purchasableItem.id).css("border","1px solid white");
         }
-        // Remove any existing event listeners
-//        purchasableItem.removeEventListener('click', handler, false);
     }
-    console.log(purchasableItems.length);
     for (var i = 0; i < purchasableItems.length; i++) {
         var purchasableItem = purchasableItems[i];
         var id = purchasableItem.id;
@@ -481,8 +471,39 @@ FiercePlanet.showResourceGallery = function() {
 };
 
 /**
- * 
+ * Shows the Fierce Planet settings
  */
 FiercePlanet.showSettings = function() {
-    $settingsDialog.dialog('open');
+    FiercePlanet.$settingsDialog.dialog('open');
+};
+
+/**
+ * Shows the Fierce Planet credits
+ */
+FiercePlanet.showCredits = function() {
+    FiercePlanet._stopAgents();
+    
+    FiercePlanet.$genericDialog = $('<div></div>')
+        .html(
+            "<h3>Credits</h3>" +
+            "<div>Liam Magee (Development)</div>" +
+            "<div>Steven Harris (Design)</div>" +
+            "<div>Joshua Magee (Game Conception)</div>" +
+            "<div>Jakki Mann (Game Conception)</div>"
+            )
+        .dialog({
+                                              position: [FiercePlanet.calculateWorldLeft(), 110],
+                                              width: 487,
+                                              height: 407,
+                    autoOpen: false,
+                    modal: true,
+                    title: 'Credits',
+                    buttons: {
+                        "OK": function() {
+                            $(this).dialog("close");
+                        }
+                    }
+
+                });
+    FiercePlanet.$genericDialog.dialog('open');
 };

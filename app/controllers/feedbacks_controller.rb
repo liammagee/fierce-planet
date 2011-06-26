@@ -49,9 +49,11 @@ class FeedbacksController < ApplicationController
 
     respond_to do |format|
       if @feedback.save
+        format.js
         format.html { redirect_to("/", :notice => 'Thank you for your feedback.') }
         format.xml  { render :xml => @feedback, :status => :created, :location => @feedback }
       else
+        format.js
         format.html { render :action => "new" }
         format.xml  { render :xml => @feedback.errors, :status => :unprocessable_entity }
       end

@@ -639,7 +639,7 @@ FiercePlanet.drawScrollingLayer = function() {
 
         // Add logic for catastrophe here
 
-        if (FiercePlanet.currentLevel.getCatastrophe() != undefined) {
+        if (FiercePlanet.catastrophesVisible && FiercePlanet.currentLevel.getCatastrophe() != undefined) {
             var catastrophe = FiercePlanet.currentLevel.getCatastrophe();
             if (catastrophe._notice._start <= FiercePlanet.levelCounter && (catastrophe._start + catastrophe._duration) >= FiercePlanet.levelCounter) {
                 FiercePlanet.currentNotice = catastrophe._notice;

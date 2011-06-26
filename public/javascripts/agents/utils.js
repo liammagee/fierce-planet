@@ -68,12 +68,14 @@ FiercePlanet.setAndStoreProperty = function(property) {
  * Gets all properties from local storage, and sets them on the settings dialog
  */
 FiercePlanet.getAndRetrieveProperties = function() {
+    FiercePlanet.getAndRetrieveProperty('noticesVisible');
+    FiercePlanet.getAndRetrieveProperty('scrollingImageVisible');
+    FiercePlanet.getAndRetrieveProperty('catastrophesVisible');
+    FiercePlanet.getAndRetrieveProperty('agentsCanCommunicate');
+
     FiercePlanet.getAndRetrieveProperty('godMode');
     FiercePlanet.getAndRetrieveProperty('invisiblePath');
-    FiercePlanet.getAndRetrieveProperty('agentsCanCommunicate');
     FiercePlanet.getAndRetrieveProperty('agentTracing');
-    FiercePlanet.getAndRetrieveProperty('scrollingImageVisible');
-    FiercePlanet.getAndRetrieveProperty('noticesVisible');
     FiercePlanet.getAndRetrieveProperty('recording');
     FiercePlanet.getAndRetrieveProperty('rivalsVisible');
     FiercePlanet.getAndRetrieveProperty('predatorsVisible');
@@ -90,12 +92,14 @@ FiercePlanet.getAndRetrieveProperties = function() {
  * Sets all properties on settings dialog, and stores property values in local storage
  */
 FiercePlanet.setAndStoreProperties = function() {
-    FiercePlanet.setAndStoreProperty('godMode');
-    FiercePlanet.setAndStoreProperty('invisiblePath');
-    FiercePlanet.setAndStoreProperty('agentsCanCommunicate');
-    FiercePlanet.setAndStoreProperty('agentTracing');
     FiercePlanet.setAndStoreProperty('scrollingImageVisible');
     FiercePlanet.setAndStoreProperty('noticesVisible');
+    FiercePlanet.setAndStoreProperty('catastrophesVisible');
+    FiercePlanet.setAndStoreProperty('agentsCanCommunicate');
+
+    FiercePlanet.setAndStoreProperty('godMode');
+    FiercePlanet.setAndStoreProperty('invisiblePath');
+    FiercePlanet.setAndStoreProperty('agentTracing');
     FiercePlanet.setAndStoreProperty('recording');
     FiercePlanet.setAndStoreProperty('rivalsVisible');
     FiercePlanet.setAndStoreProperty('predatorsVisible');

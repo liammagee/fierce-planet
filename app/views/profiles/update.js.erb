@@ -1,0 +1,5 @@
+
+FiercePlanet.$genericDialog.dialog('close');
+$('#welcome-link')[0].innerHTML = '<%= link_to("Welcome #{current_user.profile.nickname} (#{current_user.profile.profile_class})", edit_profile_path(current_user.profile), :remote => true) %> |';
+
+

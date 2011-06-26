@@ -1,41 +1,68 @@
 <div id="settings-dialog" style="display: none;">
-  
-  <br/>
-  Agents can communicate: <input id="agentsCanCommunicateInput" name="agentsCanCommunicateInput" type="checkbox" checked="checked"/>
-  <br/>
-  Notices visible: <input id="noticesVisibleInput" name="noticesVisibleInput" type="checkbox"/>
-  <br/>
-  Scrolling image: <input id="scrollingImageVisibleInput" name="scrollingImageVisibleInput" type="checkbox"/>
 
-  <hr/> 
-      <br/>
-      Agent tracing: <input id="agentTracingInput" name="agentTracingInput" type="checkbox"/>
-    <br/>
-    Recording: <input id="recordingInput" name="recordingInput" type="checkbox"/>
-    <br/>
-    Invisible path: <input id="invisiblePathInput" name="invisiblePathInput" type="checkbox"/>
-    <br/>
-    Rivals: <input id="rivalsVisibleInput" name="rivalsVisibleInput" type="checkbox"/>
-    <br/>
-    Predators: <input id="predatorsVisibleInput" name="predatorsVisibleInput" type="checkbox"/>
-    <br/>
-    Change tiles: <input id="tilesMutableInput" name="tilesMutableInput" type="checkbox"/>
-    <br/>
-    Sounds: <input id="soundsPlayableInput" name="soundsPlayableInput" type="checkbox"/>
-    <br/>
-    Background icons: <input id="backgroundIconsVisibleInput" name="backgroundIconsVisibleInput" type="checkbox"/>
-    <br/>
+  <div>
+    <input id="noticesVisibleInput" name="noticesVisibleInput" type="checkbox" checked="checked"/> Notices visible
+  </div>
+  <div>
+    <input id="scrollingImageVisibleInput" name="scrollingImageVisibleInput" type="checkbox" checked="checked"/>
+    Scrolling image visible
+  </div>
+  <div>
+    <input id="catastrophesVisibleInput" name="catastrophesVisibleInput" type="checkbox" checked="checked"/>
+    Catastrophes visible
+  </div>
+  <div>
+    <input id="agentsCanCommunicateInput" name="agentsCanCommunicateInput" type="checkbox" checked="checked"/> Agents
+    can communicate
+  </div>
+  <hr/>
+  <h4>Advanced options</h4>
 
-    <!--Resource handling-->
-    Resource weakening: <input id="resourcesInTensionInput" name="resourcesInTensionInput" type="checkbox"/>
-    <br/>
-    Ignore resource balance: <input id="ignoreResourceBalanceInput" name="ignoreResourceBalanceInput" type="checkbox"/>
-    <br/>
-    Resource bonus: <input id="resourceBonusInput" name="resourceBonusInput" type="checkbox"/>
-    <br/>
-    Use general health: <input id="applyGeneralHealthInput" name="applyGeneralHealthInput" type="checkbox"/>
-  <br/>
-  God mode: <input id="godModeInput" name="godModeInput" type="checkbox"/>
+  <div>
+    <input id="agentTracingInput" name="agentTracingInput" type="checkbox"/> Agent tracing
+  </div>
+  <div>
+    <input id="recordingInput" name="recordingInput" type="checkbox"/> Recording
+  </div>
+  <div>
+    <input id="invisiblePathInput" name="invisiblePathInput" type="checkbox"/> Invisible path
+  </div>
+  <div>
+    <input id="soundsPlayableInput" name="soundsPlayableInput" type="checkbox"/> Sounds
+  </div>
+  <div>
+    <input id="resourcesInTensionInput" name="resourcesInTensionInput" type="checkbox"/> Resource weakening
+  </div>
+  <div>
+    <input id="ignoreResourceBalanceInput" name="ignoreResourceBalanceInput" type="checkbox"/> Ignore resource balance
+  </div>
+  <div>
+    <input id="resourceBonusInput" name="resourceBonusInput" type="checkbox"/> Resource bonus
+  </div>
+  <div>
+    <input id="applyGeneralHealthInput" name="applyGeneralHealthInput" type="checkbox"/> Use general health
+  </div>
+  <div>
+    <input id="godModeInput" name="godModeInput" type="checkbox"/> God mode
+  </div>
 
+  <div id="experimental-settings" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
+      <hr/>
+      <h4>Experimental options</h4>
+      <div>
+        <input id="rivalsVisibleInput" name="rivalsVisibleInput" type="checkbox"/> Rivals
+      </div>
+      <div>
+        <input id="predatorsVisibleInput" name="predatorsVisibleInput" type="checkbox"/> Predators
+      </div>
+      <div>
+        <input id="tilesMutableInput" name="tilesMutableInput" type="checkbox"/> Change tiles
+      </div>
+      <div>
+        <input id="backgroundIconsVisibleInput" name="backgroundIconsVisibleInput" type="checkbox"/> Background icons
+      </div>
+
+
+  </div>
 
 </div>
