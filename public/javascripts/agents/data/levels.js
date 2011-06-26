@@ -57,7 +57,7 @@ PresetLevels.level1.setExpiryLimit(20);
 PresetLevels.level1.setImage("http://2.bp.blogspot.com/_bxhbymaUoNY/TSRcmaTzelI/AAAAAAAAAF8/YlOvN46t5uA/s1600/City_Ruins_by_Natiq_Aghayev_aka_Defonten.jpg");
 PresetLevels.level1.setName("Level 1: Welcome to Fierce Planet!");
 PresetLevels.level1.setIntroduction(
-        "<p>Meltdown... The citizens of Fierce Planet are under threat of extinction. Cities have been destroyed, law and order has broken down, there is a shortage of food and water, and disease is rampant.</p>" +
+        "<p>The citizens of Fierce Planet are under threat of extinction. Cities have been destroyed, law and order has broken down, there is a shortage of food and water, and disease is rampant.</p>" +
                 "<p>Help the citizens re-build their world before they are wiped out!</p>"
 );
 PresetLevels.level1.setConclusion(
