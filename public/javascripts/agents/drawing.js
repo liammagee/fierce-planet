@@ -615,11 +615,14 @@ FiercePlanet.drawAgents = function() {
         var direction = FiercePlanet.getAgentDirection(agent);
 
 
-        var ecoH = agent._economicHealth;
-        var envH = agent._environmentalHealth;
-        var socH = agent._socialHealth;
+        var blueH = agent._economicHealth;
+        var greenH = agent._environmentalHealth;
+        var redH = agent._socialHealth;
+        blueH = agent._healthCategoryStats[FiercePlanet.resourceCategories[0].getCode()];
+        greenH = agent._healthCategoryStats[FiercePlanet.resourceCategories[1].getCode()];
+        redH = agent._healthCategoryStats[FiercePlanet.resourceCategories[2].getCode()];
         var c = agent._color.toString();
-        var newColor = FiercePlanet.diluteColour(socH, envH, ecoH, c);
+        var newColor = FiercePlanet.diluteColour(redH, greenH, blueH, c);
         if (agent._isHit)
             newColor = "f00";
 
@@ -652,7 +655,7 @@ FiercePlanet.drawScrollingLayer = function() {
             if (catastrophe._start <= FiercePlanet.levelCounter && (catastrophe._start + catastrophe._duration) >= FiercePlanet.levelCounter) {
                 // Apply catastrophe effects
                 if (FiercePlanet.levelCounter >= (catastrophe._start + catastrophe._duration) / 2) {
-                    catastrophe.apply();
+                    catastrophe.strike();
                 }
 
                 // Get effect dimensions

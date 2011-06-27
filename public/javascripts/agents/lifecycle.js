@@ -237,6 +237,8 @@ FiercePlanet._initialiseGame = function () {
 
     FiercePlanet.currentLevel.setCurrentAgents([]);
     FiercePlanet.currentLevel.setResources([]);
+    if (FiercePlanet.currentLevel.getCatastrophe() != undefined)
+        FiercePlanet.currentLevel.getCatastrophe()._struck = false;
 
 //    score = 0;
     FiercePlanet.economicResourceCount = 0;

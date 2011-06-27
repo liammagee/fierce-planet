@@ -16,19 +16,19 @@
  * @param notice
  */
 function Catastrophe(kind, start, duration, effect, notice) {
-    this._kind = kind || "env";
+    this._kind = kind;
     this._start = start || 0;
     this._duration = duration || 150;
     this._effect = effect || 0.5;
     this._notice = notice || new Notice("A catastrophe is taking place!", undefined, undefined, this._start, this._duration);
-    this._applied = false;
+    this._struck = false;
 }
 
 /**
  * 
  */
-Catastrophe.prototype.apply = function() {
-    if (!this._applied) {
+Catastrophe.prototype.strike = function() {
+    if (! this._struck) {
         // Apply catastrophe effects
         FiercePlanet.currentLevel.setResources([]);
         FiercePlanet.clearCanvas('resourceCanvas');
@@ -40,7 +40,7 @@ Catastrophe.prototype.apply = function() {
 //            resource.setTotalYield(resource.getTotalYield() * this._effect);
 //        }
         FiercePlanet.currentNotice = new Notice("RESOURCES WIPED OUT!");
-        this._applied = true;
+        this._struck = true;
     }
 };
 

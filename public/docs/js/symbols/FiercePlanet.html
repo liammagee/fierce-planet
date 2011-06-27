@@ -191,9 +191,27 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
+	<li><a href="../symbols/Catastrophe.html">Catastrophe</a></li>
+	
+	<li><a href="../symbols/Event.html">Event</a></li>
+	
 	<li><a href="../symbols/FiercePlanet.html">FiercePlanet</a></li>
 	
+	<li><a href="../symbols/Level.html">Level</a></li>
+	
+	<li><a href="../symbols/Notice.html">Notice</a></li>
+	
+	<li><a href="../symbols/PlayerClass.html">PlayerClass</a></li>
+	
 	<li><a href="../symbols/PresetLevels.html">PresetLevels</a></li>
+	
+	<li><a href="../symbols/Resource.html">Resource</a></li>
+	
+	<li><a href="../symbols/ResourceCategory.html">ResourceCategory</a></li>
+	
+	<li><a href="../symbols/ResourceKind.html">ResourceKind</a></li>
+	
+	<li><a href="../symbols/Tile.html">Tile</a></li>
 	
 </ul>
 <hr />
@@ -368,6 +386,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.calculateWorldLeft">calculateWorldLeft</a></b>()
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.cancelLevelEditor">cancelLevelEditor</a></b>()
 								</div>
 								<div class="description"></div>
@@ -379,7 +406,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.checkInteger">checkInteger</a></b>(value)
 								</div>
-								<div class="description"></div>
+								<div class="description">Simple method for coercing a value to a floored integer</div>
 							</td>
 						</tr>
 					
@@ -476,7 +503,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.diluteColour">diluteColour</a></b>(a, b, c, d)
+								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.diluteColour">diluteColour</a></b>(rStrength, gStrength, bStrength, colour)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -730,7 +757,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.getAndRetrieveProperties">getAndRetrieveProperties</a></b>()
 								</div>
-								<div class="description">Gets all properties from local storage, and sets them on the settings dialog</div>
+								<div class="description">Gets all properties from local storage, and sets them on the settings dialog.</div>
 							</td>
 						</tr>
 					
@@ -739,7 +766,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.getAndRetrieveProperty">getAndRetrieveProperty</a></b>(property)
 								</div>
-								<div class="description">Gets a property from local storage, and sets this on the settings dialog</div>
+								<div class="description">Gets a property from local storage, and sets this on the settings dialog.</div>
 							</td>
 						</tr>
 					
@@ -818,6 +845,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.handleNoticeEvents">handleNoticeEvents</a></b>(e)
+								</div>
+								<div class="description">Respond to clicks on the notice canvas</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.hookUpCustomEventListeners">hookUpCustomEventListeners</a></b>()
 								</div>
 								<div class="description"></div>
@@ -839,6 +875,15 @@ ul.inheritsList
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.insertAlpha">insertAlpha</a></b>(color, alphaLevel)
 								</div>
 								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.isPositionOccupiedByResource">isPositionOccupiedByResource</a></b>(x, y)
+								</div>
+								<div class="description">Find the current resource index</div>
 							</td>
 						</tr>
 					
@@ -973,7 +1018,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.processAgents">processAgents</a></b>()
 								</div>
-								<div class="description">Core logic loop: processes agents</div>
+								<div class="description">Core logic loop: processes agents.</div>
 							</td>
 						</tr>
 					
@@ -1034,6 +1079,24 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.registerResourceCategories">registerResourceCategories</a></b>(resourceCategories)
+								</div>
+								<div class="description">Registers resource categories</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.registerResourceTypes">registerResourceTypes</a></b>(resourceTypes)
+								</div>
+								<div class="description">Registers resource categories</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.replayStart">replayStart</a></b>()
 								</div>
 								<div class="description">Begin the replay of the game, by adding a new interval</div>
@@ -1081,7 +1144,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.resolveResourceKind">resolveResourceKind</a></b>(code)
 								</div>
-								<div class="description"></div>
+								<div class="description">Generic resource kind functions</div>
 							</td>
 						</tr>
 					
@@ -1108,7 +1171,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.setAndStoreProperties">setAndStoreProperties</a></b>()
 								</div>
-								<div class="description">Sets all properties on settings dialog, and stores property values in local storage</div>
+								<div class="description">Sets all properties on settings dialog, and stores property values in local storage.</div>
 							</td>
 						</tr>
 					
@@ -1117,7 +1180,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.setAndStoreProperty">setAndStoreProperty</a></b>(property)
 								</div>
-								<div class="description">Sets a property local storage based on values in the settings dialog</div>
+								<div class="description">Sets a property local storage based on values in the settings dialog.</div>
 							</td>
 						</tr>
 					
@@ -1169,7 +1232,16 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.showDesignFeaturesDialog">showDesignFeaturesDialog</a></b>()
+								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.showCredits">showCredits</a></b>()
+								</div>
+								<div class="description">Shows the Fierce Planet credits</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.showDesignFeaturesDialog">showDesignFeaturesDialog</a></b>(e)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -1198,7 +1270,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.showResourceGallery">showResourceGallery</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">Show the resource gallery, and allow the user to pick from a range of capabilities</div>
 							</td>
 						</tr>
 					
@@ -1207,7 +1279,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.showSettings">showSettings</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">Shows the Fierce Planet settings</div>
 							</td>
 						</tr>
 					
@@ -1271,6 +1343,15 @@ ul.inheritsList
 								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.upgradeCurrentResource">upgradeCurrentResource</a></b>()
 								</div>
 								<div class="description">Upgrade the current page (NOTE: SHOULD BE TIED TO PROFILE CAPABILITIES</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">FiercePlanet.<b><a href="../symbols/FiercePlanet.html#.zeroFill">zeroFill</a></b>(number, width)
+								</div>
+								<div class="description">Sourced from: http://stackoverflow.com/questions/1267283/how-can-i-create-a-zerofilled-value-using-javascript/1267338#1267338.</div>
 							</td>
 						</tr>
 					
@@ -1603,6 +1684,34 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name=".calculateWorldLeft"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">FiercePlanet.</span><b>calculateWorldLeft</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_dialogs.js.html">dialogs.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name=".cancelLevelEditor"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1639,7 +1748,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						
+						Simple method for coercing a value to a floored integer
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_utils.js.html">utils.js</a>.
@@ -1965,14 +2074,14 @@ ul.inheritsList
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">FiercePlanet.</span><b>diluteColour</b>(a, b, c, d)
+					<span class="light">FiercePlanet.</span><b>diluteColour</b>(rStrength, gStrength, bStrength, colour)
 					
 					</div>
 					<div class="description">
 						
 						
 							<br />
-							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_fierce-planet.min.js.html">fierce-planet.min.js</a>.
+							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_drawing.js.html">drawing.js</a>.
 						
 						
 					</div>
@@ -1984,25 +2093,25 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>a</b>
+									<b>rStrength</b>
 									
 								</dt>
 								<dd></dd>
 							
 								<dt>
-									<b>b</b>
+									<b>gStrength</b>
 									
 								</dt>
 								<dd></dd>
 							
 								<dt>
-									<b>c</b>
+									<b>bStrength</b>
 									
 								</dt>
 								<dd></dd>
 							
 								<dt>
-									<b>d</b>
+									<b>colour</b>
 									
 								</dt>
 								<dd></dd>
@@ -2837,7 +2946,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						Gets all properties from local storage, and sets them on the settings dialog
+						Gets all properties from local storage, and sets them on the settings dialog.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_utils.js.html">utils.js</a>.
@@ -2865,7 +2974,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						Gets a property from local storage, and sets this on the settings dialog
+						Gets a property from local storage, and sets this on the settings dialog.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_utils.js.html">utils.js</a>.
@@ -3204,6 +3313,45 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name=".handleNoticeEvents"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">FiercePlanet.</span><b>handleNoticeEvents</b>(e)
+					
+					</div>
+					<div class="description">
+						Respond to clicks on the notice canvas
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_general-ui.js.html">general-ui.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>e</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name=".hookUpCustomEventListeners"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -3290,6 +3438,51 @@ ul.inheritsList
 							
 								<dt>
 									<b>alphaLevel</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isPositionOccupiedByResource"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">FiercePlanet.</span><b>isPositionOccupiedByResource</b>(x, y)
+					
+					</div>
+					<div class="description">
+						Find the current resource index
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_resource-ui.js.html">resource-ui.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>x</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<b>y</b>
 									
 								</dt>
 								<dd></dd>
@@ -3749,7 +3942,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						Core logic loop: processes agents
+						Core logic loop: processes agents.
 						
 						
 					</div>
@@ -3950,6 +4143,84 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name=".registerResourceCategories"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">FiercePlanet.</span><b>registerResourceCategories</b>(resourceCategories)
+					
+					</div>
+					<div class="description">
+						Registers resource categories
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_resource-ui.js.html">resource-ui.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>resourceCategories</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".registerResourceTypes"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">FiercePlanet.</span><b>registerResourceTypes</b>(resourceTypes)
+					
+					</div>
+					<div class="description">
+						Registers resource categories
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_resource-ui.js.html">resource-ui.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>resourceTypes</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name=".replayStart"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -4098,10 +4369,10 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						
+						Generic resource kind functions
 						
 							<br />
-							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_data_resource_kinds.js.html">resource_kinds.js</a>.
+							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_resource-ui.js.html">resource-ui.js</a>.
 						
 						
 					</div>
@@ -4193,7 +4464,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						Sets all properties on settings dialog, and stores property values in local storage
+						Sets all properties on settings dialog, and stores property values in local storage.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_utils.js.html">utils.js</a>.
@@ -4221,7 +4492,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						Sets a property local storage based on values in the settings dialog
+						Sets a property local storage based on values in the settings dialog.
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_utils.js.html">utils.js</a>.
@@ -4392,24 +4663,63 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name=".showCredits"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">FiercePlanet.</span><b>showCredits</b>()
+					
+					</div>
+					<div class="description">
+						Shows the Fierce Planet credits
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_dialogs.js.html">dialogs.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name=".showDesignFeaturesDialog"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">FiercePlanet.</span><b>showDesignFeaturesDialog</b>()
+					<span class="light">FiercePlanet.</span><b>showDesignFeaturesDialog</b>(e)
 					
 					</div>
 					<div class="description">
 						
 						
 							<br />
-							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_fierce-planet.min.js.html">fierce-planet.min.js</a>.
+							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_editor.js.html">editor.js</a>.
 						
 						
 					</div>
 					
 					
 					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>e</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -4484,7 +4794,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						
+						Show the resource gallery, and allow the user to pick from a range of capabilities
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_dialogs.js.html">dialogs.js</a>.
@@ -4512,7 +4822,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						
+						Shows the Fierce Planet settings
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_dialogs.js.html">dialogs.js</a>.
@@ -4750,6 +5060,51 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name=".zeroFill"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">FiercePlanet.</span><b>zeroFill</b>(number, width)
+					
+					</div>
+					<div class="description">
+						Sourced from: http://stackoverflow.com/questions/1267283/how-can-i-create-a-zerofilled-value-using-javascript/1267338#1267338.
+						
+							<br />
+							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_utils.js.html">utils.js</a>.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>number</b>
+									
+								</dt>
+								<dd></dd>
+							
+								<dt>
+									<b>width</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name=".zoom"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -4801,7 +5156,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Jun 22 2011 21:15:24 GMT+1000 (EST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Jun 28 2011 08:25:20 GMT+1000 (EST)
 		</div>
 	</body>
 </html>

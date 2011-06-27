@@ -33,6 +33,7 @@ AgentType.prototype.getHealth = function() { return this._health; };
 AgentType.prototype.getEconomicHealth = function() { return this._economicHealth; };
 AgentType.prototype.getEnvironmentalHealth = function() { return this._environmentalHealth; };
 AgentType.prototype.getSocialHealth = function() { return this._socialHealth; };
+AgentType.prototype.getHealthForCategory = function(category) { return this._healthCategoryStats[category]; };
 AgentType.prototype.getDrawFunction = function() { return this._drawFunction; };
 AgentType.prototype.setDrawFunction = function(drawFunction) { this._drawFunction = drawFunction; };
 
@@ -136,6 +137,8 @@ function Agent(agentType, x, y) {
     this._economicHealth = INITIAL_HEALTH;
     this._environmentalHealth = INITIAL_HEALTH;
     this._socialHealth = INITIAL_HEALTH;
+    this._healthCategoryStats = {};
+    this.registerHealthStats();
 
     // Whether the agent is 'hit' by a conflicting agent
     this._isHit = false;
@@ -175,24 +178,43 @@ Agent.prototype.getSocialHealth = function() { return this._socialHealth; };
 Agent.prototype.setSocialHealth = function(socialHealth) { this._socialHealth = socialHealth; };
 Agent.prototype.getIsHit = function() { return this._isHit; };
 Agent.prototype.setIsHit = function(isHit) { this._isHit = isHit; };
+Agent.prototype.registerHealthStats = function() {
+    for (var i = 0; i < FiercePlanet.resourceCategories.length; i++) {
+        var category = FiercePlanet.resourceCategories[i];
+        this._healthCategoryStats[category.getCode()] = INITIAL_HEALTH;
+    }
+};
+/**
+ * Adjusts all categories of health by the adjustment amount
+ * @param adjustment
+ */
 Agent.prototype.adjustHealth = function(adjustment) {
-    this._economicHealth = this.makeHealthAdjustment(this._economicHealth, adjustment);
-    this._environmentalHealth = this.makeHealthAdjustment(this._environmentalHealth, adjustment);
-    this._socialHealth = this.makeHealthAdjustment(this._socialHealth, adjustment);
+    var len = FiercePlanet.resourceCategories.length;
+    for (var i = 0; i < len; i++) {
+        var category = FiercePlanet.resourceCategories[i];
+        var categoryHealth = this._healthCategoryStats[category.getCode()];
+        this._healthCategoryStats[category.getCode()] = this.makeHealthAdjustment(categoryHealth, adjustment);
+    }
     this.recalibrateOverallHealth();
 };
-Agent.prototype.adjustEconomicHealth = function(adjustment) {
-    this._economicHealth = this.makeHealthAdjustment(this._economicHealth, adjustment);
+/**
+ * Adjusts health based on a given resource.
+ * 
+ * @param adjustment
+ * @param resource
+ */
+Agent.prototype.adjustHealthForResource = function(adjustment, resource) {
+    var categoryCode = resource.getCategory().getCode();
+    var categoryHealth = this._healthCategoryStats[categoryCode];
+    this._healthCategoryStats[categoryCode] = this.makeHealthAdjustment(categoryHealth, adjustment);
     this.recalibrateOverallHealth();
 };
-Agent.prototype.adjustEnvironmentalHealth = function(adjustment) {
-    this._environmentalHealth = this.makeHealthAdjustment(this._environmentalHealth, adjustment);
-    this.recalibrateOverallHealth();
-};
-Agent.prototype.adjustSocialHealth = function(adjustment) {
-    this._socialHealth = this.makeHealthAdjustment(this._socialHealth, adjustment);
-    this.recalibrateOverallHealth();
-};
+/**
+ * Generates a normalised health adjustment amount (not below zero, not above the INITIAL_HEALTH amount).
+ * 
+ * @param existingHealthValue
+ * @param adjustment
+ */
 Agent.prototype.makeHealthAdjustment = function(existingHealthValue, adjustment) {
     var newHealth = existingHealthValue + adjustment;
     if (newHealth > 0 && newHealth < INITIAL_HEALTH)
@@ -202,10 +224,23 @@ Agent.prototype.makeHealthAdjustment = function(existingHealthValue, adjustment)
     else
         return 0;
 };
+/**
+ * Recalibrates overall health based on specific statistics.
+ */
 Agent.prototype.recalibrateOverallHealth = function() {
-    var overallHealth = Math.floor((this._economicHealth + this._environmentalHealth + this._socialHealth) / 3);
+    var overallHealth = 0;
+    var len = FiercePlanet.resourceCategories.length;
+    var hasZeroHealth = false;
+    for (var i = 0; i < len; i++) {
+        var category = FiercePlanet.resourceCategories[i];
+        var categoryHealth = this._healthCategoryStats[category.getCode()];
+        if (categoryHealth == 0)
+            hasZeroHealth = true;
+        overallHealth += categoryHealth;
+    }
     // Set health to zero if any of the specific types of health are zero
-    overallHealth = (this._economicHealth == 0 || this._environmentalHealth == 0 || this._socialHealth == 0) ? 0 : overallHealth;
+    overallHealth = hasZeroHealth ? 0 : overallHealth / len;
+
     this._health = overallHealth;
 };
 Agent.prototype.getWanderX = function() { return this._wanderX; };

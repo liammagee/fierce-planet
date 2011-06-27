@@ -15,7 +15,7 @@ var FiercePlanet = FiercePlanet || {};
  * Handle various resource-related interactions
  */
 FiercePlanet.setupResourceInteraction = function () {
-        var links = $('.eco, .env, .soc'), el = null;
+        var links = $('.swatch-instance'), el = null;
         for (var i = 0; i < links.length; i++) {
             el = links[i];
             if (el.id && $.inArray(el.id, FiercePlanet.capabilities) != -1) {
@@ -152,13 +152,14 @@ FiercePlanet.dropItem = function(e) {
         else {
             FiercePlanet.resourcesInStore -= resource.getCost();
             FiercePlanet.resourcesSpent += resource.getCost();
-            if (resource.getType() == 'eco') {
+            var resourceType = resource.getCategory().getCode();
+            if (resourceType == 'eco') {
                 FiercePlanet.economicResourceCount += 1;
             }
-            else if (resource.getType() == 'env') {
+            else if (resourceType == 'env') {
                 FiercePlanet.environmentalResourceCount += 1;
             }
-            else if (resource.getType() == 'soc') {
+            else if (resourceType == 'soc') {
                 FiercePlanet.socialResourceCount += 1;
             }
             FiercePlanet.currentLevel.getResources().push(resource);
@@ -209,7 +210,7 @@ FiercePlanet.calculateResourceEffect = function (resource) {
         if (FiercePlanet.ignoreResourceBalance || FiercePlanet.applyGeneralHealth)
             return 1;
 
-        var resourceType = resource.getType();
+        var resourceType = resource.getCategory().getCode();
         var resourceTypeCount = 0;
         var totalResources = FiercePlanet.currentLevel.getResources().length;
         if (totalResources == 1)
@@ -240,13 +241,13 @@ FiercePlanet.calculateResourceEffect = function (resource) {
 FiercePlanet.calculateSurroundingResourcesEffects = function (resource) {
         var x = resource.getX();
         var y = resource.getY();
-        var resourceType = resource.getType();
+        var resourceType = resource.getCategory().getCode();
         var baseEffect = 1;
         for (var j = 0; j < FiercePlanet.currentLevel.getResources().length; j++) {
             var neighbour = FiercePlanet.currentLevel.getResources()[j];
             var nx = neighbour.getX();
             var ny = neighbour.getY();
-            var nType = neighbour.getType();
+            var nType = neighbour.getCategory().getCode();
             if (Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
                 if (resourceType == "eco") {
                     if (nType == "eco") {
@@ -311,3 +312,30 @@ FiercePlanet.resetResourceYields = function () {
             p.setTotalYield(p.getInitialTotalYield());
         }
     };
+
+
+/**
+ * Generic resource kind functions
+ */
+FiercePlanet.resolveResourceKind = function (code) {
+    for (var i = 0; i < FiercePlanet.resourceTypes.length; i++) {
+        var resourceKind = FiercePlanet.resourceTypes[i];
+        if (resourceKind._code == code)
+            return resourceKind;
+    }
+    return null;
+};
+
+/**
+ * Registers resource categories
+ */
+FiercePlanet.registerResourceCategories = function (resourceCategories) {
+    FiercePlanet.resourceCategories = resourceCategories;
+};
+
+/**
+ * Registers resource categories
+ */
+FiercePlanet.registerResourceTypes = function (resourceTypes) {
+    FiercePlanet.resourceTypes = resourceTypes;
+};

@@ -191,9 +191,27 @@ ul.inheritsList
 	
 	<li><i><a href="../symbols/_global_.html">_global_</a></i></li>
 	
+	<li><a href="../symbols/Catastrophe.html">Catastrophe</a></li>
+	
+	<li><a href="../symbols/Event.html">Event</a></li>
+	
 	<li><a href="../symbols/FiercePlanet.html">FiercePlanet</a></li>
 	
+	<li><a href="../symbols/Level.html">Level</a></li>
+	
+	<li><a href="../symbols/Notice.html">Notice</a></li>
+	
+	<li><a href="../symbols/PlayerClass.html">PlayerClass</a></li>
+	
 	<li><a href="../symbols/PresetLevels.html">PresetLevels</a></li>
+	
+	<li><a href="../symbols/Resource.html">Resource</a></li>
+	
+	<li><a href="../symbols/ResourceCategory.html">ResourceCategory</a></li>
+	
+	<li><a href="../symbols/ResourceKind.html">ResourceKind</a></li>
+	
+	<li><a href="../symbols/Tile.html">Tile</a></li>
 	
 </ul>
 <hr />
@@ -289,7 +307,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/_global_.html#AgentType">AgentType</a></b>(name, color)
 								</div>
-								<div class="description"></div>
+								<div class="description">Agent type class definition</div>
 							</td>
 						</tr>
 					
@@ -298,16 +316,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/_global_.html#AgentTypes">AgentTypes</a></b>()
 								</div>
-								<div class="description">Created by .</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/_global_.html#Event">Event</a></b>(type, source, event, time, levelContext, data)
-								</div>
-								<div class="description">Possible events: - Lifecycle events - Agent events (create, change, destroy) - Resource events (create, change, destroy) Event listeners: - Logging - Recording - Notifying Event structure: - Source (game, level, agent, resource) - Event (new, complete, change) - Data - Time (gameCounter) - Context (currentLevel)</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
@@ -315,24 +324,6 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/_global_.html#EventTarget">EventTarget</a></b>()
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/_global_.html#GameRecord">GameRecord</a></b>()
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/_global_.html#Level">Level</a></b>(id)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -351,51 +342,6 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/_global_.html#MemoryOfAgent">MemoryOfAgent</a></b>(agentID, age, x, y, otherAgentID)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/_global_.html#Notice">Notice</a></b>(text, x, y, width, height, start, duration, backgroundColor, foregroundColor, lineWidth, font)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/_global_.html#PlayerClass">PlayerClass</a></b>(name, savesRequired)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/_global_.html#Resource">Resource</a></b>(kind, x, y)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/_global_.html#ResourceKind">ResourceKind</a></b>(name, code, domain, cost, upgradeCost, totalYield, perAgentYield)
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/_global_.html#Tile">Tile</a></b>(color, x, y)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -536,7 +482,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						
+						Agent type class definition
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_framework_agent.js.html">agent.js</a>.
@@ -581,7 +527,7 @@ ul.inheritsList
 					
 					</div>
 					<div class="description">
-						Created by .User: LiamDate: 24/04/11Time: 11:18 PMTo change this template use File | Settings | File Templates.
+						
 						
 							<br />
 							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_data_agent_types.js.html">agent_types.js</a>.
@@ -591,75 +537,6 @@ ul.inheritsList
 					
 					
 					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="Event"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>Event</b>(type, source, event, time, levelContext, data)
-					
-					</div>
-					<div class="description">
-						Possible events: - Lifecycle events - Agent events (create, change, destroy) - Resource events (create, change, destroy) Event listeners: - Logging - Recording - Notifying Event structure: - Source (game, level, agent, resource) - Event (new, complete, change) - Data - Time (gameCounter) - Context (currentLevel)
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_ui_event.js.html">event.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>type</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>source</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>event</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>time</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>levelContext</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>data</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
 						
 						
 						
@@ -688,73 +565,6 @@ ul.inheritsList
 					
 					
 					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="GameRecord"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>GameRecord</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_ui_game_record.js.html">game_record.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="Level"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>Level</b>(id)
-					
-					</div>
-					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_framework_level.js.html">level.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>id</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
 						
 						
 						
@@ -883,327 +693,6 @@ ul.inheritsList
 						
 						
 
-					<hr />
-				
-					<a name="Notice"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>Notice</b>(text, x, y, width, height, start, duration, backgroundColor, foregroundColor, lineWidth, font)
-					
-					</div>
-					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_ui_notice.js.html">notice.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>text</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>x</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>y</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>width</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>height</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>start</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>duration</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>backgroundColor</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>foregroundColor</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>lineWidth</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>font</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="PlayerClass"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>PlayerClass</b>(name, savesRequired)
-					
-					</div>
-					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_framework_player_class.js.html">player_class.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>name</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>savesRequired</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="Resource"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>Resource</b>(kind, x, y)
-					
-					</div>
-					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_framework_resource.js.html">resource.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>kind</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>x</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>y</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="ResourceKind"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>ResourceKind</b>(name, code, domain, cost, upgradeCost, totalYield, perAgentYield)
-					
-					</div>
-					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_framework_resource.js.html">resource.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>name</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>code</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>domain</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>cost</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>upgradeCost</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>totalYield</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>perAgentYield</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="Tile"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>Tile</b>(color, x, y)
-					
-					</div>
-					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/public_javascripts_agents_framework_tile.js.html">tile.js</a>.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>color</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>x</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>y</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
 					
 				
 			
@@ -1218,7 +707,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Jun 22 2011 21:15:24 GMT+1000 (EST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Jun 28 2011 08:25:19 GMT+1000 (EST)
 		</div>
 	</body>
 </html>

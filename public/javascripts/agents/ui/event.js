@@ -123,7 +123,7 @@ FiercePlanet.hookUpCustomEventListeners = function() {
             var socCount = 0;
             for (var i = 0; i < resources.length; i++) {
                 var r = resources[i];
-                switch (r.getType()) {
+                switch (r.getCategory.getCode()) {
                     case 'eco':
                         ecoCount++;
                         break;
@@ -135,7 +135,7 @@ FiercePlanet.hookUpCustomEventListeners = function() {
                         break;
                 }
             }
-            switch (resource.getType()) {
+            switch (resource.getCategory().getCode()) {
                 case 'eco':
                     if (ecoCount == 1) {
                         FiercePlanet.currentNotice = new Notice("Well done! You've added your first economic resource!");

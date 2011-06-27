@@ -304,10 +304,7 @@ background-position: -101px -101px;
 #swatch img {
 	border-radius:4px;
 }
-.eco, .env, .soc {
-	width:27px;
-	text-align:center;
-}
+
 .inactive {
 	opacity:.4;
 	cursor:pointer;
@@ -321,33 +318,6 @@ background-position: -101px -101px;
 .credits {
     margin-top: 1em;
 	font-style:italic;
-}
-#swatch_economic, #swatch_environmental, #swatch_social{
-	border-radius:4px;
-	margin-bottom:10px;
-}
-#swatch_economic{
-	background:#44ABE0;
-}
-#swatch_environmental{
-	background:#CBDB2A;
-	padding:5px;
-}
-#swatch_social{
-	background:#DE1F2A;
-	padding:5px;
-}
-#swatch div.eco, #gallery-items div.eco {
-	float: left;
-	border: solid 3px #44ABE0;
-}
-#swatch div.env, #gallery-items div.env {
-	float: left;
-	border: solid 3px #CBDB2A;
-}
-#swatch div.soc, #gallery-items div.soc {
-	float: left;
-	border: solid 3px #DE1F2A;
 }
 canvas {
 	position:absolute;
@@ -406,3 +376,26 @@ li.over {
 	margin-top: 0px;
 }
 
+
+/* Resource swatch styles */
+.swatch-category {
+    border-radius:4px;
+    margin-bottom:10px;
+}
+
+.swatch-instance {
+    width:27px;
+    text-align:center;
+    float: left;
+    padding: 3px;
+}
+/* Resource swatch styles */
+#swatch_economic {
+	background:#44ABE0;
+}
+#swatch_environmental{
+	background:#CBDB2A;
+}
+#swatch_social{
+	background:#DE1F2A;
+}

@@ -59,6 +59,9 @@ FiercePlanet.WAVE_NOTICE_HEIGHT = 150;
 // Resource constants
 FiercePlanet.PROFILE_CLASSES = ["Novice", "Planner", "Expert", "Visionary", "Genius"];
 FiercePlanet.CAPABILITY_COSTS = [0, 100, 200, 300, 500];
+
+
+// TODO: Refactor out
 FiercePlanet.NOVICE_CAPABILITIES = ["farm", "water", "clinic"];
 FiercePlanet.PLANNER_CAPABILITIES = FiercePlanet.NOVICE_CAPABILITIES.concat(["shop", "park", "school"]);
 FiercePlanet.EXPERT_CAPABILITIES = FiercePlanet.PLANNER_CAPABILITIES.concat(["bank", "air", "legal"]);
@@ -103,6 +106,11 @@ FiercePlanet.backgroundIconsVisible = false;
 FiercePlanet.applyGeneralHealth = false;
 FiercePlanet.ignoreResourceBalance = false;
 FiercePlanet.tilesMutable = false;
+
+
+// Resource variables
+FiercePlanet.resourceCategories = [];
+FiercePlanet.resourceTypes = [];
 
 
 // Timer variables
