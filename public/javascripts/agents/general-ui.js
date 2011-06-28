@@ -61,7 +61,7 @@ FiercePlanet.hookUpUIEventListeners = function() {
     FiercePlanet.getAndRetrieveProperties();
 
     // Trap relevant key strokes
-    $(document).keyup(function(event) {
+    $('#').keyup(function(event) {
         console.log(event.which);
         switch (event.which) {
             // +, -, 0: Zoom functions
@@ -120,7 +120,7 @@ FiercePlanet.hookUpUIEventListeners = function() {
                 break;
             // 's': Settings
             case 83:
-                FiercePlanet.showResourceGallery();
+                FiercePlanet.showSettings();
                 break;
             // 'e': Editor
             case 69:

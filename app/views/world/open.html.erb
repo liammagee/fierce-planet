@@ -1,43 +1,48 @@
 
-    <%= render "score_board" %>
+    <div id="visible_game_area">
 
-    <div id="gameworld">
-      <div id="world">
-        <div id="map_canvas" width="481" height="401" style="z-index: 1;"></div>
-        <canvas id="baseCanvas" width="481" height="401" style="z-index: 2;">A Canvas</canvas>
-        <canvas id="resourceCanvas" width="481" height="401" style="z-index: 3;">A Canvas</canvas>
-        <canvas id="scrollingCanvas" width="481" height="401" style="z-index: 4;">A Canvas</canvas>
-        <canvas id="noticeCanvas" width="481" height="401" style="z-index: 5;">A Canvas</canvas>
-        <canvas id="agentCanvas" width="481" height="401" style="z-index: 5;">A Canvas</canvas>
-      </div>
-    </div>
+        <%= render "score_board" %>
 
-
-    <div id="info">
-      <div id="global-info">
-        <div id="user-links">
-            <% if user_signed_in? %>
-                <div id="profile" style="display:none"> <span id="profile-class-display">0</span> </div>
-                <span id="welcome-link">
-                  <%= link_to("Welcome #{current_user.profile.nickname} (#{current_user.profile.profile_class})", edit_profile_path(current_user.profile), :remote => true) %> |
-                </span>
-                <%= link_to('Contact', new_feedback_path, :remote => true) %> |
-                <a href="#" id="credits">Credits</a> |
-                <%= link_to('Logout', destroy_user_session_path) %>
-            <% else %>
-                <%= link_to('Login', new_user_session_path) %>
-            <% end %>
+        <div id="gameworld">
+          <div id="world">
+            <div id="map_canvas" width="481" height="401" style="z-index: 1;"></div>
+            <canvas id="baseCanvas" width="481" height="401" style="z-index: 2;">A Canvas</canvas>
+            <canvas id="resourceCanvas" width="481" height="401" style="z-index: 3;">A Canvas</canvas>
+            <canvas id="scrollingCanvas" width="481" height="401" style="z-index: 4;">A Canvas</canvas>
+            <canvas id="noticeCanvas" width="481" height="401" style="z-index: 5;">A Canvas</canvas>
+            <canvas id="agentCanvas" width="481" height="401" style="z-index: 5;">A Canvas</canvas>
+          </div>
         </div>
-      </div>
+
+
+        <div id="info">
+          <div id="global-info">
+            <div id="user-links">
+                <% if user_signed_in? %>
+                    <div id="profile" style="display:none"> <span id="profile-class-display">0</span> </div>
+                    <span id="welcome-link">
+                      <%= link_to("Welcome #{current_user.profile.nickname} (#{current_user.profile.profile_class})", edit_profile_path(current_user.profile), :remote => true) %> |
+                    </span>
+                    <%= link_to('Contact', new_feedback_path, :remote => true) %> |
+                    <a href="#" id="credits">Credits</a> |
+                    <%= link_to('Logout', destroy_user_session_path) %>
+                <% else %>
+                    <%= link_to('Login', new_user_session_path) %>
+                <% end %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Should always be visible -->
+        <%= render "control_panel" %>
+
+        <!-- Should only be visible when NOT in design mode -->
+        <%= render 'swatch' %>
+
+
+        <!-- Should only be visible when in design mode -->
+        <%= render 'level_editor' %>
     </div>
-
-    <!-- Should always be visible -->
-    <%= render "control_panel" %>
-
-    <!-- Should only be visible when NOT in design mode -->
-    <%= render 'swatch' %>
-    <!-- Should only be visible when in design mode -->
-    <%= render 'level_editor' %>
 
     <!-- Dialog boxes - should only be visible when explicitly invoked -->
     <%= render 'dialog_level_list' %>
