@@ -107,23 +107,17 @@ class ProfilesController < ApplicationController
   # PUT /profiles/1
   # PUT /profiles/1.xml
   def update
-    puts "got here 0"
-    puts "got here " + params[:id]
     @profile = Profile.find(params[:id])
 
-    puts "got here 1"
     respond_to do |format|
       begin
-        puts "got here 2"
         if @profile.update_attributes(params[:profile])
-  #        format.html { redirect_to("/", :notice => 'Profile was successfully updated.') }
-  #        format.xml  { head :ok }
-          puts "got here 3"
+          format.html { redirect_to("/", :notice => 'Profile was successfully updated.') }
+          format.xml  { head :ok }
           format.js   { render :action => "update" }
         else
-  #        format.html { render :action => "edit" }
-  #        format.xml  { render :xml => @profile.errors, :status => :unprocessable_entity }
-          puts "got here 4"
+          format.html { render :action => "edit" }
+          format.xml  { render :xml => @profile.errors, :status => :unprocessable_entity }
           format.js   { render :action => "edit" }
         end
       rescue => e
