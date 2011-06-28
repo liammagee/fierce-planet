@@ -38,6 +38,7 @@ class ProfilesController < ApplicationController
   # GET /profiles/1/edit
   def edit
     @profile = Profile.find(params[:id])
+    puts "got here " + params[:id]
   end
 
   # POST /profiles
@@ -107,6 +108,7 @@ class ProfilesController < ApplicationController
   # PUT /profiles/1.xml
   def update
     puts "got here 0"
+    puts "got here " + params[:id]
     @profile = Profile.find(params[:id])
 
     puts "got here 1"
