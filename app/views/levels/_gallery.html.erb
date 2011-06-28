@@ -1,55 +1,56 @@
-<h1>Level Gallery</h1>
-
-
-
-<h2>Pre-built levels</h2>
+<h3>Level Gallery</h3>
 
 <form>
-  Select difficulty:
-  <br/>
-  <select id="difficultyInput" name="difficultyInput" onchange="FiercePlanet.levelOfDifficulty = FiercePlanet.checkInteger(difficultyInput.value)">
-    <option value="1">Easy</option>
-    <option value="2" selected="selected">Medium</option>
-    <option value="3">Hard</option>
-    <option value="4">EXTREME</option>
-  </select>
-  <br/>
-
-  Level:
-  <br/>
-  <select id="levelInput" name="levelInput" onchange="FiercePlanet.currentLevelNumber = FiercePlanet.checkInteger(levelInput.value); FiercePlanet.currentLevelPreset = true;">
-    <option value="Choose level...">Choose level...</option>
-    <option value="1">Level 1: Welcome to Fierce Planet!</option>
-    <option value="2">Level 2: Twists and Turns</option>
-    <option value="3">Level 3: Waves of Uncertainty</option>
-    <option value="4">Level 4: Spiral of Doom</option>
-    <option value="5">Level 5: A-mazing Grace</option>
-    <option value="6">Level 6: Dire Straits</option>
-    <option value="7">Level 7: Like, Totally Random...</option>
-    <option value="8">Level 8: A Fork (or Two) in the Road</option>
-    <option value="9">Level 9: Cascades</option>
-    <option value="10">Level 10: Fields of Ma(i)ze</option>
-  </select>
-  <br/>
+  <div>
+    Level:
+    <select id="levelInput" name="levelInput" onchange="FiercePlanet.currentLevelNumber = FiercePlanet.checkInteger(levelInput.value); FiercePlanet.currentLevelPreset = true;">
+      <option value="Choose level...">Choose level...</option>
+      <option value="1">Level 1: Welcome to Fierce Planet!</option>
+      <option value="2">Level 2: Twists and Turns</option>
+      <option value="3">Level 3: Waves of Uncertainty</option>
+      <option value="4">Level 4: Spiral of Doom</option>
+      <option value="5">Level 5: A-mazing Grace</option>
+      <option value="6">Level 6: Dire Straits</option>
+      <option value="7">Level 7: Like, Totally Random...</option>
+      <option value="8">Level 8: A Fork (or Two) in the Road</option>
+      <option value="9">Level 9: Cascades</option>
+      <option value="10">Level 10: Fields of Ma(i)ze</option>
+    </select>
+  </div>
+  <div>
+    Select difficulty:
+    <select id="difficultyInput" name="difficultyInput" onchange="FiercePlanet.levelOfDifficulty = FiercePlanet.checkInteger(difficultyInput.value)">
+      <option value="1">Easy</option>
+      <option value="2" selected="selected">Medium</option>
+      <option value="3">Hard</option>
+      <option value="4">EXTREME</option>
+    </select>
+  </div>
 
 </form>
 
 <% if @levels.length > 0 %>
-    <h2>Community levels</h2>
+    <hr/>
+    <h3>Or select a custom level:</h3>
 
-    <table>
-      <tr>
-        <th>Name</th>
-        <th></th>
-      </tr>
+    <% @levels.each do |level| %>
+        <div>
+          <%= link_to level.name, level, :remote => true %>
+        </div>
+    <% end %>
+    <!--<table>-->
+      <!--<tr>-->
+        <!--<th>Name</th>-->
+        <!--<th></th>-->
+      <!--</tr>-->
 
-      <% @levels.each do |level| %>
-          <tr>
-            <td><%= level.name %></td>
-            <td><%= link_to 'Open', level, :remote => true %></td>
-          </tr>
-      <% end %>
-    </table>
+      <!--<% @levels.each do |level| %>-->
+          <!--<tr>-->
+            <!--<td><%= level.name %></td>-->
+            <!--<td><%= link_to 'Open', level, :remote => true %></td>-->
+          <!--</tr>-->
+      <!--<% end %>-->
+    <!--</table>-->
 <% end %>
 
     

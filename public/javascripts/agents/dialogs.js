@@ -490,7 +490,6 @@ FiercePlanet.showCredits = function() {
     
     FiercePlanet.$genericDialog = $('<div></div>')
         .html(
-            "<h3>Credits</h3>" +
             "<div class='credits'>Development Director</div>" +
             "<div>Liam Magee</div>" +
             "<div class='credits'>Art &amp; Design</div>" +

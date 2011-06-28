@@ -1,9 +1,13 @@
-<h1>Listing levels</h1>
+<h3>Level Editor</h3>
+
+
+<% link_to new_level_path, :remote => true do %>
+    Make a new level
+<% end %>
 
 <table>
   <tr>
     <th>Name</th>
-    <th></th>
     <th></th>
     <th></th>
   </tr>
@@ -13,20 +17,14 @@
         <td><%= level.name %></td>
         <td>
           <% link_to edit_level_path(level), :remote => true do %>
-            <%= image_tag("/images/32/edit-4.png", :alt => "Edit Level") %> Edit
+            Edit
             <% end %>
         </td>
         <td>
           <% link_to level, :confirm => 'Are you sure?', :method => :delete, :remote => true do  %>
-              <%= image_tag("/images/32/edit-delete-5.png", :alt =>  "Delete Level") %> Delete
+            Delete
           <% end %>
         </td>
       </tr>
   <% end %>
 </table>
-
-<br/>
-
-<% link_to new_level_path, :remote => true do %>
-    <%= image_tag("/images/32/project-development-new-template.png", :alt => "New Level") %> New Level
-<% end %>

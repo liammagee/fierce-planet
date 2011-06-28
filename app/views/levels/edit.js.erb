@@ -1,11 +1,5 @@
 
 
-// Close the level selection dialog
-FiercePlanet.$levelList.dialog('close');
-
-// Add a notification
-$('#notifications').html("<p><%= @level.name %> successfully saved.</p>");
-
 // Instantiate the current level from the database
 <%=  render('levels/setup_level', :locals => { :level => @level}) %>
 
@@ -21,3 +15,7 @@ FiercePlanet.currentLevelPreset = false;
 
 // Finally, construct the level editor
 FiercePlanet.setupLevelEditor();
+
+
+// Close the level selection dialog
+FiercePlanet.$levelList.dialog('close');
