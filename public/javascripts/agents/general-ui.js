@@ -90,6 +90,43 @@ FiercePlanet.hookUpUIEventListeners = function() {
             case 72:
                 FiercePlanet.pan(4);
                 break;
+            // 'p': Play/pause game
+            case 80:
+                FiercePlanet.playGame();
+                break;
+            // 'n': New game
+            case 78:
+                FiercePlanet.newGame();
+                break;
+            // 'r': Restart game
+            case 82:
+                FiercePlanet.restartLevel();
+                break;
+            // 'w': Rewind
+            case 87:
+                FiercePlanet.slowDown();
+                break;
+            // 'f': Fast forward
+            case 70:
+                FiercePlanet.speedUp();
+                break;
+            // 't': Tutorial
+            case 84:
+//                FiercePlanet.show;
+                break;
+            // 'g': Gallery
+            case 71:
+                FiercePlanet.showResourceGallery();
+                break;
+            // 's': Settings
+            case 83:
+                FiercePlanet.showResourceGallery();
+                break;
+            // 'e': Editor
+            case 69:
+                $('#')
+                FiercePlanet.showResourceGallery();
+                break;
 
         }
     });

@@ -18,6 +18,7 @@ class ProfilesController < ApplicationController
     @profile = Profile.find(params[:id])
 
     respond_to do |format|
+      format.js   # _show.html.erb
       format.html # _show.html.erb
       format.xml  { render :xml => @profile }
     end
