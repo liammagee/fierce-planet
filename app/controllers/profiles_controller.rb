@@ -46,9 +46,11 @@ class ProfilesController < ApplicationController
 
     respond_to do |format|
       if @profile.save
+        format.js   { render :action => "update" }
         format.html { redirect_to(@profile, :notice => 'Profile was successfully created.') }
         format.xml  { render :xml => @profile, :status => :created, :location => @profile }
       else
+        format.js   { render :action => "new" }
         format.html { render :action => "new" }
         format.xml  { render :xml => @profile.errors, :status => :unprocessable_entity }
       end
@@ -107,9 +109,8 @@ class ProfilesController < ApplicationController
 
     respond_to do |format|
       if @profile.update_attributes(params[:profile])
-        format.js   { render :action => "update" }
+        format.js
         format.html { redirect_to("/", :notice => 'Profile was successfully updated.') }
-#        format.html { redirect_to(@profile, :notice => 'Profile was successfully updated.') }
         format.xml  { head :ok }
       else
         format.js   { render :action => "edit" }
