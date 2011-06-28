@@ -165,6 +165,7 @@ body {
 	width:61px;
 	padding:50px 10px 0;
 	z-index:100;
+    background: #1F62C1;
 	background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#1F62C1), to(#203275));
 	background: -moz-linear-gradient(0% 100% 0deg,#1F62C1, #203275);
 	border-radius:4px;

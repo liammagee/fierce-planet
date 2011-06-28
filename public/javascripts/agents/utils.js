@@ -26,6 +26,7 @@ $(document).ajaxSend(function(event, request, settings) {
  */
 $(function(){
     $().zoom(function(direction){
+        console.log('zooming');
         switch(direction) {
             case 1:
                 FiercePlanet.externalZoomLevel *= 1.2;

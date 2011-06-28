@@ -96,7 +96,7 @@ FiercePlanet.handleKeyboardShortcuts = function(e) {
     if (e.ctrlKey || e.altKey || e.metaKey)
         return;
 
-    switch (event.which) {
+    switch (e.which) {
         // +, -, 0: Zoom functions
         case 107:
             FiercePlanet.zoom(1);
@@ -200,12 +200,13 @@ FiercePlanet.handleNoticeEvents = function(e) {
         var h = notice._height;
         var ex;
         var ey;
-        if (e.layerX || e.layerX == 0) { // Firefox
-            ex = e.layerX;
-            ey = e.layerY;
-        } else if (e.offsetX || e.offsetX == 0) { // Opera
+        if (e.offsetX || e.offsetX == 0) { // Opera
             ex = e.offsetX;
             ey = e.offsetY;
+        }
+        else if (e.layerX || e.layerX == 0) { // Firefox
+            ex = e.layerX;
+            ey = e.layerY;
         }
         if (ex >= x && ex <= x + w && ey >= y && ey <= y + h) {
             FiercePlanet.currentNotice = undefined;
@@ -222,21 +223,28 @@ FiercePlanet.handleNoticeEvents = function(e) {
 FiercePlanet.getCurrentPosition = function(e) {
     var x;
     var y;
-    if (e.layerX || e.layerX == 0) { // Firefox
-        x = e.layerX;
-        y = e.layerY;
-    } else if (e.offsetX || e.offsetX == 0) { // Opera
+    if (e.offsetX || e.offsetX == 0) { // Firefox, IE9, Chrome, Safari
         x = e.offsetX;
         y = e.offsetY;
     }
+    else if (e.layerX || e.layerX == 0) { // Opera
+        x = e.layerX;
+        y = e.layerY;
+    }
 
+    console.log('--------------');
+    console.log(e);
+    console.log(x);
+    console.log(y);
     x -= FiercePlanet.panLeftOffset;
     y -= FiercePlanet.panTopOffset;
     x /= FiercePlanet.zoomLevel;
     y /= FiercePlanet.zoomLevel;
-    x /= FiercePlanet.externalZoomLevel;
-    y /= FiercePlanet.externalZoomLevel;
-
+//    x /= FiercePlanet.externalZoomLevel;
+//    y /= FiercePlanet.externalZoomLevel;
+    console.log(x);
+    console.log(y);
+    
     // Compensate for border
     x -= (1 / FiercePlanet.zoomLevel);
     y -= (1 / FiercePlanet.zoomLevel);

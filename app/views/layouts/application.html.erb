@@ -20,34 +20,38 @@
 
   <!-- Load FiercePlanet classes here -->
   <%= javascript_tag "var FiercePlanet = FiercePlanet || {};" -%>
-  <%= javascript_include_tag "agents/framework/agent" %>
-  <%= javascript_include_tag "agents/framework/catastrophe" %>
-  <%= javascript_include_tag "agents/framework/level" %>
-  <%= javascript_include_tag "agents/framework/resource" %>
-  <%= javascript_include_tag "agents/framework/player_class" %>
-  <%= javascript_include_tag "agents/framework/tile" %>
-  <%= javascript_include_tag "agents/ui/notice" %>
-  <%= javascript_include_tag "agents/ui/event" %>
 
-  <!-- Change this to load other resource categories -->
-  <%= javascript_include_tag "agents/data/resourceset/tbl" %>
-  <%= javascript_include_tag "agents/data/resourceset/cos" %>
+  <% if Rails.env.production? %>
+      <%= javascript_include_tag "agents/fierce-planet.min" %>
+  <% else %>
+      <%= javascript_include_tag "agents/framework/agent" %>
+      <%= javascript_include_tag "agents/framework/catastrophe" %>
+      <%= javascript_include_tag "agents/framework/level" %>
+      <%= javascript_include_tag "agents/framework/resource" %>
+      <%= javascript_include_tag "agents/framework/player_class" %>
+      <%= javascript_include_tag "agents/framework/tile" %>
+      <%= javascript_include_tag "agents/ui/notice" %>
+      <%= javascript_include_tag "agents/ui/event" %>
 
-  <%= javascript_include_tag "agents/data/player_classes" %>
-  <%= javascript_include_tag "agents/data/agent_types" %>
-  <%= javascript_include_tag "agents/dialogs" %>
-  <%= javascript_include_tag "agents/drawing" %>
-  <%= javascript_include_tag "agents/editor" %>
-  <%= javascript_include_tag "agents/general-ui" %>
-  <%= javascript_include_tag "agents/lifecycle" %>
-  <%= javascript_include_tag "agents/params" %>
-  <%= javascript_include_tag "agents/profile" %>
-  <%= javascript_include_tag "agents/recording" %>
-  <%= javascript_include_tag "agents/resource-ui" %>
-  <%= javascript_include_tag "agents/utils" %>
-  <%= javascript_include_tag "agents/game" %>
-  <%= javascript_include_tag "agents/data/levels" %>
-  <!--<%= javascript_include_tag "agents/fierce-planet.min" %>-->
+      <!-- Change this to load other resource categories -->
+      <%= javascript_include_tag "agents/data/resourceset/tbl" %>
+      <%= javascript_include_tag "agents/data/resourceset/cos" %>
+
+      <%= javascript_include_tag "agents/data/player_classes" %>
+      <%= javascript_include_tag "agents/data/agent_types" %>
+      <%= javascript_include_tag "agents/dialogs" %>
+      <%= javascript_include_tag "agents/drawing" %>
+      <%= javascript_include_tag "agents/editor" %>
+      <%= javascript_include_tag "agents/general-ui" %>
+      <%= javascript_include_tag "agents/lifecycle" %>
+      <%= javascript_include_tag "agents/params" %>
+      <%= javascript_include_tag "agents/profile" %>
+      <%= javascript_include_tag "agents/recording" %>
+      <%= javascript_include_tag "agents/resource-ui" %>
+      <%= javascript_include_tag "agents/utils" %>
+      <%= javascript_include_tag "agents/game" %>
+      <%= javascript_include_tag "agents/data/levels" %>
+  <% end %>
 
   <%= javascript_tag "FiercePlanet.PROFILE_ID;" -%>
 

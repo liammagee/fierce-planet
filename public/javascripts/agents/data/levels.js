@@ -29,13 +29,14 @@ PresetLevels.level0.setWorldHeight(5);
 PresetLevels.level0.setInitialAgentNumber(1);
 PresetLevels.level0.setWaveNumber(3);
 PresetLevels.level0.setExpiryLimit(20);
-PresetLevels.level0.setIntroduction("<h2>Tutorial</h2> " +
-        "<p>The aim of Fierce Planet is to help citizens survive as they move towards their goal (the yellow disc in the bottom right corner).</p> " +
-        "<p>You can do this by placing <em>resources</em> on the grey squares. Your resources are the blue, green and red rectangles below. You can click or drag resources onto any grey square on the game map.</p> " +
-        "<p>Resources come in three kinds: economic, environmental and social. Your citizens need all of these, so you will need to supply a mix of resources along their path.</p> " +
-        "<p>Notice that if you don't provide enough resources of a particular kind, your citizens will start to turn into that colour. That's a dangerous sign, which indicates you need to place some resources quickly.</p> " +
-        "<p>During game play, you spend resources from your store, indicated in the top left corner of the scoreboard. Saving citizens will increase your store.</p> " +
-        "<p>Start by placing some resources on the map. When you are ready, click the 'Start' button in the Control Panel on the left. A small number of citizens will make their way along the path.</p> "
+PresetLevels.level0.setName("Tutorial");
+PresetLevels.level0.setIntroduction("" +
+        "<p>The aim of Fierce Planet is to help citizens survive as they move towards their goal (marked by a yellow circle).</p> " +
+        "<p>You do this by placing <em>resources</em> on squares around their path. You can click or drag resources anywhere on the game map.</p> " +
+        "<p>Resources come in three kinds: economic, environmental and social. Your citizens need all of these. " +
+        "If you don't provide enough resources of a particular kind, your citizens will turn that colour. You need to place some resources of that kind nearby.</p> " +
+        "<p>You start with a limited amount of resources. Saving citizens will allow you to place more resources, to help others.</p> " +
+        "<p>Start by placing some resources on the map. When you are ready, click the 'Play' button in the Control Panel on the left. After a few seconds, citizens will start marching towards their goal.</p> "
         );
 
 PresetLevels.level0.setup = function() {
