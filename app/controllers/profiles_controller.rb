@@ -109,7 +109,7 @@ class ProfilesController < ApplicationController
 
     respond_to do |format|
       if @profile.update_attributes(params[:profile])
-        format.js
+        format.js   { render :action => "update" }
         format.html { redirect_to("/", :notice => 'Profile was successfully updated.') }
         format.xml  { head :ok }
       else
