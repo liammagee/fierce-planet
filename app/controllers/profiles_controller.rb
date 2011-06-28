@@ -106,6 +106,7 @@ class ProfilesController < ApplicationController
   # PUT /profiles/1
   # PUT /profiles/1.xml
   def update
+    puts "got here 0"
     @profile = Profile.find(params[:id])
 
     puts "got here 1"
