@@ -50,7 +50,7 @@ function Level(id) {
     this._catastrophe = null;
 
     // User interface elements
-    this._tip = "";
+    this._tip = null;
     this._introduction = "Welcome to level " + this._id + ".";
     this._conclusion = "Congratulations! You have completed level " + this._id + ".";
     this._noticeImage = null;

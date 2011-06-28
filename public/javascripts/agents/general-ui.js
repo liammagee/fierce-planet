@@ -61,75 +61,21 @@ FiercePlanet.hookUpUIEventListeners = function() {
     FiercePlanet.getAndRetrieveProperties();
 
     // Trap relevant key strokes
-    $('#').keyup(function(event) {
-        console.log(event.which);
-        switch (event.which) {
-            // +, -, 0: Zoom functions
-            case 107:
-                FiercePlanet.zoom(1);
-                break;
-            case 109:
-                FiercePlanet.zoom(-1);
-                break;
-            case 96:
-                FiercePlanet.zoom(0);
-                break;
-            // Arrow buttons, 'h': Pan functions
-            case 37:
-                FiercePlanet.pan(2);
-                break;
-            case 38:
-                FiercePlanet.pan(0);
-                break;
-            case 39:
-                FiercePlanet.pan(3);
-                break;
-            case 40:
-                FiercePlanet.pan(1);
-                break;
-            case 72:
-                FiercePlanet.pan(4);
-                break;
-            // 'p': Play/pause game
-            case 80:
-                FiercePlanet.playGame();
-                break;
-            // 'n': New game
-            case 78:
-                FiercePlanet.newGame();
-                break;
-            // 'r': Restart game
-            case 82:
-                FiercePlanet.restartLevel();
-                break;
-            // 'w': Rewind
-            case 87:
-                FiercePlanet.slowDown();
-                break;
-            // 'f': Fast forward
-            case 70:
-                FiercePlanet.speedUp();
-                break;
-            // 't': Tutorial
-            case 84:
-//                FiercePlanet.show;
-                break;
-            // 'g': Gallery
-            case 71:
-                FiercePlanet.showResourceGallery();
-                break;
-            // 's': Settings
-            case 83:
-                FiercePlanet.showSettings();
-                break;
-            // 'e': Editor
-            case 69:
-                $('#')
-                FiercePlanet.showResourceGallery();
-                break;
-
-        }
+    $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
+    $('input, textarea, select, form').focus(function() {
+        $(document).unbind("keydown");
+    }).blur(function() {
+        $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
     });
+    // Disable any AJAX-loaded forms
+    $(document).ajaxComplete(function() {
+        $('input, textarea, select, form').focus(function() {
+            $(document).unbind("keydown");
+        }).blur(function() {
+            $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
+        });
+    });
+
 
     $('#agentCanvas').mousewheel(function(event, delta) {
         FiercePlanet.zoom(delta);
@@ -141,6 +87,85 @@ FiercePlanet.hookUpUIEventListeners = function() {
 
 };
 
+
+/**
+ *  Add key handling events
+ */
+FiercePlanet.handleKeyboardShortcuts = function(e) {
+    // Return if command keys are selected
+    if (e.ctrlKey || e.altKey || e.metaKey)
+        return;
+
+    switch (event.which) {
+        // +, -, 0: Zoom functions
+        case 107:
+            FiercePlanet.zoom(1);
+            break;
+        case 109:
+            FiercePlanet.zoom(-1);
+            break;
+        case 96:
+            FiercePlanet.zoom(0);
+            break;
+        // Arrow buttons, 'h': Pan functions
+        case 37:
+            FiercePlanet.pan(2);
+            break;
+        case 38:
+            FiercePlanet.pan(0);
+            break;
+        case 39:
+            FiercePlanet.pan(3);
+            break;
+        case 40:
+            FiercePlanet.pan(1);
+            break;
+        case 72:
+            FiercePlanet.pan(4);
+            break;
+        // 'p': Play/pause game
+        case 80:
+            FiercePlanet.playGame();
+            break;
+        // 'n': New game
+        case 78:
+            FiercePlanet.newGame();
+            break;
+        // 'r': Restart game
+        case 82:
+            FiercePlanet.restartLevel();
+            break;
+        // 'w': Rewind
+        case 87:
+            FiercePlanet.slowDown();
+            break;
+        // 'f': Fast forward
+        case 70:
+            FiercePlanet.speedUp();
+            break;
+        // 't': Tutorial
+        case 84:
+            $('#tutorial').click();
+            break;
+        // 'g': Gallery
+        case 71:
+            $('#level-gallery').click();
+            break;
+        // 's': Settings
+        case 83:
+            FiercePlanet.showSettings();
+            break;
+        // 'e': Editor
+        case 69:
+            $('#editor').click();
+            break;
+        // '$': Resource Gallery
+        case 52:
+            if (e.shiftKey)
+                FiercePlanet.showResourceGallery();
+            break;
+    }
+};
 
 /**
  *  Add button effects
