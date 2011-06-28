@@ -117,49 +117,16 @@ FiercePlanet.hookUpCustomEventListeners = function() {
         var resource = e._source;
         var level = e._levelContext;
         if (level.getId() == 1) {
-            var resources = level.getResources();
-            var ecoCount = 0;
-            var envCount = 0;
-            var socCount = 0;
-            for (var i = 0; i < resources.length; i++) {
-                var r = resources[i];
-                switch (r.getCategory.getCode()) {
-                    case 'eco':
-                        ecoCount++;
-                        break;
-                    case 'env':
-                        envCount++;
-                        break;
-                    case 'soc':
-                        socCount++;
-                        break;
-                }
-            }
-            switch (resource.getCategory().getCode()) {
-                case 'eco':
-                    if (ecoCount == 1) {
-                        FiercePlanet.currentNotice = new Notice("Well done! You've added your first economic resource!");
-                        FiercePlanet.currentNotice._height = 80;
-                        FiercePlanet.currentNotice._backgroundColor = 'rgba(136, 201, 255)';
-                        FiercePlanet.currentNotice._foregroundColor = 'rgba(0, 0, 0)';
-                    }
-                    break;
-                case 'env':
-                    if (envCount == 1) {
-                        FiercePlanet.currentNotice = new Notice("Well done! You've added your first environmental resource!");
-                        FiercePlanet.currentNotice._height = 80;
-                        FiercePlanet.currentNotice._backgroundColor = 'rgba(0, 255, 0)';
-                        FiercePlanet.currentNotice._foregroundColor = 'rgba(0, 0, 0)';
-                    }
-                    break;
-                case 'soc':
-                    if (socCount == 1) {
-                        FiercePlanet.currentNotice = new Notice("Well done! You've added your first social resource!");
-                        FiercePlanet.currentNotice._height = 80;
-                        FiercePlanet.currentNotice._foregroundColor = 'rgba(0, 0, 0)';
-                        FiercePlanet.currentNotice._backgroundColor = 'rgba(255, 51, 0)';
-                    }
-                    break;
+            var resourceCategory = resource.getCategory();
+            var resourceCategoryName = resourceCategory.getName();
+            var resourceCategoryColor = resourceCategory.getColor();
+            var resourceCategoryCode = resourceCategory.getCode();
+            var categoryCount = FiercePlanet.resourceStatsCount[resourceCategoryCode];
+            if (categoryCount == 1) {
+                FiercePlanet.currentNotice = new Notice("Well done! You've added your first " + resourceCategoryName + " resource!");
+                FiercePlanet.currentNotice._height = 80;
+                FiercePlanet.currentNotice._foregroundColor = 'rgba(0, 0, 0)';
+                FiercePlanet.currentNotice._backgroundColor = resourceCategoryColor;
             }
         }
     });

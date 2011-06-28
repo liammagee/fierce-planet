@@ -381,6 +381,7 @@ li.over {
 .swatch-category {
     border-radius:4px;
     margin-bottom:10px;
+    min-width:169px;
 }
 
 .swatch-instance {

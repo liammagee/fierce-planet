@@ -82,9 +82,6 @@ FiercePlanet.compileStats = function() {
         resources_spent: FiercePlanet.resourcesSpent,
         resources_in_store: FiercePlanet.resourcesInStore,
         resources: resourceCount,
-        economic_resources: FiercePlanet.economicResourceCount,
-        environmental_resources: FiercePlanet.environmentalResourceCount,
-        social_resources: FiercePlanet.socialResourceCount,
         progress_towards_next_class: progressTowardsNextClass
     };
     return stats;

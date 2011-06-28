@@ -22,18 +22,11 @@ function AgentType(name, color) {
     this._color = color;
     this._speed = MOVE_INCREMENTS;
     this._health = INITIAL_HEALTH;
-    this._economicHealth = INITIAL_HEALTH;
-    this._environmentalHealth = INITIAL_HEALTH;
-    this._socialHealth = INITIAL_HEALTH;
     this._drawFunction = null;
 }
 AgentType.prototype.getName = function() { return this._name;};
 AgentType.prototype.getColor = function() { return this._color;};
 AgentType.prototype.getHealth = function() { return this._health; };
-AgentType.prototype.getEconomicHealth = function() { return this._economicHealth; };
-AgentType.prototype.getEnvironmentalHealth = function() { return this._environmentalHealth; };
-AgentType.prototype.getSocialHealth = function() { return this._socialHealth; };
-AgentType.prototype.getHealthForCategory = function(category) { return this._healthCategoryStats[category]; };
 AgentType.prototype.getDrawFunction = function() { return this._drawFunction; };
 AgentType.prototype.setDrawFunction = function(drawFunction) { this._drawFunction = drawFunction; };
 
@@ -91,7 +84,7 @@ They have a current location in a given level, and a history of prior locations.
 
 They move at a given speed, and can 'wander' relative to the center of the tiles they occupy.
 
-They have three kinds of 'health': economic, environmental and social. (These, possibly, should be translated into capabilities or something similar).
+They can have multiple kinds of 'health' or 'capabilities': for example, economic, environmental and social.
 Without enough of any kind of health, they are unable to function, and die.
 
 They have an internal representation of the 'world', established by:
@@ -134,9 +127,6 @@ function Agent(agentType, x, y) {
 
     // Health related
     this._health = INITIAL_HEALTH;
-    this._economicHealth = INITIAL_HEALTH;
-    this._environmentalHealth = INITIAL_HEALTH;
-    this._socialHealth = INITIAL_HEALTH;
     this._healthCategoryStats = {};
     this.registerHealthStats();
 
@@ -170,12 +160,6 @@ Agent.prototype.getDelay = function() { return this._delay; };
 Agent.prototype.setDelay = function(delay) { this._delay = delay; };
 Agent.prototype.getHealth = function() { return this._health; };
 Agent.prototype.setHealth = function(health) { this._health = health; };
-Agent.prototype.getEconomicHealth = function() { return this._economicHealth; };
-Agent.prototype.setEconomicHealth = function(economicHealth) { this._economicHealth = economicHealth; };
-Agent.prototype.getEnvironmentalHealth = function() { return this._environmentalHealth; };
-Agent.prototype.setEnvironmentalHealth = function(environmentalHealth) { this._environmentalHealth = environmentalHealth; };
-Agent.prototype.getSocialHealth = function() { return this._socialHealth; };
-Agent.prototype.setSocialHealth = function(socialHealth) { this._socialHealth = socialHealth; };
 Agent.prototype.getIsHit = function() { return this._isHit; };
 Agent.prototype.setIsHit = function(isHit) { this._isHit = isHit; };
 Agent.prototype.registerHealthStats = function() {

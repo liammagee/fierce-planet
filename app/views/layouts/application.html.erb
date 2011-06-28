@@ -28,7 +28,11 @@
   <%= javascript_include_tag "agents/framework/tile" %>
   <%= javascript_include_tag "agents/ui/notice" %>
   <%= javascript_include_tag "agents/ui/event" %>
-  <%= javascript_include_tag "agents/data/resource_kinds" %>
+
+  <!-- Change this to load other resource categories -->
+  <%= javascript_include_tag "agents/data/resourceset/tbl" %>
+  <%= javascript_include_tag "agents/data/resourceset/cos" %>
+
   <%= javascript_include_tag "agents/data/player_classes" %>
   <%= javascript_include_tag "agents/data/agent_types" %>
   <%= javascript_include_tag "agents/dialogs" %>
@@ -46,6 +50,13 @@
   <!--<%= javascript_include_tag "agents/fierce-planet.min" %>-->
 
   <%= javascript_tag "FiercePlanet.PROFILE_ID;" -%>
+
+  <!-- Set the resource type namespace here -->
+  <% if params[:rs] %>
+    <%= javascript_tag "FiercePlanet.resourceTypeNamespace = " + params[:rs] + ";" -%>
+  <% end %>
+
+
   <!-- If a user is logged in, set their properties here -->
   <% if current_user %>
       <%= javascript_tag "FiercePlanet.PROFILE_ID = #{current_user.profile.id};" -%>

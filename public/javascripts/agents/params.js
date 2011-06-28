@@ -109,6 +109,7 @@ FiercePlanet.tilesMutable = false;
 
 
 // Resource variables
+FiercePlanet.resourceTypeNamespace = TBL;
 FiercePlanet.resourceCategories = [];
 FiercePlanet.resourceTypes = [];
 
@@ -144,10 +145,8 @@ FiercePlanet.waveDelayCounter = 0;
 FiercePlanet.numAgents = 1;
 
 
-
-FiercePlanet.economicResourceCount = 0;
-FiercePlanet.environmentalResourceCount = 0;
-FiercePlanet.socialResourceCount = 0;
+// Resource-specific stats
+FiercePlanet.resourceStatsCount = {};
 
 FiercePlanet.waveCounter = 0;
 FiercePlanet.levelCounter = 0;

@@ -373,7 +373,18 @@ FiercePlanet.getTextLines = function(context, text, targetWidth) {
  * @param alphaLevel
  */
 FiercePlanet.insertAlpha = function(color, alphaLevel) {
-    var newColor = color.split(')').join(', ' + alphaLevel + ')');
+    var newColor = color;
+    // Is the color a six digit hexadecimal?
+    if (color.length == 6) {
+        var r = color.substring(0, 2);
+        var g = color.substring(2, 4);
+        var b = color.substring(4, 6);
+        newColor = 'rgba(' + parseInt(r, 16) + ', ' + parseInt(g, 16) + ', ' + parseInt(b, 16) + ', ' + alphaLevel + ')';
+    }
+    // Otherwise assume it is rgba() format
+    else {
+        newColor = color.split(')').join(', ' + alphaLevel + ')');
+    }
     return newColor;
 };
 
@@ -615,12 +626,9 @@ FiercePlanet.drawAgents = function() {
         var direction = FiercePlanet.getAgentDirection(agent);
 
 
-        var blueH = agent._economicHealth;
-        var greenH = agent._environmentalHealth;
-        var redH = agent._socialHealth;
-        blueH = agent._healthCategoryStats[FiercePlanet.resourceCategories[0].getCode()];
-        greenH = agent._healthCategoryStats[FiercePlanet.resourceCategories[1].getCode()];
-        redH = agent._healthCategoryStats[FiercePlanet.resourceCategories[2].getCode()];
+        var blueH = agent._healthCategoryStats[FiercePlanet.resourceCategories[0].getCode()];
+        var greenH = agent._healthCategoryStats[FiercePlanet.resourceCategories[1].getCode()];
+        var redH = agent._healthCategoryStats[FiercePlanet.resourceCategories[2].getCode()];
         var c = agent._color.toString();
         var newColor = FiercePlanet.diluteColour(redH, greenH, blueH, c);
         if (agent._isHit)

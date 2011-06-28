@@ -22,6 +22,9 @@ FiercePlanet.loadGame = function() {
     FiercePlanet.setupDialogs();
 
     // Handle resource drag and drop and click interactions
+    FiercePlanet.initialiseAndLoadResources();
+
+    // Handle resource drag and drop and click interactions
     FiercePlanet.setupResourceInteraction();
 
     // Add UI event listeners
@@ -241,9 +244,11 @@ FiercePlanet._initialiseGame = function () {
         FiercePlanet.currentLevel.getCatastrophe()._struck = false;
 
 //    score = 0;
-    FiercePlanet.economicResourceCount = 0;
-    FiercePlanet.environmentalResourceCount = 0;
-    FiercePlanet.socialResourceCount = 0;
+    FiercePlanet.resourceStatsCount = {};
+    for (var i = 0; i < FiercePlanet.resourceCategories.length; i++) {
+        var category = FiercePlanet.resourceCategories[i];
+        FiercePlanet.resourceStatsCount[category.getCode()] = 0;
+    }
     FiercePlanet.expiredAgentCount = 0;
     FiercePlanet.savedAgentCount = 0;
     FiercePlanet.currentWave = 1;

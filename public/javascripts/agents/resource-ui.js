@@ -152,16 +152,8 @@ FiercePlanet.dropItem = function(e) {
         else {
             FiercePlanet.resourcesInStore -= resource.getCost();
             FiercePlanet.resourcesSpent += resource.getCost();
-            var resourceType = resource.getCategory().getCode();
-            if (resourceType == 'eco') {
-                FiercePlanet.economicResourceCount += 1;
-            }
-            else if (resourceType == 'env') {
-                FiercePlanet.environmentalResourceCount += 1;
-            }
-            else if (resourceType == 'soc') {
-                FiercePlanet.socialResourceCount += 1;
-            }
+            var resourceCategory = resource.getCategory().getCode();
+            FiercePlanet.resourceStatsCount[resourceCategory] += 1;
             FiercePlanet.currentLevel.getResources().push(resource);
 //            FiercePlanet.currentLevel.addCell(posX, posY, resource);
 
@@ -210,21 +202,13 @@ FiercePlanet.calculateResourceEffect = function (resource) {
         if (FiercePlanet.ignoreResourceBalance || FiercePlanet.applyGeneralHealth)
             return 1;
 
-        var resourceType = resource.getCategory().getCode();
-        var resourceTypeCount = 0;
+        var resourceCategory = resource.getCategory().getCode();
+        var resourceCategoryCount = 0;
         var totalResources = FiercePlanet.currentLevel.getResources().length;
         if (totalResources == 1)
             return 1;
-        if (resourceType == "eco") {
-            resourceTypeCount = FiercePlanet.economicResourceCount;
-        }
-        else if (resourceType == "env") {
-            resourceTypeCount = FiercePlanet.environmentalResourceCount;
-        }
-        else if (resourceType == "soc") {
-            resourceTypeCount = FiercePlanet.socialResourceCount;
-        }
-        var resourceTypeProportion = (resourceTypeCount / totalResources) * totalResources;
+        resourceCategoryCount = FiercePlanet.resourceStatsCount[resourceCategory];
+        var resourceTypeProportion = (resourceCategoryCount / totalResources) * totalResources;
         var proportionOfIdeal = (resourceTypeProportion <= 1) ? resourceTypeProportion : ((totalResources - resourceTypeProportion) / (totalResources - 1));
         var effect = proportionOfIdeal * proportionOfIdeal;
 
@@ -241,47 +225,16 @@ FiercePlanet.calculateResourceEffect = function (resource) {
 FiercePlanet.calculateSurroundingResourcesEffects = function (resource) {
         var x = resource.getX();
         var y = resource.getY();
-        var resourceType = resource.getCategory().getCode();
+        var resourceCategory = resource.getCategory();
         var baseEffect = 1;
         for (var j = 0; j < FiercePlanet.currentLevel.getResources().length; j++) {
             var neighbour = FiercePlanet.currentLevel.getResources()[j];
             var nx = neighbour.getX();
             var ny = neighbour.getY();
-            var nType = neighbour.getCategory().getCode();
-            if (Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
-                if (resourceType == "eco") {
-                    if (nType == "eco") {
-                        baseEffect *= 1.2;
-                    }
-                    else if (nType == "env") {
-                        baseEffect *= 1.0;
-                    }
-                    else if (nType == "soc") {
-                        baseEffect *= 1.0;
-                    }
-                }
-                else if (resourceType == "env") {
-                    if (nType == "eco") {
-                        baseEffect *= 0.5;
-                    }
-                    else if (nType == "env") {
-                        baseEffect *= 1.2;
-                    }
-                    else if (nType == "soc") {
-                        baseEffect *= 1.0;
-                    }
-                }
-                else if (resourceType == "soc") {
-                    if (nType == "eco") {
-                        baseEffect *= 0.5;
-                    }
-                    else if (nType == "env") {
-                        baseEffect *= 1.0;
-                    }
-                    else if (nType == "soc") {
-                        baseEffect *= 1.2;
-                    }
-                }
+            var neighbourCategory = neighbour.getCategory();
+            if ((x != nx || ny != y) && Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
+                // TODO: make this part of the ResourceCategory calculation
+                baseEffect *= resourceCategory.doEvaluateOtherCategoryImpact(neighbourCategory);
             }
         }
         return baseEffect;
@@ -338,4 +291,58 @@ FiercePlanet.registerResourceCategories = function (resourceCategories) {
  */
 FiercePlanet.registerResourceTypes = function (resourceTypes) {
     FiercePlanet.resourceTypes = resourceTypes;
+};
+
+/**
+ * Draw swatches
+ */
+FiercePlanet.initialiseAndLoadResources = function () {
+    if (FiercePlanet.resourceTypeNamespace.doSetup)
+        FiercePlanet.resourceTypeNamespace.doSetup();
+
+    for (var i = 0; i < FiercePlanet.resourceCategories.length; i++) {
+        var category = FiercePlanet.resourceCategories[i];
+
+        // Add to swatch
+        var swatchCategoryHTML = '<div class="swatch-category" id="' + category.getCode() + '"></div>';
+        $('#swatch').append(swatchCategoryHTML);
+        var swatchCategoryElement = $('#' + category.getCode());
+        var swatchCategoryTitleHTML = '<div class="title">' + category.getName() + '</div>';
+        swatchCategoryElement.append(swatchCategoryTitleHTML);
+        swatchCategoryElement.css('background', '#' + category.getColor());
+
+        // Add to gallery
+        var galleryCategoryHTML = '<div class="gallery-category" id="gallery-' + category.getCode() + '"></div>';
+        $('#gallery-items').append(galleryCategoryHTML);
+        var galleryCategoryElement = $('#gallery-' + category.getCode());
+        var galleryCategoryTitleHTML = '<div class="title">' + category.getName() + '</div>';
+        galleryCategoryElement.append(galleryCategoryTitleHTML);
+
+        var categoryInstanceCounter = 0;
+        for (var j = 0; j < FiercePlanet.resourceTypes.length; j++) {
+            var resourceType = FiercePlanet.resourceTypes[j];
+            if (resourceType.getCategory() == category) {
+
+                var swatchInstanceHTML =
+                        '<div class="swatch-instance" id="' + resourceType.getCode() + '" title="' + resourceType.getName() + '">' +
+                        '<a href="#"><img src="' + resourceType.getImage() + '" alt=""></a>' +
+                        '</div>';
+                swatchCategoryElement.append(swatchInstanceHTML);
+                var swatchInstanceElement = $('#' + resourceType.getCode());
+                if (categoryInstanceCounter > 0) {
+                    swatchInstanceElement.addClass('inactive');
+                }
+
+                var galleryInstanceHTML =
+                        '<div class="swatch-instance purchase inactive" id="' + resourceType.getCode() + '-purchase" title="' + resourceType.getName() + '">' +
+                            '<a href="#"><img src="' + resourceType.getImage() + '" alt=""></a>' +
+                        '</div>';
+                galleryCategoryElement.append(galleryInstanceHTML);
+
+                // Increment the category instance
+                categoryInstanceCounter++;
+            }
+
+        }
+    }
 };
