@@ -105,19 +105,19 @@ class ProfilesController < ApplicationController
   # PUT /profiles/1
   # PUT /profiles/1.xml
   def update
-    @profile = Profile.find(params[:id])
-
-    respond_to do |format|
-      if @profile.update_attributes(params[:profile])
-#        format.html { redirect_to("/", :notice => 'Profile was successfully updated.') }
-#        format.xml  { head :ok }
-        format.js   { render :action => "update" }
-      else
-#        format.html { render :action => "edit" }
-#        format.xml  { render :xml => @profile.errors, :status => :unprocessable_entity }
-        format.js   { render :action => "edit" }
-      end
-    end
+#    @profile = Profile.find(params[:id])
+#
+#    respond_to do |format|
+#      if @profile.update_attributes(params[:profile])
+##        format.html { redirect_to("/", :notice => 'Profile was successfully updated.') }
+##        format.xml  { head :ok }
+#        format.js   { render :action => "update" }
+#      else
+##        format.html { render :action => "edit" }
+##        format.xml  { render :xml => @profile.errors, :status => :unprocessable_entity }
+#        format.js   { render :action => "edit" }
+#      end
+#    end
   end
 
   # DELETE /profiles/1

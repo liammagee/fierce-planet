@@ -60,6 +60,40 @@ FiercePlanet.hookUpUIEventListeners = function() {
     // Set admin functions to previously stored defaults
     FiercePlanet.getAndRetrieveProperties();
 
+    // Trap relevant key strokes
+    $(document).keyup(function(event) {
+        console.log(event.which);
+        switch (event.which) {
+            // +, -, 0: Zoom functions
+            case 107:
+                FiercePlanet.zoom(1);
+                break;
+            case 109:
+                FiercePlanet.zoom(-1);
+                break;
+            case 96:
+                FiercePlanet.zoom(0);
+                break;
+            // Arrow buttons, 'h': Pan functions
+            case 37:
+                FiercePlanet.pan(2);
+                break;
+            case 38:
+                FiercePlanet.pan(0);
+                break;
+            case 39:
+                FiercePlanet.pan(3);
+                break;
+            case 40:
+                FiercePlanet.pan(1);
+                break;
+            case 72:
+                FiercePlanet.pan(4);
+                break;
+
+        }
+    });
+
     $('#agentCanvas').mousewheel(function(event, delta) {
         FiercePlanet.zoom(delta);
         event.preventDefault();
