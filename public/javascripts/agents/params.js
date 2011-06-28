@@ -93,19 +93,29 @@ FiercePlanet.noticesVisible = true;
 FiercePlanet.agentsCanCommunicate = true;
 FiercePlanet.catastrophesVisible = true;
 
-FiercePlanet.godMode = false;
+FiercePlanet.disableKeyboardShortcuts = false;
+FiercePlanet.soundsPlayable = false;
+
+FiercePlanet.recording = false;
+
 FiercePlanet.invisiblePath = false;
 FiercePlanet.agentTracing = false;
-FiercePlanet.recording = false;
-FiercePlanet.soundsPlayable = false;
+
+FiercePlanet.resourcesUpgradeable = false;
 FiercePlanet.resourcesInTension = false;
 FiercePlanet.resourceBonus = false;
-FiercePlanet.predatorsVisible = false;
-FiercePlanet.rivalsVisible = false;
-FiercePlanet.backgroundIconsVisible = false;
 FiercePlanet.applyGeneralHealth = false;
 FiercePlanet.ignoreResourceBalance = false;
+
+FiercePlanet.godMode = false;
+
+// Dev options
+FiercePlanet.predatorsVisible = false;
+FiercePlanet.rivalsVisible = false;
 FiercePlanet.tilesMutable = false;
+FiercePlanet.tilesRemovable = false;
+FiercePlanet.backgroundIconsVisible = false;
+
 
 
 // Resource variables

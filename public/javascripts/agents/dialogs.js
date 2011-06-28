@@ -63,6 +63,7 @@ FiercePlanet.setupDialogs = function() {
                 }
             }
         });
+
     FiercePlanet.$completeLevel = $('<div></div>')
         .html('Level Complete!')
         .dialog({

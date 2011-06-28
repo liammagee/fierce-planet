@@ -83,45 +83,71 @@ FiercePlanet.getAndRetrieveProperties = function() {
     FiercePlanet.getAndRetrieveProperty('noticesVisible');
     FiercePlanet.getAndRetrieveProperty('scrollingImageVisible');
     FiercePlanet.getAndRetrieveProperty('catastrophesVisible');
+    FiercePlanet.getAndRetrieveProperty('soundsPlayable');
+    FiercePlanet.getAndRetrieveProperty('disableKeyboardShortcuts');
     FiercePlanet.getAndRetrieveProperty('agentsCanCommunicate');
 
-    FiercePlanet.getAndRetrieveProperty('godMode');
+    FiercePlanet.getAndRetrieveProperty('recording');
+
     FiercePlanet.getAndRetrieveProperty('invisiblePath');
     FiercePlanet.getAndRetrieveProperty('agentTracing');
-    FiercePlanet.getAndRetrieveProperty('recording');
-    FiercePlanet.getAndRetrieveProperty('rivalsVisible');
-    FiercePlanet.getAndRetrieveProperty('predatorsVisible');
-    FiercePlanet.getAndRetrieveProperty('tilesMutable');
-    FiercePlanet.getAndRetrieveProperty('soundsPlayable');
-    FiercePlanet.getAndRetrieveProperty('backgroundIconsVisible');
+
+    FiercePlanet.getAndRetrieveProperty('resourcesUpgradeable');
     FiercePlanet.getAndRetrieveProperty('resourcesInTension');
     FiercePlanet.getAndRetrieveProperty('resourceBonus');
     FiercePlanet.getAndRetrieveProperty('applyGeneralHealth');
     FiercePlanet.getAndRetrieveProperty('ignoreResourceBalance');
+
+    FiercePlanet.getAndRetrieveProperty('godMode');
+
+    FiercePlanet.getAndRetrieveProperty('rivalsVisible');
+    FiercePlanet.getAndRetrieveProperty('predatorsVisible');
+    FiercePlanet.getAndRetrieveProperty('tilesMutable');
+    FiercePlanet.getAndRetrieveProperty('tilesRemovable');
+    FiercePlanet.getAndRetrieveProperty('backgroundIconsVisible');
 };
 
 /**
  * Sets all properties on settings dialog, and stores property values in local storage.
  */
 FiercePlanet.setAndStoreProperties = function() {
-    FiercePlanet.setAndStoreProperty('scrollingImageVisible');
     FiercePlanet.setAndStoreProperty('noticesVisible');
+    FiercePlanet.setAndStoreProperty('scrollingImageVisible');
     FiercePlanet.setAndStoreProperty('catastrophesVisible');
+    FiercePlanet.setAndStoreProperty('soundsPlayable');
+    FiercePlanet.setAndStoreProperty('disableKeyboardShortcuts');
     FiercePlanet.setAndStoreProperty('agentsCanCommunicate');
 
-    FiercePlanet.setAndStoreProperty('godMode');
+    FiercePlanet.setAndStoreProperty('recording');
+
     FiercePlanet.setAndStoreProperty('invisiblePath');
     FiercePlanet.setAndStoreProperty('agentTracing');
-    FiercePlanet.setAndStoreProperty('recording');
-    FiercePlanet.setAndStoreProperty('rivalsVisible');
-    FiercePlanet.setAndStoreProperty('predatorsVisible');
-    FiercePlanet.setAndStoreProperty('tilesMutable');
-    FiercePlanet.setAndStoreProperty('soundsPlayable');
-    FiercePlanet.setAndStoreProperty('backgroundIconsVisible');
+
+    FiercePlanet.setAndStoreProperty('resourcesUpgradeable');
     FiercePlanet.setAndStoreProperty('resourcesInTension');
     FiercePlanet.setAndStoreProperty('resourceBonus');
     FiercePlanet.setAndStoreProperty('applyGeneralHealth');
     FiercePlanet.setAndStoreProperty('ignoreResourceBalance');
+
+    FiercePlanet.setAndStoreProperty('godMode');
+
+    FiercePlanet.setAndStoreProperty('rivalsVisible');
+    FiercePlanet.setAndStoreProperty('predatorsVisible');
+    FiercePlanet.setAndStoreProperty('tilesMutable');
+    FiercePlanet.setAndStoreProperty('tilesRemovable');
+    FiercePlanet.setAndStoreProperty('backgroundIconsVisible');
+
+    if (FiercePlanet.disableKeyboardShortcuts)
+        $(document).unbind('keydown');
+    else {
+        $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
+    }
+
+    if (FiercePlanet.resourcesUpgradeable)
+        $('#upgrade-option').css('display', 'block');
+    else
+        $('#upgrade-option').css('display', 'none');
+
 
     FiercePlanet.restartLevel();
 };
