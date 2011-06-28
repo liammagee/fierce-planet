@@ -112,7 +112,7 @@ FiercePlanet.deleteCurrentResource = function () {
 FiercePlanet.upgradeCurrentResource = function () {
         var foundResource = FiercePlanet.getCurrentResourceIndex();
         if (foundResource > -1) {
-            var p = FiercePlanet.currentLevel.getResources()[i];
+            var p = FiercePlanet.currentLevel.getResources()[foundResource];
             if (p.getUpgradeLevel() <= 4 && FiercePlanet.resourcesInStore >= p.getUpgradeCost()) {
                 FiercePlanet.resourcesInStore -= p.getUpgradeCost();
                 FiercePlanet.resourcesSpent += p.getUpgradeCost();

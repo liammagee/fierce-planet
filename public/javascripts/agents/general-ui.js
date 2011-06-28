@@ -232,19 +232,13 @@ FiercePlanet.getCurrentPosition = function(e) {
         y = e.layerY;
     }
 
-    console.log('--------------');
-    console.log(e);
-    console.log(x);
-    console.log(y);
     x -= FiercePlanet.panLeftOffset;
     y -= FiercePlanet.panTopOffset;
     x /= FiercePlanet.zoomLevel;
     y /= FiercePlanet.zoomLevel;
 //    x /= FiercePlanet.externalZoomLevel;
 //    y /= FiercePlanet.externalZoomLevel;
-    console.log(x);
-    console.log(y);
-    
+
     // Compensate for border
     x -= (1 / FiercePlanet.zoomLevel);
     y -= (1 / FiercePlanet.zoomLevel);
