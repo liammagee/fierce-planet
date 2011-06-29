@@ -447,7 +447,7 @@ FiercePlanet.drawResource = function(p) {
 
     // Draw resource-specific representation here
     var resImage = new Image();
-    resImage.src = "/images/" + p._resourceName + ".gif";
+    resImage.src = p._kind._image;
     ctx.drawImage(resImage, x + 4, y + 4, FiercePlanet.cellWidth - 8, FiercePlanet.cellHeight - 8);
 };
 

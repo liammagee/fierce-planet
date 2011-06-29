@@ -60,27 +60,27 @@ TBL.SOC_CATEGORY.setEvaluateOtherCategoryImpact(function(otherCategory) {
 });
 
 // Economic resources
-TBL.FARM_RESOURCE_TYPE = new ResourceType(TBL.ECO_CATEGORY, "Farm", "farm", "/images/farm.gif", 10, 20, 100, 20);
-TBL.SHOP_RESOURCE_TYPE = new ResourceType(TBL.ECO_CATEGORY, "Shop", "shop", "/images/shop.gif", 15, 25, 100, 30);
-TBL.BANK_RESOURCE_TYPE = new ResourceType(TBL.ECO_CATEGORY, "Bank", "bank", "/images/bank.gif", 20, 30, 100, 50);
-TBL.FACTORY_RESOURCE_TYPE = new ResourceType(TBL.ECO_CATEGORY, "Factory", "factory", "/images/factory.gif", 25, 40, 100, 70);
-TBL.STOCKMARKET_RESOURCE_TYPE = new ResourceType(TBL.ECO_CATEGORY, "Stockmarket", "stockmarket", "/images/stockmarket.gif", 30, 50, 100, 90);
+TBL.FARM_RESOURCE_TYPE = new ResourceType(TBL.ECO_CATEGORY, "Farm", "farm", "/images/resources/farm.png", 10, 20, 100, 20);
+TBL.SHOP_RESOURCE_TYPE = new ResourceType(TBL.ECO_CATEGORY, "Shop", "shop", "/images/resources/shop.png", 15, 25, 100, 30);
+TBL.BANK_RESOURCE_TYPE = new ResourceType(TBL.ECO_CATEGORY, "Bank", "bank", "/images/resources/bank.png", 20, 30, 100, 50);
+TBL.FACTORY_RESOURCE_TYPE = new ResourceType(TBL.ECO_CATEGORY, "Factory", "factory", "/images/resources/factory.png", 25, 40, 100, 70);
+TBL.STOCKMARKET_RESOURCE_TYPE = new ResourceType(TBL.ECO_CATEGORY, "Stockmarket", "stockmarket", "/images/resources/stockmarket.png", 30, 50, 100, 90);
 
 
 // Environmental resources
-TBL.FRESH_WATER_RESOURCE_TYPE = new ResourceType(TBL.ENV_CATEGORY, "Fresh Water", "water", "/images/water.gif", 10, 20, 100, 10);
-TBL.WILDLIFE_PARK_RESOURCE_TYPE = new ResourceType(TBL.ENV_CATEGORY, "Wildlife Park", "park", "/images/park.gif", 15, 25, 100, 15);
-TBL.CLEAN_AIR_RESOURCE_TYPE = new ResourceType(TBL.ENV_CATEGORY, "Clear Air", "air", "/images/air.gif", 20, 30, 100, 25);
-TBL.GREEN_ENERGY_RESOURCE_TYPE = new ResourceType(TBL.ENV_CATEGORY, "Green Energy", "energy", "/images/energy.gif", 25, 40, 100, 35);
-TBL.BIODIVERSITY_RESOURCE_TYPE = new ResourceType(TBL.ENV_CATEGORY, "Biodiversity", "biodiversity", "/images/biodiversity.gif", 30, 50, 100, 45);
+TBL.FRESH_WATER_RESOURCE_TYPE = new ResourceType(TBL.ENV_CATEGORY, "Fresh Water", "water", "/images/resources/water.png", 10, 20, 100, 10);
+TBL.WILDLIFE_PARK_RESOURCE_TYPE = new ResourceType(TBL.ENV_CATEGORY, "Wildlife Park", "park", "/images/resources/park.png", 15, 25, 100, 15);
+TBL.CLEAN_AIR_RESOURCE_TYPE = new ResourceType(TBL.ENV_CATEGORY, "Clear Air", "air", "/images/resources/air.png", 20, 30, 100, 25);
+TBL.GREEN_ENERGY_RESOURCE_TYPE = new ResourceType(TBL.ENV_CATEGORY, "Green Energy", "energy", "/images/resources/energy.png", 25, 40, 100, 35);
+TBL.BIODIVERSITY_RESOURCE_TYPE = new ResourceType(TBL.ENV_CATEGORY, "Biodiversity", "biodiversity", "/images/resources/biodiversity.png", 30, 50, 100, 45);
 
 
 // Social resources
-TBL.CLINIC_RESOURCE_TYPE = new ResourceType(TBL.SOC_CATEGORY, "Clinic", "clinic", "/images/clinic.gif", 10, 20, 100, 5);
-TBL.SCHOOL_RESOURCE_TYPE = new ResourceType(TBL.SOC_CATEGORY, "School", "school", "/images/school.gif", 15, 25, 100, 8);
-TBL.LEGAL_SYSTEM_RESOURCE_TYPE = new ResourceType(TBL.SOC_CATEGORY, "Legal System", "legal", "/images/legal.gif", 20, 30, 100, 15);
-TBL.DEMOCRACY_RESOURCE_TYPE = new ResourceType(TBL.SOC_CATEGORY, "Democracy", "democracy", "/images/democracy.gif", 25, 40, 100, 20);
-TBL.FESTIVAL_RESOURCE_TYPE = new ResourceType(TBL.SOC_CATEGORY, "Festival", "festival", "/images/festival.gif", 30, 50, 100, 25);
+TBL.CLINIC_RESOURCE_TYPE = new ResourceType(TBL.SOC_CATEGORY, "Clinic", "clinic", "/images/resources/clinic.png", 10, 20, 100, 5);
+TBL.SCHOOL_RESOURCE_TYPE = new ResourceType(TBL.SOC_CATEGORY, "School", "school", "/images/resources/school.png", 15, 25, 100, 8);
+TBL.LEGAL_SYSTEM_RESOURCE_TYPE = new ResourceType(TBL.SOC_CATEGORY, "Legal System", "legal", "/images/resources/legal.png", 20, 30, 100, 15);
+TBL.DEMOCRACY_RESOURCE_TYPE = new ResourceType(TBL.SOC_CATEGORY, "Democracy", "democracy", "/images/resources/democracy.png", 25, 40, 100, 20);
+TBL.FESTIVAL_RESOURCE_TYPE = new ResourceType(TBL.SOC_CATEGORY, "Festival", "festival", "/images/resources/festival.png", 30, 50, 100, 25);
 
 // Arrays of resource kinds
 TBL.ECONOMIC_RESOURCE_TYPES = [TBL.FARM_RESOURCE_TYPE, TBL.SHOP_RESOURCE_TYPE, TBL.BANK_RESOURCE_TYPE, TBL.FACTORY_RESOURCE_TYPE, TBL.STOCKMARKET_RESOURCE_TYPE];

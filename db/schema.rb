@@ -85,10 +85,6 @@ ActiveRecord::Schema.define(:version => 20110612075242) do
     t.text     "capabilities"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "total_patches",                 :default => 0
-    t.integer  "total_economic_patches",        :default => 0
-    t.integer  "total_environmental_patches",   :default => 0
-    t.integer  "total_social_patches",          :default => 0
     t.integer  "total_saved",                   :default => 0
     t.integer  "total_expired",                 :default => 0
     t.integer  "total_resources",               :default => 0
@@ -103,7 +99,6 @@ ActiveRecord::Schema.define(:version => 20110612075242) do
   create_table "users", :force => true do |t|
     t.string   "email",                               :default => "",    :null => false
     t.string   "encrypted_password",   :limit => 128, :default => "",    :null => false
-    t.string   "password_salt",                       :default => "",    :null => false
     t.string   "reset_password_token"
     t.string   "remember_token"
     t.datetime "remember_created_at"

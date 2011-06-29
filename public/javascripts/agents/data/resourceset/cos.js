@@ -19,30 +19,30 @@ CoS.POL_CATEGORY = new ResourceCategory("Political", "pol", "DE1F2A");
 CoS.CUL_CATEGORY = new ResourceCategory("Cultural", "cul", "2ADBCB");
 
 // Economic resources
-CoS.FARM_RESOURCE_TYPE = new ResourceType(CoS.ECO_CATEGORY, "Farm", "farm", "/images/farm.gif", 10, 20, 100, 20);
-CoS.SHOP_RESOURCE_TYPE = new ResourceType(CoS.ECO_CATEGORY, "Shop", "shop", "/images/shop.gif", 15, 25, 100, 30);
-CoS.BANK_RESOURCE_TYPE = new ResourceType(CoS.ECO_CATEGORY, "Bank", "bank", "/images/bank.gif", 20, 30, 100, 50);
-CoS.FACTORY_RESOURCE_TYPE = new ResourceType(CoS.ECO_CATEGORY, "Factory", "factory", "/images/factory.gif", 25, 40, 100, 70);
-CoS.STOCKMARKET_RESOURCE_TYPE = new ResourceType(CoS.ECO_CATEGORY, "Stockmarket", "stockmarket", "/images/stockmarket.gif", 30, 50, 100, 90);
+CoS.FARM_RESOURCE_TYPE = new ResourceType(CoS.ECO_CATEGORY, "Farm", "farm", "/images/resources/farm.png", 10, 20, 100, 20);
+CoS.SHOP_RESOURCE_TYPE = new ResourceType(CoS.ECO_CATEGORY, "Shop", "shop", "/images/resources/shop.png", 15, 25, 100, 30);
+CoS.BANK_RESOURCE_TYPE = new ResourceType(CoS.ECO_CATEGORY, "Bank", "bank", "/images/resources/bank.png", 20, 30, 100, 50);
+CoS.FACTORY_RESOURCE_TYPE = new ResourceType(CoS.ECO_CATEGORY, "Factory", "factory", "/images/resources/factory.png", 25, 40, 100, 70);
+CoS.STOCKMARKET_RESOURCE_TYPE = new ResourceType(CoS.ECO_CATEGORY, "Stockmarket", "stockmarket", "/images/resources/stockmarket.png", 30, 50, 100, 90);
 
 
 // Environmental resources
-CoS.FRESH_WATER_RESOURCE_TYPE = new ResourceType(CoS.ENV_CATEGORY, "Fresh Water", "water", "/images/water.gif", 10, 20, 100, 10);
-CoS.WILDLIFE_PARK_RESOURCE_TYPE = new ResourceType(CoS.ENV_CATEGORY, "Wildlife Park", "park", "/images/park.gif", 15, 25, 100, 15);
-CoS.CLEAN_AIR_RESOURCE_TYPE = new ResourceType(CoS.ENV_CATEGORY, "Clear Air", "air", "/images/air.gif", 20, 30, 100, 25);
-CoS.GREEN_ENERGY_RESOURCE_TYPE = new ResourceType(CoS.ENV_CATEGORY, "Green Energy", "energy", "/images/energy.gif", 25, 40, 100, 35);
-CoS.BIODIVERSITY_RESOURCE_TYPE = new ResourceType(CoS.ENV_CATEGORY, "Biodiversity", "biodiversity", "/images/biodiversity.gif", 30, 50, 100, 45);
+CoS.FRESH_WATER_RESOURCE_TYPE = new ResourceType(CoS.ENV_CATEGORY, "Fresh Water", "water", "/images/resources/water.png", 10, 20, 100, 10);
+CoS.WILDLIFE_PARK_RESOURCE_TYPE = new ResourceType(CoS.ENV_CATEGORY, "Wildlife Park", "park", "/images/resources/park.png", 15, 25, 100, 15);
+CoS.CLEAN_AIR_RESOURCE_TYPE = new ResourceType(CoS.ENV_CATEGORY, "Clear Air", "air", "/images/resources/air.png", 20, 30, 100, 25);
+CoS.GREEN_ENERGY_RESOURCE_TYPE = new ResourceType(CoS.ENV_CATEGORY, "Green Energy", "energy", "/images/resources/energy.png", 25, 40, 100, 35);
+CoS.BIODIVERSITY_RESOURCE_TYPE = new ResourceType(CoS.ENV_CATEGORY, "Biodiversity", "biodiversity", "/images/resources/biodiversity.png", 30, 50, 100, 45);
 
 
 // Political resources
-CoS.LEGAL_SYSTEM_RESOURCE_TYPE = new ResourceType(CoS.POL_CATEGORY, "Legal System", "legal", "/images/legal.gif", 20, 30, 100, 15);
-CoS.DEMOCRACY_RESOURCE_TYPE = new ResourceType(CoS.POL_CATEGORY, "Democracy", "democracy", "/images/democracy.gif", 25, 40, 100, 20);
+CoS.LEGAL_SYSTEM_RESOURCE_TYPE = new ResourceType(CoS.POL_CATEGORY, "Legal System", "legal", "/images/resources/legal.png", 20, 30, 100, 15);
+CoS.DEMOCRACY_RESOURCE_TYPE = new ResourceType(CoS.POL_CATEGORY, "Democracy", "democracy", "/images/resources/democracy.png", 25, 40, 100, 20);
 
 
 // Cultural resources
-CoS.CLINIC_RESOURCE_TYPE = new ResourceType(CoS.CUL_CATEGORY, "Clinic", "clinic", "/images/clinic.gif", 10, 20, 100, 5);
-CoS.SCHOOL_RESOURCE_TYPE = new ResourceType(CoS.CUL_CATEGORY, "School", "school", "/images/school.gif", 15, 25, 100, 8);
-CoS.FESTIVAL_RESOURCE_TYPE = new ResourceType(CoS.CUL_CATEGORY, "Festival", "festival", "/images/festival.gif", 30, 50, 100, 25);
+CoS.CLINIC_RESOURCE_TYPE = new ResourceType(CoS.CUL_CATEGORY, "Clinic", "clinic", "/images/resources/clinic.png", 10, 20, 100, 5);
+CoS.SCHOOL_RESOURCE_TYPE = new ResourceType(CoS.CUL_CATEGORY, "School", "school", "/images/resources/school.png", 15, 25, 100, 8);
+CoS.FESTIVAL_RESOURCE_TYPE = new ResourceType(CoS.CUL_CATEGORY, "Festival", "festival", "/images/resources/festival.png", 30, 50, 100, 25);
 
 // Arrays of resource kinds
 CoS.ECONOMIC_RESOURCE_TYPES = [CoS.FARM_RESOURCE_TYPE, CoS.SHOP_RESOURCE_TYPE, CoS.BANK_RESOURCE_TYPE, CoS.FACTORY_RESOURCE_TYPE, CoS.STOCKMARKET_RESOURCE_TYPE];
