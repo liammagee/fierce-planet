@@ -73,7 +73,7 @@ PresetLevels.level1.setConclusion(
 //"<p>The citizens of Fierce Planet are under threat. They are migrating in ever increasing numbers, seeking a promised land of peace and prosperity.</p>" +
 //"<p>Help them by placing resources beside their path - before they expire!</p> "
 PresetLevels.level1.setTip(new Notice("Drag or click the resources on the right (->), then add them to the map.", FiercePlanet.WORLD_WIDTH - FiercePlanet.WAVE_NOTICE_WIDTH, FiercePlanet.WORLD_HEIGHT / 2));
-PresetLevels.level1.setSoundSrc("/sounds/technophobic_android-creeping_0.mp3");
+PresetLevels.level1.setSoundSrc("http://db.tt/iFLVJKi");
 
 
 PresetLevels.level1.setup = function() {
@@ -116,7 +116,7 @@ PresetLevels.level2.setConclusion(
         "<p>Congratulations, you have completed level 2. But the hard work must continue...</p>"
 );
 PresetLevels.level2.setTip(new Notice("You can pause at any time to add resources. You can place more resources as you save citizens.", 0, 0));
-PresetLevels.level2.setSoundSrc("/sounds/22415__Charel_Sytze__pizzadelivery.mp3");
+PresetLevels.level2.setSoundSrc("http://db.tt/Tyd9F6M");
 
 PresetLevels.level2.setup = function() {
     this.fillWithTiles();
@@ -168,7 +168,7 @@ PresetLevels.level3.setConclusion(
         "<p>Phew - that was a rush! Perhaps the citizens need to stay inland for a while.</p>"
 );
 PresetLevels.level3.setTip(new Notice("Levels get progressively larger, requiring more planning about where you allocate resources. Aim to place resources at regular intervals."));
-PresetLevels.level3.setSoundSrc("/sounds/22688__DJ_Chronos__Loop_1.mp3");
+PresetLevels.level3.setSoundSrc("http://db.tt/7KPJ8Xi");
 //PresetLevels.level3.setCatastrophe(new Catastrophe("env", 300, 250, 0, new Notice("A tsumani will soon hit the city - all resources will be depleted.", undefined, undefined, 250, 250)));
 PresetLevels.level3.setCatastrophe(new Catastrophe(FiercePlanet.resourceCategories[1], 1000 + (Math.random() * 2000), 250, 0, new Notice("A tsumani will soon hit the city - all resources will be depleted.", undefined, undefined, 500, 250)));
 
@@ -231,7 +231,7 @@ PresetLevels.level4.setIntroduction(
         "<p>The only way out is via the long and winding road...</p>"
         );
 PresetLevels.level4.setTip(new Notice("Be sure to allocate resources to the outer reaches of the path. Citizens run faster when there is less to go around..."));
-PresetLevels.level4.setSoundSrc("/sounds/36604__Charel_Sytze__klokslagtwaalf.mp3");
+PresetLevels.level4.setSoundSrc("http://db.tt/9m8kuIs");
 
 
 PresetLevels.level4.setup = function() {
@@ -307,7 +307,7 @@ PresetLevels.level5.setIntroduction(
         "<p>The citizens are - mistakenly? - hopeful that the promised land lies not too far ahead. If only they can find their way through...</p>"
         );
 PresetLevels.level5.setTip(new Notice("Citizens are (sort of) smart - at forks in the road, they'll take the path which appears more plentiful. Place resources to help them choose the right path."));
-PresetLevels.level5.setSoundSrc("/sounds/57714__DJ_Chronos__Metal_Atmosphere_001.mp3");
+PresetLevels.level5.setSoundSrc("http://db.tt/DIi4CW0");
 
 
 PresetLevels.level5.setup = function() {
@@ -406,7 +406,7 @@ PresetLevels.level6.setName("Level 6: Dire Straits");
 PresetLevels.level6.setIntroduction(
         "<p>Not there yet... This level looks well resourced - but your citizens will need them. </p>");
 PresetLevels.level6.setTip(new Notice("Clicking on an existing resource allows you to delete or upgrade it. An upgraded resource will dispense more health to citizens passing by."));
-PresetLevels.level6.setSoundSrc("/sounds/76266__tallers__001_plaza_revolucio.mp3");
+PresetLevels.level6.setSoundSrc("http://db.tt/gre8MPS");
 
 PresetLevels.level6.setup = function() {
     this.fillWithTiles();
@@ -451,7 +451,7 @@ PresetLevels.level7.setName("Level 7: Like, Totally Random...");
 PresetLevels.level7.setIntroduction(
         "<p>Ahead lies a vast and empty expanse. The citizens are understandably nervous. Left unaided, they will try not to backtrack, but could still find themselves hopelessly lost without your aid.</p>");
 PresetLevels.level7.setTip(new Notice("You can add resources to the paths (the white squares) on this level, to direct citizens to their goal."));
-PresetLevels.level7.setSoundSrc("/sounds/22698__DJ_Chronos__Loop_2.mp3");
+PresetLevels.level7.setSoundSrc("http://db.tt/7SRv0qP");
 
 PresetLevels.level7.setup = function() {
     this.fillWithTiles();
@@ -498,7 +498,7 @@ PresetLevels.level8.setName("Level 8: A Fork (or Two) in the Road");
 PresetLevels.level8.setIntroduction(
         "<p>Life for the citizens of Fierce Planet is never easy. Having escaped the perils of random wandering, here they are faced with many decisions about which way to turn.</p>");
 PresetLevels.level8.setTip(new Notice("You'll need to direct citizen through numerous forks in the road, with strategic allocation of resources. Beware: leave no path under-resourced!"));
-PresetLevels.level8.setSoundSrc("/sounds/46783__schokobeau__metropoetry.mp3");
+PresetLevels.level8.setSoundSrc("http://db.tt/0ynKmXS");
 
 
 PresetLevels.level8.setup = function() {
@@ -595,7 +595,7 @@ PresetLevels.level9.setName("Level 9: Cascades");
 PresetLevels.level9.setIntroduction(
         "<p>With time running out, the citizens of Fierce Planet are in a rush to find safety. But they're in for a bumpy ride.</p>");
 PresetLevels.level9.setTip(new Notice("No tip! You've gotten this far..."));
-PresetLevels.level9.setSoundSrc("/sounds/26377__DJ_Chronos__Soundscape_2.mp3");
+PresetLevels.level9.setSoundSrc("http://db.tt/LMyYRtH");
 
 PresetLevels.level9.setup = function() {
     this.fillWithTiles();
@@ -672,7 +672,7 @@ PresetLevels.level10.setIntroduction(
         "<p>Nearly there! Pastures of plenty, and a new future, lie in store for the citizens of Fierce Planet. " +
         "However the way ahead is full of false dawns. Can they navigate the treacherous maze?</p>");
 PresetLevels.level10.setTip(new Notice("Remember to resource dead end paths, or citizens will expire, dazed and confused..."));
-PresetLevels.level10.setSoundSrc("/sounds/57714__DJ_Chronos__Metal_Atmosphere_001.mp3");
+PresetLevels.level10.setSoundSrc("http://db.tt/DIi4CW0");
 
 
 PresetLevels.level10.setup = function() {
