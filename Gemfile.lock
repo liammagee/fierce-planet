@@ -170,7 +170,6 @@ PLATFORMS
 
 DEPENDENCIES
   devise
-  eventmachine (= 1.0.0.beta.3)
   jasmine
   omniauth
   paperclip (~> 2.3)
