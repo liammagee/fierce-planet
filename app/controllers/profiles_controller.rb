@@ -38,7 +38,6 @@ class ProfilesController < ApplicationController
   # GET /profiles/1/edit
   def edit
     @profile = Profile.find(params[:id])
-    puts "got here " + params[:id]
   end
 
   # POST /profiles
@@ -110,19 +109,14 @@ class ProfilesController < ApplicationController
     @profile = Profile.find(params[:id])
 
     respond_to do |format|
-      begin
-        if @profile.update_attributes(params[:profile])
-#          format.html { redirect_to("/", :notice => 'Profile was successfully updated.') }
-          format.html { render :action => "edit" }
-          format.xml  { head :ok }
-          format.js   { render :action => "update" }
-        else
-          format.html { render :action => "edit" }
-          format.xml  { render :xml => @profile.errors, :status => :unprocessable_entity }
-          format.js   { render :action => "edit" }
-        end
-      rescue => e
-        puts e
+      if @profile.update_attributes(params[:profile])
+        format.html { redirect_to("/", :notice => 'Profile was successfully updated.') }
+        format.xml  { head :ok }
+        format.js
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @profile.errors, :status => :unprocessable_entity }
+        format.js   { render :action => "edit" }
       end
     end
   end
