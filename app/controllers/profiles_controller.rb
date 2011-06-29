@@ -1,5 +1,5 @@
 class ProfilesController < ApplicationController
-#  before_filter :authenticate_user!
+  before_filter :authenticate_user!
 
   # GET /profiles
   # GET /profiles.xml
@@ -107,6 +107,7 @@ class ProfilesController < ApplicationController
   # PUT /profiles/1
   # PUT /profiles/1.xml
   def update
+    puts 'got here'
     @profile = Profile.find(params[:id])
 
     respond_to do |format|
