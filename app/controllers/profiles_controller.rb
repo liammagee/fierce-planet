@@ -110,20 +110,20 @@ class ProfilesController < ApplicationController
     @profile = Profile.find(params[:id])
 
     respond_to do |format|
-      format.js
-#      begin
-#        if @profile.update_attributes(params[:profile])
+      begin
+        if @profile.update_attributes(params[:profile])
 #          format.html { redirect_to("/", :notice => 'Profile was successfully updated.') }
-#          format.xml  { head :ok }
-#          format.js   { render :action => "update" }
-#        else
-#          format.html { render :action => "edit" }
-#          format.xml  { render :xml => @profile.errors, :status => :unprocessable_entity }
-#          format.js   { render :action => "edit" }
-#        end
-#      rescue => e
-#        puts e
-#      end
+          format.html { render :action => "edit" }
+          format.xml  { head :ok }
+          format.js   { render :action => "update" }
+        else
+          format.html { render :action => "edit" }
+          format.xml  { render :xml => @profile.errors, :status => :unprocessable_entity }
+          format.js   { render :action => "edit" }
+        end
+      rescue => e
+        puts e
+      end
     end
   end
 
