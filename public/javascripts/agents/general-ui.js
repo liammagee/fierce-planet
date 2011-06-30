@@ -69,13 +69,13 @@ FiercePlanet.hookUpUIEventListeners = function() {
     });
     // Disable any AJAX-loaded forms
     $(document).ajaxComplete(function() {
-        $('input, textarea, select, form').focus(function() {
+        $('input, textarea, select').focus(function() {
             $(document).unbind("keydown");
+            console.log('got here2');
         }).blur(function() {
             $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
         });
     });
-
 
     $('#agentCanvas').mousewheel(function(event, delta) {
         FiercePlanet.zoom(delta);

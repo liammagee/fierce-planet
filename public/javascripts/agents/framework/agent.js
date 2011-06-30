@@ -12,8 +12,10 @@ var INITIAL_HEALTH = 100;
 var MOVE_INCREMENTS = 5;
 
 /**
- * Agent type class definition
+ * Defines the type of an agent.
+ * The type includes the name, color, initial health, default speed and the drawing function of an agent. 
  *
+ * @constructor
  * @param name
  * @param color
  */
@@ -31,7 +33,15 @@ AgentType.prototype.getDrawFunction = function() { return this._drawFunction; };
 AgentType.prototype.setDrawFunction = function(drawFunction) { this._drawFunction = drawFunction; };
 
 
-/* Memory class definition */
+/**
+ * Models the memory of an agent of a location it has visited.
+ *
+ * @constructor
+ * @param agentID
+ * @param age
+ * @param x
+ * @param y
+ */
 function Memory(agentID, age, x, y) {
     this._agentID = agentID;
     this._age = age;
@@ -63,6 +73,16 @@ Memory.prototype.setDistanceFromLastUntriedPath = function(distanceFromLastUntri
 
 MemoryOfAgent.prototype = new Memory();
 MemoryOfAgent.prototype.constructor = MemoryOfAgent;
+/**
+ * Models the memory one agent has of another.
+ *
+ * @constructor
+ * @param agentID
+ * @param age
+ * @param x
+ * @param y
+ * @param otherAgentID
+ */
 function MemoryOfAgent(agentID, age, x, y, otherAgentID) {
     this._agentID = agentID;
     this._age = age;
@@ -75,24 +95,30 @@ function MemoryOfAgent(agentID, age, x, y, otherAgentID) {
 MemoryOfAgent.prototype.getOtherAgentID = function() { return this._otherAgentID; };
 
 
-/*
-Agent class definition
 
-Agents belong to a particular type.
+/**
+<div>Defines the agent - the core class of the agent modelling system.</div>
+<div>Agents have the following properties:
+<ul>
+    <li>They to a particular type.</li>
+     <li>They have a current location in a given level, and a history of prior locations.</li>
+     <li>They move at a given speed, and can 'wander' relative to the center of the tiles they occupy.</li>
+     <li>They can have multiple kinds of 'health' or 'capabilities': for example, economic, environmental and social.</li>
+     <li>Without enough of any kind of health, they are unable to function, and die.</li>
+     <li>They have an internal representation of the 'world', established by:</li>
+     <ul>
+             <li>preceding generations</li>
+             <li>experience</li>
+             <li>communication with other agents</li>
+     </ul>
+</ul>
+</div>
 
-They have a current location in a given level, and a history of prior locations.
-
-They move at a given speed, and can 'wander' relative to the center of the tiles they occupy.
-
-They can have multiple kinds of 'health' or 'capabilities': for example, economic, environmental and social.
-Without enough of any kind of health, they are unable to function, and die.
-
-They have an internal representation of the 'world', established by:
- - preceding generations
- - experience
- - communication with other agents
-
-*/
+ * @constructor
+ * @param agentType
+ * @param x
+ * @param y
+ */
 function Agent(agentType, x, y) {
     // General properties
     this._agentType = agentType;
@@ -116,7 +142,7 @@ function Agent(agentType, x, y) {
     this._lastMemory = null;
     this._lastUntriedPathMemory = null;
 
-    this.memorise(undefined, x, y);
+    this.memorise(undefined);
 
     // Speed-related
     this._delay = 0;
@@ -134,6 +160,9 @@ function Agent(agentType, x, y) {
     this._isHit = false;
 
 }
+/**
+ * Generates a random ID.
+ */
 Agent.prototype.generateID = function() {
     return Math.floor(Math.random() * Math.pow(10, 10));
 };
@@ -162,6 +191,9 @@ Agent.prototype.getHealth = function() { return this._health; };
 Agent.prototype.setHealth = function(health) { this._health = health; };
 Agent.prototype.getIsHit = function() { return this._isHit; };
 Agent.prototype.setIsHit = function(isHit) { this._isHit = isHit; };
+/**
+ * Initialises health statistics for an agent, based all resource categories.
+ */
 Agent.prototype.registerHealthStats = function() {
     for (var i = 0; i < FiercePlanet.resourceCategories.length; i++) {
         var category = FiercePlanet.resourceCategories[i];
@@ -169,7 +201,8 @@ Agent.prototype.registerHealthStats = function() {
     }
 };
 /**
- * Adjusts all categories of health by the adjustment amount
+ * Adjusts all categories of health by the adjustment amount.
+ *
  * @param adjustment
  */
 Agent.prototype.adjustHealth = function(adjustment) {
@@ -254,7 +287,9 @@ Agent.prototype.setSpeed = function(speed) { this._speed = speed; };
 Agent.prototype.getMoves = function() { return this._age; };
 Agent.prototype.setMoves = function(moves) { this._age = moves; };
 Agent.prototype.incrementMoves = function() { this._age++; };
-/* Change the speed, but sparingly as the speed moves away from the standard speed: MOVE_INCREMENTS */
+/**
+ * Change the speed, but sparingly as the speed moves away from the standard speed: MOVE_INCREMENTS
+ */
 Agent.prototype.adjustSpeed = function() {
     var tmpSpeed = this._speed;
     var variance = this._speed - MOVE_INCREMENTS;
@@ -290,14 +325,13 @@ Agent.prototype.adjustSpeed = function() {
 
 /**
  * Main method for evaluating and making moves
+ *
  * @param options
  */
 Agent.prototype.evaluateMove = function(level, options) {
     // TODO: Make these parameters of the level
     var withNoRepeat = options["withNoRepeat"];
     var withNoCollision = options["withNoCollision"];
-
-//    this.memorise(this._x, this._y);
 
     var position = this.findPosition(level, withNoRepeat, withNoCollision, level.getAllowOffscreenCycling());
 
@@ -307,20 +341,21 @@ Agent.prototype.evaluateMove = function(level, options) {
 };
 
 /**
- *
+ * Evaluates the position
  */
-Agent.prototype.evaluatePosition = function(level) {
+Agent.prototype.memorisePosition = function(level) {
     // Record current position in memory, before moving on
     this.memorise(level, this._x, this._y);
 }
 
 /**
+ * Memorises the current position of the agent, and if the level parameter is present,
+ * surrounding cells, agents and other resources
  *
- * @param x
- * @param y
+ * @param level
  */
-Agent.prototype.memorise = function(level, x, y) {
-
+Agent.prototype.memorise = function(level) {
+    var x = this._x, y = this._y;
     var memory = null;
     if (this._memoriesOfPlacesVisited[[x, y]] != undefined) {
         memory = this._memoriesOfPlacesVisited[[x, y]];
@@ -433,6 +468,42 @@ Agent.prototype.memorise = function(level, x, y) {
     }
 };
 
+/**
+<div>
+Uses a series of heuristics to find an available adjacent cell to move to:
+</div>
+
+ <div>
+    <ol>
+ <li>Find all adjacent candidate (non-tile) cells, excluding the last visited cell. The order of the candidate
+cells (which maximally include the cells immediately above, right, below and left to the current cell) is randomised,
+to ensure no prejudice in the selected direction, all else being equal.</li>
+ <li>If the previously visited cell is the only viable alternative, i.e. there are no candidates, move to that cell.
+ <li>If one of the candidate (non-tile) cells is an exit point, move to that cell.</li>
+ <li>Create a refined candidate list based on whether any cells have not yet been visited by this agent.
+If the 'level.agentsCanCommunicate' property is true, then the memories of other agents met by this agent (AS AT THE TIME THEY MET)
+are also shared. (Hereafter, when this property is true, additional conditions are included in square brackets).</li>
+ <li>The refined candidate list, including just those cells not in this [or other met] agent's memory is then searched.
+If any of these candidates in turn have a neighbouring resource, then the first of those candidates is selected.
+Otherwise the first of the whole refined candidate list is returned.</li>
+ <li>If no match has been found so far, then the *unrefined* candidate list is re-processed.
+The last visited cell is added back to the list.</li>
+ <li>The memories of these candidates of this agent [and of other met agents] are compiled into a new list.</li>
+ <li>For each candidate, the memory list is then iterated through.
+For each memory, the most recent visit to the memorised cell is then compared with the *age* of all memories of *unvisited* cells
+of this agent [and of other met agents].
+The candidate with the shortest distance between this agent's [or a met agent's] memory of it and its memory of an unvisited cell
+is then selected. [If other agents' memory paths are shorter than this agent's, their candidate is preferred].</li>
+ <li>If no candidate cells have a shortest distance to an unvisited cell for this agent [or any other met agent],
+the first candidate cell is selected.</li>
+</ol>
+</div>
+ *
+ * @param level
+ * @param withNoRepeat
+ * @param withNoCollision
+ * @param withOffscreenCycling
+ */
 Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, withOffscreenCycling) {
     var x = this.getPosition()[0];
     var y = this.getPosition()[1];
@@ -552,6 +623,7 @@ Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, wi
         }
 
 
+        // If we get here, we need to search all candidate cells.
         for (var i = 0; i < candidateCells.length; i++) {
             var candidate = candidateCells[i];
             var mostRecentMemoryOfCandidate = this._memoriesOfPlacesVisited[candidate];
@@ -686,7 +758,13 @@ Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, wi
     return candidateCells[0];
 };
 
-Agent.prototype.getClosestUnvisitedTile = function(currentX, currentY) {
+/**
+ * Returns the closest unvisited cell to the current position,
+ *
+ * @param currentX
+ * @param currentY
+ */
+Agent.prototype.getClosestUnvisitedCell = function(currentX, currentY) {
     var foundMemory = null;
     var foundMemoryPosition = -1;
     for (var i = 0; i < this._memoriesOfPlacesVisited.length; i++) {
@@ -713,6 +791,9 @@ Agent.prototype.getClosestUnvisitedTile = function(currentX, currentY) {
 };
 
 
+/**
+ * Generates a random order for the available directions (UP, RIGHT, DOWN, LEFT)
+ */
 Agent.prototype.randomDirectionOrder = function() {
     var directions = [];
     var orderedDirections = [0, 1, 2, 3];
@@ -727,6 +808,13 @@ Agent.prototype.randomDirectionOrder = function() {
     return directions;
 };
 
+/**
+ * Returns whether there is a neighbouring cell on a given level, at the given position.
+ *
+ * @param level
+ * @param x
+ * @param y
+ */
 Agent.prototype.hasNeighbouringResources = function(level, x, y) {
     for (var j = 0; j < level.getResources().length; j++) {
         var p = FiercePlanet.currentLevel.getResources()[j];

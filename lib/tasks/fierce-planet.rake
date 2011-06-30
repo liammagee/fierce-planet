@@ -1,8 +1,11 @@
+require 'fileutils'
+
 namespace :fp do
 
   namespace :utils do
     desc 'Runs JSDoc over the code base'
     task :jsdoc do
+      FileUtils.rm_rf('public/docs/js')
       exec 'java -jar tools/jsdoc-toolkit/jsrun.jar tools/jsdoc-toolkit/app/run.js -a  -d=public/docs/js -t=tools/jsdoc-toolkit/templates/jsdoc public/javascripts/agents/*.js public/javascripts/agents/data/*.js public/javascripts/agents/data/resourceset/*.js public/javascripts/agents/framework/*.js public/javascripts/agents/ui/*.js'
     end
 

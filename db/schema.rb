@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110612075242) do
+ActiveRecord::Schema.define(:version => 20110630111853) do
 
   create_table "capabilities", :force => true do |t|
     t.integer  "capability_type"
@@ -92,7 +92,7 @@ ActiveRecord::Schema.define(:version => 20110612075242) do
     t.integer  "total_environmental_resources", :default => 0
     t.integer  "total_social_resources",        :default => 0
     t.integer  "credits",                       :default => 0
-    t.string   "profile_class",                 :default => "0"
+    t.string   "profile_class",                 :default => "Novice"
     t.integer  "progress_towards_next_class",   :default => 0
   end
 

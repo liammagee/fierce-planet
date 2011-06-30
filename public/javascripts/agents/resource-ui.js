@@ -325,7 +325,7 @@ FiercePlanet.initialiseAndLoadResources = function () {
 
                 var swatchInstanceHTML =
                         '<div class="swatch-instance" id="' + resourceType.getCode() + '" title="' + resourceType.getName() + '">' +
-                        '<a href="#"><img src="' + resourceType.getImage() + '" alt=""></a>' +
+                        '<img src="' + resourceType.getImage() + '" alt="">' +
                         '</div>';
                 swatchCategoryElement.append(swatchInstanceHTML);
                 var swatchInstanceElement = $('#' + resourceType.getCode());

@@ -141,9 +141,6 @@ FiercePlanet.setupDialogs = function() {
                 }
             }
         });
-
-
-
     $('#del-button').click(function() {FiercePlanet.deleteCurrentResource(); FiercePlanet.$upgradeDelete.dialog('close'); });
     $('#upg-button').click(function() {FiercePlanet.upgradeCurrentResource(); FiercePlanet.$upgradeDelete.dialog('close'); });
 
@@ -348,7 +345,11 @@ FiercePlanet.showUpgradeDeleteDialog = function(e) {
         var p = FiercePlanet.currentLevel.getResources()[i];
         if (p.getX() == posX && p.getY() == posY) {
             FiercePlanet.currentResource = p;
-            FiercePlanet.$upgradeDelete.dialog('open');
+            if (confirm("Are you sure you want to delete this resource?")) {
+                FiercePlanet.deleteCurrentResource();
+            }
+            // Do this only if we want more than a simple delete option
+//            FiercePlanet.$upgradeDelete.dialog('open');
             return;
         }
     }

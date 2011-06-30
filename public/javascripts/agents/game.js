@@ -68,7 +68,7 @@ FiercePlanet.processAgents = function() {
         var speed = agent.getSpeed();
         var countDown = (agent.getCountdownToMove()) % speed;
         if (FiercePlanet.waveCounter >= agent.getDelay() && countDown % speed == 0) {
-            agent.evaluatePosition(FiercePlanet.currentLevel);
+            agent.memorise(FiercePlanet.currentLevel);
         }
     }
 

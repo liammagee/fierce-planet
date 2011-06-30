@@ -2,10 +2,12 @@
 <html>
 <head>
   <title>Fierce Planet</title>
+
+  <!-- STYLESHEET INCLUDES -->
   <%= stylesheet_link_tag "styles" %>
-  <!--<%= stylesheet_link_tag "smoothness/jquery-ui-1.8.11.custom" %>-->
   <%= stylesheet_link_tag "custom/jquery-ui-1.8.13.custom" %>
 
+  <!-- JAVASCRIPT INCLUDES -->
   <%= javascript_include_tag "jquery-1.6.1.js" %>
   <!--<%= javascript_include_tag "jquery.min.js" %>-->
   <%= javascript_include_tag "jquery-ui-1.8.13.custom.min.js" %>
@@ -20,48 +22,52 @@
   <!-- Load FiercePlanet classes here -->
   <%= javascript_tag "var FiercePlanet = FiercePlanet || {};" -%>
 
-  <%= javascript_include_tag "agents/fierce-planet.min" %>
-  <!--<% if Rails.env.production? %>-->
-      <!--<%= javascript_include_tag "agents/fierce-planet.min" %>-->
-  <!--<% else %>-->
-      <!--<%= javascript_include_tag "agents/framework/agent" %>-->
-      <!--<%= javascript_include_tag "agents/framework/catastrophe" %>-->
-      <!--<%= javascript_include_tag "agents/framework/level" %>-->
-      <!--<%= javascript_include_tag "agents/framework/resource" %>-->
-      <!--<%= javascript_include_tag "agents/framework/player_class" %>-->
-      <!--<%= javascript_include_tag "agents/framework/tile" %>-->
-      <!--<%= javascript_include_tag "agents/ui/notice" %>-->
-      <!--<%= javascript_include_tag "agents/ui/event" %>-->
+  <% if Rails.env.production? %>
+      <%= javascript_include_tag "agents/fierce-planet.min" %>
+  <% else %>
+      <%= javascript_include_tag "agents/framework/agent" %>
+      <%= javascript_include_tag "agents/framework/catastrophe" %>
+      <%= javascript_include_tag "agents/framework/level" %>
+      <%= javascript_include_tag "agents/framework/resource" %>
+      <%= javascript_include_tag "agents/framework/player_class" %>
+      <%= javascript_include_tag "agents/framework/tile" %>
+      <%= javascript_include_tag "agents/ui/notice" %>
+      <%= javascript_include_tag "agents/ui/event" %>
 
-      <!--&lt;!&ndash; Change this to load other resource categories &ndash;&gt;-->
-      <!--<%= javascript_include_tag "agents/data/resourceset/tbl" %>-->
-      <!--<%= javascript_include_tag "agents/data/resourceset/cos" %>-->
+      <!-- Change this to load other resource categories -->
+      <%= javascript_include_tag "agents/data/resourceset/tbl" %>
+      <%= javascript_include_tag "agents/data/resourceset/cos" %>
 
-      <!--<%= javascript_include_tag "agents/data/player_classes" %>-->
-      <!--<%= javascript_include_tag "agents/data/agent_types" %>-->
-      <!--<%= javascript_include_tag "agents/dialogs" %>-->
-      <!--<%= javascript_include_tag "agents/drawing" %>-->
-      <!--<%= javascript_include_tag "agents/editor" %>-->
-      <!--<%= javascript_include_tag "agents/general-ui" %>-->
-      <!--<%= javascript_include_tag "agents/lifecycle" %>-->
-      <!--<%= javascript_include_tag "agents/params" %>-->
-      <!--<%= javascript_include_tag "agents/profile" %>-->
-      <!--<%= javascript_include_tag "agents/recording" %>-->
-      <!--<%= javascript_include_tag "agents/resource-ui" %>-->
-      <!--<%= javascript_include_tag "agents/utils" %>-->
-      <!--<%= javascript_include_tag "agents/game" %>-->
-      <!--<%= javascript_include_tag "agents/data/levels" %>-->
-  <!--<% end %>-->
+      <%= javascript_include_tag "agents/data/player_classes" %>
+      <%= javascript_include_tag "agents/data/agent_types" %>
+      <%= javascript_include_tag "agents/dialogs" %>
+      <%= javascript_include_tag "agents/drawing" %>
+      <%= javascript_include_tag "agents/editor" %>
+      <%= javascript_include_tag "agents/general-ui" %>
+      <%= javascript_include_tag "agents/lifecycle" %>
+      <%= javascript_include_tag "agents/params" %>
+      <%= javascript_include_tag "agents/profile" %>
+      <%= javascript_include_tag "agents/recording" %>
+      <%= javascript_include_tag "agents/resource-ui" %>
+      <%= javascript_include_tag "agents/utils" %>
+      <%= javascript_include_tag "agents/game" %>
+      <%= javascript_include_tag "agents/data/levels" %>
+  <% end %>
 
-  <%= javascript_tag "FiercePlanet.PROFILE_ID;" -%>
 
   <!-- Set the resource type namespace here -->
   <% if params[:rs] %>
     <%= javascript_tag "FiercePlanet.resourceTypeNamespace = " + params[:rs] + ";" -%>
   <% end %>
 
+  <!-- If test parameter is passed, showed the QUnit test runner -->
+  <% if params[:test] %>
+      <%= raw include_qunit %>
+  <% end %>
+
 
   <!-- If a user is logged in, set their properties here -->
+  <%= javascript_tag "FiercePlanet.PROFILE_ID;" -%>
   <% if current_user %>
       <%= javascript_tag "FiercePlanet.PROFILE_ID = #{current_user.profile.id};" -%>
       <script>
@@ -75,16 +81,11 @@
       </script>
   <% end %>
 
-  <!-- If test parameter is passed, showed the QUnit test runner -->
-  <% if params[:test] %>
-      <%= raw include_qunit %>
-  <% end %>
   <%= csrf_meta_tag %>
 
 </head>
 <body>
 <div id="content-pane">
-
   <%= yield %>
 </div>
 </body>
