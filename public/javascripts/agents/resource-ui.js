@@ -319,9 +319,11 @@ FiercePlanet.initialiseAndLoadResources = function () {
         galleryCategoryElement.append(galleryCategoryTitleHTML);
 
         var categoryInstanceCounter = 0;
-        for (var j = 0; j < FiercePlanet.resourceTypes.length; j++) {
-            var resourceType = FiercePlanet.resourceTypes[j];
-            if (resourceType.getCategory() == category) {
+        for (var j = 0; j < category._types.length; j++) {
+            var resourceType = category._types[j];
+//        for (var j = 0; j < FiercePlanet.resourceTypes.length; j++) {
+//            var resourceType = FiercePlanet.resourceTypes[j];
+//            if (resourceType.getCategory() == category) {
 
                 var swatchInstanceHTML =
                         '<div class="swatch-instance" id="' + resourceType.getCode() + '" title="' + resourceType.getName() + '">' +
@@ -335,13 +337,13 @@ FiercePlanet.initialiseAndLoadResources = function () {
 
                 var galleryInstanceHTML =
                         '<div class="swatch-instance purchase inactive" id="' + resourceType.getCode() + '-purchase" title="' + resourceType.getName() + '">' +
-                            '<a href="#"><img src="' + resourceType.getImage() + '" alt=""></a>' +
+                            '<img src="' + resourceType.getImage() + '" alt="">' +
                         '</div>';
                 galleryCategoryElement.append(galleryInstanceHTML);
 
                 // Increment the category instance
                 categoryInstanceCounter++;
-            }
+//            }
 
         }
     }

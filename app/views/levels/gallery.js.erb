@@ -28,3 +28,22 @@ FiercePlanet.$levelList = $('<div></div>')
 
                 });
 FiercePlanet.$levelList.dialog('open');
+
+
+FiercePlanet.changePresetLevel =  function() {
+    var level = $('#levelInput').val();
+    FiercePlanet.currentLevelNumber = FiercePlanet.checkInteger(level);
+    FiercePlanet.currentLevelPreset = true;
+    // Remember this level, along with other data
+    FiercePlanet.storeData();
+};
+
+FiercePlanet.changeDifficulty = function () {
+    var difficulty = $('#difficultyInput').val();
+  FiercePlanet.levelOfDifficulty = FiercePlanet.checkInteger(difficulty);
+};
+
+$(document).ready(function() {
+    $('#levelInput').change(FiercePlanet.changePresetLevel);
+    $('#difficultyInput').change(FiercePlanet.changeDifficulty);
+});

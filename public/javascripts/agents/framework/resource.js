@@ -26,7 +26,10 @@ ResourceCategory.prototype.getCode = function() { return this._code; };
 ResourceCategory.prototype.setCode = function(code) { this._code = code; };
 ResourceCategory.prototype.getTypes = function() { return this._types; };
 ResourceCategory.prototype.setTypes = function(types) { this._types = types; };
-ResourceCategory.prototype.addType = function(type) { this._types.push(type); };
+ResourceCategory.prototype.addType = function(type) {
+    this._types.push(type);
+    type.setCategory(this);
+};
 ResourceCategory.prototype.setEvaluateOtherCategoryImpact = function(f) {this._evaluateOtherCategoryImpact = f;};
 ResourceCategory.prototype.doEvaluateOtherCategoryImpact = function(otherCategory) {return this._evaluateOtherCategoryImpact(otherCategory); };
 
@@ -36,9 +39,10 @@ ResourceCategory.prototype.doEvaluateOtherCategoryImpact = function(otherCategor
  * ResourceType class definition
  * 
  * @constructor
+ * @param category
  * @param name
  * @param code
- * @param domain
+ * @param image
  * @param cost
  * @param upgradeCost
  * @param totalYield
@@ -54,6 +58,28 @@ function ResourceType(category, name, code, image, cost, upgradeCost, totalYield
     this._totalYield = totalYield;
     this._perAgentYield = perAgentYield;
     this._category.addType(this);
+}
+
+/**
+ * ResourceType class definition
+ *
+ * @constructor
+ * @param name
+ * @param code
+ * @param image
+ * @param cost
+ * @param upgradeCost
+ * @param totalYield
+ * @param perAgentYield
+ */
+function ResourceType(name, code, image, cost, upgradeCost, totalYield, perAgentYield) {
+    this._name = name;
+    this._code = code;
+    this._image = image;
+    this._cost = cost;
+    this._upgradeCost = upgradeCost;
+    this._totalYield = totalYield;
+    this._perAgentYield = perAgentYield;
 }
 ResourceType.prototype.getName = function() { return this._name; };
 ResourceType.prototype.setName = function(name) { this._name = name; };

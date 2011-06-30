@@ -38,26 +38,43 @@ FiercePlanet.DEFAULT_RESOURCE_RECOVERY = 2;
 FiercePlanet.WAVE_GOODNESS_BONUS = 5;
 
 // Timer constants
+/**
+ * @constant The time to wait before starting the first wave
+ */
 FiercePlanet.NEW_LEVEL_DELAY = 3000;
+/**
+ * @constant The time to wait between waves
+ */
 FiercePlanet.NEW_WAVE_DELAY = 200;
 
 
 // Difficulty constants
+/** @constant Easiest level of difficulty */
 FiercePlanet.EASY_DIFFICULTY = 1;
+/** @constant Medium level of difficulty */
 FiercePlanet.MEDIUM_DIFFICULTY = 2;
+/** @constant Hard level of difficulty */
 FiercePlanet.HARD_DIFFICULTY = 3;
+/** @constant Extreme level of difficulty */
 FiercePlanet.EXTREME_DIFFICULTY = 4;
 
 // Dimension constants
+/** @constant The width of the world (should equal the width of all canvases */
 FiercePlanet.WORLD_WIDTH = 480;
+/** @constant The height of the world (should equal the height of all canvases */
 FiercePlanet.WORLD_HEIGHT = 400;
+
+/** @constant The default width of notices */
 FiercePlanet.WAVE_NOTICE_WIDTH = 200;
+/** @constant The default height of notices */
 FiercePlanet.WAVE_NOTICE_HEIGHT = 150;
 
 
 
 // Resource constants
+/** @constant The list of available profile classes */
 FiercePlanet.PROFILE_CLASSES = ["Novice", "Planner", "Expert", "Visionary", "Genius"];
+/** @constant The costs of obtaining capabilities related to each profile class */
 FiercePlanet.CAPABILITY_COSTS = [0, 100, 200, 300, 500];
 
 
@@ -72,12 +89,19 @@ FiercePlanet.GENIUS_CAPABILITIES = FiercePlanet.VISIONARY_CAPABILITIES.concat(["
 // VARIABLES
 
 // Profile variables
+FiercePlanet.currentProfile = new Profile();
 FiercePlanet.capabilities = ["farm", "water", "clinic"];
-FiercePlanet.credits = 0;
 FiercePlanet.profileClass = "Novice";
-//FiercePlanet.credits = 10000;
-//FiercePlanet.profileClass = "Genius";
+FiercePlanet.credits = 0;
 FiercePlanet.totalSaved = 0;
+FiercePlanet.previousLevelScore = 0;
+FiercePlanet.currentScore = 0;
+FiercePlanet.resourcesInStore = 0;
+FiercePlanet.resourcesSpent = 0;
+FiercePlanet.expiredAgentCount = 0;
+FiercePlanet.savedAgentCount = 0;
+FiercePlanet.savedAgentThisWaveCount = 0;
+FiercePlanet.resourceStatsCount = {};
 
 
 
@@ -155,9 +179,6 @@ FiercePlanet.waveDelayCounter = 0;
 FiercePlanet.numAgents = 1;
 
 
-// Resource-specific stats
-FiercePlanet.resourceStatsCount = {};
-
 FiercePlanet.waveCounter = 0;
 FiercePlanet.levelCounter = 0;
 FiercePlanet.gameCounter = 0;
@@ -165,13 +186,6 @@ FiercePlanet.globalRecordingCounter = 0;
 
 
 
-FiercePlanet.previousLevelScore = 0;
-FiercePlanet.currentScore = 0;
-FiercePlanet.resourcesInStore = 0;
-FiercePlanet.resourcesSpent = 0;
-FiercePlanet.expiredAgentCount = 0;
-FiercePlanet.savedAgentCount = 0;
-FiercePlanet.savedAgentThisWaveCount = 0;
 
 
 // Dimension variables
