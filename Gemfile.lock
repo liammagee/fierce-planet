@@ -171,6 +171,7 @@ PLATFORMS
 DEPENDENCIES
   devise
   jasmine
+  oa-openid
   omniauth
   paperclip (~> 2.3)
   pg

@@ -19,11 +19,9 @@ FiercePlanet::Application.routes.draw do
     end
   end
 
-  devise_for :users
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  resource :user, :only => [:edit, :new]
 
-  namespace :user do
-      root :to => "users#open"
-  end
 
   # For Facebook authentication
   match '/auth/:service/callback' => 'services#create'

@@ -15,6 +15,7 @@ gem 'thin'
 
 gem "devise"
 gem "omniauth"
+gem 'oa-openid', :require => 'omniauth/openid'
 
 gem "paperclip", "~> 2.3"
 
