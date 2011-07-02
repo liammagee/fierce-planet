@@ -22,7 +22,7 @@ FiercePlanet::Application.routes.draw do
   devise_for :users
 
   namespace :user do
-      root :to => "world#open"
+      root :to => "users#open"
   end
 
   # For Facebook authentication
