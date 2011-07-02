@@ -75,7 +75,7 @@
       <script>
             // Converts the current (Ruby) profile to a JavaScript object
           var profileProxy = $.evalJSON('<%= raw current_user.profile.to_json(:except => [:created_at, :updated_at]) %>');
-          FiercePlanet.currentProfile = profileProxy.profile;
+          FiercePlanet.currentProfile = profileProxy;
           Profile.makeProfile(FiercePlanet.currentProfile);
 
           $(document).ready(function() {
