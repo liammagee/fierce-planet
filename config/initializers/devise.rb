@@ -140,7 +140,7 @@ Devise.setup do |config|
   #   manager.default_strategies(:scope => :user).unshift :twitter_oauth
   # end
 
-  if Raile.env == "development"
+  if Rails.env == "development"
     config.omniauth :facebook, "205901039456697", "65f0bc907d0b433343ef1e73b6cb8134",
         {:scope => 'email, offline_access', :client_options => {:ssl => {:ca_file => '/usr/lib/ssl/certs/ca-certificates.crt'}}}
   else
