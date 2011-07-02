@@ -10,11 +10,6 @@
 
 var FiercePlanet = FiercePlanet || {};
 
-/**
- * @constant the profile ID of the current user
- */
-FiercePlanet.PROFILE_ID = null;
-
 // Game variable constants
 /**
  * @constant The cost of making a move
@@ -72,37 +67,24 @@ FiercePlanet.WAVE_NOTICE_HEIGHT = 150;
 
 
 // Resource constants
-/** @constant The list of available profile classes */
-FiercePlanet.PROFILE_CLASSES = ["Novice", "Planner", "Expert", "Visionary", "Genius"];
-/** @constant The costs of obtaining capabilities related to each profile class */
-FiercePlanet.CAPABILITY_COSTS = [0, 100, 200, 300, 500];
-
-
-// TODO: Refactor out
-FiercePlanet.NOVICE_CAPABILITIES = ["farm", "water", "clinic"];
-FiercePlanet.PLANNER_CAPABILITIES = FiercePlanet.NOVICE_CAPABILITIES.concat(["shop", "park", "school"]);
-FiercePlanet.EXPERT_CAPABILITIES = FiercePlanet.PLANNER_CAPABILITIES.concat(["bank", "air", "legal"]);
-FiercePlanet.VISIONARY_CAPABILITIES = FiercePlanet.EXPERT_CAPABILITIES.concat(["factory", "energy", "democracy"]);
-FiercePlanet.GENIUS_CAPABILITIES = FiercePlanet.VISIONARY_CAPABILITIES.concat(["stockmarket", "biodiversity", "festival"]);
-
 
 // VARIABLES
 
 // Profile variables
 FiercePlanet.currentProfile = new Profile();
-FiercePlanet.capabilities = ["farm", "water", "clinic"];
-FiercePlanet.profileClass = "Novice";
+/*
+FiercePlanet.profile_class = "Novice";
 FiercePlanet.credits = 0;
-FiercePlanet.totalSaved = 0;
-FiercePlanet.previousLevelScore = 0;
-FiercePlanet.currentScore = 0;
-FiercePlanet.resourcesInStore = 0;
-FiercePlanet.resourcesSpent = 0;
-FiercePlanet.expiredAgentCount = 0;
-FiercePlanet.savedAgentCount = 0;
-FiercePlanet.savedAgentThisWaveCount = 0;
+FiercePlanet.total_saved = 0;
+FiercePlanet.previous_level_score = 0;
+FiercePlanet.current_score = 0;
+FiercePlanet.resources_in_store = 0;
+FiercePlanet.resources_spent = 0;
+FiercePlanet.expired_agent_count = 0;
+FiercePlanet.saved_agent_count = 0;
+FiercePlanet.saved_agent_this_wave_count = 0;
 FiercePlanet.resourceStatsCount = {};
-
+*/
 
 
 // Toggleable variables
@@ -116,8 +98,7 @@ FiercePlanet.scrollingImageVisible = true;
 FiercePlanet.noticesVisible = true;
 FiercePlanet.agentsCanCommunicate = true;
 FiercePlanet.catastrophesVisible = true;
-
-FiercePlanet.disableKeyboardShortcuts = false;
+FiercePlanet.disableKeyboardShortcuts = true;
 FiercePlanet.soundsPlayable = false;
 
 FiercePlanet.recording = false;
@@ -228,6 +209,7 @@ FiercePlanet.$resourceGallery = null;
 FiercePlanet.$newLevel = null;
 FiercePlanet.$settingsDialog = null;
 FiercePlanet.$genericDialog = null;
+FiercePlanet.$highScores = null;
 
 
 

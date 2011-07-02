@@ -12,6 +12,18 @@ class ProfilesController < ApplicationController
     end
   end
 
+  # GET /profiles/high_scores
+  # GET /profiles.xml/high_scores
+  def high_scores
+    @profiles = Profile.order('highest_score DESC').limit(10)
+
+    respond_to do |format|
+      format.js # high_scores.js.erb
+      format.html # high_scores.html.erb
+      format.xml  { render :xml => @profiles }
+    end
+  end
+
   # GET /profiles/1
   # GET /profiles/1.xml
   def show
@@ -63,37 +75,37 @@ class ProfilesController < ApplicationController
   # POST /profiles.xml/1/update_stats
   def update_stats
     @profile = Profile.find(params[:id])
+    @profile = @profile.from_json(params[:profile_object])
 
-    waves_survived = params[:waves_survived]
-    saved_agent_count = params[:saved_agent_count]
-    expired_agent_count = params[:expired_agent_count]
-    resources_spent = params[:resources_spent]
-    resources_in_store = params[:resources_in_store]
-    resources = params[:resources]
-    economic_resources = params[:economic_resources]
-    environmental_resources = params[:environmental_resources]
-    social_resources = params[:social_resources]
-    credits = params[:credits]
-    progress_towards_next_class = params[:progress_towards_next_class]
-
-    @profile.total_saved ||= 0
-    @profile.total_saved += saved_agent_count.to_i
-    @profile.total_expired ||= 0
-    @profile.total_expired += expired_agent_count.to_i
-    @profile.total_resources ||= 0
-    @profile.total_resources += resources.to_i
-    @profile.total_economic_resources ||= 0
-    @profile.total_economic_resources += economic_resources.to_i
-    @profile.total_environmental_resources ||= 0
-    @profile.total_environmental_resources += environmental_resources.to_i
-    @profile.total_social_resources ||= 0
-    @profile.total_social_resources += social_resources.to_i
-    @profile.credits ||= 0
-    @profile.credits += credits.to_i
-    @profile.progress_towards_next_class = progress_towards_next_class.to_i
+#    saved_agent_count = params[:saved_agent_count]
+#    expired_agent_count = params[:expired_agent_count]
+#    resources_spent = params[:resources_spent]
+#    resources_in_store = params[:resources_in_store]
+#    resources = params[:resources]
+#    economic_resources = params[:economic_resources]
+#    environmental_resources = params[:environmental_resources]
+#    social_resources = params[:social_resources]
+#    credits = params[:credits]
+#    progress_towards_next_class = params[:progress_towards_next_class]
+#
+#    @profile.total_saved ||= 0
+#    @profile.total_saved += saved_agent_count.to_i
+#    @profile.total_expired ||= 0
+#    @profile.total_expired += expired_agent_count.to_i
+#    @profile.total_resources ||= 0
+#    @profile.total_resources += resources.to_i
+#    @profile.total_economic_resources ||= 0
+#    @profile.total_economic_resources += economic_resources.to_i
+#    @profile.total_environmental_resources ||= 0
+#    @profile.total_environmental_resources += environmental_resources.to_i
+#    @profile.total_social_resources ||= 0
+#    @profile.total_social_resources += social_resources.to_i
+#    @profile.credits ||= 0
+#    @profile.credits += credits.to_i
+#    @profile.progress_towards_next_class = progress_towards_next_class.to_i
 
     respond_to do |format|
-      if @profile.update_attributes(params[:profile])
+      if @profile.save #update_attributes(params[:profile])
         format.html { render :text => "Stats saved" }
         format.js { render :text => "Stats saved" }
       else

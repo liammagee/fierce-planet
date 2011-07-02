@@ -711,7 +711,7 @@ FiercePlanet.drawLevel = function() {
 FiercePlanet.drawProfileClass = function() {
     var e = $('#profile-class-display')[0];
     if (e != undefined)
-        e.innerHTML = FiercePlanet.profileClass;
+        e.innerHTML = FiercePlanet.currentProfile.profile_class;
 };
 
 /**
@@ -719,7 +719,7 @@ FiercePlanet.drawProfileClass = function() {
  */
 FiercePlanet.drawScore = function() {
     var e = $('#score-display')[0];
-    e.innerHTML = FiercePlanet.zeroFill(FiercePlanet.currentScore, 5);
+    e.innerHTML = FiercePlanet.zeroFill(FiercePlanet.currentProfile.current_score, 5);
 };
 
 /**
@@ -727,7 +727,7 @@ FiercePlanet.drawScore = function() {
  */
 FiercePlanet.drawHighestScore = function() {
     var e = $('#highest-score-display')[0];
-    var hs = localStorage.highestScore;
+    var hs = FiercePlanet.currentProfile.highest_score;
     if (hs == undefined)
         hs = 0;
     e.innerHTML = hs.toString();
@@ -738,7 +738,7 @@ FiercePlanet.drawHighestScore = function() {
  */
 FiercePlanet.drawResourcesInStore = function() {
     var e = $('#goodness-display')[0];
-    e.innerHTML = FiercePlanet.resourcesInStore.toString();
+    e.innerHTML = FiercePlanet.currentProfile.resources_in_store.toString();
 };
 
 /**
@@ -750,7 +750,7 @@ FiercePlanet.drawExpired = function() {
     var e = $('#expired-citizens')[0];
     var expiredHTML = '';
     for (var i = 0, len = FiercePlanet.currentLevel.getExpiryLimit(); i < len; i++) {
-        if (i < FiercePlanet.expiredAgentCount)
+        if (i < FiercePlanet.currentProfile.expired_agent_count)
             expiredHTML += '<div id="expired-citizen"></div>';
         else
             expiredHTML += '<div id="healthy-citizen"></div>';
@@ -763,7 +763,7 @@ FiercePlanet.drawExpired = function() {
  */
 FiercePlanet.drawSaved = function() {
     var e = $('#saved-display')[0];
-    e.innerHTML = FiercePlanet.savedAgentCount.toString();
+    e.innerHTML = FiercePlanet.currentProfile.saved_agent_count.toString();
 };
 
 /**

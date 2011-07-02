@@ -34,6 +34,7 @@ FiercePlanet.hookUpUIEventListeners = function() {
     $('#zoomReset').click(function() { FiercePlanet.zoom(0);});
     $('#settings').click(FiercePlanet.showSettings);
     $('#credits').click(FiercePlanet.showCredits);
+    $('#highscore').click(FiercePlanet.showHighScores);
 
 
 
@@ -280,8 +281,8 @@ FiercePlanet.levelInfo = function() {
  * Refresh the swatch area with latest capabilities
  */
 FiercePlanet.refreshSwatch = function() {
-    for (var i = 0; i < FiercePlanet.capabilities.length; i++) {
-        var capability = $.trim(FiercePlanet.capabilities[i]);
+    for (var i = 0; i < FiercePlanet.currentProfile.capabilities.length; i++) {
+        var capability = $.trim(FiercePlanet.currentProfile.capabilities[i]);
         try {
 //            $('#' + capability)[0].style.display = 'block';
             var el = $('#' + capability);
@@ -291,4 +292,23 @@ FiercePlanet.refreshSwatch = function() {
         catch (err) {
         }
     }
+};
+
+/**
+ * Changes the preset level
+ */
+FiercePlanet.changePresetLevel =  function() {
+    var level = $('#levelInput').val();
+    FiercePlanet.currentLevelNumber = FiercePlanet.checkInteger(level);
+    FiercePlanet.currentLevelPreset = true;
+    // Remember this level, along with other data
+    FiercePlanet.storeData();
+};
+
+/**
+ * Changes the difficulty
+ */
+FiercePlanet.changeDifficulty = function () {
+    var difficulty = $('#difficultyInput').val();
+  FiercePlanet.levelOfDifficulty = FiercePlanet.checkInteger(difficulty);
 };

@@ -1,0 +1,24 @@
+
+FiercePlanet.pauseGame();
+
+// Construct and show the level gallery
+FiercePlanet.$highScores = $('<div></div>')
+        .html("<%=  escape_javascript(render('profiles/high_scores', :locals => { :profiles => @profiles})) %>")
+        .dialog({
+                                              position: [FiercePlanet.calculateWorldLeft(), 110],
+                                              width: 487,
+                                              height: 407,
+                    autoOpen: false,
+                    modal: true,
+                    title: 'High Scores',
+                    buttons: {
+                        "OK": function() {
+                            $(this).dialog("close");
+                        }
+
+                    },
+                    close: function(ev, ui) { $(this).remove(); },
+
+                });
+FiercePlanet.$highScores.dialog('open');
+

@@ -59,28 +59,6 @@ TBL.SOC_CATEGORY.setEvaluateOtherCategoryImpact(function(otherCategory) {
     return baseEffect;
 });
 
-// Economic resources
-TBL.ECO_CATEGORY.addType(FiercePlanet.FARM_RESOURCE_TYPE);
-TBL.ECO_CATEGORY.addType(FiercePlanet.SHOP_RESOURCE_TYPE);
-TBL.ECO_CATEGORY.addType(FiercePlanet.BANK_RESOURCE_TYPE);
-TBL.ECO_CATEGORY.addType(FiercePlanet.FACTORY_RESOURCE_TYPE);
-TBL.ECO_CATEGORY.addType(FiercePlanet.STOCKMARKET_RESOURCE_TYPE);
-
-
-// Environmental resources
-TBL.ENV_CATEGORY.addType(FiercePlanet.FRESH_WATER_RESOURCE_TYPE);
-TBL.ENV_CATEGORY.addType(FiercePlanet.WILDLIFE_PARK_RESOURCE_TYPE);
-TBL.ENV_CATEGORY.addType(FiercePlanet.CLEAN_AIR_RESOURCE_TYPE);
-TBL.ENV_CATEGORY.addType(FiercePlanet.GREEN_ENERGY_RESOURCE_TYPE);
-TBL.ENV_CATEGORY.addType(FiercePlanet.BIODIVERSITY_RESOURCE_TYPE);
-
-
-// Social resources
-TBL.SOC_CATEGORY.addType(FiercePlanet.CLINIC_RESOURCE_TYPE);
-TBL.SOC_CATEGORY.addType(FiercePlanet.SCHOOL_RESOURCE_TYPE);
-TBL.SOC_CATEGORY.addType(FiercePlanet.LEGAL_SYSTEM_RESOURCE_TYPE);
-TBL.SOC_CATEGORY.addType(FiercePlanet.DEMOCRACY_RESOURCE_TYPE);
-TBL.SOC_CATEGORY.addType(FiercePlanet.FESTIVAL_RESOURCE_TYPE);
 
 // Arrays of resource kinds
 TBL.ECONOMIC_RESOURCE_TYPES = [FiercePlanet.FARM_RESOURCE_TYPE, FiercePlanet.SHOP_RESOURCE_TYPE, FiercePlanet.BANK_RESOURCE_TYPE, FiercePlanet.FACTORY_RESOURCE_TYPE, FiercePlanet.STOCKMARKET_RESOURCE_TYPE];
@@ -91,6 +69,29 @@ TBL.SOCIAL_RESOURCE_TYPES = [FiercePlanet.CLINIC_RESOURCE_TYPE, FiercePlanet.SCH
  * Do setup of this resource set
  */
 TBL.doSetup = function() {
+// Economic resources
+    TBL.ECO_CATEGORY.addType(FiercePlanet.FARM_RESOURCE_TYPE);
+    TBL.ECO_CATEGORY.addType(FiercePlanet.SHOP_RESOURCE_TYPE);
+    TBL.ECO_CATEGORY.addType(FiercePlanet.BANK_RESOURCE_TYPE);
+    TBL.ECO_CATEGORY.addType(FiercePlanet.FACTORY_RESOURCE_TYPE);
+    TBL.ECO_CATEGORY.addType(FiercePlanet.STOCKMARKET_RESOURCE_TYPE);
+
+
+// Environmental resources
+    TBL.ENV_CATEGORY.addType(FiercePlanet.FRESH_WATER_RESOURCE_TYPE);
+    TBL.ENV_CATEGORY.addType(FiercePlanet.WILDLIFE_PARK_RESOURCE_TYPE);
+    TBL.ENV_CATEGORY.addType(FiercePlanet.CLEAN_AIR_RESOURCE_TYPE);
+    TBL.ENV_CATEGORY.addType(FiercePlanet.GREEN_ENERGY_RESOURCE_TYPE);
+    TBL.ENV_CATEGORY.addType(FiercePlanet.BIODIVERSITY_RESOURCE_TYPE);
+
+
+// Social resources
+    TBL.SOC_CATEGORY.addType(FiercePlanet.CLINIC_RESOURCE_TYPE);
+    TBL.SOC_CATEGORY.addType(FiercePlanet.SCHOOL_RESOURCE_TYPE);
+    TBL.SOC_CATEGORY.addType(FiercePlanet.LEGAL_SYSTEM_RESOURCE_TYPE);
+    TBL.SOC_CATEGORY.addType(FiercePlanet.DEMOCRACY_RESOURCE_TYPE);
+    TBL.SOC_CATEGORY.addType(FiercePlanet.FESTIVAL_RESOURCE_TYPE);
+
     FiercePlanet.registerResourceCategories([TBL.ECO_CATEGORY, TBL.ENV_CATEGORY, TBL.SOC_CATEGORY]);
     FiercePlanet.registerResourceTypes(TBL.ECONOMIC_RESOURCE_TYPES.concat(TBL.ENVIRONMENTAL_RESOURCE_TYPES.concat(TBL.SOCIAL_RESOURCE_TYPES)));
 };

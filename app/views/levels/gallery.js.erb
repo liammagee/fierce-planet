@@ -5,6 +5,7 @@ FiercePlanet.cancelLevelEditor();
 // Notify
 $('#notifications').html("<p>Opening level gallery</p>");
 
+
 // Construct and show the level gallery
 FiercePlanet.$levelList = $('<div></div>')
         .html("<%=  escape_javascript(render('levels/gallery', :locals => { :levels => @levels})) %>")
@@ -24,25 +25,15 @@ FiercePlanet.$levelList = $('<div></div>')
                             $(this).dialog("close");
                         }
 
-                    }
+                    },
+                    close: function(ev, ui) { $(this).remove(); },
 
                 });
 FiercePlanet.$levelList.dialog('open');
 
 
-FiercePlanet.changePresetLevel =  function() {
-    var level = $('#levelInput').val();
-    FiercePlanet.currentLevelNumber = FiercePlanet.checkInteger(level);
-    FiercePlanet.currentLevelPreset = true;
-    // Remember this level, along with other data
-    FiercePlanet.storeData();
-};
 
-FiercePlanet.changeDifficulty = function () {
-    var difficulty = $('#difficultyInput').val();
-  FiercePlanet.levelOfDifficulty = FiercePlanet.checkInteger(difficulty);
-};
-
+// Add event handlers when dialog is loaded
 $(document).ready(function() {
     $('#levelInput').change(FiercePlanet.changePresetLevel);
     $('#difficultyInput').change(FiercePlanet.changeDifficulty);

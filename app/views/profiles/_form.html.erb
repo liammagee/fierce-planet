@@ -36,7 +36,7 @@
     <div class="field">
       <%= f.label :capabilities %>
       <br/>
-      <%= @profile.capabilities %>
+      <%= @profile.capabilities.join(',') %>
     </div>
 
     <h2>Vital statistics</h2>

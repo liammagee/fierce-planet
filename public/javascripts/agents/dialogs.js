@@ -249,9 +249,9 @@ FiercePlanet.setupDialogs = function() {
  *
  */
 FiercePlanet.showGameOverDialog = function () {
-    FiercePlanet.determineCreditsAndClass();
+//    FiercePlanet.currentProfile.updateStats(FiercePlanet.currentProfile.resources_in_store, FiercePlanet.currentProfile.saved_agent_count);
     // Try to save results to the server
-    if (FiercePlanet.PROFILE_ID != undefined) {
+    if (FiercePlanet.currentProfile.id > -1) {
         FiercePlanet.updateStats(function(data) {
                FiercePlanet.openGameOverDialog();
            });
@@ -274,15 +274,14 @@ FiercePlanet.openGameOverDialog = function() {
 };
 
 /**
- *
+ * Update profile statistics, save statistics to the server if the user is logged in, and opn the complete game dialog
  */
 FiercePlanet.showCompleteGameDialog = function() {
-    FiercePlanet.determineCreditsAndClass();
+    FiercePlanet.currentProfile.updateStats(FiercePlanet.currentProfile.resources_in_store, FiercePlanet.currentProfile.saved_agent_count, FiercePlanet.currentLevelNumber);
+
     // Try to save results to the server
-    if (FiercePlanet.PROFILE_ID != undefined) {
-        var stats = FiercePlanet.compileStats();
-        $.post("/profiles/" + FiercePlanet.PROFILE_ID + "/update_stats", stats,
-           function(data) {
+    if (FiercePlanet.currentProfile.id > -1) {
+        FiercePlanet.updateStats(function(data) {
                FiercePlanet.openCompleteGameDialog();
            });
     }
@@ -292,7 +291,7 @@ FiercePlanet.showCompleteGameDialog = function() {
 };
 
 /**
- *
+ * Open the completed game dialog
  */
 FiercePlanet.openCompleteGameDialog = function() {
     FiercePlanet.$completeGame
@@ -308,11 +307,10 @@ FiercePlanet.openCompleteGameDialog = function() {
  */
 FiercePlanet.showCompleteLevelDialog = function() {
     // Try to save results to the server
-    FiercePlanet.determineCreditsAndClass();
-    if (FiercePlanet.PROFILE_ID != undefined) {
-        var stats = FiercePlanet.compileStats();
-        $.post("/profiles/" + FiercePlanet.PROFILE_ID + "/update_stats", stats,
-           function(data) {
+    FiercePlanet.currentProfile.updateStats(FiercePlanet.currentLevelNumber);
+
+    if (FiercePlanet.currentProfile.id > -1) {
+        FiercePlanet.updateStats(function(data) {
                FiercePlanet.openCompleteLevelDialog();
            });
     }
@@ -327,7 +325,7 @@ FiercePlanet.showCompleteLevelDialog = function() {
 FiercePlanet.openCompleteLevelDialog = function() {
     FiercePlanet.$completeLevel
             .html(
-            "<p>" + FiercePlanet.currentLevel.getConclusion() + "</p>" +
+            "<div>" + FiercePlanet.currentLevel.getConclusion() + "</div>" +
             FiercePlanet.generateStats()
             ).dialog('open');
 };
@@ -377,26 +375,26 @@ FiercePlanet.showUpgradeDeleteDialog = function(e) {
  * Show the resource gallery, and allow the user to pick from a range of capabilities
  */
 FiercePlanet.showResourceGallery = function() {
-    $('#current-profile-class')[0].innerHTML = FiercePlanet.profileClass;
-    $('#current-credits')[0].innerHTML = FiercePlanet.credits;
-    $('#current-capabilities')[0].innerHTML = FiercePlanet.capabilities.join(",");
+    $('#current-profile-class')[0].innerHTML = FiercePlanet.currentProfile.profile_class;
+    $('#current-credits')[0].innerHTML = FiercePlanet.currentProfile.credits;
+    $('#current-capabilities')[0].innerHTML = FiercePlanet.currentProfile.capabilities.join(",");
 
     var accessibleCapabilities = [];
     var purchasableItems = [];
 
-    if (FiercePlanet.profileClass == "Novice") {
+    if (FiercePlanet.profile_class == "Novice") {
         accessibleCapabilities = FiercePlanet.NOVICE_CAPABILITIES;
     }
-    else if (FiercePlanet.profileClass == "Planner") {
+    else if (FiercePlanet.profile_class == "Planner") {
         accessibleCapabilities = FiercePlanet.PLANNER_CAPABILITIES;
     }
-    else if (FiercePlanet.profileClass == "Expert") {
+    else if (FiercePlanet.profile_class == "Expert") {
         accessibleCapabilities = FiercePlanet.EXPERT_CAPABILITIES;
     }
-    else if (FiercePlanet.profileClass == "Visionary") {
+    else if (FiercePlanet.profile_class == "Visionary") {
         accessibleCapabilities = FiercePlanet.VISIONARY_CAPABILITIES;
     }
-    else if (FiercePlanet.profileClass == "Genius") {
+    else if (FiercePlanet.profile_class == "Genius") {
         accessibleCapabilities = FiercePlanet.GENIUS_CAPABILITIES;
     }
     // TODO: Temporarily enable all capabilities
@@ -423,7 +421,7 @@ FiercePlanet.showResourceGallery = function() {
             cost = FiercePlanet.CAPABILITY_COSTS [4];
         }
         // Make item available for purchase if: (1) the player's level permits it; (2) it is not among existing capabilities and (3) there is enough money
-        if ($.inArray(itemName, accessibleCapabilities) > -1 && $.inArray(itemName, FiercePlanet.capabilities) == -1 && cost < FiercePlanet.credits) {
+        if ($.inArray(itemName, accessibleCapabilities) > -1 && $.inArray(itemName, FiercePlanet.currentProfile.capabilities) == -1 && cost < FiercePlanet.currentProfile.credits) {
             // Make item purchasable
             purchasableItems.push(purchasableItem);
         }
@@ -451,15 +449,15 @@ FiercePlanet.showResourceGallery = function() {
 
         purchasableItem.addEventListener('click', function(e) {
             var id = this.id;
+            console.log(id);
             var swatchId = id.split("-purchase")[0];
-            var itemName = $('#' + id + ' > a > img')[0].title;
-            if ($.inArray(swatchId, FiercePlanet.capabilities) == -1) {
-                var purchase = confirm('Purchase item "' + itemName + '"?');
-                if (purchase) {
-                    FiercePlanet.credits -= cost;
-                    FiercePlanet.capabilities.push(swatchId);
-                    $('#current-credits')[0].innerHTML = FiercePlanet.credits;
-                    $('#current-capabilities')[0].innerHTML = FiercePlanet.capabilities.join(", ");
+            var itemName = $('#' + id + '')[0].title;
+            if ($.inArray(swatchId, FiercePlanet.currentProfile.capabilities) == -1) {
+                if (confirm('Purchase item "' + itemName + '"?')) {
+                    FiercePlanet.currentProfile.credits -= cost;
+                    FiercePlanet.currentProfile.capabilities.push(swatchId);
+                    $('#current-credits')[0].innerHTML = FiercePlanet.currentProfile.credits;
+                    $('#current-capabilities')[0].innerHTML = FiercePlanet.currentProfile.capabilities.join(", ");
                     $('#' + id).removeClass('active');
                     $('#' + id).addClass('inactive');
                 }

@@ -18,7 +18,7 @@ FiercePlanet.setupResourceInteraction = function () {
         var links = $('.swatch-instance'), el = null;
         for (var i = 0; i < links.length; i++) {
             el = links[i];
-            if (el.id && $.inArray(el.id, FiercePlanet.capabilities) != -1) {
+            if (el.id && $.inArray(el.id, FiercePlanet.currentProfile.capabilities) != -1) {
                 FiercePlanet.makeResourceActive(el);
             }
         }
@@ -96,8 +96,8 @@ FiercePlanet.makeResourceActive = function (el) {
 FiercePlanet.deleteCurrentResource = function () {
         var foundResource = FiercePlanet.getCurrentResourceIndex();
         if (foundResource > -1) {
-            FiercePlanet.resourcesInStore += 5;
-            FiercePlanet.resourcesSpent -= 5;
+            FiercePlanet.currentProfile.resources_in_store += 5;
+            FiercePlanet.currentProfile.resources_spent -= 5;
             FiercePlanet.currentLevel.getResources().splice(foundResource, 1);
 //            FiercePlanet.currentLevel.annulCell(FiercePlanet.currentResource.getPosition()[0], FiercePlanet.currentResource.getPosition()[1]) ;
             FiercePlanet.drawResourcesInStore();
@@ -113,9 +113,9 @@ FiercePlanet.upgradeCurrentResource = function () {
         var foundResource = FiercePlanet.getCurrentResourceIndex();
         if (foundResource > -1) {
             var p = FiercePlanet.currentLevel.getResources()[foundResource];
-            if (p.getUpgradeLevel() <= 4 && FiercePlanet.resourcesInStore >= p.getUpgradeCost()) {
-                FiercePlanet.resourcesInStore -= p.getUpgradeCost();
-                FiercePlanet.resourcesSpent += p.getUpgradeCost();
+            if (p.getUpgradeLevel() <= 4 && FiercePlanet.currentProfile.resources_in_store >= p.getUpgradeCost()) {
+                FiercePlanet.currentProfile.resources_in_store -= p.getUpgradeCost();
+                FiercePlanet.currentProfile.resources_spent += p.getUpgradeCost();
                 p.setUpgradeLevel(p.getUpgradeLevel() + 1);
                 FiercePlanet.drawResource(p);
                 FiercePlanet.drawResourcesInStore();
@@ -145,13 +145,13 @@ FiercePlanet.dropItem = function(e) {
         var kind = FiercePlanet.resolveResourceKind(resourceCode);
         var resource = new Resource(kind, posX, posY);
 
-        if (FiercePlanet.resourcesInStore < resource.getCost()) {
+        if (FiercePlanet.currentProfile.resources_in_store < resource.getCost()) {
             FiercePlanet.notify('Not enough goodness for now - save some more agents!');
             return;
         }
         else {
-            FiercePlanet.resourcesInStore -= resource.getCost();
-            FiercePlanet.resourcesSpent += resource.getCost();
+            FiercePlanet.currentProfile.resources_in_store -= resource.getCost();
+            FiercePlanet.currentProfile.resources_spent += resource.getCost();
             var resourceCategory = resource.getCategory().getCode();
             FiercePlanet.resourceStatsCount[resourceCategory] += 1;
             FiercePlanet.currentLevel.getResources().push(resource);

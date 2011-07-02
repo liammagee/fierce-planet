@@ -5,6 +5,9 @@ FiercePlanet::Application.routes.draw do
   resources :feedbacks
 
   resources :profiles do
+    collection do
+      get 'high_scores'
+    end
     member do
       post 'update_stats'
     end
@@ -19,7 +22,7 @@ FiercePlanet::Application.routes.draw do
   devise_for :users
 
   namespace :user do
-      root :to => "welcome#index"
+      root :to => "world#open"
   end
 
   # You can have the root of your site routed with "root"

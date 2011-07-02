@@ -7,7 +7,11 @@
     <!--<div id="expired"> Expired: <span id="expired-display">0</span> </div>-->
     <div id="expired-citizens">    </div>
     <div id="saved"> Saved: <span id="saved-display">0</span> </div>
-    <div id="highscore"> Highest Score: <span id="highest-score-display">0</span> </div>
+    <div id="highscore">
+      <% link_to high_scores_profiles_path, :method => :get, :remote => true do %>
+          Highest Score: <span id="highest-score-display">0</span>
+      <% end %>
+    </div>
 
     <!-- Unstyled properties -->
     <div id="level"> Level: <span id="level-display">0</span> </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110630111853) do
+ActiveRecord::Schema.define(:version => 20110701130013) do
 
   create_table "capabilities", :force => true do |t|
     t.integer  "capability_type"

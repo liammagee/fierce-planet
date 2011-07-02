@@ -22,3 +22,15 @@ FiercePlanet.SCHOOL_RESOURCE_TYPE = new ResourceType("School", "school", "/image
 FiercePlanet.LEGAL_SYSTEM_RESOURCE_TYPE = new ResourceType("Legal System", "legal", "/images/resources/legal.png", 20, 30, 100, 15);
 FiercePlanet.DEMOCRACY_RESOURCE_TYPE = new ResourceType("Democracy", "democracy", "/images/resources/democracy.png", 25, 40, 100, 20);
 FiercePlanet.FESTIVAL_RESOURCE_TYPE = new ResourceType("Festival", "festival", "/images/resources/festival.png", 30, 50, 100, 25);
+
+
+/**
+ * Resources assigned to profile class capabilities (@link Profile)
+ *
+ * TODO: Use actual resource types instead
+ */
+FiercePlanet.NOVICE_CAPABILITIES = ["farm", "water", "clinic"];
+FiercePlanet.PLANNER_CAPABILITIES = FiercePlanet.NOVICE_CAPABILITIES.concat(["shop", "park", "school"]);
+FiercePlanet.EXPERT_CAPABILITIES = FiercePlanet.PLANNER_CAPABILITIES.concat(["bank", "air", "legal"]);
+FiercePlanet.VISIONARY_CAPABILITIES = FiercePlanet.EXPERT_CAPABILITIES.concat(["factory", "energy", "democracy"]);
+FiercePlanet.GENIUS_CAPABILITIES = FiercePlanet.VISIONARY_CAPABILITIES.concat(["stockmarket", "biodiversity", "festival"]);

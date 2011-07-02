@@ -44,8 +44,8 @@ FiercePlanet.loadGame = function() {
 FiercePlanet.newGame = function() {
     if (FiercePlanet.currentLevelPreset)
         FiercePlanet.currentLevelNumber = 1;
-    FiercePlanet.currentScore = 0;
-    FiercePlanet.previousLevelScore = 0;
+    FiercePlanet.current_score = 0;
+    FiercePlanet.previous_level_score = 0;
     FiercePlanet.gameCounter = 0;
     FiercePlanet.newLevel();
 };
@@ -59,7 +59,7 @@ FiercePlanet.newLevel = function() {
     FiercePlanet.levelDelayCounter = 0;
     FiercePlanet.levelCounter = 0;
     FiercePlanet.maxLevelMoves = 0;
-    FiercePlanet.previousLevelScore = FiercePlanet.currentScore;
+    FiercePlanet.previous_level_score = FiercePlanet.current_score;
     if (FiercePlanet.currentLevel != undefined)
         FiercePlanet.currentLevel.setResources([]);
     FiercePlanet.currentNotice = null;
@@ -83,7 +83,7 @@ FiercePlanet.newLevel = function() {
  */
 FiercePlanet.restartLevel = function() {
     // Reset the score
-    FiercePlanet.currentScore = FiercePlanet.previousLevelScore;
+    FiercePlanet.current_score = FiercePlanet.previous_level_score;
 
     // Start a new level
     FiercePlanet.newLevel();
@@ -97,7 +97,7 @@ FiercePlanet.newWave = function() {
     FiercePlanet.maxWaveMoves = 0;
     FiercePlanet.waveCounter = 0;
     FiercePlanet.waveDelayCounter = 0;
-    FiercePlanet.savedAgentThisWaveCount = 0;
+    FiercePlanet.saved_agent_this_wave_count = 0;
 
     FiercePlanet.currentLevel.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, FiercePlanet.numAgents, FiercePlanet.agentsCanCommunicate);
 
@@ -136,7 +136,7 @@ FiercePlanet.completeLevel = function() {
  * Called when the game is over
  */
 FiercePlanet.gameOver = function() {
-    FiercePlanet.currentScore = FiercePlanet.previousLevelScore;
+    FiercePlanet.current_score = FiercePlanet.previous_level_score;
     FiercePlanet._finaliseGame();
     FiercePlanet.showGameOverDialog();
 };
@@ -233,9 +233,9 @@ FiercePlanet._initialiseGame = function () {
         FiercePlanet.currentLevel.setWaveNumber(FiercePlanet.waveOverride);
         FiercePlanet.waveOverride = 0;
     }
-    FiercePlanet.resourcesInStore = FiercePlanet.currentLevel.getInitialResourceStore();
-    if (FiercePlanet.resourcesInStore == undefined || FiercePlanet.resourcesInStore == null) {
-        FiercePlanet.resourcesInStore = FiercePlanet.STARTING_STORE;
+    FiercePlanet.currentProfile.resources_in_store = FiercePlanet.currentLevel.getInitialResourceStore();
+    if (FiercePlanet.currentProfile.resources_in_store == undefined || FiercePlanet.currentProfile.resources_in_store == null) {
+        FiercePlanet.currentProfile.resources_in_store = FiercePlanet.STARTING_STORE;
     }
 
     FiercePlanet.currentLevel.setCurrentAgents([]);
@@ -249,8 +249,8 @@ FiercePlanet._initialiseGame = function () {
         var category = FiercePlanet.resourceCategories[i];
         FiercePlanet.resourceStatsCount[category.getCode()] = 0;
     }
-    FiercePlanet.expiredAgentCount = 0;
-    FiercePlanet.savedAgentCount = 0;
+    FiercePlanet.currentProfile.expired_agent_count = 0;
+    FiercePlanet.currentProfile.saved_agent_count = 0;
     FiercePlanet.currentWave = 1;
 
     FiercePlanet.resourceRecoveryCycle = Math.pow(FiercePlanet.DEFAULT_RESOURCE_RECOVERY, FiercePlanet.levelOfDifficulty - 1);

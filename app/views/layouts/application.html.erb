@@ -7,6 +7,7 @@
   <%= stylesheet_link_tag "styles" %>
   <%= stylesheet_link_tag "custom/jquery-ui-1.8.13.custom" %>
 
+  
   <!-- JAVASCRIPT INCLUDES -->
   <%= javascript_include_tag "jquery-1.6.1.js" %>
   <!--<%= javascript_include_tag "jquery.min.js" %>-->
@@ -57,6 +58,8 @@
   <% end %>
 
 
+  <!-- CONDITIONAL AND UTILITY BLOCKS -->
+
   <!-- Set the resource type namespace here -->
   <% if params[:rs] %>
     <%= javascript_tag "FiercePlanet.resourceTypeNamespace = " + params[:rs] + ";" -%>
@@ -67,19 +70,26 @@
       <%= raw include_qunit %>
   <% end %>
 
-
   <!-- If a user is logged in, set their properties here -->
-  <%= javascript_tag "FiercePlanet.PROFILE_ID;" -%>
   <% if current_user %>
-      <%= javascript_tag "FiercePlanet.PROFILE_ID = #{current_user.profile.id};" -%>
       <script>
-          FiercePlanet.profileClass = '<%= current_user.profile.profile_class ? current_user.profile.profile_class : "Novice" %>';
-          FiercePlanet.credits = parseInt('<%= current_user.profile.credits ? current_user.profile.credits : 0 %>');
-          FiercePlanet.capabilities = '<%= current_user.profile.capabilities ? current_user.profile.capabilities : "farm,water,clinic" %>'.split(',');
-          FiercePlanet.totalSaved = parseInt('<%= current_user.profile.total_saved ? current_user.profile.total_saved : 0 %>');
+            // Converts the current (Ruby) profile to a JavaScript object
+          var profileProxy = $.evalJSON('<%= raw current_user.profile.to_json(:except => [:created_at, :updated_at]) %>');
+          FiercePlanet.currentProfile = profileProxy.profile;
+          Profile.makeProfile(FiercePlanet.currentProfile);
+
           $(document).ready(function() {
               FiercePlanet.refreshSwatch();
           });
+
+        // TODO: Test code for mobile version
+        var ua = navigator.userAgent.toLowerCase();
+        var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+        if(isAndroid) {
+          // Do something!
+          // Redirect to Android-site?
+          alert('is android');
+        }
       </script>
   <% end %>
 

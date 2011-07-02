@@ -1,0 +1,7 @@
+<h3>High Scores</h3>
+
+<div id="hs">
+  <% @profiles.each do |profile| %>
+    <div><%= profile.nickname %> (<%= profile.profile_class %>): <%= profile.highest_score %> </div>
+  <% end %>
+</div>
