@@ -17,6 +17,32 @@
       <p><%= f.submit "Sign up" %></p>
   <% end %>
 
+  <div id="remote">
+    <!--<div id="terms" class="box">-->
+      <!--<%= link_to "Terms of Service", "#" %>-->
+    <!--</div>-->
+    <div id="services" class="box">
+      Sign in with:
+      <% link_to user_omniauth_authorize_path(:facebook) do %>
+          <image src="/images/intridea-authbuttons/png/facebook_32.png" alt="Facebook" />
+          Facebook
+      <% end %>
+      <% link_to user_omniauth_authorize_path(:google) do %>
+          <image src="/images/intridea-authbuttons/png/google_32.png" alt="Google" />
+          Google
+      <% end %>
+
+      <!--<a href="/auth/facebook" class="services"><image src="/images/intridea-authbuttons/png/facebook_32.png" alt="Facebook" />-->
+        <!--Facebook</a>-->
+      <!--<a href="/auth/google" class="services"><image src="/images/intridea-authbuttons/png/google_32.png" alt="Facebook" />-->
+        <!--Google</a>-->
+      <!--<a href="/auth/github" class="services"><image src="/images/intridea-authbuttons/png/github_32.png" alt="Facebook" />-->
+        <!--Github</a>-->
+      <!--<a href="/auth/twitter" class="services"><image src="/images/intridea-authbuttons/png/twitter_32.png" alt="Facebook" />-->
+        <!--Twitter</a>-->
+    </div>
+  </div>
+
   <%= render :partial => "devise/shared/links" %>
 
 </div>
