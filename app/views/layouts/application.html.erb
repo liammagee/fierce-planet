@@ -4,7 +4,7 @@
   <title>Fierce Planet</title>
 
   <!-- STYLESHEET INCLUDES -->
-  <% if users_browser == 'android' %>
+  <% if users_browser == 'android' || users_browser == 'ipod' || users_browser == 'iphone'  %>
       <%= stylesheet_link_tag "styles_android" %>
   <% else %>
       <%= stylesheet_link_tag "styles" %>
