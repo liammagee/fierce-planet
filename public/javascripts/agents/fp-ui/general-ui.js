@@ -62,7 +62,7 @@ FiercePlanet.hookUpUIEventListeners = function() {
     FiercePlanet.getAndRetrieveProperties();
 
     // Trap relevant key strokes
-    if (! FiercePlanet.currentSettings.disableKeyboardShortcuts) {
+    if (!FiercePlanet.currentSettings.disableKeyboardShortcuts) {
         $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
         $('input, textarea, select, form').focus(function() {
             $(document).unbind("keydown");
