@@ -8,6 +8,7 @@ gem 'rails', '3.0.5'
 #gem 'sqlite3'
 gem 'pg'
 gem 'thin'
+#gem 'eventmachine'
 
 #gem "socky-client-rails"
 

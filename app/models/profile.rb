@@ -7,10 +7,14 @@ class Profile < ActiveRecord::Base
 
   def init
     self.profile_class ||= 'Novice'
-    self.capabilities = self.capabilities ? self.capabilities.split(',') : ['farm', 'water', 'clinic']
+    if new_record?
+      self.capabilities ||= ['farm', 'water', 'clinic']
+    else
+      self.capabilities = self.capabilities.split(',') if self.capabilities
+    end
   end
 
   def serialise_capabilities
-    self.capabilities = self.capabilities.join(',') if self.capabilities
+    self.capabilities = self.capabilities.join(',') if self.capabilities and self.capabilities.is_a?(String)
   end
 end
