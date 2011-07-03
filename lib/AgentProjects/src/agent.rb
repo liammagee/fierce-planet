@@ -162,7 +162,7 @@ class Agent
   def to_json(*a)
     {
       'json_class'   => self.class.name,
-      'data'         => [ culture, age, health, wealth, literacy, status, position, parents, children, memories, beliefs, desires ]
+      'fp-data'         => [ culture, age, health, wealth, literacy, status, position, parents, children, memories, beliefs, desires ]
     }.to_json(*a)
   end
 

@@ -18,7 +18,7 @@ class Species
   def to_json(*a)
     {
       'json_class'   => self.class.name,
-      'data'         => [ name, min_life_expectancy, max_life_expectancy, min_fertility_rate, max_fertility_rate, min_childbirth_age, max_childbirth_age ]
+      'fp-data'         => [ name, min_life_expectancy, max_life_expectancy, min_fertility_rate, max_fertility_rate, min_childbirth_age, max_childbirth_age ]
     }.to_json(*a)
   end
   

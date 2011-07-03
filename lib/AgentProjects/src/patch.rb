@@ -15,7 +15,7 @@ class Patch
   def to_json(*a)
     {
       'json_class'   => self.class.name,
-      'data'         => [ agent, terrain ]
+      'fp-data'         => [ agent, terrain ]
     }.to_json(*a)
   end
 

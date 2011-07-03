@@ -261,9 +261,9 @@ JSDOC.TokenReader.prototype.read_numb = function(/**JSDOC.TokenStream*/stream, t
 	}
 	////
 	
-	is(decToken.data, "8.0", "decimal number is found in source.");
-	is(hexToken.data, "0x20", "hexdec number is found in source (issue #99).");
-	is(octToken.data, "0777", "octal number is found in source.");
+	is(decToken.fp-data, "8.0", "decimal number is found in source.");
+	is(hexToken.fp-data, "0x20", "hexdec number is found in source (issue #99).");
+	is(octToken.fp-data, "0777", "octal number is found in source.");
 */
 
 /**

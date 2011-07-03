@@ -72,19 +72,6 @@ FiercePlanet.WAVE_NOTICE_HEIGHT = 150;
 
 // Profile variables
 FiercePlanet.currentProfile = new Profile();
-/*
-FiercePlanet.profile_class = "Novice";
-FiercePlanet.credits = 0;
-FiercePlanet.total_saved = 0;
-FiercePlanet.previous_level_score = 0;
-FiercePlanet.current_score = 0;
-FiercePlanet.resources_in_store = 0;
-FiercePlanet.resources_spent = 0;
-FiercePlanet.expired_agent_count = 0;
-FiercePlanet.saved_agent_count = 0;
-FiercePlanet.saved_agent_this_wave_count = 0;
-FiercePlanet.resourceStatsCount = {};
-*/
 
 
 // Toggleable variables
@@ -94,23 +81,24 @@ FiercePlanet.isMouseDown = false;
 FiercePlanet.isMouseMoving = false;
 
 // Setting variables
-FiercePlanet.scrollingImageVisible = true;
-FiercePlanet.noticesVisible = true;
-FiercePlanet.agentsCanCommunicate = true;
-FiercePlanet.catastrophesVisible = true;
-FiercePlanet.disableKeyboardShortcuts = true;
-FiercePlanet.soundsPlayable = false;
+FiercePlanet.currentSettings = new Settings();
+//FiercePlanet.scrollingImageVisible = true;
+//FiercePlanet.noticesVisible = true;
+//FiercePlanet.agentsCanCommunicate = true;
+//FiercePlanet.catastrophesVisible = true;
+//FiercePlanet.disableKeyboardShortcuts = true;
+//FiercePlanet.soundsPlayable = false;
 
-FiercePlanet.recording = false;
+//FiercePlanet.recording = false;
 
-FiercePlanet.invisiblePath = false;
-FiercePlanet.agentTracing = false;
+//FiercePlanet.invisiblePath = false;
+//FiercePlanet.agentTracing = false;
 
-FiercePlanet.resourcesUpgradeable = false;
-FiercePlanet.resourcesInTension = false;
-FiercePlanet.resourceBonus = false;
-FiercePlanet.applyGeneralHealth = false;
-FiercePlanet.ignoreResourceBalance = false;
+//FiercePlanet.resourcesUpgradeable = false;
+//FiercePlanet.resourcesInTension = false;
+//FiercePlanet.resourceBonus = false;
+//FiercePlanet.applyGeneralHealth = false;
+//FiercePlanet.ignoreResourceBalance = false;
 
 FiercePlanet.godMode = false;
 

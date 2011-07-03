@@ -94,7 +94,7 @@ FiercePlanet.drawPath = function() {
         var y = yPos * FiercePlanet.cellHeight;
         ctx.clearRect(x + 1, y + 1, FiercePlanet.cellWidth - 1, FiercePlanet.cellHeight - 1);
 
-        if (!FiercePlanet.invisiblePath) {
+        if (!FiercePlanet.currentSettings.invisiblePath) {
             if (yPos == 0 || FiercePlanet.currentLevel.getTile(xPos, yPos - 1) != undefined) {
                 var my_gradient = ctx.createLinearGradient(x, y, x, y + FiercePlanet.cellHeight / 4);
                 my_gradient.addColorStop(0, "#ccc");
@@ -480,7 +480,7 @@ FiercePlanet.clearAgents = function() {
             var intX = __ret.intX * FiercePlanet.cellWidth + wx + 1;
             var intY = __ret.intY * FiercePlanet.cellHeight + wy + 1;
             ctx.clearRect(intX, intY, FiercePlanet.cellWidth + wx + 1, FiercePlanet.cellHeight + wy + 1);
-            if (FiercePlanet.agentTracing) {
+            if (FiercePlanet.currentSettings.agentTracing) {
                 ctx.beginPath();
                 ctx.arc(intX + FiercePlanet.cellWidth / 2, intY + FiercePlanet.cellHeight * 1.2, 2, 0, Math.PI * 2, false);
                 ctx.closePath();
@@ -648,14 +648,14 @@ FiercePlanet.drawAgents = function() {
  *
  */
 FiercePlanet.drawScrollingLayer = function() {
-    if (FiercePlanet.scrollingImageVisible) {
+    if (FiercePlanet.currentSettings.scrollingImageVisible) {
         FiercePlanet.clearCanvas('scrollingCanvas');
         var canvas = $('#scrollingCanvas')[0];
         var ctx = canvas.getContext('2d');
 
         // Add logic for catastrophe here
 
-        if (FiercePlanet.catastrophesVisible && FiercePlanet.currentLevel.getCatastrophe() != undefined) {
+        if (FiercePlanet.currentSettings.catastrophesVisible && FiercePlanet.currentLevel.getCatastrophe() != undefined) {
             var catastrophe = FiercePlanet.currentLevel.getCatastrophe();
             if (catastrophe._notice._start <= FiercePlanet.levelCounter && (catastrophe._start + catastrophe._duration) >= FiercePlanet.levelCounter) {
                 FiercePlanet.currentNotice = catastrophe._notice;

@@ -26,7 +26,7 @@ Array.prototype.filter = function(){};
 
 
 /**
- * A first in, first out data structure.
+ * A first in, first out fp-data structure.
  * @constructor
  */
 Queue = function(){};

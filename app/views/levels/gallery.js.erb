@@ -1,4 +1,7 @@
 
+// Pause the game, if in play
+FiercePlanet.pauseGame();
+
 // If we are editing a level, cancel the level editor
 FiercePlanet.cancelLevelEditor();
 
@@ -10,7 +13,7 @@ $('#notifications').html("<p>Opening level gallery</p>");
 FiercePlanet.$levelList = $('<div></div>')
         .html("<%=  escape_javascript(render('levels/gallery', :locals => { :levels => @levels})) %>")
         .dialog({
-                                              position: [FiercePlanet.calculateWorldLeft(), 110],
+                                              position: [FiercePlanet.calculateWorldLeft(), FiercePlanet.calculateWorldTop()],
                                               width: 487,
                                               height: 407,
                     autoOpen: false,

@@ -12,7 +12,7 @@ var FiercePlanet = FiercePlanet || {};
 
 
 /**
- *
+ * Calculates the left position of the 'world' element
  */
 FiercePlanet.calculateWorldLeft = function () {
     var contentPane = $("#content-pane");
@@ -23,17 +23,31 @@ FiercePlanet.calculateWorldLeft = function () {
     return dialogX;
 };
 
+
+/**
+ * Calculates the top position of the 'world' element
+ */
+FiercePlanet.calculateWorldTop = function () {
+    var contentPane = $("#content-pane");
+    var world = $("#world");
+    var contentPaneY = contentPane.position().top;
+    var worldY = world.position().top;
+    var dialogY = contentPaneY + worldY;
+    return dialogY;
+};
+
 /**
  *
  */
 FiercePlanet.setupDialogs = function() {
     var dialogX = FiercePlanet.calculateWorldLeft();
+    var dialogY = FiercePlanet.calculateWorldTop();
     // Dialogs
 
     FiercePlanet.$newLevel = $('<div></div>')
         .html('New Level')
         .dialog({
-            position: [dialogX, 110],
+            position: [dialogX, dialogY],
             width: 487,
             height: 407,
             autoOpen: false,
@@ -67,7 +81,7 @@ FiercePlanet.setupDialogs = function() {
     FiercePlanet.$completeLevel = $('<div></div>')
         .html('Level Complete!')
         .dialog({
-                                                      position: [dialogX, 110],
+                                                      position: [dialogX, dialogY],
                                                       width: 487,
                                                       height: 407,
             autoOpen: false,
@@ -88,7 +102,7 @@ FiercePlanet.setupDialogs = function() {
     FiercePlanet.$completeGame = $('<div></div>')
         .html('Complete game!')
         .dialog({
-                                                     position: [dialogX, 110],
+                                                     position: [dialogX, dialogY],
                                                      width: 487,
                                                      height: 407,
             autoOpen: false,
@@ -108,7 +122,7 @@ FiercePlanet.setupDialogs = function() {
     FiercePlanet.$gameOver = $('<div></div>')
         .html('Game Over!')
         .dialog({
-                                                 position: [dialogX, 110],
+                                                 position: [dialogX, dialogY],
                                                  width: 487,
                                                  height: 407,
             autoOpen: false,
@@ -129,7 +143,7 @@ FiercePlanet.setupDialogs = function() {
     /* Upgrade / delete dialog */
     FiercePlanet.$upgradeDelete = $('#delete-upgrade-dialog')
         .dialog({
-                                                      position: [dialogX, 110],
+                                                      position: [dialogX, dialogY],
                                                       width: 487,
                                                       height: 407,
             autoOpen: false,
@@ -146,7 +160,7 @@ FiercePlanet.setupDialogs = function() {
 
     FiercePlanet.$resourceGallery = $('#resource-gallery')
         .dialog({
-                                                        position: [dialogX, 110],
+                                                        position: [dialogX, dialogY],
                                                         width: 487,
                                                         height: 407,
             autoOpen: false,
@@ -166,7 +180,7 @@ FiercePlanet.setupDialogs = function() {
 
     FiercePlanet.$settingsDialog = $('#settings-dialog')
         .dialog({
-                                          position: [dialogX, 110],
+                                          position: [dialogX, dialogY],
                                           width: 487,
                                           height: 407,
             autoOpen: false,
@@ -184,9 +198,11 @@ FiercePlanet.setupDialogs = function() {
         });
 
     $('#tutorial').click(function(e) {
-        FiercePlanet.currentLevelNumber = 0;
-        FiercePlanet.currentLevelPreset = true;
-        FiercePlanet.restartLevel();
+        if (confirm("Stop current game and begin the tutorial?")) {
+            FiercePlanet.currentLevelNumber = 0;
+            FiercePlanet.currentLevelPreset = true;
+            FiercePlanet.restartLevel();
+        }
     });
 
 
@@ -375,6 +391,8 @@ FiercePlanet.showUpgradeDeleteDialog = function(e) {
  * Show the resource gallery, and allow the user to pick from a range of capabilities
  */
 FiercePlanet.showResourceGallery = function() {
+    FiercePlanet.pauseGame();
+
     $('#current-profile-class')[0].innerHTML = FiercePlanet.currentProfile.profile_class;
     $('#current-credits')[0].innerHTML = FiercePlanet.currentProfile.credits;
     $('#current-capabilities')[0].innerHTML = FiercePlanet.currentProfile.capabilities.join(",");
@@ -478,6 +496,7 @@ FiercePlanet.showResourceGallery = function() {
  * Shows the Fierce Planet settings
  */
 FiercePlanet.showSettings = function() {
+    FiercePlanet.pauseGame();
     FiercePlanet.$settingsDialog.dialog('open');
 };
 
@@ -485,7 +504,7 @@ FiercePlanet.showSettings = function() {
  * Shows the Fierce Planet credits
  */
 FiercePlanet.showCredits = function() {
-    FiercePlanet._stopAgents();
+    FiercePlanet.pauseGame();
     
     FiercePlanet.$genericDialog = $('<div></div>')
         .html(

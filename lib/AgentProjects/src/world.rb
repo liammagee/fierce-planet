@@ -81,12 +81,12 @@ class World
   def to_json(*a)
     {
       'json_class'   => self.class.name,
-      'data'         => [ grid ]
+      'fp-data'         => [ grid ]
     }.to_json(*a)
   end
 
   def self.json_create(o)
-    new(*o['data'])
+    new(*o['fp-data'])
   end
 
   def [](x)

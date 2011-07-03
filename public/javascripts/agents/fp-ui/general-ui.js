@@ -62,21 +62,23 @@ FiercePlanet.hookUpUIEventListeners = function() {
     FiercePlanet.getAndRetrieveProperties();
 
     // Trap relevant key strokes
-    $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
-    $('input, textarea, select, form').focus(function() {
-        $(document).unbind("keydown");
-    }).blur(function() {
+    if (! FiercePlanet.currentSettings.disableKeyboardShortcuts) {
         $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
-    });
-    // Disable any AJAX-loaded forms
-    $(document).ajaxComplete(function() {
-        $('input, textarea, select').focus(function() {
+        $('input, textarea, select, form').focus(function() {
             $(document).unbind("keydown");
-            console.log('got here2');
         }).blur(function() {
             $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
         });
-    });
+        // Disable any AJAX-loaded forms
+        $(document).ajaxComplete(function() {
+            $('input, textarea, select').focus(function() {
+                $(document).unbind("keydown");
+            }).blur(function() {
+                $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
+            });
+        });
+    }
+
 
     $('#agentCanvas').mousewheel(function(event, delta) {
         FiercePlanet.zoom(delta);
@@ -93,6 +95,9 @@ FiercePlanet.hookUpUIEventListeners = function() {
  *  Add key handling events
  */
 FiercePlanet.handleKeyboardShortcuts = function(e) {
+    if (FiercePlanet.currentSettings.disableKeyboardShortcuts)
+        return;
+
     // Return if command keys are selected
     if (e.ctrlKey || e.altKey || e.metaKey)
         return;

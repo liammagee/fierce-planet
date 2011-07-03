@@ -149,7 +149,7 @@ Resource.prototype.setY = function(y) { this._y = y; };
 Resource.prototype.provideYield = function(agent, resourceEffect) {
     if (this._totalYield > this._perAgentYield && agent.getHealth() < 100) {
         var adjustment = 0;
-        if (FiercePlanet.applyGeneralHealth) {
+        if (FiercePlanet.currentSettings.applyGeneralHealth) {
             adjustment = this._perAgentYield * this._upgradeLevel * resourceEffect;
             agent.adjustHealth(adjustment);
             agent.setSpeed(this._perAgentYield);

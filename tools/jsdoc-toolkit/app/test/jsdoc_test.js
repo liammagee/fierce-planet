@@ -345,7 +345,7 @@ Circle.createCircle = function(radius){
 
 
 /**
- * Create a new Coordinate instance based on x and y grid data.
+ * Create a new Coordinate instance based on x and y grid fp-data.
  * @class Coordinate is a class that can encapsulate location information.
  * @param {int} [x=0] The optional x portion of the Coordinate
  * @param {int} [y=0] The optinal y portion of the Coordinate

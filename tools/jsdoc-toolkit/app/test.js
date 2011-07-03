@@ -259,7 +259,7 @@ var testCases = [
 		is('symbols.getSymbol("Array#some").alias', 'Array#some', 'The alias of a symbol in a shared section is found.');
 		is('symbols.getSymbol("Array#some").desc', "Extension to builtin array.", 'A description can be shared.');
 		is('symbols.getSymbol("Array#filter").desc', "Extension to builtin array.\nChange every element of an array.", 'A shared description is appended.');
-		is('symbols.getSymbol("Queue").desc', "A first in, first out data structure.", 'A description is not shared when outside a shared section.');
+		is('symbols.getSymbol("Queue").desc', "A first in, first out fp-data structure.", 'A description is not shared when outside a shared section.');
 		is('symbols.getSymbol("Queue.rewind").alias', "Queue.rewind", 'Second shared tag can be started.');
 		is('symbols.getSymbol("startOver").alias', "startOver", 'Shared tag doesnt cross over files.');
 	}

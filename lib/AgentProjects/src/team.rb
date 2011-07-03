@@ -20,7 +20,7 @@ class Team
   def to_json(*a)
     {
       'json_class'   => self.class.name,
-      'data'         => [ name, base_size, species ]
+      'fp-data'         => [ name, base_size, species ]
     }.to_json(*a)
   end
 

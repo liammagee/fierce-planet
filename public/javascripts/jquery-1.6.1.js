@@ -1432,7 +1432,7 @@ jQuery.extend({
 		}
 
 		if ( !id ) {
-			// Only DOM nodes need a new unique ID for each element since their data
+			// Only DOM nodes need a new unique ID for each element since their fp-data
 			// ends up in the global cache
 			if ( isNode ) {
 				elem[ jQuery.expando ] = id = ++jQuery.uuid;
@@ -1452,7 +1452,7 @@ jQuery.extend({
 			}
 		}
 
-		// An object can be passed to jQuery.data instead of a key/value pair; this gets
+		// An object can be passed to jQuery.fp-data instead of a key/value pair; this gets
 		// shallow copied over onto the existing cache
 		if ( typeof name === "object" || typeof name === "function" ) {
 			if ( pvt ) {
@@ -1464,7 +1464,7 @@ jQuery.extend({
 
 		thisCache = cache[ id ];
 
-		// Internal jQuery data is stored in a separate object inside the object's data
+		// Internal jQuery fp-data is stored in a separate object inside the object's data
 		// cache in order to avoid key collisions between internal data and user-defined
 		// data
 		if ( pvt ) {

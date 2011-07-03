@@ -199,7 +199,7 @@ FiercePlanet.isPositionOccupiedByResource = function (x, y) {
  */
 FiercePlanet.calculateResourceEffect = function (resource) {
         // Allow this calculation to be ignored
-        if (FiercePlanet.ignoreResourceBalance || FiercePlanet.applyGeneralHealth)
+        if (FiercePlanet.currentSettings.ignoreResourceBalance || FiercePlanet.currentSettings.applyGeneralHealth)
             return 1;
 
         var resourceCategory = resource.getCategory().getCode();
@@ -213,7 +213,7 @@ FiercePlanet.calculateResourceEffect = function (resource) {
         var effect = proportionOfIdeal * proportionOfIdeal;
 
         // Further adjustment based on surrounding resources
-        if (FiercePlanet.resourcesInTension) {
+        if (FiercePlanet.currentSettings.resourcesInTension) {
             effect *= FiercePlanet.calculateSurroundingResourcesEffects(resource);
         }
         return effect;

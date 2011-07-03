@@ -110,7 +110,7 @@ def create
         end
       end
     else
-      flash[:error] =  service_route.capitalize + ' returned invalid data for the user id.'
+      flash[:error] =  service_route.capitalize + ' returned invalid fp-data for the user id.'
       redirect_to new_user_session_path
     end
   else

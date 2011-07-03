@@ -63,7 +63,7 @@ function main() {
 		
 		// debugger's option: dump the entire symbolSet produced from your code
 		if (JSDOC.opt.Z) {
-			LOG.warn("So you want to see the data structure, eh? This might hang if you have circular refs...");
+			LOG.warn("So you want to see the fp-data structure, eh? This might hang if you have circular refs...");
 			IO.include("frame/Dumper.js");
 			var symbols = JSDOC.JsDoc.symbolSet.toArray();
 			for (var i = 0, l = symbols.length; i < l; i++) {

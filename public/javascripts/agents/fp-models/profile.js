@@ -1,5 +1,5 @@
 /*!
- * Fierce Planet - Catastrophe
+ * Fierce Planet - Profile
  *
  * Copyright (C) 2011 Liam Magee
  * MIT Licensed

@@ -58,7 +58,7 @@ FiercePlanet.checkInteger = function(value) {
 FiercePlanet.getAndRetrieveProperty = function(property) {
     if ($('#' + property + 'Input')[0] != undefined) {
         if (localStorage[property] == "true") {
-            this[property] = true;
+            this.currentSettings[property] = true;
             $('#' + property + 'Input')[0].checked = true;
         }
     }
@@ -72,7 +72,7 @@ FiercePlanet.getAndRetrieveProperty = function(property) {
 FiercePlanet.setAndStoreProperty = function(property) {
     if ($("#" + property + "Input")[0] != undefined) {
         var propertyInputValue = $("#" + property + "Input")[0].checked;
-        this[property] = propertyInputValue;
+        this.currentSettings[property] = propertyInputValue;
         localStorage[property] = propertyInputValue;
     }
 };

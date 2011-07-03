@@ -835,7 +835,7 @@ QUnit.equiv = function () {
  * Copyright (c) 2008 Ariel Flesler - aflesler(at)gmail(dot)com | http://flesler.blogspot.com
  * Licensed under BSD (http://www.opensource.org/licenses/bsd-license.php)
  * Date: 5/15/2008
- * @projectDescription Advanced and extensible data dumping for Javascript.
+ * @projectDescription Advanced and extensible fp-data dumping for Javascript.
  * @version 1.0.0
  * @author Ariel Flesler
  * @link {http://flesler.blogspot.com/2008/05/jsdump-pretty-dump-of-any-javascript.html}

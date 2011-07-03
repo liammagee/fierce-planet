@@ -25,7 +25,7 @@ class Terrain
   def to_json(*a)
     {
       'json_class'   => self.class.name,
-      'data'         => [ name, color, habitable ]
+      'fp-data'         => [ name, color, habitable ]
     }.to_json(*a)
   end
 

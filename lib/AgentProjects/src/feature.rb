@@ -14,7 +14,7 @@ class Feature
   def to_json(*a)
     {
       'json_class'   => self.class.name,
-      'data'         => [ name, symbol ]
+      'fp-data'         => [ name, symbol ]
     }.to_json(*a)
   end
 

@@ -4,7 +4,11 @@
   <title>Fierce Planet</title>
 
   <!-- STYLESHEET INCLUDES -->
-  <%= stylesheet_link_tag "styles" %>
+  <% if users_browser == 'android' %>
+      <%= stylesheet_link_tag "styles_android" %>
+  <% else %>
+      <%= stylesheet_link_tag "styles" %>
+  <% end %>
   <%= stylesheet_link_tag "custom/jquery-ui-1.8.13.custom" %>
 
   
@@ -29,32 +33,36 @@
       <%= javascript_include_tag "agents/framework/agent" %>
       <%= javascript_include_tag "agents/framework/catastrophe" %>
       <%= javascript_include_tag "agents/framework/level" %>
-      <%= javascript_include_tag "agents/framework/profile" %>
       <%= javascript_include_tag "agents/framework/resource" %>
-      <%= javascript_include_tag "agents/framework/player_class" %>
       <%= javascript_include_tag "agents/framework/tile" %>
-      <%= javascript_include_tag "agents/ui/notice" %>
-      <%= javascript_include_tag "agents/ui/event" %>
 
-      <%= javascript_include_tag "agents/data/resource_types" %>
+      <%= javascript_include_tag "agents/fp-models/profile" %>
+      <%= javascript_include_tag "agents/fp-models/profile_class" %>
+      <%= javascript_include_tag "agents/fp-models/settings" %>
+      <%= javascript_include_tag "agents/fp-models/notice" %>
+      <%= javascript_include_tag "agents/fp-models/event" %>
+
+      <%= javascript_include_tag "agents/fp-data/resource_types" %>
       <!-- Change this to load other resource categories -->
-      <%= javascript_include_tag "agents/data/resourceset/tbl" %>
-      <%= javascript_include_tag "agents/data/resourceset/cos" %>
+      <%= javascript_include_tag "agents/fp-data/resourceset/tbl" %>
+      <%= javascript_include_tag "agents/fp-data/resourceset/cos" %>
+      <%= javascript_include_tag "agents/fp-data/player_classes" %>
+      <%= javascript_include_tag "agents/fp-data/agent_types" %>
 
-      <%= javascript_include_tag "agents/data/player_classes" %>
-      <%= javascript_include_tag "agents/data/agent_types" %>
-      <%= javascript_include_tag "agents/dialogs" %>
-      <%= javascript_include_tag "agents/drawing" %>
+      <%= javascript_include_tag "agents/fp-ui/dialogs" %>
+      <%= javascript_include_tag "agents/fp-ui/drawing" %>
+      <%= javascript_include_tag "agents/fp-ui/general-ui" %>
+      <%= javascript_include_tag "agents/fp-ui/profile-ui" %>
+      <%= javascript_include_tag "agents/fp-ui/resource-ui" %>
       <%= javascript_include_tag "agents/editor" %>
-      <%= javascript_include_tag "agents/general-ui" %>
       <%= javascript_include_tag "agents/lifecycle" %>
       <%= javascript_include_tag "agents/params" %>
-      <%= javascript_include_tag "agents/profile-ui" %>
       <%= javascript_include_tag "agents/recording" %>
-      <%= javascript_include_tag "agents/resource-ui" %>
       <%= javascript_include_tag "agents/utils" %>
       <%= javascript_include_tag "agents/game" %>
-      <%= javascript_include_tag "agents/data/levels" %>
+
+      <!-- Last to load - has strong dependencies on all other classes -->
+      <%= javascript_include_tag "agents/fp-data/levels" %>
   <% end %>
 
 
@@ -87,8 +95,8 @@
         var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
         if(isAndroid) {
           // Do something!
-          // Redirect to Android-site?
-          alert('is android');
+          FiercePlanet.currentSettings.agentsCanCommunicate = false;
+          FiercePlanet.currentSettings.scrollingImageVisible = false;
         }
       </script>
   <% end %>

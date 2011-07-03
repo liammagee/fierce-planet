@@ -27,7 +27,7 @@
 			// *** Get current window dimensions
 			var widthNow = $(window).width(), heightNow = $(window).height(), fontSizeNow = $("#zsp_ez").height();
 			if (data.lastWidth !== widthNow || data.lastFontSize !== fontSizeNow){	// || data.lastHeight !== heightNow){
-				// *** If dimensions have changed, update data, and 
+				// *** If dimensions have changed, update data, and
 				// *** fire documentZoomed event on all available components.
 				//console.log(fontSizeNow);
 				$(this).data("zoomEvent",{
@@ -36,7 +36,7 @@
 					lastHeight: heightNow,
 					lastFontSize: fontSizeNow
 				});
-				//if(data.lastWidth) 
+				//if(data.lastWidth)
 					$("*").trigger("documentzoom");	
 			}
 		

@@ -7,6 +7,7 @@ class Profile < ActiveRecord::Base
 
   def init
     self.profile_class ||= 'Novice'
+    self.current_score ||= 0
     if new_record?
       self.capabilities ||= ['farm', 'water', 'clinic']
     else

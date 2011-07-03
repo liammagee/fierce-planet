@@ -34,7 +34,7 @@ FiercePlanet.processAgents = function() {
     FiercePlanet.drawScrollingLayer();
 
     // Draw any notices
-    if (FiercePlanet.noticesVisible && FiercePlanet.currentNotice != undefined) {
+    if (FiercePlanet.currentSettings.noticesVisible && FiercePlanet.currentNotice != undefined) {
         FiercePlanet.drawNotice(FiercePlanet.currentNotice);
     }
 
@@ -122,7 +122,7 @@ FiercePlanet.processAgents = function() {
 
                 // TODO: should be in-lined?
                 if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE || agent.getType() == AgentTypes.RIVAL_AGENT_TYPE) {
-                    if (!FiercePlanet.godMode)
+                    if (!FiercePlanet.currentSettings.godMode)
                         agent.adjustHealth(FiercePlanet.MOVE_HEALTH_COST);
                     if (agent.getHealth() <= 0) {
                         nullifiedAgents.push(i);
@@ -179,7 +179,7 @@ FiercePlanet.processAgents = function() {
     }
 
     // Post-move processing
-    if (FiercePlanet.recording)
+    if (FiercePlanet.currentSettings.recording)
         FiercePlanet.recordWorld();
 
 };
@@ -217,7 +217,7 @@ FiercePlanet.processNeighbouringAgents = function(agent) {
         var ax = a.getX();
         var ay = a.getY();
         if (Math.abs(ax - x) <= 1 && Math.abs(ay - y) <= 1) {
-            if (!FiercePlanet.godMode && FiercePlanet.predatorsVisible && agent.getType() == CITIZEN_AGENT_TYPE && a.getType() == PREDATOR_AGENT_TYPE) {
+            if (!FiercePlanet.currentSettings.godMode && FiercePlanet.predatorsVisible && agent.getType() == CITIZEN_AGENT_TYPE && a.getType() == PREDATOR_AGENT_TYPE) {
                 agent.setIsHit(true);
             }
         }
