@@ -31,6 +31,7 @@ GEM
     addressable (2.2.4)
     arel (2.0.10)
     bcrypt-ruby (2.1.4)
+    bcrypt-ruby (2.1.4-x86-mingw32)
     builder (2.1.2)
     childprocess (0.1.9)
       ffi (~> 1.0.6)
@@ -43,12 +44,14 @@ GEM
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
-    eventmachine (0.12.10)
+    eventmachine (1.0.0.beta.3)
+    eventmachine (1.0.0.beta.3-x86-mingw32)
     faraday (0.6.1)
       addressable (~> 2.2.4)
       multipart-post (~> 1.1.0)
       rack (< 2, >= 1.1.0)
     ffi (1.0.9)
+    ffi (1.0.9-x86-mingw32)
     i18n (0.6.0)
     jasmine (1.0.2.1)
       json_pure (>= 1.4.3)
@@ -67,6 +70,7 @@ GEM
     multipart-post (1.1.2)
     net-ldap (0.2.2)
     nokogiri (1.4.7)
+    nokogiri (1.4.7-x86-mingw32)
     oa-basic (0.2.6)
       oa-core (= 0.2.6)
       rest-client (~> 1.6.0)
@@ -110,6 +114,7 @@ GEM
       activesupport (>= 2.3.2)
       cocaine (>= 0.0.2)
     pg (0.11.0)
+    pg (0.11.0-x86-mingw32)
     polyglot (0.3.1)
     pyu-ruby-sasl (0.0.3.3)
     rack (1.2.3)
@@ -158,6 +163,10 @@ GEM
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
+    thin (1.2.11-x86-mingw32)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
     thor (0.14.6)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
@@ -167,9 +176,11 @@ GEM
 
 PLATFORMS
   ruby
+  x86-mingw32
 
 DEPENDENCIES
   devise
+  eventmachine (= 1.0.0.beta.3)
   jasmine
   oa-openid
   omniauth

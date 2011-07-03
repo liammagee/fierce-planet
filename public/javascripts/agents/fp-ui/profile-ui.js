@@ -60,7 +60,7 @@ FiercePlanet.storeData = function() {
 FiercePlanet.serializeProfile = function() {
     var resourceCount = FiercePlanet.currentLevel.getResources().length;
     var profileProxy = {};
-    profileProxy.profile = FiercePlanet.currentProfile;
+    profileProxy = FiercePlanet.currentProfile;
     var stats = {
         profile_object: $.toJSON(profileProxy)
     };

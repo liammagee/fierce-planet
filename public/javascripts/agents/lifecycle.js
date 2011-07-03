@@ -115,9 +115,9 @@ FiercePlanet.newWave = function() {
  * Called when a level is completed
  */
 FiercePlanet.completeWave = function() {
-    FiercePlanet._finaliseGame();
     FiercePlanet.currentWave++;
     FiercePlanet.numAgents++;
+    FiercePlanet._finaliseGame();
 };
 
 
