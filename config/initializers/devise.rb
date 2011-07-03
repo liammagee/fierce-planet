@@ -1,3 +1,10 @@
+
+if Rails.env == 'development'
+  require 'openssl'
+  OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+end
+
+
 # Use this hook to configure devise mailer, warden hooks and so forth. The first
 # four configuration values can also be set straight in your models.
 Devise.setup do |config|
@@ -140,14 +147,14 @@ Devise.setup do |config|
   #   manager.default_strategies(:scope => :user).unshift :twitter_oauth
   # end
 
-  if Rails.env == "development"
-    config.omniauth :facebook, "205901039456697", "65f0bc907d0b433343ef1e73b6cb8134",
-        {:scope => 'email, offline_access', :client_options => {:ssl => {:ca_file => '/usr/lib/ssl/certs/ca-certificates.crt'}}}
+  if Rails.env.development?
+    OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+    config.omniauth :facebook, "205901039456697", "65f0bc907d0b433343ef1e73b6cb8134"
   else
     # Name: Fierce Planet App
     # Name: http://fierce-planet.herokuapp.com/
     config.omniauth :facebook, "116518935106308", "bcd614b749c1296d417df6e6bfe7e407",
-        {:scope => 'email, offline_access', :client_options => {:ssl => {:ca_file => '/usr/lib/ssl/certs/ca-certificates.crt'}}}
+        {:scope => 'email, offline_access', :client_options => {:ssl => {:ca_file => '/etc/ssl/certs'}}}
   end
   require 'openid/store/filesystem'
   config.omniauth :open_id, OpenID::Store::Filesystem.new('/tmp')
