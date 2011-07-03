@@ -4,6 +4,3 @@ db/*.sqlite3
 log/*.log
 tmp/
 public/docs/js/
-tools/
-assets/
-
