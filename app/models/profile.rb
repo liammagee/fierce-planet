@@ -15,6 +15,6 @@ class Profile < ActiveRecord::Base
   end
 
   def serialise_capabilities
-    self.capabilities = self.capabilities.join(',') if self.capabilities and self.capabilities.is_a?(String)
+    self.capabilities = self.capabilities.join(',') if self.capabilities and self.capabilities.is_a?(Array)
   end
 end
