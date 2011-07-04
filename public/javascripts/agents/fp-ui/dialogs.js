@@ -109,6 +109,10 @@ FiercePlanet.setupDialogs = function() {
             modal: true,
             title: 'Fierce Planet Complete!',
             buttons: {
+                "Bonus Level": function() {
+                    FiercePlanet.newLevel();
+                    $( this ).dialog( "close" );
+                },
                 "New Game": function() {
                     FiercePlanet.newGame();
                     $( this ).dialog( "close" );
@@ -181,8 +185,8 @@ FiercePlanet.setupDialogs = function() {
     FiercePlanet.$settingsDialog = $('#settings-dialog')
         .dialog({
                                           position: [dialogX, dialogY],
-                                          width: 487,
-                                          height: 407,
+                                                       width: FiercePlanet.WORLD_WIDTH + 7,
+                                                       height: FiercePlanet.WORLD_HEIGHT + 7,
             autoOpen: false,
             modal: true,
             title: 'Settings',
@@ -208,7 +212,7 @@ FiercePlanet.setupDialogs = function() {
 
     FiercePlanet.$statsDialog = $('<div></div>')
         .dialog({
-                                                position: [dialogX, 110],
+                                                position: [dialogX, dialogY],
                                                     width: FiercePlanet.WORLD_WIDTH + 7,
                                                     height: FiercePlanet.WORLD_HEIGHT + 7,
             autoOpen: false,
@@ -223,7 +227,7 @@ FiercePlanet.setupDialogs = function() {
 
     FiercePlanet.$designFeatures = $('#level-features')
         .dialog({
-                                                       position: [dialogX, 110],
+                                                       position: [dialogX, dialogY],
                                                        width: FiercePlanet.WORLD_WIDTH + 7,
                                                        height: FiercePlanet.WORLD_HEIGHT + 7,
             autoOpen: false,
@@ -240,9 +244,9 @@ FiercePlanet.setupDialogs = function() {
     FiercePlanet.$editProperties = $('<div></div>')
         .html('Edit level properties')
         .dialog({
-                                                       position: [dialogX, 110],
-                                                       width: FiercePlanet.WORLD_WIDTH + 7,
-                                                       height: FiercePlanet.WORLD_HEIGHT + 7,
+           position: [dialogX, dialogY],
+           width: FiercePlanet.WORLD_WIDTH + 7,
+           height: FiercePlanet.WORLD_HEIGHT + 7,
             autoOpen: false,
             modal: true,
             title: 'Edit level properties',
@@ -295,7 +299,7 @@ FiercePlanet.openGameOverDialog = function() {
 FiercePlanet.showCompleteGameDialog = function() {
     // Try to save results to the server
     if (FiercePlanet.currentProfile.id > -1) {
-        FiercePlanet.updateStats(function(data) {
+        FiercePlanet.saveProfile(function(data) {
                FiercePlanet.openCompleteGameDialog();
            });
     }
@@ -310,7 +314,8 @@ FiercePlanet.showCompleteGameDialog = function() {
 FiercePlanet.openCompleteGameDialog = function() {
     FiercePlanet.$completeGame.html(
             "Congratulations! In spite of challenges ahead, the citizens of Fierce Planet look forward to a bright and sustainable future!" +
-                    FiercePlanet.generateStats())
+                    FiercePlanet.generateStats()
+            )
             .dialog('open');
     $('#gotoResourceGallery').click(FiercePlanet.showResourceGallery);
 };

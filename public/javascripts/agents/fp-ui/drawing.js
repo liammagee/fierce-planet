@@ -393,7 +393,7 @@ FiercePlanet.insertAlpha = function(color, alphaLevel) {
 
 
 /**
- *
+ * Draw all of the resources
  */
 FiercePlanet.drawResources = function() {
     for (var i = 0; i < FiercePlanet.currentLevel._resources.length; i+= 1) {
@@ -402,17 +402,17 @@ FiercePlanet.drawResources = function() {
 };
 
 /**
- *
- * @param p
+ * Draw an individual resource
+ * @param resource
  */
-FiercePlanet.drawResource = function(p) {
+FiercePlanet.drawResource = function(resource) {
     var canvas = $('#resourceCanvas')[0];
     var ctx = canvas.getContext('2d');
 
-    var x = p._x * FiercePlanet.cellWidth;
-    var y = p._y * FiercePlanet.cellHeight;
-    var s = p._totalYield / p._initialTotalYield * 100;
-    var c = p._color;
+    var x = resource._x * FiercePlanet.cellWidth;
+    var y = resource._y * FiercePlanet.cellHeight;
+    var s = resource._totalYield / resource._initialTotalYield * 100;
+    var c = resource._color;
     var newColor = FiercePlanet.diluteColour(s, s, s, c);
     ctx.clearRect(x + 1, y + 1, FiercePlanet.cellWidth - 1, FiercePlanet.cellHeight - 1);
     ctx.fillStyle = "#" + newColor;
@@ -423,7 +423,7 @@ FiercePlanet.drawResource = function(p) {
 //    ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
     // Fill smaller square
     ctx.fillRect(x + 4, y + 4, FiercePlanet.cellWidth - 8, FiercePlanet.cellHeight - 8);
-    switch (p._upgradeLevel) {
+    switch (resource._upgradeLevel) {
         case 1:
             break;
         case 2:
@@ -449,9 +449,25 @@ FiercePlanet.drawResource = function(p) {
 //    ctx.strokeText(p.getUpgradeLevel(), x + 10, y + 10);
 
     // Draw resource-specific representation here
-    var resImage = new Image();
-    resImage.src = p._kind._image;
-    ctx.drawImage(resImage, x + 4, y + 4, FiercePlanet.cellWidth - 8, FiercePlanet.cellHeight - 8);
+    if (resource._kind._image) {
+        var resImage = new Image();
+        resImage.src = resource._kind._image;
+        ctx.drawImage(resImage, x + 4, y + 4, FiercePlanet.cellWidth - 8, FiercePlanet.cellHeight - 8);
+    }
+};
+
+
+/**
+ * Clears an individual resource
+ * @param resource
+ */
+FiercePlanet.clearResource = function(resource) {
+    var canvas = $('#resourceCanvas')[0];
+    var ctx = canvas.getContext('2d');
+
+    var x = resource._x * FiercePlanet.cellWidth;
+    var y = resource._y * FiercePlanet.cellHeight;
+    ctx.clearRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
 };
 
 /**
@@ -580,9 +596,9 @@ FiercePlanet.getDrawingPosition = function(agent, counter) {
                 intX = (FiercePlanet.worldWidth - offsetX);
             }
         }
-        else if (y == FiercePlanet.worldWidth - 1 && lastY == 0) {
+        else if (y == FiercePlanet.worldHeight - 1 && lastY == 0) {
             if (halfWay) {
-                offsetY = (y - FiercePlanet.worldWidth) * (increment);
+                offsetY = (y - FiercePlanet.worldHeight) * (increment);
                 intY = (y - offsetY);
             }
             else {
@@ -590,14 +606,14 @@ FiercePlanet.getDrawingPosition = function(agent, counter) {
                 intY = offsetY;
             }
         }
-        else if (y == 0 && lastY == FiercePlanet.worldWidth - 1) {
+        else if (y == 0 && lastY == FiercePlanet.worldHeight - 1) {
             if (halfWay) {
                 offsetY = increment;
                 intY = (0 - offsetY);
             }
             else {
-                offsetY = (FiercePlanet.worldWidth - lastY) * (increment);
-                intY = (FiercePlanet.worldWidth - offsetY);
+                offsetY = (FiercePlanet.worldHeight - lastY) * (increment);
+                intY = (FiercePlanet.worldHeight - offsetY);
             }
         }
     }
@@ -665,7 +681,7 @@ FiercePlanet.drawScrollingLayer = function() {
             }
             if (catastrophe._start <= FiercePlanet.levelCounter && (catastrophe._start + catastrophe._duration) >= FiercePlanet.levelCounter) {
                 // Apply catastrophe effects
-                if (FiercePlanet.levelCounter >= (catastrophe._start + catastrophe._duration) / 2) {
+                if (FiercePlanet.levelCounter >= (catastrophe._start + catastrophe._duration / 2)) {
                     catastrophe.strike();
                 }
 
@@ -679,7 +695,7 @@ FiercePlanet.drawScrollingLayer = function() {
                 var y = 0;
                 var w = trailIncrement;
                 var h = FiercePlanet.WORLD_HEIGHT;
-                ctx.fillStyle = "rgba(128, 128, 255, 0.5)";
+                ctx.fillStyle = FiercePlanet.insertAlpha(catastrophe._kind._color, 0.5);
                 ctx.fillRect(x, y, w, h);
                 return;
             }
@@ -766,7 +782,9 @@ FiercePlanet.drawExpired = function() {
  */
 FiercePlanet.drawSaved = function() {
     var e = $('#saved-display')[0];
-    e.innerHTML = FiercePlanet.currentProfile.current_level_saved.toString();
+    var saved = FiercePlanet.currentProfile.current_level_saved.toString();
+    var totalSaveable = FiercePlanet.currentLevel.getTotalSaveable();
+    e.innerHTML = saved + " out of " + totalSaveable;
 };
 
 /**

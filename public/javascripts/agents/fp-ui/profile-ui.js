@@ -96,6 +96,14 @@ FiercePlanet.generateStats = function() {
             "<td>" + FiercePlanet.currentProfile.game_total_saved + "</td>" +
             "</tr>" +
             "<tr>" +
+            "<td>Total expired:</td>" +
+            "<td>" + FiercePlanet.currentProfile.game_total_expired + "</td>" +
+            "</tr>" +
+            "<tr>" +
+            "<td>Total resources spent:</td>" +
+            "<td>" + FiercePlanet.currentProfile.game_total_resources_spent + "</td>" +
+            "</tr>" +
+            "<tr>" +
             "<td>Profile class:</td>" +
             "<td>" + FiercePlanet.currentProfile.profile_class + "</td>" +
             "</tr>" +

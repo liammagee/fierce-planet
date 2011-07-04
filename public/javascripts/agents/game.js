@@ -110,8 +110,10 @@ FiercePlanet.processAgents = function() {
 
                 if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE) {
                     agent.resetCountdownToMove();
-                    agent.adjustSpeed();
-                    agent.adjustWander();
+                    if (!FiercePlanet.currentLevel.getNoSpeedChange())
+                        agent.adjustSpeed();
+                    if (!FiercePlanet.currentLevel.getNoWander())
+                        agent.adjustWander();
                 }
 
                 if (agent.getMoves() > FiercePlanet.maxWaveMoves)
@@ -194,6 +196,7 @@ FiercePlanet.processNeighbouringResources = function(agent) {
         var ry = resource.getY();
         if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
             var resourceEffect = FiercePlanet.calculateResourceEffect(resource);
+            console.log(resourceEffect);
             resource.provideYield(agent, resourceEffect);
             FiercePlanet.drawResource(resource);
         }

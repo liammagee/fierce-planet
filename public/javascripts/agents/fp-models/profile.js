@@ -112,33 +112,6 @@ Profile.prototype.initialiseResourceStore = function(initialStore) {
 };
 
 
-/**
- * Increment profile credits
- * @param currentLevel
- */
-Profile.prototype.updateStats = function(currentLevel) {
-    // Update level data
-    this.current_level = currentLevelNumber || this.current_level;
-
-    // Update game data
-    this.game_total_saved += this.current_level_saved;
-    this.game_total_expired += this.current_level_expired;
-    if (this.game_level < this.current_level)
-        this.game_level = this.current_level;
-    if (this.game_score < this.current_score)
-        this.game_score = this.current_score;
-
-    // Update profile data
-    this.credits += this.current_level_resources_in_store;
-    this.total_saved += this.current_level_saved;
-    this.total_expired += this.current_level_expired;
-    if (this.highest_score < this.current_score)
-        this.highest_score = this.current_score;
-    if (this.highest_level < this.current_level)
-        this.highest_level = this.current_level;
-    this.evaluateProfileClass();
-};
-
 
 /**
  * Compiles statistics for the current level
@@ -294,7 +267,6 @@ Profile.makeProfile = function(proxyProfile) {
     proxyProfile.initialiseResourceStore = Profile.prototype.initialiseResourceStore;
     proxyProfile.resetCurrentStats = Profile.prototype.resetCurrentStats;
     proxyProfile.compileProfileStats = Profile.prototype.compileProfileStats;
-    proxyProfile.compileGameStats = Profile.prototype.compileGameStats;
 
     proxyProfile._initialise = Profile.prototype._initialise;
     proxyProfile._initialise();

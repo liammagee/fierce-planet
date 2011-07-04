@@ -16,7 +16,6 @@ function Level(id) {
     this._id = id;
     this._isPresetLevel = false;
     this._name = id;
-    this._initialAgentNumber = 1;
     this._entryPoints = [];
     this._exitPoints = [];
 
@@ -25,12 +24,15 @@ function Level(id) {
     this._worldHeight = 11;
 
     // Parameters
+    this._initialAgentNumber = 1;
     this._waveNumber = 10;
     this._expiryLimit = 20;
     this._initialResourceStore = 100;
     this._allowOffscreenCycling = false;
     this._allowResouresOnPath = false;
     this._customLevel = false;
+    this._noWander = false;
+    this._noSpeedChange = false;
 
     // Google map options
     this._mapOptions = null;
@@ -146,6 +148,10 @@ Level.prototype.getAllowOffscreenCycling = function() { return this._allowOffscr
 Level.prototype.setAllowOffscreenCycling = function(allowOffscreenCycling) { this._allowOffscreenCycling = allowOffscreenCycling; };
 Level.prototype.getAllowResourcesOnPath = function() { return this._allowResouresOnPath; };
 Level.prototype.setAllowResourcesOnPath = function(allowResourcesOnPath) { this._allowResouresOnPath = allowResourcesOnPath; };
+Level.prototype.getNoWander = function() { return this._noWander; };
+Level.prototype.setNoWander = function(noWander) { this._noWander = noWander; };
+Level.prototype.getNoSpeedChange = function() { return this._noSpeedChange; };
+Level.prototype.setNoSpeedChange = function(noSpeedChange) { this._noSpeedChange = noSpeedChange; };
 Level.prototype.getIntroduction = function() { return this._introduction; };
 Level.prototype.setIntroduction = function(introduction) { this._introduction = introduction; };
 Level.prototype.getConclusion = function() { return this._conclusion; };
@@ -301,4 +307,21 @@ Level.prototype.presetAgents = function(agentType, number, canCommunicateWithOth
 
     this.setCurrentAgents(agents);
 };
+
+/**
+ * Indicates total number of agents saveable on this level
+ */
+Level.prototype.getTotalSaveable = function () {
+    var firstWave = this._initialAgentNumber;
+    var lastWave = this._waveNumber + this._initialAgentNumber -1;
+    var minor = (firstWave * (firstWave - 1)) / 2;
+    var major = (lastWave * (lastWave + 1)) / 2;
+    var saveablePerEntryPoint = major - minor;
+    var totalSaveable = saveablePerEntryPoint * this._entryPoints.length;
+    return totalSaveable;
+};
+
+/**
+ * Stub method, for setting up a new level
+ */
 Level.prototype.setup = function() {};

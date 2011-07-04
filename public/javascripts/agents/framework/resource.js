@@ -152,13 +152,15 @@ Resource.prototype.provideYield = function(agent, resourceEffect) {
         if (FiercePlanet.currentSettings.applyGeneralHealth) {
             adjustment = this._perAgentYield * this._upgradeLevel * resourceEffect;
             agent.adjustHealth(adjustment);
-            agent.setSpeed(this._perAgentYield);
+            if (!FiercePlanet.currentLevel._noSpeedChange)
+                agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));
             this._totalYield -= this._perAgentYield;
         }
         else {
             adjustment = this._perAgentYield * this._upgradeLevel * 3 * resourceEffect;
             agent.adjustHealthForResource(adjustment, this);
-            agent.setSpeed(this._perAgentYield);
+            if (!FiercePlanet.currentLevel._noSpeedChange)
+                agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));
             this._totalYield -= this._perAgentYield;
         }
     }

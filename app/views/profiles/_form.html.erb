@@ -29,14 +29,8 @@
       <%= @profile.credits %>
     </div>
     <div class="field">
-      <%= f.label :status %>
-      <br/>
-      <%= @profile.status %>
-    </div>
-    <div class="field">
-      <%= f.label :capabilities %>
-      <br/>
-      <%= @profile.capabilities.join(',') %>
+      <%= f.label :capabilities %>:
+      <%= (@profile.capabilities).join(',') %>
     </div>
 
     <h2>Vital statistics</h2>
@@ -50,41 +44,21 @@
       <%= @profile.total_expired %>
     </div>
     <div class="field">
-      <%= f.label :total_resources %>:
-      <%= @profile.total_resources %>
-    </div>
-    <div class="field">
-      <%= f.label :total_economic_resources %>:
-      <%= @profile.total_economic_resources %>
-    </div>
-    <div class="field">
-      <%= f.label :total_environmental_resources %>:
-      <%= @profile.total_environmental_resources %>
-    </div>
-    <div class="field">
-      <%= f.label :total_social_resources %>:
-      <%= @profile.total_social_resources %>
+      <%= f.label :total_resources_spent %>:
+      <%= @profile.total_resources_spent %>
     </div>
 
     <div class="field">
-      <%= f.label :current_score %>
-      <br/>
-      <%= @profile.current_score %>
+      <%= f.label :current_score %>: <%= @profile.current_score %>
     </div>
     <div class="field">
-      <%= f.label :highest_score %>
-      <br/>
-      <%= @profile.highest_score %>
+      <%= f.label :highest_score %>: <%= @profile.highest_score %>
     </div>
     <div class="field">
-      <%= f.label :current_level %>
-      <br/>
-      <%= @profile.current_level %>
+      <%= f.label :current_level %>: <%= @profile.current_level %>
     </div>
     <div class="field">
-      <%= f.label :highest_level %>
-      <br/>
-      <%= @profile.highest_level %>
+      <%= f.label :highest_level %>: <%= @profile.highest_level %>
     </div>
 
 <% end %>

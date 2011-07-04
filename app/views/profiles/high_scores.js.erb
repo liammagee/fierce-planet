@@ -2,12 +2,14 @@
 FiercePlanet.pauseGame();
 
 // Construct and show the level gallery
+var dialogX = FiercePlanet.calculateWorldLeft();
+var dialogY = FiercePlanet.calculateWorldTop();
 FiercePlanet.$highScores = $('<div></div>')
         .html("<%=  escape_javascript(render('profiles/high_scores', :locals => { :profiles => @profiles})) %>")
         .dialog({
-                                              position: [FiercePlanet.calculateWorldLeft(), 110],
-                                              width: 487,
-                                              height: 407,
+                   position: [dialogX, dialogY],
+                   width: FiercePlanet.WORLD_WIDTH + 7,
+                   height: FiercePlanet.WORLD_HEIGHT + 7,
                     autoOpen: false,
                     modal: true,
                     title: 'High Scores',
