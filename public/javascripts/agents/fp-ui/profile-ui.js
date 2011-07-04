@@ -35,22 +35,9 @@ FiercePlanet.loadSettingsFromStorage = function () {
  * Stores relevant profile data in local storage
  */
 FiercePlanet.storeData = function() {
-    localStorage.current_score = FiercePlanet.previous_level_score;
-//    if (FiercePlanet.currentLevelNumber > 0 && FiercePlanet.currentLevelNumber <= PresetLevels.MAX_DEFAULT_LEVELS)
     localStorage.currentLevelNumber = FiercePlanet.currentLevelNumber;
     localStorage.currentLevelPreset = FiercePlanet.currentLevel.isPresetLevel();
     localStorage.currentProfile = $.toJSON(FiercePlanet.currentProfile);
-
-/*
-    localStorage.totalSaved = FiercePlanet.totalSaved;
-    localStorage.profileClass = FiercePlanet.profileClass;
-    localStorage.credits = FiercePlanet.credits;
-    localStorage.capabilities = FiercePlanet.capabilities;
-    if (localStorage.highestScore == undefined || FiercePlanet.currentScore > localStorage.highestScore)
-        localStorage.highestScore = FiercePlanet.currentScore;
-    if (localStorage.highestLevel == undefined || FiercePlanet.currentLevelNumber > localStorage.highestLevel)
-        localStorage.highestLevel = FiercePlanet.currentLevelNumber;
-        */
 };
 
 
@@ -86,19 +73,19 @@ FiercePlanet.generateStats = function() {
             "</tr>" +
             "<tr>" +
             "<td>Citizens saved:</td>" +
-            "<td>" + FiercePlanet.currentProfile.saved_agent_count + "</td>" +
+            "<td>" + FiercePlanet.currentProfile.current_level_saved + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Citizens expired:</td>" +
-            "<td>" + FiercePlanet.currentProfile.expired_agent_count + "</td>" +
+            "<td>" + FiercePlanet.currentProfile.current_level_expired + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Resources spent:</td>" +
-            "<td>" + FiercePlanet.currentProfile.resources_spent + "</td>" +
+            "<td>" + FiercePlanet.currentProfile.current_level_resources_spent + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Resources remaining:</td>" +
-            "<td>" + FiercePlanet.currentProfile.resources_in_store + "</td>" +
+            "<td>" + FiercePlanet.currentProfile.current_level_resources_in_store + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td></td>" +
@@ -106,7 +93,7 @@ FiercePlanet.generateStats = function() {
             "</tr>" +
             "<tr>" +
             "<td>Total saved:</td>" +
-            "<td>" + FiercePlanet.currentProfile.total_saved + "</td>" +
+            "<td>" + FiercePlanet.currentProfile.game_total_saved + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Profile class:</td>" +
@@ -114,17 +101,17 @@ FiercePlanet.generateStats = function() {
             "</tr>" +
             "<tr>" +
             "<td>Credits:</td>" +
-            "<td><span style='font-weight:bold'>" + FiercePlanet.currentProfile.credits + " [<a href='#' id='gotoResourceGallery'>SPEND</a>]</span></td>" +
+            "<td><span style='font-weight:bold'>" + FiercePlanet.currentProfile.credits + " [<a href='#' id='gotoResourceGallery'>$$$</a>]</span></td>" +
             "</tr>" +
             "</table>";
     return stats;
 };
 
 /**
- * Updates the statistics for this profile
+ * Saves current capabilities for this profile
  * @param func
  */
-FiercePlanet.updateStats = function(func) {
+FiercePlanet.saveProfile = function(func) {
     if (FiercePlanet.currentProfile.id > -1) {
         $.post("/profiles/" + FiercePlanet.currentProfile.id + "/update_stats", FiercePlanet.serializeProfile(), func);
     }
@@ -134,5 +121,5 @@ FiercePlanet.updateStats = function(func) {
  * Saves current capabilities for this profile
  */
 FiercePlanet.saveCapabilities = function() {
-    FiercePlanet.updateStats();
+    FiercePlanet.saveProfile();
 };

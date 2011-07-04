@@ -85,6 +85,7 @@ FiercePlanet.getAndRetrieveProperties = function() {
     FiercePlanet.getAndRetrieveProperty('scrollingImageVisible');
     FiercePlanet.getAndRetrieveProperty('catastrophesVisible');
     FiercePlanet.getAndRetrieveProperty('soundsPlayable');
+    FiercePlanet.getAndRetrieveProperty('useInlineResourceSwatch');
     FiercePlanet.getAndRetrieveProperty('disableKeyboardShortcuts');
     FiercePlanet.getAndRetrieveProperty('agentsCanCommunicate');
 
@@ -116,6 +117,7 @@ FiercePlanet.setAndStoreProperties = function() {
     FiercePlanet.setAndStoreProperty('scrollingImageVisible');
     FiercePlanet.setAndStoreProperty('catastrophesVisible');
     FiercePlanet.setAndStoreProperty('soundsPlayable');
+    FiercePlanet.setAndStoreProperty('useInlineResourceSwatch');
     FiercePlanet.setAndStoreProperty('disableKeyboardShortcuts');
     FiercePlanet.setAndStoreProperty('agentsCanCommunicate');
 

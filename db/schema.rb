@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110702113604) do
+ActiveRecord::Schema.define(:version => 20110704053029) do
 
   create_table "capabilities", :force => true do |t|
     t.integer  "capability_type"
@@ -85,15 +85,40 @@ ActiveRecord::Schema.define(:version => 20110702113604) do
     t.text     "capabilities"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "total_saved",                   :default => 0
-    t.integer  "total_expired",                 :default => 0
-    t.integer  "total_resources",               :default => 0
-    t.integer  "total_economic_resources",      :default => 0
-    t.integer  "total_environmental_resources", :default => 0
-    t.integer  "total_social_resources",        :default => 0
-    t.integer  "credits",                       :default => 0
-    t.string   "profile_class",                 :default => "Novice"
-    t.integer  "progress_towards_next_class",   :default => 0
+    t.integer  "total_saved",                               :default => 0
+    t.integer  "total_expired",                             :default => 0
+    t.integer  "total_resources_spent",                     :default => 0
+    t.integer  "total_economic_resources",                  :default => 0
+    t.integer  "total_environmental_resources",             :default => 0
+    t.integer  "total_social_resources",                    :default => 0
+    t.integer  "credits",                                   :default => 0
+    t.string   "profile_class",                             :default => "Novice"
+    t.integer  "progress_towards_next_class",               :default => 0
+    t.integer  "total_levels",                              :default => 0
+    t.string   "total_resources_spent_by_category",         :default => ""
+    t.integer  "ave_saved",                                 :default => 0
+    t.integer  "ave_expired",                               :default => 0
+    t.integer  "ave_resources_spent",                       :default => 0
+    t.string   "ave_resources_spent_by_category",           :default => ""
+    t.integer  "game_total_levels",                         :default => 0
+    t.integer  "game_highest_level",                        :default => 0
+    t.integer  "game_score",                                :default => 0
+    t.integer  "game_total_saved",                          :default => 0
+    t.integer  "game_total_expired",                        :default => 0
+    t.integer  "game_total_resources_spent",                :default => 0
+    t.string   "game_total_resources_spent_by_category",    :default => ""
+    t.integer  "game_ave_saved",                            :default => 0
+    t.integer  "game_ave_expired",                          :default => 0
+    t.integer  "game_ave_resources_spent",                  :default => 0
+    t.string   "game_ave_resources_spent_by_category",      :default => ""
+    t.boolean  "current_level_is_preset",                   :default => true
+    t.integer  "current_level_waves",                       :default => 0
+    t.integer  "current_level_saved_this_wave",             :default => 0
+    t.integer  "current_level_saved",                       :default => 0
+    t.integer  "current_level_expired",                     :default => 0
+    t.integer  "current_level_resources_in_store",          :default => 0
+    t.integer  "current_level_resources_spent",             :default => 0
+    t.string   "current_level_resources_spent_by_category", :default => ""
   end
 
   create_table "services", :force => true do |t|

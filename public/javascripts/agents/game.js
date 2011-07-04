@@ -96,12 +96,9 @@ FiercePlanet.processAgents = function() {
                 // TODO: move this logic elsewhere
                 if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE) {
                     if (FiercePlanet.currentLevel.isExitPoint(agent.getX(), agent.getY())) {
-                        FiercePlanet.currentProfile.current_score += FiercePlanet.SAVE_SCORE;
-                        FiercePlanet.currentProfile.saved_agent_count++;
-                        FiercePlanet.currentProfile.saved_agent_this_wave_count++;
+                        FiercePlanet.currentProfile.processSavedAgent(FiercePlanet.currentWave);
                         nullifiedAgents.push(i);
-                        var multiplier = (FiercePlanet.currentWave < 5 ? 4 : (FiercePlanet.currentWave < 10 ? 3 : (FiercePlanet.currentWave < 20 ? 2 : 1)));
-                        FiercePlanet.currentProfile.resources_in_store += multiplier; //FiercePlanet.WAVE_GOODNESS_BONUS;
+
                         FiercePlanet.drawScore();
                         FiercePlanet.drawResourcesInStore();
                         FiercePlanet.drawSaved();
@@ -127,7 +124,7 @@ FiercePlanet.processAgents = function() {
                     if (agent.getHealth() <= 0) {
                         nullifiedAgents.push(i);
                         if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE)
-                            FiercePlanet.currentProfile.expired_agent_count++;
+                            FiercePlanet.currentProfile.current_level_expired++;
                        FiercePlanet.drawExpired();
                     }
                     else {
@@ -149,7 +146,7 @@ FiercePlanet.processAgents = function() {
 
 
 
-    if (FiercePlanet.currentProfile.expired_agent_count >= FiercePlanet.currentLevel.getExpiryLimit()) {
+    if (FiercePlanet.currentProfile.current_level_expired >= FiercePlanet.currentLevel.getExpiryLimit()) {
         return FiercePlanet.gameOver();
     }
 

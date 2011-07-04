@@ -96,8 +96,8 @@ FiercePlanet.makeResourceActive = function (el) {
 FiercePlanet.deleteCurrentResource = function () {
         var foundResource = FiercePlanet.getCurrentResourceIndex();
         if (foundResource > -1) {
-            FiercePlanet.currentProfile.resources_in_store += 5;
-            FiercePlanet.currentProfile.resources_spent -= 5;
+            FiercePlanet.currentProfile.current_level_resources_in_store += 5;
+            FiercePlanet.currentProfile.current_level_resources_spent -= 5;
             FiercePlanet.currentLevel.getResources().splice(foundResource, 1);
 //            FiercePlanet.currentLevel.annulCell(FiercePlanet.currentResource.getPosition()[0], FiercePlanet.currentResource.getPosition()[1]) ;
             FiercePlanet.drawResourcesInStore();
@@ -113,9 +113,9 @@ FiercePlanet.upgradeCurrentResource = function () {
         var foundResource = FiercePlanet.getCurrentResourceIndex();
         if (foundResource > -1) {
             var p = FiercePlanet.currentLevel.getResources()[foundResource];
-            if (p.getUpgradeLevel() <= 4 && FiercePlanet.currentProfile.resources_in_store >= p.getUpgradeCost()) {
-                FiercePlanet.currentProfile.resources_in_store -= p.getUpgradeCost();
-                FiercePlanet.currentProfile.resources_spent += p.getUpgradeCost();
+            if (p.getUpgradeLevel() <= 4 && FiercePlanet.currentProfile.current_level_resources_in_store >= p.getUpgradeCost()) {
+                FiercePlanet.currentProfile.current_level_resources_in_store -= p.getUpgradeCost();
+                FiercePlanet.currentProfile.current_level_resources_spent += p.getUpgradeCost();
                 p.setUpgradeLevel(p.getUpgradeLevel() + 1);
                 FiercePlanet.drawResource(p);
                 FiercePlanet.drawResourcesInStore();
@@ -124,7 +124,7 @@ FiercePlanet.upgradeCurrentResource = function () {
     };
 
 /**
- *
+ * 'Drops' a selected resource on the tile
  * @param e
  */
 FiercePlanet.dropItem = function(e) {
@@ -133,8 +133,6 @@ FiercePlanet.dropItem = function(e) {
         var posY = __ret.posY;
         if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
             return;
-//        if (FiercePlanet.currentLevel.getCell(posX, posY) instanceof Resource)
-//            return;
         if (FiercePlanet.isPositionOccupiedByResource(posX, posY))
             return;
 
@@ -145,23 +143,22 @@ FiercePlanet.dropItem = function(e) {
         var kind = FiercePlanet.resolveResourceKind(resourceCode);
         var resource = new Resource(kind, posX, posY);
 
-        if (FiercePlanet.currentProfile.resources_in_store < resource.getCost()) {
-            FiercePlanet.notify('Not enough goodness for now - save some more agents!');
+        if (FiercePlanet.currentProfile.current_level_resources_in_store < resource.getCost()) {
+            FiercePlanet.currentNotice = new Notice('Not enough goodness for now - save some more agents!');
             return;
         }
         else {
-            FiercePlanet.currentProfile.resources_in_store -= resource.getCost();
-            FiercePlanet.currentProfile.resources_spent += resource.getCost();
             var resourceCategory = resource.getCategory().getCode();
-            FiercePlanet.resourceStatsCount[resourceCategory] += 1;
+            FiercePlanet.currentProfile.spendResource(resource);
             FiercePlanet.currentLevel.getResources().push(resource);
-//            FiercePlanet.currentLevel.addCell(posX, posY, resource);
 
             FiercePlanet.drawResource(resource);
             FiercePlanet.drawResourcesInStore();
 
             FiercePlanet.eventTarget.fire(new Event("resource", resource, "added", FiercePlanet.gameCounter, FiercePlanet.currentLevel));
         }
+        if (FiercePlanet.currentSettings.useInlineResourceSwatch)
+            FiercePlanet.currentResourceId = null;
     };
 
 /**
@@ -207,7 +204,7 @@ FiercePlanet.calculateResourceEffect = function (resource) {
         var totalResources = FiercePlanet.currentLevel.getResources().length;
         if (totalResources == 1)
             return 1;
-        resourceCategoryCount = FiercePlanet.resourceStatsCount[resourceCategory];
+        resourceCategoryCount = FiercePlanet.currentProfile.current_level_resources_spent_by_category[resourceCategory];
         var resourceTypeProportion = (resourceCategoryCount / totalResources) * totalResources;
         var proportionOfIdeal = (resourceTypeProportion <= 1) ? resourceTypeProportion : ((totalResources - resourceTypeProportion) / (totalResources - 1));
         var effect = proportionOfIdeal * proportionOfIdeal;
@@ -321,30 +318,26 @@ FiercePlanet.initialiseAndLoadResources = function () {
         var categoryInstanceCounter = 0;
         for (var j = 0; j < category._types.length; j++) {
             var resourceType = category._types[j];
-//        for (var j = 0; j < FiercePlanet.resourceTypes.length; j++) {
-//            var resourceType = FiercePlanet.resourceTypes[j];
-//            if (resourceType.getCategory() == category) {
 
-                var swatchInstanceHTML =
-                        '<div class="swatch-instance" id="' + resourceType.getCode() + '" title="' + resourceType.getName() + '">' +
+            var swatchInstanceHTML =
+                    '<div class="swatch-instance" id="' + resourceType.getCode() + '" title="' + resourceType.getName() + '">' +
+                    '<img src="' + resourceType.getImage() + '" alt="">' +
+                            '<div>' + resourceType.getCost() + '</div>' +
+                    '</div>';
+            swatchCategoryElement.append(swatchInstanceHTML);
+            var swatchInstanceElement = $('#' + resourceType.getCode());
+            if (categoryInstanceCounter > 0) {
+                swatchInstanceElement.addClass('inactive');
+            }
+
+            var galleryInstanceHTML =
+                    '<div class="swatch-instance purchase inactive" id="' + resourceType.getCode() + '-purchase" title="' + resourceType.getName() + '">' +
                         '<img src="' + resourceType.getImage() + '" alt="">' +
-                        '</div>';
-                swatchCategoryElement.append(swatchInstanceHTML);
-                var swatchInstanceElement = $('#' + resourceType.getCode());
-                if (categoryInstanceCounter > 0) {
-                    swatchInstanceElement.addClass('inactive');
-                }
+                    '</div>';
+            galleryCategoryElement.append(galleryInstanceHTML);
 
-                var galleryInstanceHTML =
-                        '<div class="swatch-instance purchase inactive" id="' + resourceType.getCode() + '-purchase" title="' + resourceType.getName() + '">' +
-                            '<img src="' + resourceType.getImage() + '" alt="">' +
-                        '</div>';
-                galleryCategoryElement.append(galleryInstanceHTML);
-
-                // Increment the category instance
-                categoryInstanceCounter++;
-//            }
-
+            // Increment the category instance
+            categoryInstanceCounter++;
         }
     }
 };

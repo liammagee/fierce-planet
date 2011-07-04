@@ -258,8 +258,11 @@ FiercePlanet.drawEntryPoints = function() {
 
 };
 
+
 /**
+ * Draws the current notice
  *
+ * @param notice
  */
 FiercePlanet.drawNotice = function(notice) {
     if (FiercePlanet.currentNotice != null) {
@@ -602,7 +605,7 @@ FiercePlanet.getDrawingPosition = function(agent, counter) {
 };
 
 /**
- *
+ * Draw agents on the agent canvas
  */
 FiercePlanet.drawAgents = function() {
     var canvas = $('#agentCanvas')[0];
@@ -645,7 +648,7 @@ FiercePlanet.drawAgents = function() {
 };
 
 /**
- *
+ * Draw the scrolling layer
  */
 FiercePlanet.drawScrollingLayer = function() {
     if (FiercePlanet.currentSettings.scrollingImageVisible) {
@@ -698,7 +701,7 @@ FiercePlanet.drawScrollingLayer = function() {
 };
 
 /**
- *
+ * Draw the current level
  */
 FiercePlanet.drawLevel = function() {
     var e = $('#level-display')[0];
@@ -706,7 +709,7 @@ FiercePlanet.drawLevel = function() {
 };
 
 /**
- *
+ * Draw the current profile class
  */
 FiercePlanet.drawProfileClass = function() {
     var e = $('#profile-class-display')[0];
@@ -715,7 +718,7 @@ FiercePlanet.drawProfileClass = function() {
 };
 
 /**
- *
+ * Update the current score
  */
 FiercePlanet.drawScore = function() {
     var e = $('#score-display')[0];
@@ -723,7 +726,7 @@ FiercePlanet.drawScore = function() {
 };
 
 /**
- *
+ * Update the highest score
  */
 FiercePlanet.drawHighestScore = function() {
     var e = $('#highest-score-display')[0];
@@ -734,15 +737,15 @@ FiercePlanet.drawHighestScore = function() {
 };
 
 /**
- *
+ * Update resources in store
  */
 FiercePlanet.drawResourcesInStore = function() {
     var e = $('#goodness-display')[0];
-    e.innerHTML = FiercePlanet.currentProfile.resources_in_store.toString();
+    e.innerHTML = FiercePlanet.currentProfile.current_level_resources_in_store.toString();
 };
 
 /**
- *
+ * Update the number of expired agents
  */
 FiercePlanet.drawExpired = function() {
 //    var e = $('#expired-display')[0];
@@ -750,7 +753,7 @@ FiercePlanet.drawExpired = function() {
     var e = $('#expired-citizens')[0];
     var expiredHTML = '';
     for (var i = 0, len = FiercePlanet.currentLevel.getExpiryLimit(); i < len; i++) {
-        if (i < FiercePlanet.currentProfile.expired_agent_count)
+        if (i < FiercePlanet.currentProfile.current_level_expired)
             expiredHTML += '<div id="expired-citizen"></div>';
         else
             expiredHTML += '<div id="healthy-citizen"></div>';
@@ -759,15 +762,15 @@ FiercePlanet.drawExpired = function() {
 };
 
 /**
- *
+ * Update the number of saved agents
  */
 FiercePlanet.drawSaved = function() {
     var e = $('#saved-display')[0];
-    e.innerHTML = FiercePlanet.currentProfile.saved_agent_count.toString();
+    e.innerHTML = FiercePlanet.currentProfile.current_level_saved.toString();
 };
 
 /**
- *
+ * Update the current wave number
  */
 FiercePlanet.drawWaves = function() {
     var e = $('#waves-display')[0];
@@ -776,7 +779,7 @@ FiercePlanet.drawWaves = function() {
 
 
 /**
- *
+ * Update the scoreboard
  */
 FiercePlanet.drawScoreboard = function() {
     FiercePlanet.drawLevel();
@@ -791,6 +794,7 @@ FiercePlanet.drawScoreboard = function() {
 
 
 /**
+ * Pan around the current level
  *
  * @param direction
  */
@@ -841,6 +845,7 @@ FiercePlanet.pan = function(direction) {
 };
 
 /**
+ * Zoom in or out of the current level
  *
  * @param direction
  */

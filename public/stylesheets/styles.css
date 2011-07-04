@@ -295,14 +295,14 @@ background-position: -101px -101px;
     border-radius:4px;
     padding:4px;
 }
-#swatch > div, #gallery-items > div, #level-editor > div {
+#swatch > div, #inline-swatch > div, #gallery-items > div, #level-editor > div {
 	float: left;
 	position: relative;
 	text-decoration: none;
 	padding: 2px;
 	margin-right: 10px;
 }
-#swatch img {
+#swatch img, #inline-swatch img, #gallery-items img {
 	border-radius:4px;
 }
 
@@ -379,13 +379,13 @@ li.over {
 
 
 /* Resource swatch styles */
-.swatch-category {
+.swatch-category, .inline-swatch-category, .gallery-category {
     border-radius:4px;
     margin-bottom:10px;
     min-width:169px;
 }
 
-.swatch-instance {
+.swatch-instance, .inline-swatch-instance, .gallery-instance {
     width:27px;
     text-align:center;
     float: left;

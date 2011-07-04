@@ -221,12 +221,11 @@ FiercePlanet.handleNoticeEvents = function(e) {
     }
 };
 
-
 /**
- * Gets the current position of a mouse click
+ *
  * @param e
  */
-FiercePlanet.getCurrentPosition = function(e) {
+FiercePlanet.getWorldCoordinates = function(e) {
     var x;
     var y;
     if (e.offsetX || e.offsetX == 0) { // Firefox, IE9, Chrome, Safari
@@ -237,7 +236,18 @@ FiercePlanet.getCurrentPosition = function(e) {
         x = e.layerX;
         y = e.layerY;
     }
+    return {x:x, y:y};
+};
 
+
+/**
+ * Gets the current position of a mouse click
+ * @param e
+ */
+FiercePlanet.getCurrentPosition = function(e) {
+    var __ret = FiercePlanet.getWorldCoordinates(e);
+    var x = __ret.x;
+    var y = __ret.y;
     x -= FiercePlanet.panLeftOffset;
     y -= FiercePlanet.panTopOffset;
     x /= FiercePlanet.zoomLevel;

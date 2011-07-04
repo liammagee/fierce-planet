@@ -44,8 +44,7 @@ FiercePlanet.loadGame = function() {
 FiercePlanet.newGame = function() {
     if (FiercePlanet.currentLevelPreset)
         FiercePlanet.currentLevelNumber = 1;
-    FiercePlanet.current_score = 0;
-    FiercePlanet.previous_level_score = 0;
+    FiercePlanet.currentProfile.resetScores();
     FiercePlanet.gameCounter = 0;
     FiercePlanet.newLevel();
 };
@@ -59,7 +58,7 @@ FiercePlanet.newLevel = function() {
     FiercePlanet.levelDelayCounter = 0;
     FiercePlanet.levelCounter = 0;
     FiercePlanet.maxLevelMoves = 0;
-    FiercePlanet.previous_level_score = FiercePlanet.current_score;
+    FiercePlanet.currentProfile.updateScore();
     if (FiercePlanet.currentLevel != undefined)
         FiercePlanet.currentLevel.setResources([]);
     FiercePlanet.currentNotice = null;
@@ -83,7 +82,7 @@ FiercePlanet.newLevel = function() {
  */
 FiercePlanet.restartLevel = function() {
     // Reset the score
-    FiercePlanet.current_score = FiercePlanet.previous_level_score;
+    FiercePlanet.currentProfile.revertScore();
 
     // Start a new level
     FiercePlanet.newLevel();
@@ -97,7 +96,7 @@ FiercePlanet.newWave = function() {
     FiercePlanet.maxWaveMoves = 0;
     FiercePlanet.waveCounter = 0;
     FiercePlanet.waveDelayCounter = 0;
-    FiercePlanet.saved_agent_this_wave_count = 0;
+    FiercePlanet.currentProfile.current_level_saved_this_wave = 0;
 
     FiercePlanet.currentLevel.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, FiercePlanet.numAgents, FiercePlanet.currentSettings.agentsCanCommunicate);
 
@@ -125,6 +124,7 @@ FiercePlanet.completeWave = function() {
  * Called when a level is completed
  */
 FiercePlanet.completeLevel = function() {
+    FiercePlanet.currentProfile.compileProfileStats(FiercePlanet.currentLevel);
     if (FiercePlanet.currentLevel.isPresetLevel())
         FiercePlanet.currentLevelNumber++;
     FiercePlanet._finaliseGame();
@@ -133,21 +133,22 @@ FiercePlanet.completeLevel = function() {
 
 
 /**
- * Called when the game is over
+ * Called when a game is completed
  */
-FiercePlanet.gameOver = function() {
-    FiercePlanet.current_score = FiercePlanet.previous_level_score;
+FiercePlanet.completeGame = function() {
+    FiercePlanet.currentProfile.compileProfileStats(FiercePlanet.currentLevel);
     FiercePlanet._finaliseGame();
-    FiercePlanet.showGameOverDialog();
+    FiercePlanet.showCompleteGameDialog();
 };
 
 
 /**
- * Called when a game is completed
+ * Called when the game is over
  */
-FiercePlanet.completeGame = function() {
+FiercePlanet.gameOver = function() {
+    FiercePlanet.currentProfile.revertScore();
     FiercePlanet._finaliseGame();
-    FiercePlanet.showCompleteGameDialog();
+    FiercePlanet.showGameOverDialog();
 };
 
 
@@ -233,25 +234,15 @@ FiercePlanet._initialiseGame = function () {
         FiercePlanet.currentLevel.setWaveNumber(FiercePlanet.waveOverride);
         FiercePlanet.waveOverride = 0;
     }
-    FiercePlanet.currentProfile.resources_in_store = FiercePlanet.currentLevel.getInitialResourceStore();
-    if (FiercePlanet.currentProfile.resources_in_store == undefined || FiercePlanet.currentProfile.resources_in_store == null) {
-        FiercePlanet.currentProfile.resources_in_store = FiercePlanet.STARTING_STORE;
-    }
-
+    FiercePlanet.currentWave = 1;
     FiercePlanet.currentLevel.setCurrentAgents([]);
     FiercePlanet.currentLevel.setResources([]);
     if (FiercePlanet.currentLevel.getCatastrophe() != undefined)
         FiercePlanet.currentLevel.getCatastrophe()._struck = false;
 
 //    score = 0;
-    FiercePlanet.resourceStatsCount = {};
-    for (var i = 0; i < FiercePlanet.resourceCategories.length; i++) {
-        var category = FiercePlanet.resourceCategories[i];
-        FiercePlanet.resourceStatsCount[category.getCode()] = 0;
-    }
-    FiercePlanet.currentProfile.expired_agent_count = 0;
-    FiercePlanet.currentProfile.saved_agent_count = 0;
-    FiercePlanet.currentWave = 1;
+    FiercePlanet.currentProfile.resetCurrentStats();
+
 
     FiercePlanet.resourceRecoveryCycle = Math.pow(FiercePlanet.DEFAULT_RESOURCE_RECOVERY, FiercePlanet.levelOfDifficulty - 1);
 

@@ -17,6 +17,7 @@ function Settings() {
     this.noticesVisible = true;
     this.agentsCanCommunicate = true;
     this.catastrophesVisible = true;
+    this.useInlineResourceSwatch = true;
     this.disableKeyboardShortcuts = true;
     this.soundsPlayable = false;
 
