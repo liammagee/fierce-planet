@@ -24,6 +24,7 @@ FiercePlanet.DEMOCRACY_RESOURCE_TYPE = new ResourceType("Democracy", "democracy"
 FiercePlanet.FESTIVAL_RESOURCE_TYPE = new ResourceType("Festival", "festival", "/images/icons/festival.png", 30, 50, 300, 25);
 
 
+
 /**
  * Resources assigned to profile class capabilities (@link Profile)
  *
