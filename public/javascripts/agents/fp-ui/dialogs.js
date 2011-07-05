@@ -581,7 +581,11 @@ FiercePlanet.showCredits = function() {
             "<div>Steven Harris</div>" +
             "<div class='credits'>Game Conception &amp; Testing</div>" +
             "<div>Joshua Magee</div>" +
-            "<div>Jakki Mann</div>"
+            "<div>Jakki Mann</div>" +
+            "<div class='credits'>Images and Sounds</div>" +
+            "<div><a href='http://www.publicdomainpictures.net'>Public Domain Pictures</a></div>" +
+            "<div><a href='http://freesound.org'>thefreesoundproject</a></div>" +
+            "<div><a href='http://opengameart.org'>OpenGameArt.org</a></div>"
             )
         .dialog({
                                               position: [FiercePlanet.calculateWorldLeft(), 110],

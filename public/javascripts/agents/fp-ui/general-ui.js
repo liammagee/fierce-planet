@@ -280,14 +280,17 @@ FiercePlanet.notify = function(notice) {
  */
 FiercePlanet.levelInfo = function() {
     var levelHTML = "";
-    if (FiercePlanet.currentLevel.getName() != undefined) {
-        levelHTML += "<h3>" + FiercePlanet.currentLevel.getName() + "</h3>";
+    var level = FiercePlanet.currentLevel;
+    if (level.getName() != undefined) {
+        levelHTML += "<h3>" + level.getName() + "</h3>";
     }
-    if (FiercePlanet.currentLevel.getImage() != undefined) {
-        levelHTML += '<img src="' + FiercePlanet.currentLevel.getImage() + '" alt="City Image" width="460" height="140">';
+    if (level.getImage() != undefined) {
+        levelHTML += '<img src="' + level.getImage() + '" alt="City Image" width="460" height="140">';
+        if (level.getImageAttribution())
+            levelHTML += '<div style="font-size: 0.8em; text-align: right">' + level.getImageAttribution() + '</div>';
     }
-    if (FiercePlanet.currentLevel.getIntroduction() != undefined) {
-        levelHTML += FiercePlanet.currentLevel.getIntroduction();
+    if (level.getIntroduction() != undefined) {
+        levelHTML += level.getIntroduction();
     }
     FiercePlanet.$newLevel.html(levelHTML).dialog('open');
 };

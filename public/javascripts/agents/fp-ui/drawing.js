@@ -39,8 +39,6 @@ FiercePlanet.drawGame = function() {
     FiercePlanet.drawScrollingLayer();
     FiercePlanet.drawScoreboard();
 
-//    FiercePlanet.levelInfo(FiercePlanet.currentLevel.getNotice());
-
 };
 
 /**

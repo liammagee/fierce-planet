@@ -1,5 +1,5 @@
 body {
-	zoom = 100%;
+	zoom: 100%;
     background: #000 url(../layout/stars.jpg);
 	color: #fff;
 	font-family:Verdana, Arial, Helvetica, sans-serif;

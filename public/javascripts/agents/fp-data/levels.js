@@ -108,7 +108,7 @@ PresetLevels.level2.setInitialAgentNumber(1);
 PresetLevels.level2.setWaveNumber(10);
 PresetLevels.level2.setExpiryLimit(10);
 PresetLevels.level2.setInitialResourceStore(120);
-PresetLevels.level2.setImage("http://www.publicdomainpictures.net/pictures/7000/nahled/2504-127160623953YH.jpg");
+PresetLevels.level2.setImage("http://t1.gstatic.com/images?q=tbn:ANd9GcTPM0pPCj-LQNtsrdc1htNYinCKea9-JrAkGkNzZgzP1J26kmfNXA&t=1");
 PresetLevels.level2.setName("Level 2: Twists and Turns");
 PresetLevels.level2.setIntroduction(
         "<p>The citizens of Fierce Planet are slowly building their city. With your help they can make it a place of peace and prosperity.</p>"
@@ -160,7 +160,8 @@ PresetLevels.level3.setInitialAgentNumber(1);
 PresetLevels.level3.setWaveNumber(10);
 PresetLevels.level3.setExpiryLimit(10);
 PresetLevels.level3.setInitialResourceStore(130);
-PresetLevels.level3.setImage("http://t1.gstatic.com/images?q=tbn:ANd9GcTPM0pPCj-LQNtsrdc1htNYinCKea9-JrAkGkNzZgzP1J26kmfNXA&t=1");
+PresetLevels.level3.setImage("http://www.publicdomainpictures.net/pictures/7000/nahled/2504-127160623953YH.jpg");
+PresetLevels.level3.setImageAttribution('<a href="http://www.publicdomainpictures.net/view-image.php?image=6310&picture=city-skyline">City Skyline</a> by Samantha DeWitt');
 PresetLevels.level3.setName("Level 3: Waves of Uncertainty");
 PresetLevels.level3.setIntroduction(
         "<p>The rebuilding of Fierce Planet is proceeding well... but how can you plan for a random act of nature??!!! </p>"
@@ -227,6 +228,7 @@ PresetLevels.level4.setWaveNumber(10);
 PresetLevels.level4.setExpiryLimit(10);
 PresetLevels.level4.setInitialResourceStore(150);
 PresetLevels.level4.setImage("http://www.publicdomainpictures.net/pictures/9000/nahled/warsaw-city-centre-20851282410093J8WZ.jpg");
+PresetLevels.level4.setImageAttribution('<a href="http://www.publicdomainpictures.net/view-image.php?image=8701&picture=warsaw-city-centre">Warsaw City Centre</a> by Yana Ray');
 PresetLevels.level4.setName("Level 4: Spiral of Doom");
 PresetLevels.level4.setIntroduction(
         "<p>The only way out is via the long and winding road...</p>"
@@ -303,6 +305,7 @@ PresetLevels.level5.setWaveNumber(10);
 PresetLevels.level5.setExpiryLimit(10);
 PresetLevels.level5.setInitialResourceStore(180);
 PresetLevels.level5.setImage("http://www.publicdomainpictures.net/pictures/6000/nahled/2178-1267099526uOOY.jpg");
+PresetLevels.level5.setImageAttribution('<a href="http://www.publicdomainpictures.net/view-image.php?image=5606&picture=forbidden-city-wall">Forbidden City Wall</a> by Scott Meltzer');
 PresetLevels.level5.setName("Level 5: A-mazing Grace");
 PresetLevels.level5.setIntroduction(
         "<p>The citizens are hopeful that the promised land lies not too far ahead. Or does it?</p>"
@@ -404,6 +407,7 @@ PresetLevels.level6.setExpiryLimit(10);
 PresetLevels.level6.setAllowOffscreenCycling(true);
 PresetLevels.level6.setInitialResourceStore(250);
 PresetLevels.level6.setImage("http://www.publicdomainpictures.net/pictures/11000/nahled/city-pollution-2961292115826L7C.jpg");
+PresetLevels.level6.setImageAttribution('<a href="http://www.publicdomainpictures.net/view-image.php?image=10751&picture=city-pollution">City Pollution</a> by Peter Griffin');
 PresetLevels.level6.setName("Level 6: Dire Straits");
 PresetLevels.level6.setIntroduction(
         "<p>Not there yet... This level looks well resourced &mdash; but your citizens are going to need all the help they can get. There are troubling signs ahead for the economy... </p>");
@@ -453,6 +457,7 @@ PresetLevels.level7.setExpiryLimit(10);
 PresetLevels.level7.setAllowResourcesOnPath(true);
 PresetLevels.level7.setInitialResourceStore(150);
 PresetLevels.level7.setImage("http://www.publicdomainpictures.net/pictures/4000/nahled/1453-1252053885sFox.jpg");
+PresetLevels.level7.setImageAttribution('<a href="http://www.publicdomainpictures.net/view-image.php?image=3948&picture=ocean-city">Ocean City</a> by Shari Weinsheimer');
 PresetLevels.level7.setName("Level 7: Like, Totally Random...");
 PresetLevels.level7.setIntroduction(
         "<p>Ahead lies a vast and empty expanse. Your citizens are understandably nervous. Left unaided, they will try not to backtrack, but could find themselves hopelessly lost.</p>");
@@ -501,6 +506,7 @@ PresetLevels.level8.setWaveNumber(10);
 PresetLevels.level8.setExpiryLimit(10);
 PresetLevels.level8.setInitialResourceStore(200);
 PresetLevels.level8.setImage("http://www.publicdomainpictures.net/pictures/7000/nahled/2185-1271351380pptO.jpg");
+PresetLevels.level8.setImageAttribution('<a href="http://www.publicdomainpictures.net/view-image.php?image=6265&picture=shadow">Shadow</a> by Bobby Mikul');
 PresetLevels.level8.setName("Level 8: A Fork (or Two) in the Road");
 PresetLevels.level8.setIntroduction(
         "<p>Life for the citizens of Fierce Planet is never simple. They are now faced with difficult dilemmas about which way to turn.</p>");
@@ -599,6 +605,7 @@ PresetLevels.level9.setInitialAgentNumber(1);
 PresetLevels.level9.setWaveNumber(10);
 PresetLevels.level9.setExpiryLimit(10);
 PresetLevels.level9.setImage("http://www.publicdomainpictures.net/pictures/8000/nahled/sailboats-218512787662477CFj.jpg");
+PresetLevels.level9.setImageAttribution('<a href="http://www.publicdomainpictures.net/view-image.php?image=7605&picture=sailboats">Sailboats</a> by Bobby Mikul');
 PresetLevels.level9.setName("Level 9: Cascades");
 PresetLevels.level9.setIntroduction(
         "<p>Time is running out. But the citizens of Fierce Planet still need some rest and relaxation. Doesn't a trip to the beach sound like a good idea?</p>");
@@ -676,11 +683,11 @@ PresetLevels.level10.setWaveNumber(5);
 PresetLevels.level10.setExpiryLimit(1);
 PresetLevels.level10.setInitialResourceStore(250);
 PresetLevels.level10.setImage("http://www.publicdomainpictures.net/pictures/11000/nahled/night-in-the-city-21851292200793awk.jpg");
+PresetLevels.level10.setImageAttribution('<a href="http://www.publicdomainpictures.net/view-image.php?image=10783&picture=night-in-the-city">Night In The City</a> by Bobby Mikul');
 PresetLevels.level10.setName("Level 10: Fields of Ma(i)ze");
 PresetLevels.level10.setIntroduction(
-        "<p>Pastures of plenty and a new sustainable future lie in store for the citizens of Fierce Planet. " +
-        "However the way ahead is full of false dawns. </p>" +
-        "<p>With few remaining resources, they are starting to fight among themselves. Having faced so many challenges together, can they withstand a revolution from within?</p>");
+        "<p>Pastures of plenty and a new sustainable future lie in store for the citizens of Fierce Planet. </p>" +
+        "<p>With few remaining resources, they are starting to fight among themselves. Can they withstand a revolution from within?</p>");
 PresetLevels.level10.setTip(new Notice("Remember to resource dead end paths, or your citizens will fade away, dazed and confused..."));
 PresetLevels.level10.setSoundSrc("http://db.tt/DIi4CW0");
 PresetLevels.level10.setCatastrophe(new Catastrophe(TBL.SOC_CATEGORY, 500 + (Math.random() * 100), 250, 0.5, new Notice("Oh no! A revolution is coming...", undefined, undefined, 500, 250, undefined, undefined, TBL.SOC_CATEGORY.getColor())));

@@ -3,6 +3,7 @@
 <head>
   <title>Fierce Planet</title>
 
+
   <!-- STYLESHEET INCLUDES -->
   <% if users_browser == 'android' || users_browser == 'ipod' || users_browser == 'iphone'  %>
       <%= stylesheet_link_tag "styles_android" %>
@@ -13,8 +14,17 @@
 
   
   <!-- JAVASCRIPT INCLUDES -->
-  <%= javascript_include_tag "jquery-1.6.1.js" %>
+  <!-- Allow for optimised use of Google API -->
+  <% if Rails.env.production? %>
+      <!-- For fierce-planet.herokuapp.com -->
+      <script src="https://www.google.com/jsapi?key=ABQIAAAARoOs6ILY9Ci-wjXDl46j4xRmqV9Vj2jWabvTtFU7FCZqsdHUyxRv4pRfbM4fvQzlIKjlBWg4vTT3Hg" type="text/javascript"></script>
+  <% else %>
+      <!-- For localhost -->
+      <script src="https://www.google.com/jsapi?key=ABQIAAAARoOs6ILY9Ci-wjXDl46j4xTJQa0g3IQ9GZqIMmInSLzwtGDKaBT5Gl1FUC-xR0F8NySH1hgQiauZJw" type="text/javascript"></script>
+  <% end %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript"></script>
   <!--<%= javascript_include_tag "jquery.min.js" %>-->
+  <!-- TODO: Can the custom UI be further optimised? -->
   <%= javascript_include_tag "jquery-ui-1.8.13.custom.min.js" %>
   <%= javascript_include_tag "jquery.json-2.2.min.js" %>
   <%= javascript_include_tag "jquery.mousewheel.3.0.2/jquery.mousewheel.min.js" %>

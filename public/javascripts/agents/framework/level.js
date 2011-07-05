@@ -37,7 +37,8 @@ function Level(id) {
     // Google map options
     this._mapOptions = null;
     this._mapURL = null;
-    this._noticeImage = null;
+    this._image = null;
+    this._imageAttribution = null;
 
 
     // Current level state
@@ -55,7 +56,7 @@ function Level(id) {
     this._tip = null;
     this._introduction = "Welcome to level " + this._id + ".";
     this._conclusion = "Congratulations! You have completed level " + this._id + ".";
-    this._noticeImage = null;
+    this._image = null;
     this._soundSrc = null;
 
 }
@@ -158,8 +159,10 @@ Level.prototype.getConclusion = function() { return this._conclusion; };
 Level.prototype.setConclusion = function(conclusion) { this._conclusion = conclusion; };
 Level.prototype.getTip = function() { return this._tip; };
 Level.prototype.setTip = function(tip) { this._tip = tip; };
-Level.prototype.getImage = function() { return this._noticeImage; };
-Level.prototype.setImage = function(image) { this._noticeImage = image; };
+Level.prototype.getImage = function() { return this._image; };
+Level.prototype.setImage = function(image) { this._image = image; };
+Level.prototype.getImageAttribution = function() { return this._imageAttribution; };
+Level.prototype.setImageAttribution = function(imageAttribution) { this._imageAttribution = imageAttribution; };
 Level.prototype.getSoundSrc = function() { return this._soundSrc; };
 Level.prototype.setSoundSrc = function(soundSrc) { this._soundSrc = soundSrc; };
 Level.prototype.getTile = function(x, y) {
