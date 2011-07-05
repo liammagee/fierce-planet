@@ -82,25 +82,7 @@ FiercePlanet.isMouseMoving = false;
 
 // Setting variables
 FiercePlanet.currentSettings = new Settings();
-//FiercePlanet.scrollingImageVisible = true;
-//FiercePlanet.noticesVisible = true;
-//FiercePlanet.agentsCanCommunicate = true;
-//FiercePlanet.catastrophesVisible = true;
-//FiercePlanet.disableKeyboardShortcuts = true;
-//FiercePlanet.soundsPlayable = false;
 
-//FiercePlanet.recording = false;
-
-//FiercePlanet.invisiblePath = false;
-//FiercePlanet.agentTracing = false;
-
-//FiercePlanet.resourcesUpgradeable = false;
-//FiercePlanet.resourcesInTension = false;
-//FiercePlanet.resourceBonus = false;
-//FiercePlanet.applyGeneralHealth = false;
-//FiercePlanet.ignoreResourceBalance = false;
-
-FiercePlanet.godMode = false;
 
 // Dev options
 FiercePlanet.predatorsVisible = false;
@@ -158,11 +140,6 @@ FiercePlanet.globalRecordingCounter = 0;
 
 
 // Dimension variables
-FiercePlanet.zoomLevel = 1;
-FiercePlanet.externalZoomLevel = 1;
-
-FiercePlanet.panLeftOffset = 0;
-FiercePlanet.panTopOffset = 0;
 
 FiercePlanet.worldWidth = 14;
 FiercePlanet.worldHeight = 11;
@@ -182,7 +159,13 @@ FiercePlanet.audio = null;
 FiercePlanet.googleMap = null;
 
 
-// Level editor variables
+// Viewport variables
+FiercePlanet.zoomLevel = 1;
+FiercePlanet.externalZoomLevel = 1;
+
+FiercePlanet.panLeftOffset = 0;
+FiercePlanet.panTopOffset = 0;
+
 FiercePlanet.currentX = null;
 FiercePlanet.currentY = null;
 

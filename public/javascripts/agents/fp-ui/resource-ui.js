@@ -26,31 +26,11 @@ FiercePlanet.setupResourceInteraction = function () {
         var resourceCanvas = $('#agentCanvas')[0];
 
 
-        resourceCanvas.addEventListener('click', function (e) {
-            if (e.preventDefault) e.preventDefault(); // allows us to drop
-            if (! FiercePlanet.inDesignMode)
-                FiercePlanet.showUpgradeDeleteDialog(e);
-            return false;
-          }, false);
-//        resourceCanvas.setAttribute('draggable', 'true');
 
         resourceCanvas.addEventListener('dragstart', function (e) {
             if (e.preventDefault) e.preventDefault(); // allows us to drop
             this.className = 'over';
             e.dataTransfer.dropEffect = 'copy';
-
-            /*
-            TODO: Find a way to drag and drop resources
-            var __ret = FiercePlanet.getCurrentPosition(e);
-            var posX = __ret.posX;
-            var posY = __ret.posY;
-            if (FiercePlanet.currentLevel.getCell(posX, posY) instanceof Resource) {
-                var resource = FiercePlanet.currentLevel.getCell(posX, posY);
-                e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
-                e.dataTransfer.setData('Text', resource.getName()); // required otherwise doesn't work
-                FiercePlanet.currentResourceId = resource.getName();
-            }
-            */
             return false;
           }, false);
         resourceCanvas.addEventListener('dragover', function (e) {
@@ -72,6 +52,122 @@ FiercePlanet.setupResourceInteraction = function () {
             FiercePlanet.dropItem(e);
           }, false);
     };
+
+
+/**
+ *
+ *
+ * @param e
+ */
+FiercePlanet.processResourceCanvasClick = function(e) {
+    // Don't do anything if moving
+    FiercePlanet.isMouseDown = false;
+    if (FiercePlanet.isMouseMoving)
+        return;
+    var __ret = FiercePlanet.getCurrentPosition(e);
+    var posX = __ret.posX;
+    var posY = __ret.posY;
+    var foundResource = false;
+    for (var i = 0; i < FiercePlanet.currentLevel.getResources().length; i++) {
+        var p = FiercePlanet.currentLevel.getResources()[i];
+        if (p.getX() == posX && p.getY() == posY) {
+            FiercePlanet.currentResource = p;
+            if (confirm("Are you sure you want to delete this resource?")) {
+                FiercePlanet.deleteCurrentResource();
+            }
+            // Do this only if we want more than a simple delete option
+//            FiercePlanet.$upgradeDelete.dialog('open');
+            return;
+        }
+    }
+    var currentTile = FiercePlanet.currentLevel.getTile(posX, posY);
+    if (FiercePlanet.tilesMutable) {
+        if (currentTile == undefined) {
+            FiercePlanet.currentLevel.addTile(new Tile(DEFAULT_TILE_COLOR, posX, posY));
+            FiercePlanet.drawGame();
+        }
+        else if (!foundResource && FiercePlanet.currentResourceId != null) {
+            FiercePlanet.dropItem(e);
+        }
+        else {
+            FiercePlanet.currentLevel.removeTile(posX, posY);
+            FiercePlanet.drawGame();
+        }
+    }
+    else if (!foundResource) {
+        if (FiercePlanet.currentResourceId != null) {
+            FiercePlanet.dropItem(e);
+        }
+        else if (FiercePlanet.currentSettings.useInlineResourceSwatch) {
+            FiercePlanet.showInlineResourcePanel(e);
+
+        }
+    }
+
+};
+
+/**
+ * Shows an inline resource panel
+ */
+FiercePlanet.showInlineResourcePanel = function(e) {
+    var __ret = FiercePlanet.getCurrentPosition(e);
+    var posX = __ret.posX;
+    var posY = __ret.posY;
+    if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
+        return;
+    if (FiercePlanet.isPositionOccupiedByResource(posX, posY))
+        return;
+
+    var dialogX = FiercePlanet.calculateWorldLeft();
+    var dialogY = FiercePlanet.calculateWorldTop();
+    var coords = FiercePlanet.getWorldCoordinates(e);
+    var x = coords.x;
+    var y = coords.y;
+    var width = 200, height = 240;
+    posX = dialogX + x - (width / 2);
+    posY = dialogY + y - (height / 2);
+    posX = (posX < dialogX ? dialogX : (posX + width > dialogX + FiercePlanet.WORLD_WIDTH ? (dialogX + FiercePlanet.WORLD_WIDTH - width) : posX));
+    posY = (posY < dialogY ? dialogY : (posY + height > dialogY + FiercePlanet.WORLD_HEIGHT ? (dialogY + FiercePlanet.WORLD_HEIGHT - height) : posY));
+
+    var swatchCopy = $('#swatch').clone();
+    swatchCopy.attr('id', 'inline-swatch');
+    swatchCopy.css('left', 0);
+    swatchCopy.css('top', 0);
+    //FiercePlanet.drawInlineSwatch()
+    FiercePlanet.inlineResourcePanel = $('<div></div>')
+        .html(swatchCopy)
+        .dialog({
+           title: 'Add a Resource',
+            position: [posX, posY],
+            width: width,
+            height: height,
+            autoOpen: false,
+            modal: true
+        });
+    $('#inline-swatch div[class="title"]').remove();
+    var links = $('#inline-swatch .swatch-instance'), el = null;
+    for (var i = 0; i < links.length; i++) {
+        el = links[i];
+        if (el.id && $.inArray(el.id, FiercePlanet.currentProfile.capabilities) != -1) {
+            el.addEventListener('click', function (event) {
+                var __ret = FiercePlanet.getCurrentPosition(e);
+                var posX = __ret.posX;
+                var posY = __ret.posY;
+                if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
+                    return;
+                if (FiercePlanet.isPositionOccupiedByResource(posX, posY))
+                    return;
+
+                FiercePlanet.currentResourceId = this.id;
+                FiercePlanet.dropItem(e);
+                FiercePlanet.currentResourceId = null;
+                FiercePlanet.inlineResourcePanel.dialog('close');
+            }, false);
+
+        }
+    }
+    FiercePlanet.inlineResourcePanel.dialog('open');
+};
 
 /**
  *

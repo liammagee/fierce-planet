@@ -59,6 +59,9 @@ FiercePlanet.setupLevelEditor = function() {
 
     var canvas = $('#agentCanvas');
     canvas.unbind('click');
+    canvas.unbind('mousedown');
+    canvas.unbind('mousemove');
+    canvas.unbind('mouseup');
 //    canvas.click(function() {return false;});
     canvas.mousedown(FiercePlanet.handleEditorMouseDown);
     canvas.mousemove(FiercePlanet.handleEditorMouseMove);
@@ -76,6 +79,7 @@ FiercePlanet.setupLevelEditor = function() {
 FiercePlanet.handleEditorMouseDown = function(e) {
     FiercePlanet.oldTiles = FiercePlanet.currentLevel.getTiles().slice();
     FiercePlanet.isMouseDown = true;
+    FiercePlanet.isMouseMoving = false;
     return false;
 };
 
@@ -110,11 +114,10 @@ FiercePlanet.handleEditorMouseUp = function(e) {
     }
     else {
         FiercePlanet.currentLevel.removeTile(FiercePlanet.currentX, FiercePlanet.currentY);
-        FiercePlanet.drawGame();
+        FiercePlanet.drawCanvases();
     }
 
     FiercePlanet.isMouseDown = false;
-    FiercePlanet.isMouseMoving = false;
 
     return false;
 };
@@ -128,6 +131,7 @@ FiercePlanet.cancelLevelEditor = function() {
     canvas.unbind('mousedown', FiercePlanet.handleEditorMouseDown);
     canvas.unbind('mousemove', FiercePlanet.handleEditorMouseMove);
     canvas.unbind('mouseup', FiercePlanet.handleEditorMouseUp);
+    FiercePlanet.bindGameMouseEvents();
     $('#level-editor').hide();
     $('#swatch').show();
 };

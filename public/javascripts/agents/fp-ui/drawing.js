@@ -42,6 +42,33 @@ FiercePlanet.drawGame = function() {
 };
 
 /**
+ * Draw just the canvas layers
+ */
+FiercePlanet.drawCanvases = function() {
+    // Clear canvases
+    FiercePlanet.clearCanvas('baseCanvas');
+    FiercePlanet.clearCanvas('resourceCanvas');
+    FiercePlanet.clearCanvas('scrollingCanvas');
+    FiercePlanet.clearCanvas('noticeCanvas');
+    FiercePlanet.clearCanvas('agentCanvas');
+
+    // Draw basic elements
+    if ((FiercePlanet.currentLevel.getMapOptions() != undefined  && FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined)
+            || (FiercePlanet.currentLevel.getMapURL() != undefined && $.trim(FiercePlanet.currentLevel.getMapURL()).length > 0)) {
+        FiercePlanet.drawPath();
+    }
+    else {
+        FiercePlanet.drawTiles();
+        FiercePlanet.drawBackgroundImage();
+        FiercePlanet.drawPath();
+    }
+    FiercePlanet.drawEntryPoints();
+    FiercePlanet.drawExitPoints();
+    FiercePlanet.drawResources();
+    FiercePlanet.drawScrollingLayer();
+};
+
+/**
  *
  */
 FiercePlanet.drawTiles = function() {
@@ -170,7 +197,7 @@ FiercePlanet.drawMap = function() {
 };
 
 /**
- *
+ * Draws exit points on the map
  */
 FiercePlanet.drawExitPoints = function() {
     var canvas = $('#baseCanvas')[0];
@@ -182,14 +209,6 @@ FiercePlanet.drawExitPoints = function() {
         var y = point[1] * FiercePlanet.cellHeight + FiercePlanet.cellHeight / 2;
         var width = (FiercePlanet.pieceWidth / 2);
         var height = (FiercePlanet.pieceHeight / 2);
-
-//        ctx.beginPath();
-//        ctx.arc(x, y, width, 0, Math.PI * 2, false);
-//        ctx.closePath();
-//        ctx.strokeStyle = "#ccc";
-//        ctx.stroke();
-//        ctx.fillStyle = "#fbe53b";
-//        ctx.fill();
 
         // Draw circle
         ctx.beginPath();
@@ -208,14 +227,14 @@ FiercePlanet.drawExitPoints = function() {
         ctx.closePath();
         ctx.strokeStyle = "#000";
         ctx.stroke();
-        ctx.fillStyle = "#0f0";
+        ctx.fillStyle = "#93C83E";
         ctx.fill();
     }
 };
 
 
 /**
- *
+ * Draws entry points on the map
  */
 FiercePlanet.drawEntryPoints = function() {
     var canvas = $('#baseCanvas')[0];
@@ -228,18 +247,13 @@ FiercePlanet.drawEntryPoints = function() {
         var width = (FiercePlanet.pieceWidth / 2);
         var height = (FiercePlanet.pieceHeight / 2);
 
-        /*
-        ctx.fillStyle = "#ddd";
-        ctx.fillRect(x - width, y - width, width * 2, width * 2);
-        */
-
         // Draw circle
         ctx.beginPath();
         ctx.arc(x, y, width, 0, Math.PI * 2, false);
         ctx.closePath();
         ctx.strokeStyle = "#000";
         ctx.stroke();
-        ctx.fillStyle = "#0f0";
+        ctx.fillStyle = "#93C83E";
         ctx.fill();
 
         // Draw progress
@@ -812,11 +826,53 @@ FiercePlanet.drawScoreboard = function() {
 /**
  * Pan around the current level
  *
+ * @param offsetX
+ * @param offsetY
+ */
+FiercePlanet.panByDrag = function(offsetX, offsetY) {
+    var canvases = $('canvas');
+    for (var i = 0; i < canvases.length; i++) {
+        var canvas = canvases[i];
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width,canvas.height);
+        ctx.translate(offsetX, offsetY);
+    }
+    FiercePlanet.panTopOffset += offsetY * FiercePlanet.zoomLevel;
+    FiercePlanet.panLeftOffset += offsetX * FiercePlanet.zoomLevel;
+    if (FiercePlanet.googleMap) {
+        FiercePlanet.googleMap.panBy(- offsetX * FiercePlanet.zoomLevel, - offsetY * FiercePlanet.zoomLevel);
+    }
+    FiercePlanet.drawCanvases();
+};
+
+
+/**
+ * Pan around the current level
+ *
  * @param direction
  */
 FiercePlanet.pan = function(direction) {
-    var canvases = $('canvas');
     var offset = 10;
+    switch (direction) {
+        case 0:
+            FiercePlanet.panByDrag(0, offset);
+            break;
+        case 1:
+            FiercePlanet.panByDrag(0, -offset);
+            break;
+        case 2:
+            FiercePlanet.panByDrag(offset, 0);
+            break;
+        case 3:
+            FiercePlanet.panByDrag(-offset, 0);
+            break;
+        case 4:
+            FiercePlanet.panByDrag(- FiercePlanet.panLeftOffset / FiercePlanet.zoomLevel, - FiercePlanet.panTopOffset / FiercePlanet.zoomLevel);
+            break;
+    }
+
+    /*
+    var canvases = $('canvas');
     for (var i = 0; i < canvases.length; i++) {
         var canvas = canvases[i];
         var ctx = canvas.getContext('2d');
@@ -858,6 +914,7 @@ FiercePlanet.pan = function(direction) {
             break;
     }
     FiercePlanet.drawGame();
+    */
 };
 
 /**
@@ -868,6 +925,8 @@ FiercePlanet.pan = function(direction) {
 FiercePlanet.zoom = function(direction) {
     var canvases = $('canvas');
     var magnify = 1.5;
+    var existingZoom = FiercePlanet.zoomLevel;
+    var zoomChanged = false;
     for (var i = 0; i < canvases.length; i++) {
         var canvas = canvases[i];
         var ctx = canvas.getContext('2d');
@@ -875,17 +934,14 @@ FiercePlanet.zoom = function(direction) {
             case -1:
                 if (FiercePlanet.zoomLevel > 1) {
                     ctx.scale(1 / magnify, 1 / magnify);
-//                    ctx.translate(200, 150);
                 }
                 break;
             case 0:
                 ctx.scale(1 / FiercePlanet.zoomLevel, 1 / FiercePlanet.zoomLevel);
-//                ctx.translate(0, 0);
                 break;
             case 1:
                 if (FiercePlanet.zoomLevel < 10) {
                     ctx.scale(magnify, magnify);
-//                    ctx.translate(-200 * magnify, -150 * magnify);
                 }
                 break;
         }
@@ -893,24 +949,28 @@ FiercePlanet.zoom = function(direction) {
     switch (direction) {
         case -1:
             if (FiercePlanet.zoomLevel > 1) {
-//                FiercePlanet.panLeftOffset += 200;
-//                FiercePlanet.panTopOffset += 150;
                 FiercePlanet.zoomLevel *= 1 / magnify;
             }
             break;
         case 0:
-//            FiercePlanet.panLeftOffset = 0;
-//            FiercePlanet.panTopOffset = 0;
             FiercePlanet.zoomLevel = 1;
             break;
         case 1:
             if (FiercePlanet.zoomLevel < 10) {
-//                FiercePlanet.panLeftOffset -= 200;
-//                FiercePlanet.panTopOffset -= 150;
                 FiercePlanet.zoomLevel *= magnify;
             }
             break;
     }
-    FiercePlanet.drawGame();
+    if (FiercePlanet.googleMap) {
+        var gZoom = FiercePlanet.googleMap.getZoom();
+        var newZoom = FiercePlanet.zoomLevel;
+        var normalisedExistingZoom = Math.log(existingZoom) / Math.log(magnify);
+        var normalisedNewZoom = Math.log(newZoom) / Math.log(magnify);
+        var gZoomChange = normalisedNewZoom - normalisedExistingZoom;
+        var newGZoom = ((gZoom + gZoomChange) < 1 ? 1 : ((gZoom + gZoomChange) > 20 ? 20 : gZoom + gZoomChange));
+        FiercePlanet.googleMap.setZoom(newGZoom);
+
+    }
+    FiercePlanet.drawCanvases();
 };
 

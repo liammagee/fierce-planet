@@ -15,7 +15,7 @@ class ProfilesController < ApplicationController
   # GET /profiles/high_scores
   # GET /profiles.xml/high_scores
   def high_scores
-    @profiles = Profile.order('highest_score DESC').limit(10)
+    @profiles = Profile.where('highest_score is not null').order('highest_score DESC').limit(10)
 
     respond_to do |format|
       format.js # high_scores.js.erb

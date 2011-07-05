@@ -15,6 +15,10 @@ var FiercePlanet = FiercePlanet || {};
  * Adds a series of event listeners to UI elements
  */
 FiercePlanet.hookUpUIEventListeners = function() {
+
+    // Set admin functions to previously stored defaults
+    FiercePlanet.getAndRetrieveProperties();
+
     // Control panel functions
     $('#playAgents').click(FiercePlanet.playGame);
     $('#slowDown').click(FiercePlanet.slowDown);
@@ -34,8 +38,6 @@ FiercePlanet.hookUpUIEventListeners = function() {
     $('#zoomReset').click(function() { FiercePlanet.zoom(0);});
     $('#settings').click(FiercePlanet.showSettings);
     $('#credits').click(FiercePlanet.showCredits);
-
-
 
     // Admin functions
     $('#debug').click(FiercePlanet.processAgents);
@@ -59,9 +61,6 @@ FiercePlanet.hookUpUIEventListeners = function() {
             console.log(err);
     }
 
-    // Set admin functions to previously stored defaults
-    FiercePlanet.getAndRetrieveProperties();
-
     // Trap relevant key strokes
     if (!FiercePlanet.currentSettings.disableKeyboardShortcuts) {
         $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
@@ -80,17 +79,106 @@ FiercePlanet.hookUpUIEventListeners = function() {
         });
     }
 
+    FiercePlanet.bindGameMouseEvents();
+};
 
-    $('#agentCanvas').mousewheel(function(event, delta) {
+/**
+ *  Does all the necessary binding for in-game mouse events
+ */
+FiercePlanet.bindGameMouseEvents = function() {
+    var agentCanvas = $('#agentCanvas');
+
+    agentCanvas.click(FiercePlanet.handleNoticeEvents);
+    agentCanvas.click(FiercePlanet.processResourceCanvasClick);
+    agentCanvas.mousedown(FiercePlanet.registerMouseDown);
+    agentCanvas.mousemove(FiercePlanet.registerMouseMove);
+    agentCanvas.mouseup(FiercePlanet.registerMouseUp);
+    agentCanvas.mousewheel(function(event, delta) {
         FiercePlanet.zoom(delta);
         event.preventDefault();
         return false; // prevent default
     });
-
-    $('#agentCanvas').click(FiercePlanet.handleNoticeEvents);
-
 };
 
+/**
+ *  Does all the necessary binding for in-game mouse events
+ */
+FiercePlanet.unbindGameMouseEvents = function() {
+    var agentCanvas = $('#agentCanvas');
+
+    agentCanvas.unbind('click', FiercePlanet.handleNoticeEvents);
+    agentCanvas.unbind('click', FiercePlanet.processResourceCanvasClick);
+    agentCanvas.unbind('mousedown', FiercePlanet.registerMouseDown);
+    agentCanvas.unbind('mousemove', FiercePlanet.registerMouseMove);
+    agentCanvas.unbind('mouseup', FiercePlanet.registerMouseUp);
+    agentCanvas.mousewheel(function(event, delta) {
+        FiercePlanet.zoom(delta);
+        event.preventDefault();
+        return false; // prevent default
+    });
+};
+
+/**
+ *  Register mouse down event
+ */
+FiercePlanet.registerMouseDown = function(e) {
+    FiercePlanet.isMouseDown = true;
+    FiercePlanet.isMouseMoving = false;
+    if (e.offsetX || e.offsetX == 0) { // Opera
+        FiercePlanet.currentX = e.offsetX;
+        FiercePlanet.currentY = e.offsetY;
+    }
+    else if (e.layerX || e.layerX == 0) { // Firefox
+        FiercePlanet.currentX = e.layerX;
+        FiercePlanet.currentY = e.layerY;
+    }
+};
+
+/**
+ *  Register mouse move event
+ */
+FiercePlanet.registerMouseMove = function(e) {
+    if (FiercePlanet.isMouseDown) {
+        FiercePlanet.isMouseMoving = true;
+        FiercePlanet.doMove(e);
+    }
+};
+
+/**
+ *  Process mouse moves
+ */
+FiercePlanet.doMove = function(e) {
+    if (FiercePlanet.isMouseDown) {
+        var ex, ey;
+        if (e.offsetX || e.offsetX == 0) { // Opera
+            ex = e.offsetX;
+            ey = e.offsetY;
+        }
+        else if (e.layerX || e.layerX == 0) { // Firefox
+            ex = e.layerX;
+            ey = e.layerY;
+        }
+        var offsetX = ex - FiercePlanet.currentX;
+        var offsetY = ey - FiercePlanet.currentY;
+
+        FiercePlanet.panByDrag(offsetX, offsetY);
+        FiercePlanet.currentX = ex;
+        FiercePlanet.currentY = ey;
+    }
+};
+
+/**
+ *  Register mouse up event
+ */
+FiercePlanet.registerMouseUp = function(e) {
+    if (e.preventDefault)
+        e.preventDefault();
+    if (FiercePlanet.isMouseDown && FiercePlanet.isMouseMoving) {
+        FiercePlanet.doMove(e);
+        FiercePlanet.isMouseDown = false;
+    }
+    return false;
+};
 
 /**
  *  Add key handling events
