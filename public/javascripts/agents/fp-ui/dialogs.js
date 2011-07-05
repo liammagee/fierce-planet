@@ -395,14 +395,22 @@ FiercePlanet.showUpgradeDeleteDialog = function(e) {
  * Shows an inline resource panel
  */
 FiercePlanet.showInlineResourcePanel = function(e) {
+    var __ret = FiercePlanet.getCurrentPosition(e);
+    var posX = __ret.posX;
+    var posY = __ret.posY;
+    if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
+        return;
+    if (FiercePlanet.isPositionOccupiedByResource(posX, posY))
+        return;
+
     var dialogX = FiercePlanet.calculateWorldLeft();
     var dialogY = FiercePlanet.calculateWorldTop();
     var coords = FiercePlanet.getWorldCoordinates(e);
     var x = coords.x;
     var y = coords.y;
     var width = 200, height = 240;
-    var posX = dialogX + x - (width / 2);
-    var posY = dialogY + y - (height / 2);
+    posX = dialogX + x - (width / 2);
+    posY = dialogY + y - (height / 2);
     posX = (posX < dialogX ? dialogX : (posX + width > dialogX + FiercePlanet.WORLD_WIDTH ? (dialogX + FiercePlanet.WORLD_WIDTH - width) : posX));
     posY = (posY < dialogY ? dialogY : (posY + height > dialogY + FiercePlanet.WORLD_HEIGHT ? (dialogY + FiercePlanet.WORLD_HEIGHT - height) : posY));
 

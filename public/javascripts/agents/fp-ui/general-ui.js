@@ -34,13 +34,14 @@ FiercePlanet.hookUpUIEventListeners = function() {
     $('#zoomReset').click(function() { FiercePlanet.zoom(0);});
     $('#settings').click(FiercePlanet.showSettings);
     $('#credits').click(FiercePlanet.showCredits);
-    $('#highscore').click(FiercePlanet.showHighScores);
 
 
 
     // Admin functions
     $('#debug').click(FiercePlanet.processAgents);
     $('#replay').click(FiercePlanet.replayWorld);
+    $('#script-editor').click(FiercePlanet.openConsole);
+    $('#story-board').click(FiercePlanet.showStoryboard);
 
 
     // Level editor functions

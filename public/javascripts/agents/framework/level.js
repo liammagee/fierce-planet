@@ -295,7 +295,8 @@ Level.prototype.presetAgents = function(agentType, number, canCommunicateWithOth
             var agent = new Agent(agentType, x, y);
             var colorSeed = j % 3;
             var colorScheme = (colorSeed == 0 ? "000" : (colorSeed == 1 ? "0f0" : "00f"));
-            agent.setColor(colorScheme);
+            // TODO: Make this option configurable
+//            agent.setColor(colorScheme);
             var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
             agent.setDelay(delay);
             agent.setCanCommunicateWithOtherAgents(canCommunicateWithOtherAgents);

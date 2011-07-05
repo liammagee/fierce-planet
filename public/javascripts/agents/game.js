@@ -196,7 +196,6 @@ FiercePlanet.processNeighbouringResources = function(agent) {
         var ry = resource.getY();
         if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
             var resourceEffect = FiercePlanet.calculateResourceEffect(resource);
-            console.log(resourceEffect);
             resource.provideYield(agent, resourceEffect);
             FiercePlanet.drawResource(resource);
         }
