@@ -19,7 +19,6 @@ class User < ActiveRecord::Base
       p = Profile.new
       p.user = self
       p.save
-      self.profile = p
     end
   end
 

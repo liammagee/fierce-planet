@@ -4,7 +4,7 @@ html {
 
 body {
 	zoom: 100%;
-    background: url(../layout/backgound.png);
+    background: url(../layout/backgound.jpg);
     background-repeat: no-repeat;
 	color: #fff;
 	font-family:Verdana, Arial, Helvetica, sans-serif;
@@ -16,7 +16,8 @@ body {
 }
 #content-pane {
 	position:relative;
-	margin:0; padding:0;
+	margin:0;
+    padding:0;
 	width:785px;
 	height:810px;
 }
