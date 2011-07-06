@@ -31,11 +31,11 @@ PresetLevels.level0.setWaveNumber(3);
 PresetLevels.level0.setExpiryLimit(20);
 PresetLevels.level0.setName("Tutorial");
 PresetLevels.level0.setIntroduction("" +
-        "<p>The citizens of Fierce Planet are under in danger of extinction. Their cities have been destroyed &mdash; there is a shortage of food and water, law and order has broken down, and disease is rampant.</p>" +
+        "<p>The citizens of Fierce Planet are in danger of extinction. Their cities have been destroyed &mdash; there is a shortage of food and water, law and order has broken down, and disease is rampant.</p>" +
         "<p>The aim of the game is to help citizens survive as they build a sustainable city. Their start point is marked by a green circle, and the goal by a white circle. Both circles reflect your progress as more waves of citizens come through.</p> " +
         "<p>You can save your citizens by placing <em>resources</em> on tiles around their path. You can click on tiles to select a resource, or drag resources from the panel on the right onto the game map.</p> " +
         "<p>Resources come in three kinds: economic, environmental and social. Your citizens need all of these to build a sustainable city. " +
-        "If you don't provide enough resources of a particular kind, your citizens will start turning that colour. This indicates you need to some resources of that colour to help your citizens.</p> " +
+        "If you don't provide enough resources of a particular kind, your citizens will start turning that colour. This indicates you need to put down some resources of that colour to help your citizens.</p> " +
         "<p>You start with a limited amount of resources. Saving citizens will allow you to place more resources, which will allow you to help others.</p> " +
         "<p>Begin by placing some resources on the map. When you are ready, click the 'Play' button in the Control Panel on the left. After a few seconds, citizens will start marching towards their goal.</p> "
         );
@@ -66,11 +66,11 @@ PresetLevels.level1.setExpiryLimit(20);
 PresetLevels.level1.setImage("http://2.bp.blogspot.com/_bxhbymaUoNY/TSRcmaTzelI/AAAAAAAAAF8/YlOvN46t5uA/s1600/City_Ruins_by_Natiq_Aghayev_aka_Defonten.jpg");
 PresetLevels.level1.setName("Level 1: Welcome to Fierce Planet!");
 PresetLevels.level1.setIntroduction(
-        "<p>The citizens of Fierce Planet are under in danger extinction. Their cities have been destroyed &mdash; there is a shortage of food and water, law and order has broken down, and disease is rampant.</p>" +
+        "<p>The citizens of Fierce Planet are in danger of extinction. Their cities have been destroyed &mdash; there is a shortage of food and water, law and order has broken down, and disease is rampant.</p>" +
                 "<p>Help your citizens rebuild their world before they are wiped out!</p>"
 );
 PresetLevels.level1.setConclusion(
-        "<p>Congratulations, you have helped the citizens of Fierce Planet start rebuilding their world... there is a still long way to go!</p>"
+        "<p>Congratulations, you have helped the citizens of Fierce Planet start rebuilding their world... there is still a long way to go!</p>"
 );
 //"<p>The citizens of Fierce Planet are under threat. They are migrating in ever increasing numbers, seeking a promised land of peace and prosperity.</p>" +
 //"<p>Help them by placing resources beside their path - before they expire!</p> "
@@ -172,7 +172,7 @@ PresetLevels.level3.setConclusion(
 );
 PresetLevels.level3.setTip(new Notice("The levels get progressively larger, requiring more planning as to where you allocate resources. Aim to place resources at regular intervals along the path."));
 PresetLevels.level3.setSoundSrc("http://db.tt/7KPJ8Xi");
-PresetLevels.level3.setCatastrophe(new Catastrophe(TBL.ENV_CATEGORY, 1000 + (Math.random() * 1000), 250, 0.5, new Notice("A tsumani will soon hit the city - all resources will be depleted.", undefined, undefined, 500, 250, undefined, undefined, TBL.ENV_CATEGORY.getColor(), "000000")));
+PresetLevels.level3.setCatastrophe(new Catastrophe(TBL.ENV_CATEGORY, 1000 + (Math.random() * 1000), 250, 0.5, new Notice("A tsumani will soon hit the city - some of its resources will be depleted.", undefined, undefined, 500, 250, undefined, undefined, TBL.ENV_CATEGORY.getColor(), "000000")));
 
 
 PresetLevels.level3.setup = function() {
@@ -235,7 +235,7 @@ PresetLevels.level4.setIntroduction(
         );
 PresetLevels.level4.setTip(new Notice("Be sure to allocate resources to the outer reaches of the path. Citizens will run faster when there is less to go around..."));
 PresetLevels.level4.setSoundSrc("http://db.tt/9m8kuIs");
-PresetLevels.level4.setConclusion("Your citizens are feeling dizzy. But thankfully they have survived.");
+PresetLevels.level4.setConclusion("Your citizens are feeling dizzy! But thankfully they have survived!");
 
 PresetLevels.level4.setup = function() {
     this.fillWithTiles();
@@ -410,7 +410,7 @@ PresetLevels.level6.setImage("http://www.publicdomainpictures.net/pictures/11000
 PresetLevels.level6.setImageAttribution('<a href="http://www.publicdomainpictures.net/view-image.php?image=10751&picture=city-pollution">City Pollution</a> by Peter Griffin');
 PresetLevels.level6.setName("Level 6: Dire Straits");
 PresetLevels.level6.setIntroduction(
-        "<p>Not there yet... This level looks well resourced &mdash; but your citizens are going to need all the help they can get. There are troubling signs ahead for the economy... </p>");
+        "<p>This level looks well resourced &mdash; but there are troubling signs ahead for the economy. your citizens are going to need all the help they can get... </p>");
 //PresetLevels.level6.setTip(new Notice("Clicking on an existing resource allows you to delete or upgrade it. An upgraded resource will dispense more health to citizens passing by."));
 PresetLevels.level6.setTip(new Notice("Clicking on an existing resource allows you to delete it, and give you back some of what you spent"));
 PresetLevels.level6.setConclusion("Back in surplus! Your citizens were able to pull through. Can they continue to work together through the challenges that lie ahead?");

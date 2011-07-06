@@ -48,8 +48,8 @@ FiercePlanet.drawCanvases = function() {
     // Clear canvases
     FiercePlanet.clearCanvas('baseCanvas');
     FiercePlanet.clearCanvas('resourceCanvas');
-    FiercePlanet.clearCanvas('scrollingCanvas');
-    FiercePlanet.clearCanvas('noticeCanvas');
+//    FiercePlanet.clearCanvas('scrollingCanvas');
+//    FiercePlanet.clearCanvas('noticeCanvas');
     FiercePlanet.clearCanvas('agentCanvas');
 
     // Draw basic elements
@@ -65,11 +65,11 @@ FiercePlanet.drawCanvases = function() {
     FiercePlanet.drawEntryPoints();
     FiercePlanet.drawExitPoints();
     FiercePlanet.drawResources();
-    FiercePlanet.drawScrollingLayer();
+//    FiercePlanet.drawScrollingLayer();
 };
 
 /**
- *
+ * Draws all the tiles on the map
  */
 FiercePlanet.drawTiles = function() {
     var tiles = FiercePlanet.currentLevel.getTiles();
@@ -830,7 +830,8 @@ FiercePlanet.drawScoreboard = function() {
  * @param offsetY
  */
 FiercePlanet.panByDrag = function(offsetX, offsetY) {
-    var canvases = $('canvas');
+//    var canvases = $('canvas');
+    var canvases = $('.scrollable-canvas');
     for (var i = 0; i < canvases.length; i++) {
         var canvas = canvases[i];
         var ctx = canvas.getContext('2d');
@@ -870,51 +871,6 @@ FiercePlanet.pan = function(direction) {
             FiercePlanet.panByDrag(- FiercePlanet.panLeftOffset / FiercePlanet.zoomLevel, - FiercePlanet.panTopOffset / FiercePlanet.zoomLevel);
             break;
     }
-
-    /*
-    var canvases = $('canvas');
-    for (var i = 0; i < canvases.length; i++) {
-        var canvas = canvases[i];
-        var ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width,canvas.height);
-        switch (direction) {
-            case 0:
-                ctx.translate(0, offset);
-                break;
-            case 1:
-                ctx.translate(0, -offset);
-                break;
-            case 2:
-                ctx.translate(offset, 0);
-                break;
-            case 3:
-                ctx.translate(-offset, 0);
-                break;
-            case 4:
-                ctx.translate(- FiercePlanet.panLeftOffset / FiercePlanet.zoomLevel, - FiercePlanet.panTopOffset / FiercePlanet.zoomLevel);
-                break;
-        }
-    }
-    switch (direction) {
-        case 0:
-            FiercePlanet.panTopOffset += offset * FiercePlanet.zoomLevel;
-            break;
-        case 1:
-            FiercePlanet.panTopOffset += -offset * FiercePlanet.zoomLevel;
-            break;
-        case 2:
-            FiercePlanet.panLeftOffset += offset * FiercePlanet.zoomLevel;
-            break;
-        case 3:
-            FiercePlanet.panLeftOffset += -offset * FiercePlanet.zoomLevel;
-            break;
-        case 4:
-            FiercePlanet.panLeftOffset = 0;
-            FiercePlanet.panTopOffset = 0;
-            break;
-    }
-    FiercePlanet.drawGame();
-    */
 };
 
 /**
@@ -923,7 +879,8 @@ FiercePlanet.pan = function(direction) {
  * @param direction
  */
 FiercePlanet.zoom = function(direction) {
-    var canvases = $('canvas');
+//    var canvases = $('canvas');
+    var canvases = $('.scrollable-canvas');
     var magnify = 1.5;
     var existingZoom = FiercePlanet.zoomLevel;
     var zoomChanged = false;

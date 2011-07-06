@@ -1,6 +1,11 @@
+html {
+    background: #000 url(../layout/stars.jpg);
+}
+
 body {
 	zoom: 100%;
-    background: #000 url(../layout/stars.jpg);
+    background: url(../layout/backgound.png);
+    background-repeat: no-repeat;
 	color: #fff;
 	font-family:Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
@@ -12,9 +17,8 @@ body {
 #content-pane {
 	position:relative;
 	margin:0; padding:0;
-	width:1200px;
+	width:785px;
 	height:810px;
-	background: url(../layout/backgound.jpg);
 }
 #main-panel {
 }
@@ -32,7 +36,8 @@ body {
 }
 #info {
 	position:absolute;
-	width:400px; height:20px;
+	width:400px;
+    height:20px;
 	top:67px;
 	left:670px;
 	text-align:right;
