@@ -16,7 +16,8 @@ class Profile < ActiveRecord::Base
   def initialize_defaults
     self.profile_class ||= 'Novice'
     self.current_score ||= 0
-    self.capabilities ||= "['farm', 'water', 'clinic']" if new_record?
+    
+    self.capabilities ||= ['farm', 'water', 'clinic'].to_json if new_record?
     self.total_resources_spent_by_category = {}
     self.ave_resources_spent_by_category = {}
     self.game_total_resources_spent_by_category = {}
