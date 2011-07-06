@@ -16,7 +16,8 @@ body {
 }
 #content-pane {
 	position:relative;
-	margin:0; padding:0;
+	margin:0;
+    padding:0;
 	width:785px;
 	height:810px;
 }
