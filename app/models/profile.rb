@@ -17,12 +17,12 @@ class Profile < ActiveRecord::Base
     self.profile_class ||= 'Novice'
     self.current_score ||= 0
     
-    self.capabilities ||= ['farm', 'water', 'clinic'].to_json if new_record?
-    self.total_resources_spent_by_category = {}
-    self.ave_resources_spent_by_category = {}
-    self.game_total_resources_spent_by_category = {}
-    self.game_ave_resources_spent_by_category = {}
-    self.current_level_resources_spent_by_category = {}
+    self.capabilities ||= ['farm', 'water', 'clinic'].to_json
+    self.total_resources_spent_by_category ||= {}
+    self.ave_resources_spent_by_category ||= {}
+    self.game_total_resources_spent_by_category ||= {}
+    self.game_ave_resources_spent_by_category ||= {}
+    self.current_level_resources_spent_by_category ||= {}
   end
 
   def deserialise_objects
