@@ -34,7 +34,6 @@ GEM
     builder (2.1.2)
     childprocess (0.1.9)
       ffi (~> 1.0.6)
-    cocaine (0.1.0)
     daemons (1.1.4)
     devise (1.4.2)
       bcrypt-ruby (~> 2.1.2)
@@ -105,10 +104,6 @@ GEM
       oa-oauth (= 0.2.6)
       oa-openid (= 0.2.6)
     orm_adapter (0.0.5)
-    paperclip (2.3.12)
-      activerecord (>= 2.3.0)
-      activesupport (>= 2.3.2)
-      cocaine (>= 0.0.2)
     pg (0.11.0-x86-mingw32)
     polyglot (0.3.1)
     pyu-ruby-sasl (0.0.3.3)
@@ -174,7 +169,6 @@ DEPENDENCIES
   jasmine
   oa-openid
   omniauth
-  paperclip (~> 2.3)
   pg
-  rails (~> 3.0.1)
+  rails (= 3.0.5)
   thin
