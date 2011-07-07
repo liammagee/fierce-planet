@@ -850,6 +850,7 @@ PresetLevels.level11.teardown = function() {
     FiercePlanet.currentSettings.useInlineResourceSwatch = this._preState.agentsCanCommunicate;
     FiercePlanet.interval = this._preState.interval;
     FiercePlanet.currentProfile.capabilities = this._preState.capabilities;
+//    FiercePlanet.initialiseAndLoadResources();
 };
 
 /* Google Map links */
