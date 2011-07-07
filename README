@@ -1,4 +1,16 @@
-== Welcome to Rails
+== Welcome to FiercePlanet
+
+FiercePlanet is a game for learning about sustainability. It is modelled on
+common tower defence games, with the difference that the goal here is to save
+citizens rather than destroy enemies.
+
+FiercePlanet is built upon Ruby on Rails and uses JavaScript, HTML5 and CSS3
+extensively for scripting animation and user interaction. It also uses a
+simple Agent-based framework for modelling the individual decisions agents make
+as they wander through the environment. It therefore aims to be a very rudimentary
+"social simulation".
+
+
 
 Rails is a web-application framework that includes everything needed to create
 database-backed web applications according to the Model-View-Control pattern.
