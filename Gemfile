@@ -5,6 +5,8 @@ gem 'rails', '3.0.5'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
+gem "jasmine"
+
 #gem 'sqlite3'
 gem 'pg'
 gem 'thin'
@@ -20,7 +22,6 @@ gem 'oa-openid', :require => 'omniauth/openid'
 
 gem "paperclip", "~> 2.3"
 
-gem "jasmine"
 
 # Deploy with Capistrano
 # gem 'capistrano'
