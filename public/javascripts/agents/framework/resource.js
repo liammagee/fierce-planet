@@ -147,21 +147,28 @@ Resource.prototype.setX = function(x) { this._x = x; };
 Resource.prototype.getY = function() { return this._y; };
 Resource.prototype.setY = function(y) { this._y = y; };
 Resource.prototype.provideYield = function(agent, resourceEffect) {
-    if (this._totalYield > this._perAgentYield && agent.getHealth() < 100) {
+    if (this._totalYield > this._perAgentYield) {
         var adjustment = 0;
         if (FiercePlanet.currentSettings.applyGeneralHealth) {
-            adjustment = this._perAgentYield * this._upgradeLevel * resourceEffect;
-            agent.adjustHealth(adjustment);
-            if (!FiercePlanet.currentLevel._noSpeedChange)
-                agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));
-            this._totalYield -= this._perAgentYield;
+            // Don't be greedy - only yield a benefit if the agent needs it
+            if (agent.getHealth() < 100) {
+                adjustment = this._perAgentYield * this._upgradeLevel * resourceEffect;
+                agent.adjustHealth(adjustment);
+                if (!FiercePlanet.currentLevel._noSpeedChange)
+                    agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));
+                this._totalYield -= this._perAgentYield;
+            }
         }
         else {
-            adjustment = this._perAgentYield * this._upgradeLevel * 3 * resourceEffect;
-            agent.adjustHealthForResource(adjustment, this);
-            if (!FiercePlanet.currentLevel._noSpeedChange)
-                agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));
-            this._totalYield -= this._perAgentYield;
+            if (agent.getHealthForResource(this) < 100) {
+                adjustment = this._perAgentYield * this._upgradeLevel * 3 * resourceEffect;
+                agent.adjustHealthForResource(adjustment, this);
+                if (!FiercePlanet.currentLevel._noSpeedChange)
+                    agent.setSpeed(this._perAgentYield, 0.5);
+                // This lowers the impact of resources on agents' speed - but need delay for 'followers' to get resources of their own.
+//                    agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));
+                this._totalYield -= this._perAgentYield;
+            }
         }
     }
 };

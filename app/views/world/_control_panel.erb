@@ -23,7 +23,9 @@
     <a href="#" id="tutorial">Tutorial</a>
     <%= link_to "Gallery", gallery_levels_path, :id => 'level-gallery', :method => :get, :remote => true %>
   <a href="#" id="settings">Settings</a>
-    <%= link_to "Editor", levels_path, :id => 'editor', :method => :get, :remote => true %>
+    <% if current_user %>
+      <%= link_to "Editor", levels_path, :id => 'editor', :method => :get, :remote => true %>
+    <% end %>
     <div class="divide"></div>
       <div id="admin-controls" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
           <button id="debug">Debug</button>

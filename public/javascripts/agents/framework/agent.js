@@ -227,6 +227,16 @@ Agent.prototype.adjustHealthForResource = function(adjustment, resource) {
     this.recalibrateOverallHealth();
 };
 /**
+ * Retrieves health for a given resource category.
+ *
+ * @param resource
+ */
+Agent.prototype.getHealthForResource = function(resource) {
+    var categoryCode = resource.getCategory().getCode();
+    var categoryHealth = this._healthCategoryStats[categoryCode];
+    return categoryHealth;
+};
+/**
  * Generates a normalised health adjustment amount (not below zero, not above the INITIAL_HEALTH amount).
  * 
  * @param existingHealthValue

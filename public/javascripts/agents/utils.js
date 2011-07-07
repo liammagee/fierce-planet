@@ -86,6 +86,7 @@ FiercePlanet.getAndRetrieveProperties = function() {
     FiercePlanet.getAndRetrieveProperty('catastrophesVisible');
     FiercePlanet.getAndRetrieveProperty('soundsPlayable');
     FiercePlanet.getAndRetrieveProperty('useInlineResourceSwatch');
+    FiercePlanet.getAndRetrieveProperty('allowInlinePanning');
     FiercePlanet.getAndRetrieveProperty('disableKeyboardShortcuts');
     FiercePlanet.getAndRetrieveProperty('agentsCanCommunicate');
 
@@ -118,6 +119,7 @@ FiercePlanet.setAndStoreProperties = function() {
     FiercePlanet.setAndStoreProperty('catastrophesVisible');
     FiercePlanet.setAndStoreProperty('soundsPlayable');
     FiercePlanet.setAndStoreProperty('useInlineResourceSwatch');
+    FiercePlanet.setAndStoreProperty('allowInlinePanning');
     FiercePlanet.setAndStoreProperty('disableKeyboardShortcuts');
     FiercePlanet.setAndStoreProperty('agentsCanCommunicate');
 
@@ -140,13 +142,17 @@ FiercePlanet.setAndStoreProperties = function() {
     FiercePlanet.setAndStoreProperty('tilesRemovable');
     FiercePlanet.setAndStoreProperty('backgroundIconsVisible');
 
-    if (FiercePlanet.disableKeyboardShortcuts)
+    if (FiercePlanet.currentSettings.disableKeyboardShortcuts)
         $(document).unbind('keydown');
     else {
         $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
     }
 
-    if (FiercePlanet.resourcesUpgradeable)
+    // Update based on allowInlinePanning property
+    FiercePlanet.unbindGameMouseEvents();
+    FiercePlanet.bindGameMouseEvents();
+
+    if (FiercePlanet.currentSettings.resourcesUpgradeable)
         $('#upgrade-option').css('display', 'block');
     else
         $('#upgrade-option').css('display', 'none');

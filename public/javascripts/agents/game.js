@@ -19,6 +19,15 @@ var $fp = $fp || FiercePlanet;
 
 $(document).ready(function() {
     FiercePlanet.loadGame();
+
+    // Set up shortcut variable names for debugging convenience
+    $fp.p = $fp.p || FiercePlanet.currentProfile;
+    $fp.s = $fp.s || FiercePlanet.currentSettings;
+    $fp.l = $fp.l || FiercePlanet.currentLevel;
+    $fp.r = $fp.r || FiercePlanet.currentResource;
+    $fp.rid = $fp.rid || FiercePlanet.currentResourceId;
+    $fp.x = $fp.x || FiercePlanet.currentX;
+    $fp.y = $fp.y || FiercePlanet.currentY;
 });
 
 

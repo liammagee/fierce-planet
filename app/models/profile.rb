@@ -27,13 +27,38 @@ class Profile < ActiveRecord::Base
   end
 
   def deserialise_objects
-    self.capabilities = JSON.parse(self.capabilities) if self.capabilities and !self.capabilities.empty? and self.capabilities.is_a?(String)
-    self.total_resources_spent_by_category = JSON.parse(self.total_resources_spent_by_category) if self.total_resources_spent_by_category and !self.total_resources_spent_by_category.empty? and self.total_resources_spent_by_category != '""'
-    self.ave_resources_spent_by_category = JSON.parse(self.ave_resources_spent_by_category) if self.ave_resources_spent_by_category and !self.ave_resources_spent_by_category.empty? and self.ave_resources_spent_by_category != '""'
-    self.game_total_resources_spent_by_category = JSON.parse(self.game_total_resources_spent_by_category) if self.game_total_resources_spent_by_category and !self.game_total_resources_spent_by_category.empty? and self.game_total_resources_spent_by_category != '""'
-    self.game_ave_resources_spent_by_category = JSON.parse(self.game_ave_resources_spent_by_category) if self.game_ave_resources_spent_by_category and !self.game_ave_resources_spent_by_category.empty? and self.game_ave_resources_spent_by_category != '""'
-    self.current_level_resources_spent_by_category = JSON.parse(self.current_level_resources_spent_by_category) if self.current_level_resources_spent_by_category and !self.current_level_resources_spent_by_category.empty? and self.current_level_resources_spent_by_category != '""'
+    deserialise_as_array('capabilities')
+    deserialise_as_hash('total_resources_spent_by_category')
+    deserialise_as_hash('ave_resources_spent_by_category')
+    deserialise_as_hash('game_total_resources_spent_by_category')
+    deserialise_as_hash('game_ave_resources_spent_by_category')
+    deserialise_as_hash('current_level_resources_spent_by_category')
   end
+
+  def deserialise_as_array(property)
+    lp = self.send(property.to_sym)
+    val = []
+    if lp and lp.is_a?(String) and !lp.empty?
+      begin
+        val = JSON.parse(lp)
+      rescue
+      end
+    end
+    self.send((property+'=').to_sym, val)
+  end
+
+  def deserialise_as_hash(property)
+    lp = self.send(property.to_sym)
+    val = {}
+    if lp and lp.is_a?(String) and !lp.empty?
+      begin
+        val = JSON.parse(lp)
+      rescue
+      end
+    end
+    self.send((property+'=').to_sym, val)
+  end
+
 
   def serialise_objects
     self.capabilities = self.capabilities.to_json #if self.capabilities and self.capabilities.is_a?(Array)
@@ -43,4 +68,6 @@ class Profile < ActiveRecord::Base
     self.game_ave_resources_spent_by_category = self.game_ave_resources_spent_by_category.to_json
     self.current_level_resources_spent_by_category = self.current_level_resources_spent_by_category.to_json
   end
+
+
 end

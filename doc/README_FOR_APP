@@ -1,2 +1,11 @@
-Use this README file to introduce your application and point to useful places in the API for learning more.
-Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+== Welcome to FiercePlanet
+
+FiercePlanet is a game for learning about sustainability. It is modelled on
+common tower defence games, with the difference that the goal here is to save
+citizens rather than destroy enemies.
+
+FiercePlanet is built upon Ruby on Rails and uses JavaScript, HTML5 and CSS3
+extensively for scripting animation and user interaction. It also uses a
+simple agent-based framework for modelling the individual decisions agents make
+as they wander through the environment. It aims to provide a very rudimentary
+"social simulation".

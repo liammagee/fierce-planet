@@ -32,6 +32,7 @@ function Profile() {
     this.capabilities = FiercePlanet.NOVICE_CAPABILITIES;
     this.progress_towards_next_class = 0;
     this.status = '';
+    this.credits = 0;
 
     this.highest_level = 0;
     this.highest_score = 0;
