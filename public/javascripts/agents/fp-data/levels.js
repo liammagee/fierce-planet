@@ -158,7 +158,7 @@ PresetLevels.level3.setWorldHeight(13);
 PresetLevels.level3.setInitialAgentNumber(1);
 PresetLevels.level3.setWaveNumber(10);
 PresetLevels.level3.setExpiryLimit(10);
-PresetLevels.level3.setInitialResourceStore(130);
+PresetLevels.level3.setInitialResourceStore(150);
 PresetLevels.level3.setImage("http://www.publicdomainpictures.net/pictures/7000/nahled/2504-127160623953YH.jpg");
 PresetLevels.level3.setImageAttribution('<a href="http://www.publicdomainpictures.net/view-image.php?image=6310&picture=city-skyline">City Skyline</a> by Samantha DeWitt');
 PresetLevels.level3.setName("Level 3: Waves of Uncertainty");

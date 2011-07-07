@@ -84,14 +84,14 @@ FiercePlanet.processResourceCanvasClick = function(e) {
     if (FiercePlanet.tilesMutable) {
         if (currentTile == undefined) {
             FiercePlanet.currentLevel.addTile(new Tile(DEFAULT_TILE_COLOR, posX, posY));
-            FiercePlanet.drawGame();
+            FiercePlanet.drawCanvases();
         }
         else if (!foundResource && FiercePlanet.currentResourceId != null) {
             FiercePlanet.dropItem(e);
         }
         else {
             FiercePlanet.currentLevel.removeTile(posX, posY);
-            FiercePlanet.drawGame();
+            FiercePlanet.drawCanvases();
         }
     }
     else if (!foundResource) {
@@ -240,7 +240,7 @@ FiercePlanet.dropItem = function(e) {
         var resource = new Resource(kind, posX, posY);
 
         if (FiercePlanet.currentProfile.current_level_resources_in_store < resource.getCost()) {
-            FiercePlanet.currentNotice = new Notice('Not enough goodness for now - save some more agents!');
+            FiercePlanet.currentNotice = new Notice('Not enough resources for now - save some more agents!');
             return;
         }
         else {

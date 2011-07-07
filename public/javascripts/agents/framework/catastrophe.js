@@ -47,7 +47,7 @@ Catastrophe.prototype.strike = function() {
         FiercePlanet.currentLevel.setResources(newResources);
 //        FiercePlanet.clearCanvas('resourceCanvas');
 //        FiercePlanet.drawResources();
-        FiercePlanet.currentNotice = new Notice("RESOURCES WIPED OUT!");
+//        FiercePlanet.currentNotice = new Notice("RESOURCES WIPED OUT!");
         this._struck = true;
     }
 };
