@@ -124,6 +124,8 @@ FiercePlanet.completeWave = function() {
  * Called when a level is completed
  */
 FiercePlanet.completeLevel = function() {
+    if (FiercePlanet.currentLevel.teardown)
+        FiercePlanet.currentLevel.teardown();
     FiercePlanet.currentProfile.compileProfileStats(FiercePlanet.currentLevel);
     if (FiercePlanet.currentLevel.isPresetLevel())
         FiercePlanet.currentLevelNumber++;
@@ -136,6 +138,8 @@ FiercePlanet.completeLevel = function() {
  * Called when a game is completed
  */
 FiercePlanet.completeGame = function() {
+    if (FiercePlanet.currentLevel.teardown)
+        FiercePlanet.currentLevel.teardown();
     FiercePlanet.currentProfile.compileProfileStats(FiercePlanet.currentLevel);
     FiercePlanet._finaliseGame();
     FiercePlanet.showCompleteGameDialog();
@@ -256,7 +260,8 @@ FiercePlanet._initialiseGame = function () {
     FiercePlanet.scrollingImage.src = "/images/yellow-rain.png";
 
     // Set up level
-    FiercePlanet.currentLevel.setup();
+    if (FiercePlanet.currentLevel.setup)
+        FiercePlanet.currentLevel.setup();
 
     // Draw the game
     FiercePlanet.drawGame();

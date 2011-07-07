@@ -30,6 +30,7 @@ GEM
     activesupport (3.0.5)
     addressable (2.2.4)
     arel (2.0.10)
+    bcrypt-ruby (2.1.4)
     bcrypt-ruby (2.1.4-x86-mingw32)
     builder (2.1.2)
     childprocess (0.1.9)
@@ -42,11 +43,13 @@ GEM
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
+    eventmachine (1.0.0.beta.3)
     eventmachine (1.0.0.beta.3-x86-mingw32)
     faraday (0.6.1)
       addressable (~> 2.2.4)
       multipart-post (~> 1.1.0)
       rack (< 2, >= 1.1.0)
+    ffi (1.0.9)
     ffi (1.0.9-x86-mingw32)
     i18n (0.6.0)
     jasmine (1.0.2.1)
@@ -65,6 +68,7 @@ GEM
     multi_xml (0.2.2)
     multipart-post (1.1.2)
     net-ldap (0.2.2)
+    nokogiri (1.4.7)
     nokogiri (1.4.7-x86-mingw32)
     oa-basic (0.2.6)
       oa-core (= 0.2.6)
@@ -104,6 +108,7 @@ GEM
       oa-oauth (= 0.2.6)
       oa-openid (= 0.2.6)
     orm_adapter (0.0.5)
+    pg (0.11.0)
     pg (0.11.0-x86-mingw32)
     polyglot (0.3.1)
     pyu-ruby-sasl (0.0.3.3)
@@ -149,6 +154,10 @@ GEM
       ffi (>= 1.0.7)
       json_pure
       rubyzip
+    thin (1.2.11)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
     thin (1.2.11-x86-mingw32)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -161,6 +170,7 @@ GEM
       rack (>= 1.0)
 
 PLATFORMS
+  ruby
   x86-mingw32
 
 DEPENDENCIES

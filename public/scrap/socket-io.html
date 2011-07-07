@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <script src="/javascripts/jquery.min.js"></script>
+    <script src="http://localhost:3001/socket.io/socket.io.js"></script>
+<script>
+    $(document).ready(function() {
+        var socket = io.connect('http://localhost:3001');
+        socket.on('news', function (data) {
+          console.log(data);
+          console.log($('#message'));
+            $('#message').append(data.hello);
+          socket.emit('my other event', { my: 'data' });
+        });
+    });
+</script>
+
+</head>
+<body>
+<h3>Testing socket.io</h3>
+<div id="message">
+
+        Hello
+</div>
+</body>
+</html>
