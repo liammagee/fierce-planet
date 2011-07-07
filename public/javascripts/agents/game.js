@@ -122,7 +122,7 @@ FiercePlanet.processAgents = function() {
                     if (!FiercePlanet.currentLevel.getNoSpeedChange())
                         agent.adjustSpeed();
                     if (!FiercePlanet.currentLevel.getNoWander())
-                        agent.adjustWander();
+                        agent.adjustWander(FiercePlanet.cellWidth, FiercePlanet.pieceWidth);
                 }
 
                 if (agent.getMoves() > FiercePlanet.maxWaveMoves)
@@ -205,7 +205,7 @@ FiercePlanet.processNeighbouringResources = function(agent) {
         var ry = resource.getY();
         if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
             var resourceEffect = FiercePlanet.calculateResourceEffect(resource);
-            resource.provideYield(agent, resourceEffect);
+            resource.provideYield(agent, resourceEffect, FiercePlanet.currentSettings.applyGeneralHealth, !FiercePlanet.currentLevel._noSpeedChange);
             FiercePlanet.drawResource(resource);
         }
     }

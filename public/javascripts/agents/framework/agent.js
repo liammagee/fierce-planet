@@ -19,16 +19,18 @@ var MOVE_INCREMENTS = 5;
  * @param name
  * @param color
  */
-function AgentType(name, color) {
+function AgentType(name, color, healthCategories, speed, health, drawFunction) {
     this._name = name;
     this._color = color;
-    this._speed = MOVE_INCREMENTS;
-    this._health = INITIAL_HEALTH;
-    this._drawFunction = null;
+    this._healthCategories = healthCategories || [];
+    this._speed = speed || MOVE_INCREMENTS;
+    this._health = health || INITIAL_HEALTH;
+    this._drawFunction = drawFunction || function(){};
 }
 AgentType.prototype.getName = function() { return this._name;};
 AgentType.prototype.getColor = function() { return this._color;};
 AgentType.prototype.getHealth = function() { return this._health; };
+AgentType.prototype.getHealthCategories = function() { return this._healthCategories; };
 AgentType.prototype.getDrawFunction = function() { return this._drawFunction; };
 AgentType.prototype.setDrawFunction = function(drawFunction) { this._drawFunction = drawFunction; };
 
@@ -189,16 +191,20 @@ Agent.prototype.getDelay = function() { return this._delay; };
 Agent.prototype.setDelay = function(delay) { this._delay = delay; };
 Agent.prototype.getHealth = function() { return this._health; };
 Agent.prototype.setHealth = function(health) { this._health = health; };
+Agent.prototype.getHealthStatistics = function() { return this._healthCategoryStats; };
+Agent.prototype.setHealthStatistics = function(healthCategoryStats) { this._healthCategoryStats = healthCategoryStats; };
 Agent.prototype.getIsHit = function() { return this._isHit; };
 Agent.prototype.setIsHit = function(isHit) { this._isHit = isHit; };
 /**
  * Initialises health statistics for an agent, based all resource categories.
  */
 Agent.prototype.registerHealthStats = function() {
-    for (var i = 0; i < FiercePlanet.resourceCategories.length; i++) {
-        var category = FiercePlanet.resourceCategories[i];
+    for (var i = 0; i < this._agentType._healthCategories.length; i++) {
+        var category = this._agentType._healthCategories[i];
         this._healthCategoryStats[category.getCode()] = INITIAL_HEALTH;
     }
+    // Add length accessor here, to easily determine number of categories
+    this._healthCategoryStats.length = this._agentType._healthCategories.length;
 };
 /**
  * Adjusts all categories of health by the adjustment amount.
@@ -206,9 +212,9 @@ Agent.prototype.registerHealthStats = function() {
  * @param adjustment
  */
 Agent.prototype.adjustHealth = function(adjustment) {
-    var len = FiercePlanet.resourceCategories.length;
+    var len = this._agentType._healthCategories.length;
     for (var i = 0; i < len; i++) {
-        var category = FiercePlanet.resourceCategories[i];
+        var category = this._agentType._healthCategories[i];
         var categoryHealth = this._healthCategoryStats[category.getCode()];
         this._healthCategoryStats[category.getCode()] = this.makeHealthAdjustment(categoryHealth, adjustment);
     }
@@ -256,10 +262,10 @@ Agent.prototype.makeHealthAdjustment = function(existingHealthValue, adjustment)
  */
 Agent.prototype.recalibrateOverallHealth = function() {
     var overallHealth = 0;
-    var len = FiercePlanet.resourceCategories.length;
+    var len = this._agentType._healthCategories.length;
     var hasZeroHealth = false;
     for (var i = 0; i < len; i++) {
-        var category = FiercePlanet.resourceCategories[i];
+        var category = this._agentType._healthCategories[i];
         var categoryHealth = this._healthCategoryStats[category.getCode()];
         if (categoryHealth == 0)
             hasZeroHealth = true;
@@ -272,10 +278,10 @@ Agent.prototype.recalibrateOverallHealth = function() {
 };
 Agent.prototype.getWanderX = function() { return this._wanderX; };
 Agent.prototype.getWanderY = function() { return this._wanderY; };
-Agent.prototype.adjustWander = function() {
+Agent.prototype.adjustWander = function(cellWidth, pieceWidth) {
     var wx = this._wanderX;
     var wy = this._wanderY;
-    var limit = FiercePlanet.cellWidth / 2 - FiercePlanet.pieceWidth / 2;
+    var limit = cellWidth / 2 - pieceWidth / 2;
     var rx = Math.floor(Math.random() * 3 - 1);
     var ry = Math.floor(Math.random() * 3 - 1);
     wx = wx + rx;
@@ -826,14 +832,15 @@ Agent.prototype.randomDirectionOrder = function() {
  * @param y
  */
 Agent.prototype.hasNeighbouringResources = function(level, x, y) {
-    for (var j = 0; j < level.getResources().length; j++) {
-        var p = FiercePlanet.currentLevel.getResources()[j];
-        var px = p.getX();
-        var py = p.getY();
+    var resources = level.getResources();
+    for (var j = 0, len = resources.length; j < len.length; j++) {
+        var resource = resources[j];
+        var px = resource.getX();
+        var py = resource.getY();
         if (Math.abs(px - x) <= 1 && Math.abs(py - y) <= 1) {
-            // Add hook here for evaluating relative health of neighbouring resources
+            // TODO: Add hook here for evaluating relative health of neighbouring resources
 //            var h = p.getHealth();
-            return p;
+            return resource;
         }
     }
     return null;

@@ -57,5 +57,6 @@ CoS.doSetup = function() {
 
     FiercePlanet.registerResourceCategories([CoS.ECO_CATEGORY, CoS.ENV_CATEGORY, CoS.POL_CATEGORY, CoS.CUL_CATEGORY]);
     FiercePlanet.registerResourceTypes(CoS.ECONOMIC_RESOURCE_TYPES.concat(CoS.ECOLOGICAL_RESOURCE_TYPES.concat(CoS.POLITICAL_RESOURCE_TYPES.concat(CoS.CULTURAL_RESOURCE_TYPES))));
+    FiercePlanet.registerDefaultAgentTypes();
     FiercePlanet.currentProfile.capabilities = ["farm", "water", "clinic", "legal"];
 };

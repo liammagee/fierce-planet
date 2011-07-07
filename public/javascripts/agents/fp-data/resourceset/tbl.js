@@ -94,4 +94,5 @@ TBL.doSetup = function() {
 
     FiercePlanet.registerResourceCategories([TBL.ECO_CATEGORY, TBL.ENV_CATEGORY, TBL.SOC_CATEGORY]);
     FiercePlanet.registerResourceTypes(TBL.ECONOMIC_RESOURCE_TYPES.concat(TBL.ENVIRONMENTAL_RESOURCE_TYPES.concat(TBL.SOCIAL_RESOURCE_TYPES)));
+    FiercePlanet.registerDefaultAgentTypes();
 };

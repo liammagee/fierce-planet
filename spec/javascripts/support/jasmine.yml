@@ -15,6 +15,8 @@ src_files:
   - public/javascripts/jasmine-jquery-1.2.0.js
   - public/javascripts/Player.js
   - public/javascripts/Song.js
+  - public/javascripts/agents/framework/resource.js
+  - public/javascripts/agents/framework/agent.js
 
 # stylesheets
 #
