@@ -90,9 +90,11 @@ FiercePlanet.bindGameMouseEvents = function() {
 
     agentCanvas.click(FiercePlanet.handleNoticeEvents);
     agentCanvas.click(FiercePlanet.processResourceCanvasClick);
-    agentCanvas.mousedown(FiercePlanet.registerMouseDown);
-    agentCanvas.mousemove(FiercePlanet.registerMouseMove);
-    agentCanvas.mouseup(FiercePlanet.registerMouseUp);
+    if (FiercePlanet.currentSettings.allowInlinePanning) {
+        agentCanvas.mousedown(FiercePlanet.registerMouseDown);
+        agentCanvas.mousemove(FiercePlanet.registerMouseMove);
+        agentCanvas.mouseup(FiercePlanet.registerMouseUp);
+    }
     agentCanvas.mousewheel(function(event, delta) {
         FiercePlanet.zoom(delta);
         event.preventDefault();

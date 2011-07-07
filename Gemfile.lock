@@ -186,5 +186,5 @@ DEPENDENCIES
   omniauth
   paperclip (~> 2.3)
   pg
-  rails (~> 3.0.1)
+  rails (= 3.0.5)
   thin

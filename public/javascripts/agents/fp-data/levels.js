@@ -48,7 +48,6 @@ PresetLevels.level0.setup = function() {
     this.clearTiles(10, 5);
     this.clearTiles(9, 1);
     this.clearTiles(0, 5);
-    
 };
 
 
