@@ -6,13 +6,16 @@
     <script src="/javascripts/jquery.min.js"></script>
     <script src="http://localhost:3001/socket.io/socket.io.js"></script>
 <script>
+    function sendData() {
+        socket.emit('my other event', { hello: navigator.userAgent });
+    }
     $(document).ready(function() {
-        var socket = io.connect('http://localhost:3001');
+        socket = io.connect('http://localhost:3001');
         socket.on('news', function (data) {
-          console.log(data);
-          console.log($('#message'));
+          if (typeof console != "undefined")
+              console.log(data);
             $('#message').append(data.hello);
-          socket.emit('my other event', { my: 'data' });
+          setInterval('sendData()',5000);
         });
     });
 </script>
