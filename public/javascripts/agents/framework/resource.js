@@ -35,30 +35,6 @@ ResourceCategory.prototype.doEvaluateOtherCategoryImpact = function(otherCategor
 
 
 
-/**
- * ResourceType class definition
- * 
- * @constructor
- * @param category
- * @param name
- * @param code
- * @param image
- * @param cost
- * @param upgradeCost
- * @param totalYield
- * @param perAgentYield
- */
-function ResourceType(category, name, code, image, cost, upgradeCost, totalYield, perAgentYield) {
-    this._category = category;
-    this._name = name;
-    this._code = code;
-    this._image = image;
-    this._cost = cost;
-    this._upgradeCost = upgradeCost;
-    this._totalYield = totalYield;
-    this._perAgentYield = perAgentYield;
-    this._category.addType(this);
-}
 
 /**
  * ResourceType class definition
@@ -153,7 +129,7 @@ Resource.prototype.provideYield = function(agent, resourceEffect, applyGeneralHe
             // Don't be greedy - only yield a benefit if the agent needs it
             if (agent.getHealth() < 100) {
                 adjustment = this._perAgentYield * this._upgradeLevel * resourceEffect;
-                agent.adjustHealth(adjustment);
+                agent.adjustGeneralHealth(adjustment);
                 if (adjustSpeedToYield)
                     agent.setSpeed(this._perAgentYield);
                 // This lowers the impact of resources on agents' speed - but need delay for 'followers' to get resources of their own.

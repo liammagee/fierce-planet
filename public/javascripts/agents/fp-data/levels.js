@@ -158,7 +158,7 @@ PresetLevels.level3.setWorldHeight(13);
 PresetLevels.level3.setInitialAgentNumber(1);
 PresetLevels.level3.setWaveNumber(10);
 PresetLevels.level3.setExpiryLimit(10);
-PresetLevels.level3.setInitialResourceStore(150);
+PresetLevels.level3.setInitialResourceStore(100);
 PresetLevels.level3.setImage("http://www.publicdomainpictures.net/pictures/7000/nahled/2504-127160623953YH.jpg");
 PresetLevels.level3.setImageAttribution('<a target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=6310&picture=city-skyline">City Skyline</a> by Samantha DeWitt');
 PresetLevels.level3.setName("Level 3: Waves of Uncertainty");
@@ -171,7 +171,7 @@ PresetLevels.level3.setConclusion(
 );
 PresetLevels.level3.setTip(new Notice("The levels get progressively larger, requiring more planning as to where you allocate resources. Aim to place resources at regular intervals along the path."));
 PresetLevels.level3.setSoundSrc("http://db.tt/7KPJ8Xi");
-PresetLevels.level3.setCatastrophe(new Catastrophe(TBL.ENV_CATEGORY, 1000 + (Math.random() * 1000), 250, 0.5, new Notice("A tsumani will soon hit the city - some of its resources will be depleted.", undefined, undefined, 500, 250, undefined, undefined, TBL.ENV_CATEGORY.getColor(), "000000")));
+PresetLevels.level3.setCatastrophe(new Catastrophe(TBL.ENV_CATEGORY, 1000 + (Math.random() * 1000), 250, 0.4, new Notice("A tsumani will soon hit the city - some of its resources will be depleted.", undefined, undefined, 500, 250, undefined, undefined, TBL.ENV_CATEGORY.getColor(), "000000")));
 
 
 PresetLevels.level3.setup = function() {
@@ -814,6 +814,7 @@ PresetLevels.level11.setup = function() {
     FiercePlanet.currentSettings.useInlineResourceSwatch = false;
     FiercePlanet.interval = 10;
     FiercePlanet.currentProfile.capabilities = FiercePlanet.GENIUS_CAPABILITIES;
+    FiercePlanet.refreshSwatch();
     this.setNoSpeedChange(true);
 //    this.setNoWander(true);
 //    var resources = [];
@@ -850,7 +851,7 @@ PresetLevels.level11.teardown = function() {
     FiercePlanet.currentSettings.useInlineResourceSwatch = this._preState.agentsCanCommunicate;
     FiercePlanet.interval = this._preState.interval;
     FiercePlanet.currentProfile.capabilities = this._preState.capabilities;
-//    FiercePlanet.initialiseAndLoadResources();
+    FiercePlanet.refreshSwatch();
 };
 
 /* Google Map links */

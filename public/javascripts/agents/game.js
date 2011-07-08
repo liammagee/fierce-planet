@@ -131,7 +131,7 @@ FiercePlanet.processAgents = function() {
                 // TODO: should be in-lined?
                 if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE || agent.getType() == AgentTypes.RIVAL_AGENT_TYPE) {
                     if (!FiercePlanet.currentSettings.godMode)
-                        agent.adjustHealth(FiercePlanet.MOVE_HEALTH_COST);
+                        agent.adjustGeneralHealth(FiercePlanet.MOVE_HEALTH_COST);
                     if (agent.getHealth() <= 0) {
                         nullifiedAgents.push(i);
                         if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE)
@@ -231,7 +231,7 @@ FiercePlanet.processNeighbouringAgents = function(agent) {
         }
     }
     if (agent.getIsHit())
-        agent.adjustHealth(-10);
+        agent.adjustGeneralHealth(-10);
 };
 
 

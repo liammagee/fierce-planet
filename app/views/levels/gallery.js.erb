@@ -3,7 +3,8 @@
 FiercePlanet.pauseGame();
 
 // If we are editing a level, cancel the level editor
-FiercePlanet.cancelLevelEditor();
+if (FiercePlanet.inDesignMode)
+    FiercePlanet.cancelLevelEditor();
 
 // Notify
 $('#notifications').html("<p>Opening level gallery</p>");

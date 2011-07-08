@@ -88,6 +88,7 @@ FiercePlanet.hookUpUIEventListeners = function() {
 FiercePlanet.bindGameMouseEvents = function() {
     var agentCanvas = $('#agentCanvas');
 
+    console.log('binding mouse events');
     agentCanvas.click(FiercePlanet.handleNoticeEvents);
     agentCanvas.click(FiercePlanet.processResourceCanvasClick);
     if (FiercePlanet.currentSettings.allowInlinePanning) {
@@ -108,8 +109,9 @@ FiercePlanet.bindGameMouseEvents = function() {
 FiercePlanet.unbindGameMouseEvents = function() {
     var agentCanvas = $('#agentCanvas');
 
-    agentCanvas.unbind('click', FiercePlanet.handleNoticeEvents);
-    agentCanvas.unbind('click', FiercePlanet.processResourceCanvasClick);
+    agentCanvas.unbind('click');
+//    agentCanvas.unbind('click', FiercePlanet.handleNoticeEvents);
+//    agentCanvas.unbind('click', FiercePlanet.processResourceCanvasClick);
     agentCanvas.unbind('mousedown', FiercePlanet.registerMouseDown);
     agentCanvas.unbind('mousemove', FiercePlanet.registerMouseMove);
     agentCanvas.unbind('mouseup', FiercePlanet.registerMouseUp);
@@ -387,13 +389,23 @@ FiercePlanet.levelInfo = function() {
 
 
 /**
- * Refresh the swatch area with latest capabilities
+ * Refresh the swatch area with the current profile capabilities
  */
 FiercePlanet.refreshSwatch = function() {
+    // Make all capabilities inactive
+    for (var i = 0; i < FiercePlanet.GENIUS_CAPABILITIES.length; i++) {
+        var capability = $.trim(FiercePlanet.GENIUS_CAPABILITIES[i]);
+        try {
+            var el = $('#' + capability);
+            el.addClass("inactive");
+        }
+        catch (err) {
+        }
+    }
+    // Make the current profile's capabilities active
     for (var i = 0; i < FiercePlanet.currentProfile.capabilities.length; i++) {
         var capability = $.trim(FiercePlanet.currentProfile.capabilities[i]);
         try {
-//            $('#' + capability)[0].style.display = 'block';
             var el = $('#' + capability);
             el.removeClass("inactive");
             FiercePlanet.makeResourceActive(el[0]);

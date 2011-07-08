@@ -122,10 +122,21 @@ MemoryOfAgent.prototype.getOtherAgentID = function() { return this._otherAgentID
  * @param y
  */
 function Agent(agentType, x, y) {
-    // General properties
+    // Private field and methods
+
+    /**
+     * Generates a random ID.
+     */
+    var generateID = function() {
+        return Math.floor(Math.random() * Math.pow(10, 10));
+    };
+    
+
+
+    // Privileged fields and methods
+    this._id = generateID();
     this._agentType = agentType;
     this._color = agentType.getColor();
-    this._id = this.generateID();
 
     // Current age of the agent
     this._age = 0;
@@ -161,14 +172,49 @@ function Agent(agentType, x, y) {
     // Whether the agent is 'hit' by a conflicting agent
     this._isHit = false;
 
+
+    // TODO: Should be made private
+
+    /**
+     * Generates a normalised health adjustment amount (not below zero, not above the INITIAL_HEALTH amount).
+     *
+     * @param existingHealthValue
+     * @param adjustment
+     */
+    this.makeHealthAdjustment = function(existingHealthValue, adjustment) {
+        var newHealth = existingHealthValue + adjustment;
+        if (newHealth > 0 && newHealth < INITIAL_HEALTH)
+            return newHealth;
+        else if (newHealth > 0)
+            return INITIAL_HEALTH;
+        else
+            return 0;
+    };
+
+    /**
+     * Recalibrates overall health based on specific statistics.
+     */
+    this.recalibrateOverallHealth = function() {
+        var overallHealth = 0;
+        var len = this._agentType._healthCategories.length;
+        var hasZeroHealth = false;
+        for (var i = 0; i < len; i++) {
+            var category = this._agentType._healthCategories[i];
+            var categoryHealth = this._healthCategoryStats[category.getCode()];
+            if (categoryHealth == 0)
+                hasZeroHealth = true;
+            overallHealth += categoryHealth;
+        }
+        // Set health to zero if any of the specific types of health are zero
+        overallHealth = hasZeroHealth ? 0 : overallHealth / len;
+
+        this._health = overallHealth;
+    };
+
+    // PRIVILEGED METHODS
+    this.getID = function() { return this._id; };
 }
-/**
- * Generates a random ID.
- */
-Agent.prototype.generateID = function() {
-    return Math.floor(Math.random() * Math.pow(10, 10));
-};
-Agent.prototype.getID = function() { return this._id; };
+
 Agent.prototype.getAge = function() { return this._age; };
 Agent.prototype.setAge = function(age) { this._age = age; };
 Agent.prototype.getPosition = function() { return [this._x, this._y]; };
@@ -211,7 +257,7 @@ Agent.prototype.registerHealthStats = function() {
  *
  * @param adjustment
  */
-Agent.prototype.adjustHealth = function(adjustment) {
+Agent.prototype.adjustGeneralHealth = function(adjustment) {
     var len = this._agentType._healthCategories.length;
     for (var i = 0; i < len; i++) {
         var category = this._agentType._healthCategories[i];
@@ -242,40 +288,7 @@ Agent.prototype.getHealthForResource = function(resource) {
     var categoryHealth = this._healthCategoryStats[categoryCode];
     return categoryHealth;
 };
-/**
- * Generates a normalised health adjustment amount (not below zero, not above the INITIAL_HEALTH amount).
- * 
- * @param existingHealthValue
- * @param adjustment
- */
-Agent.prototype.makeHealthAdjustment = function(existingHealthValue, adjustment) {
-    var newHealth = existingHealthValue + adjustment;
-    if (newHealth > 0 && newHealth < INITIAL_HEALTH)
-        return newHealth;
-    else if (newHealth > 0)
-        return INITIAL_HEALTH;
-    else
-        return 0;
-};
-/**
- * Recalibrates overall health based on specific statistics.
- */
-Agent.prototype.recalibrateOverallHealth = function() {
-    var overallHealth = 0;
-    var len = this._agentType._healthCategories.length;
-    var hasZeroHealth = false;
-    for (var i = 0; i < len; i++) {
-        var category = this._agentType._healthCategories[i];
-        var categoryHealth = this._healthCategoryStats[category.getCode()];
-        if (categoryHealth == 0)
-            hasZeroHealth = true;
-        overallHealth += categoryHealth;
-    }
-    // Set health to zero if any of the specific types of health are zero
-    overallHealth = hasZeroHealth ? 0 : overallHealth / len;
 
-    this._health = overallHealth;
-};
 Agent.prototype.getWanderX = function() { return this._wanderX; };
 Agent.prototype.getWanderY = function() { return this._wanderY; };
 Agent.prototype.adjustWander = function(cellWidth, pieceWidth) {

@@ -150,6 +150,8 @@ FiercePlanet.completeGame = function() {
  * Called when the game is over
  */
 FiercePlanet.gameOver = function() {
+    if (FiercePlanet.currentLevel.teardown)
+        FiercePlanet.currentLevel.teardown();
     FiercePlanet.currentProfile.revertScore();
     FiercePlanet._finaliseGame();
     FiercePlanet.showGameOverDialog();
