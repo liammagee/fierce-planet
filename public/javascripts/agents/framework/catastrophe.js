@@ -36,7 +36,8 @@ Catastrophe.prototype.strike = function() {
         for (var i = 0, len = resources.length; i < len; i++) {
             var resource = resources[i];
             // Adjust number of resources attacked based on level of difficulty
-            if (Math.random() < Math.pow(this._effect, Math.pow(1, lod - 1)) ) {
+            var threshold = Math.pow(this._effect, Math.pow(1, lod - 1));
+            if (Math.random() < threshold ) {
                 newResources.push(resource);
             }
             else {

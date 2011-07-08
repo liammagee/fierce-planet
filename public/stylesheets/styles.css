@@ -4,23 +4,29 @@ html {
 
 body {
 	zoom: 100%;
-    background: url(../layout/backgound.jpg);
-    background-repeat: no-repeat;
 	color: #fff;
 	font-family:Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	padding:0; margin:0;
+    background-repeat: no-repeat;
 }
 .hide {
 	display:none;
+}
+#wrapper {
+    background: url(../layout/backgound.jpg);
+    background-repeat: no-repeat;
+    background-position: right;
+    width: 1200px;
 }
 #content-pane {
 	position:relative;
 	margin:0;
     padding:0;
-	width:785px;
+	width:665px;
 	height:810px;
 	left:400px;
+    text-align: left;
 }
 #main-panel {
 }
@@ -179,6 +185,25 @@ body {
 	line-height:24px;
 	text-align:center;
 }
+#swatch {
+	position:absolute;
+	left:510px;
+	top: 292px;
+    width:173px;
+	font-size:10px;
+}
+#level-editor {
+	margin-top: 20px;
+	clear: both;
+	position:absolute;
+	left:0px;
+	top: 520px;
+    background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#203275), to(#1F62C1));
+    background: -moz-linear-gradient(0% 100% 0deg, #203275,#1F62C1);
+    border-radius:4px;
+    padding:4px;
+}
+
 #playAgents, #slowDown, #speedUp, #newGame, #restartLevel, #panUp, #panLeft, #panReset, #panRight, #panDown, #zoomOut, #zoomReset, #zoomIn{
 	cursor:pointer;
 }
@@ -285,23 +310,6 @@ background-position: -101px -101px;
 	margin-bottom:10px;
 }
 
-#swatch {
-	position:absolute;
-	left:510px;
-	top: 292px;
-	font-size:10px;
-}
-#level-editor {
-	margin-top: 20px;
-	clear: both;
-	position:absolute;
-	left:0px;
-	top: 520px;
-    background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#203275), to(#1F62C1));
-    background: -moz-linear-gradient(0% 100% 0deg, #203275,#1F62C1);
-    border-radius:4px;
-    padding:4px;
-}
 #swatch > div, #inline-swatch > div, #gallery-items > div, #level-editor > div {
 	float: left;
 	position: relative;

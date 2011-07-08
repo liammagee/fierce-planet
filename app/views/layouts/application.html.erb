@@ -100,23 +100,38 @@
               FiercePlanet.refreshSwatch();
           });
 
-        // TODO: Test code for mobile version
-        var ua = navigator.userAgent.toLowerCase();
-        var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-        if(isAndroid) {
-          // Do something!
-          FiercePlanet.currentSettings.agentsCanCommunicate = false;
-          FiercePlanet.currentSettings.scrollingImageVisible = false;
-        }
       </script>
   <% end %>
 
   <%= csrf_meta_tag %>
 
+<script>
+  // Test resizing for different devices
+$(document).ready(function() {
+// TODO: Test code for mobile version
+var ua = navigator.userAgent.toLowerCase();
+var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+if(isAndroid) {
+  // Do something!
+  FiercePlanet.currentSettings.agentsCanCommunicate = false;
+  FiercePlanet.currentSettings.scrollingImageVisible = false;
+}
+
+// TODO: Test code for iframe (i.e. Facebook app version)
+    if (top != self) {
+        $('#wrapper').offset({left:-315});
+    }
+});
+</script>
 </head>
 <body>
-<div id="content-pane">
-  <%= yield %>
+<div id="wrapper">
+  <div id="content-pane">
+    <%= yield %>
+  </div>
 </div>
+
 </body>
 </html>
+
+<script>
