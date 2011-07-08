@@ -325,10 +325,10 @@ FiercePlanet.calculateSurroundingResourcesEffects = function (resource) {
             var nx = neighbour.getX();
             var ny = neighbour.getY();
             var neighbourCategory = neighbour.getCategory();
-//            if ((x != nx || ny != y) && Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
+            if ((x != nx || ny != y) && Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
                 // TODO: make this part of the ResourceCategory calculation
                 baseEffect *= resourceCategory.doEvaluateOtherCategoryImpact(neighbourCategory);
-//            }
+            }
         }
         return baseEffect;
     };
