@@ -102,6 +102,7 @@ function Resource(kind, x, y) {
 // Kind properties
 Resource.prototype.getName = function() { return this._resourceName; };
 Resource.prototype.getCategory = function() { return this._resourceCategory;};
+Resource.prototype.getType = function() { return this._kind;};
 Resource.prototype.getColor = function() { return this._color;};
 Resource.prototype.getCost = function() { return this._cost; };
 Resource.prototype.setCost = function(cost) { this._cost = cost; };

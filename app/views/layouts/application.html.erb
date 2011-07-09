@@ -81,7 +81,7 @@
 
   <!-- Set the resource type namespace here -->
   <% if params[:rs] %>
-    <%= javascript_tag "FiercePlanet.resourceTypeNamespace = " + params[:rs] + ";" -%>
+    <%= javascript_tag "World.resourceTypes = " + params[:rs] + ";" -%>
   <% end %>
 
   <!-- If test parameter is passed, showed the QUnit test runner -->

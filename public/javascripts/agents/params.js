@@ -93,9 +93,9 @@ FiercePlanet.isMouseMoving = false;
 
 
 // Resource variables
-FiercePlanet.resourceTypeNamespace = TBL;
-FiercePlanet.resourceCategories = [];
-FiercePlanet.resourceTypes = [];
+//FiercePlanet.resourceTypeNamespace = TBL;
+//FiercePlanet.resourceCategories = [];
+//FiercePlanet.resourceTypes = [];
 
 
 // Timer variables

@@ -657,9 +657,9 @@ FiercePlanet.drawAgents = function() {
         var direction = FiercePlanet.getAgentDirection(agent);
 
 
-        var blueH = agent._healthCategoryStats[FiercePlanet.resourceCategories[0].getCode()];
-        var greenH = agent._healthCategoryStats[FiercePlanet.resourceCategories[1].getCode()];
-        var redH = agent._healthCategoryStats[FiercePlanet.resourceCategories[2].getCode()];
+        var blueH = agent._healthCategoryStats[World.resourceCategories[0].getCode()];
+        var greenH = agent._healthCategoryStats[World.resourceCategories[1].getCode()];
+        var redH = agent._healthCategoryStats[World.resourceCategories[2].getCode()];
         var c = agent._color.toString();
         var newColor = FiercePlanet.diluteColour(redH, greenH, blueH, c);
         if (agent._isHit)

@@ -98,8 +98,8 @@ Profile.prototype.resetCurrentStats = function(initialStore) {
     this.current_level_resources_in_store = FiercePlanet.currentLevel.getInitialResourceStore() || FiercePlanet.STARTING_STORE;
     this.current_level_resources_spent = 0;
     this.current_level_resources_spent_by_category = {};
-    for (var i = 0; i < FiercePlanet.resourceCategories.length; i++) {
-        var category = FiercePlanet.resourceCategories[i];
+    for (var i = 0; i < World.resourceCategories.length; i++) {
+        var category = World.resourceCategories[i];
         this.current_level_resources_spent_by_category[category.getCode()] = 0;
     }
 };

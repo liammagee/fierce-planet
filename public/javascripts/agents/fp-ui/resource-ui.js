@@ -288,11 +288,11 @@ FiercePlanet.isPositionOccupiedByResource = function (x, y) {
  * Draw swatches
  */
 FiercePlanet.initialiseAndLoadResources = function () {
-    if (FiercePlanet.resourceTypeNamespace.doSetup)
-        FiercePlanet.resourceTypeNamespace.doSetup();
+    if (World.resourceTypes.doSetup)
+        World.resourceTypes.doSetup();
 
-    for (var i = 0; i < FiercePlanet.resourceCategories.length; i++) {
-        var category = FiercePlanet.resourceCategories[i];
+    for (var i = 0; i < World.resourceCategories.length; i++) {
+        var category = World.resourceCategories[i];
 
         // Add to swatch
         var swatchCategoryHTML = '<div class="swatch-category" id="' + category.getCode() + '"></div>';
@@ -428,8 +428,8 @@ FiercePlanet.resetResourceYields = function () {
  * Generic resource kind functions
  */
 FiercePlanet.resolveResourceKind = function (code) {
-    for (var i = 0; i < FiercePlanet.resourceTypes.length; i++) {
-        var resourceKind = FiercePlanet.resourceTypes[i];
+    for (var i = 0; i < World.resourceTypes.length; i++) {
+        var resourceKind = World.resourceTypes[i];
         if (resourceKind._code == code)
             return resourceKind;
     }
@@ -440,12 +440,12 @@ FiercePlanet.resolveResourceKind = function (code) {
  * Registers resource categories
  */
 FiercePlanet.registerResourceCategories = function (resourceCategories) {
-    FiercePlanet.resourceCategories = resourceCategories;
+    World.resourceCategories = resourceCategories;
 };
 
 /**
  * Registers resource categories
  */
 FiercePlanet.registerResourceTypes = function (resourceTypes) {
-    FiercePlanet.resourceTypes = resourceTypes;
+    World.resourceTypes = resourceTypes;
 };

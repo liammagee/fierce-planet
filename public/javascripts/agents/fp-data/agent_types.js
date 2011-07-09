@@ -16,7 +16,7 @@ var AgentTypes = function() {};
  * Register the default agent types
  */
 FiercePlanet.registerDefaultAgentTypes = function() {
-    AgentTypes.CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000", FiercePlanet.resourceCategories);
+    AgentTypes.CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000", World.resourceCategories);
     AgentTypes.CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, pieceHeight, newColor, counter, direction) {
         if (pieceWidth < 8 || pieceHeight < 8) {
             var radius = (pieceWidth / 4);
@@ -95,7 +95,7 @@ FiercePlanet.registerDefaultAgentTypes = function() {
 
     });
 
-    AgentTypes.PREDATOR_AGENT_TYPE = new AgentType("Predator", "fbe53b", FiercePlanet.resourceCategories);
+    AgentTypes.PREDATOR_AGENT_TYPE = new AgentType("Predator", "fbe53b", World.resourceCategories);
     AgentTypes.PREDATOR_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
         var radius = (pieceWidth / 4);
         var bodyLength = (pieceWidth / 2);
@@ -118,7 +118,7 @@ FiercePlanet.registerDefaultAgentTypes = function() {
         ctx.drawImage(img, intX - pieceWidth / 2, intY - pieceWidth / 2, pieceWidth, pieceWidth);
     });
 
-    AgentTypes.RIVAL_AGENT_TYPE = new AgentType("Rival", "3be5fb", FiercePlanet.resourceCategories);
+    AgentTypes.RIVAL_AGENT_TYPE = new AgentType("Rival", "3be5fb", World.resourceCategories);
     AgentTypes.RIVAL_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
         var radius = (pieceWidth / 4);
         var bodyLength = (pieceWidth / 2);

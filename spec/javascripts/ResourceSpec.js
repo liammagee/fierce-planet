@@ -1,14 +1,6 @@
 
 // Top level anonymous function for defining some general resource categories and types
 (function(){
-//    var ecoResourceCategory;
-//    var envResourceCategory;
-//    var socResourceCategory;
-//    var ecoResourceType;
-//    var envResourceType;
-//    var socResourceType;
-//    var resourceCategories;
-//    var resourceTypes;
 
       // Create categories
       ecoResourceCategory = new ResourceCategory("Economic", "eco", "44ABE0");
@@ -46,7 +38,10 @@ describe("resource-related classes", function() {
 
     describe("a resource", function() {
         it("should have a category", function() {
-          expect(ecoResourceType.getCategory()).toEqual(ecoResourceCategory);
+          expect(resource.getCategory()).toEqual(ecoResourceCategory);
+        });
+        it("should have a type", function() {
+          expect(resource.getType()).toEqual(ecoResourceType);
         });
 
     });
