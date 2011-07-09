@@ -11,16 +11,18 @@
  * World Singleton class definition
  */
 var World = (function() {
-    var world = {};
-    var resourceCategories = [];
-    var resourceTypes = [];
+    var world = (function() {
+        var resourceCategories = [];
+        var resourceTypes = [];
 
-    world.registerResourceCategories = function(rcs) {
-        resourceCategories = rcs;
-    };
-    world.registerResourceTypes = function(rts) {
-        resourceTypes = rts;
-    };
+        this.registerResourceCategories = function(rcs) {
+            resourceCategories = rcs;
+        };
+        this.registerResourceTypes = function(rts) {
+            resourceTypes = rts;
+        };
+
+    })();
 
     return world;
 })();

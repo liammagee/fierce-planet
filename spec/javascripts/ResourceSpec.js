@@ -1,15 +1,15 @@
-describe("resource-related classes", function() {
-  var ecoResourceCategory;
-  var envResourceCategory;
-  var socResourceCategory;
-  var ecoResourceType;
-  var envResourceType;
-  var socResourceType;
-  var resourceCategories;
-  var resourceTypes;
-  var resource;
 
-  beforeEach(function() {
+// Top level anonymous function for defining some general resource categories and types
+(function(){
+//    var ecoResourceCategory;
+//    var envResourceCategory;
+//    var socResourceCategory;
+//    var ecoResourceType;
+//    var envResourceType;
+//    var socResourceType;
+//    var resourceCategories;
+//    var resourceTypes;
+
       // Create categories
       ecoResourceCategory = new ResourceCategory("Economic", "eco", "44ABE0");
       envResourceCategory = new ResourceCategory("Environmental", "env", "CBDB2A");
@@ -24,10 +24,16 @@ describe("resource-related classes", function() {
       ecoResourceType.setCategory(ecoResourceCategory);
       envResourceType.setCategory(envResourceCategory);
       socResourceType.setCategory(socResourceCategory);
-      
+
       resourceCategories = [ecoResourceCategory, envResourceCategory, socResourceCategory];
       resourceTypes = [ecoResourceType, envResourceType, socResourceType];
 
+})();
+
+describe("resource-related classes", function() {
+  var resource;
+
+  beforeEach(function() {
       resource = new Resource(ecoResourceType, 0, 0);
   });
 
