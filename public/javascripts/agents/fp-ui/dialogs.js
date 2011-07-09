@@ -198,7 +198,10 @@ FiercePlanet.setupDialogs = function() {
                 "Cancel": function() {
                     $( this ).dialog( "close" );
                 }
-            }
+            },
+              open: function(){
+                $("#settings-tabs").tabs();
+              }
         });
 
     $('#tutorial').click(function(e) {

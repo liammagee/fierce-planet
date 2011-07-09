@@ -39,6 +39,7 @@
   <% if Rails.env.production? %>
       <%= javascript_include_tag "agents/fierce-planet.min" %>
   <% else %>
+      <%= javascript_include_tag "agents/framework/world" %>
       <%= javascript_include_tag "agents/framework/agent" %>
       <%= javascript_include_tag "agents/framework/catastrophe" %>
       <%= javascript_include_tag "agents/framework/level" %>
@@ -134,4 +135,3 @@ if(isAndroid) {
 </body>
 </html>
 
-<script>

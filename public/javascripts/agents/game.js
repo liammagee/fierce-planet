@@ -21,6 +21,7 @@ $(document).ready(function() {
     FiercePlanet.loadGame();
 
     // Set up shortcut variable names for debugging convenience
+    $fp.w = $fp.w || FiercePlanet.currentWorld;
     $fp.p = $fp.p || FiercePlanet.currentProfile;
     $fp.s = $fp.s || FiercePlanet.currentSettings;
     $fp.l = $fp.l || FiercePlanet.currentLevel;
@@ -87,9 +88,9 @@ FiercePlanet.processAgents = function() {
         var agent = agents[i];
 
         // Don't process agents we want to block
-        if (! FiercePlanet.rivalsVisible && agent.getType() == AgentTypes.RIVAL_AGENT_TYPE)
+        if (! FiercePlanet.currentSettings.rivalsVisible && agent.getType() == AgentTypes.RIVAL_AGENT_TYPE)
             continue;
-        if (! FiercePlanet.predatorsVisible && agent.getType() == AgentTypes.PREDATOR_AGENT_TYPE)
+        if (! FiercePlanet.currentSettings.predatorsVisible && agent.getType() == AgentTypes.PREDATOR_AGENT_TYPE)
             continue;
 
         var speed = agent.getSpeed();
@@ -225,7 +226,7 @@ FiercePlanet.processNeighbouringAgents = function(agent) {
         var ax = a.getX();
         var ay = a.getY();
         if (Math.abs(ax - x) <= 1 && Math.abs(ay - y) <= 1) {
-            if (!FiercePlanet.currentSettings.godMode && FiercePlanet.predatorsVisible && agent.getType() == CITIZEN_AGENT_TYPE && a.getType() == PREDATOR_AGENT_TYPE) {
+            if (!FiercePlanet.currentSettings.godMode && FiercePlanet.currentSettings.predatorsVisible && agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE && a.getType() == AgentTypes.PREDATOR_AGENT_TYPE) {
                 agent.setIsHit(true);
             }
         }

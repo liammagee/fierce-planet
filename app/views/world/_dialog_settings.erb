@@ -1,90 +1,116 @@
 <div id="settings-dialog" style="display: none;">
 
-  <div>
-    <input id="noticesVisibleInput" name="noticesVisibleInput" type="checkbox" checked="checked"/> Show notices
-  </div>
-  <div>
-    <input id="scrollingImageVisibleInput" name="scrollingImageVisibleInput" type="checkbox" checked="checked"/>
-    Show scrolling image
-  </div>
-  <div>
-    <input id="catastrophesVisibleInput" name="catastrophesVisibleInput" type="checkbox" checked="checked"/>
-    Show catastrophes
-  </div>
-  <div>
-    <input id="agentsCanCommunicateInput" name="agentsCanCommunicateInput" type="checkbox" checked="checked"/>
-    Allow agents to communicate
-  </div>
-  <div>
-    <input id="disableKeyboardShortcutsInput" name="disableKeyboardShortcutsInput" type="checkbox"/> Disable keyboard shortcuts
-  </div>
-  <div>
-    <input id="soundsPlayableInput" name="soundsPlayableInput" type="checkbox"/> Play sounds
+  <div id="settings-tabs">
+
+  	<ul>
+        <li><a href="#game-settings">Game play</a></li>
+		<li><a href="#user-interface">User interface</a></li>
+		<li><a href="#experimental" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">Experimental</a></li>
+		<li><a href="#testing">Testing</a></li>
+	</ul>
+
+
+
+  <div id="game-settings">
+    <div>
+      <input id="agentsCanCommunicateInput" name="agentsCanCommunicateInput" type="checkbox" checked="checked"/>
+      Allow agents to share their memories
+    </div>
+    <div>
+      <input id="resourcesInTensionInput" name="resourcesInTensionInput" type="checkbox"/>
+      Resources affect neighbouring resources
+    </div>
+    <div>
+      <input id="resourcesAffectAllOtherResourcesInput" name="resourcesAffectAllOtherResourcesInput" type="checkbox"/>
+      Resources affect all other resources [NOT YET FUNCTIONAL]
+    </div>
+    <div>
+      <input id="ignoreResourceBalanceInput" name="ignoreResourceBalanceInput" type="checkbox"/>
+      Ignore mix of resource categories
+    </div>
+    <div>
+      <input id="applyGeneralHealthInput" name="applyGeneralHealthInput" type="checkbox"/>
+      Ignore resource categories altogether
+    </div>
+    <div>
+      <input id="resourceBonusInput" name="resourceBonusInput" type="checkbox"/>
+      Resource mix bonus [NOT YET FUNCTIONAL]
+    </div>
+    <div>
+      <input id="resourcesUpgradeableInput" name="resourcesUpgradeableInput" type="checkbox"/>
+      Resources can be upgraded [NOT YET FUNCTIONAL]
+    </div>
   </div>
 
 
-  <hr/>
-  <h4>Advanced options</h4>
-  <div>
-    <input id="useInlineResourceSwatchInput" name="useInlineResourceSwatchInput" type="checkbox" />
-    Show inline resource pop-up
-  </div>
-  <div>
-    <input id="allowInlinePanningInput" name="allowInlinePanningInput" type="checkbox" />
-    Allow inline panning
-  </div>
-  <div>
-    <input id="recordingInput" name="recordingInput" type="checkbox"/> Record game
-  </div>
-  <div>
-    <input id="agentTracingInput" name="agentTracingInput" type="checkbox"/> Show agent movement
-  </div>
-  <div>
-    <input id="invisiblePathInput" name="invisiblePathInput" type="checkbox"/> Make path invisible
-  </div>
 
-  <!-- Resource settings -->
-  <div>
-    <input id="resourcesUpgradeableInput" name="resourcesUpgradeableInput" type="checkbox"/> Resources can be upgraded
-  </div>
-  <div>
-    <input id="resourcesInTensionInput" name="resourcesInTensionInput" type="checkbox"/> Resource zoning effects
-  </div>
-  <div>
-    <input id="ignoreResourceBalanceInput" name="ignoreResourceBalanceInput" type="checkbox"/> Ignore balance of resources
-  </div>
-  <div>
-    <input id="resourceBonusInput" name="resourceBonusInput" type="checkbox"/> Resource bonus
-  </div>
-  <div>
-    <input id="applyGeneralHealthInput" name="applyGeneralHealthInput" type="checkbox"/> Apply general health
+  <div id="user-interface">
+    <div>
+      <input id="noticesVisibleInput" name="noticesVisibleInput" type="checkbox" checked="checked"/> Show notices
+    </div>
+    <div>
+      <input id="scrollingImageVisibleInput" name="scrollingImageVisibleInput" type="checkbox" checked="checked"/>
+      Show scrolling image
+    </div>
+    <div>
+      <input id="catastrophesVisibleInput" name="catastrophesVisibleInput" type="checkbox" checked="checked"/>
+      Show catastrophes
+    </div>
+    <div>
+      <input id="disableKeyboardShortcutsInput" name="disableKeyboardShortcutsInput" type="checkbox"/> Disable keyboard shortcuts
+    </div>
+    <div>
+      <input id="soundsPlayableInput" name="soundsPlayableInput" type="checkbox"/> Play sounds
+    </div>
+    <div>
+      <input id="useInlineResourceSwatchInput" name="useInlineResourceSwatchInput" type="checkbox" />
+      Show inline resource pop-up
+    </div>
+    <div>
+      <input id="allowInlinePanningInput" name="allowInlinePanningInput" type="checkbox" />
+      Allow inline panning
+    </div>
+    <div>
+      <input id="agentTracingInput" name="agentTracingInput" type="checkbox"/> Show agent movement
+    </div>
+    <div>
+      <input id="invisiblePathInput" name="invisiblePathInput" type="checkbox"/> Make path invisible
+    </div>
   </div>
 
 
-  <div>
-    <input id="godModeInput" name="godModeInput" type="checkbox"/> Play in 'god' mode
+
+
+  <div id="experimental" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
+        <h4>Experimental options</h4>
+        <div>
+          <input id="rivalsVisibleInput" name="rivalsVisibleInput" type="checkbox"/> Show rivals
+        </div>
+        <div>
+          <input id="predatorsVisibleInput" name="predatorsVisibleInput" type="checkbox"/> Show predators
+        </div>
+        <div>
+          <input id="tilesMutableInput" name="tilesMutableInput" type="checkbox"/> Allow tiles to be added
+        </div>
+        <div>
+          <input id="tilesRemovableInput" name="tilesRemovableInput" type="checkbox"/> Allow tiles to be removed
+        </div>
+        <div>
+          <input id="backgroundIconsVisibleInput" name="backgroundIconsVisibleInput" type="checkbox"/> Show background icons
+        </div>
   </div>
 
-  <div id="experimental-settings" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
-      <hr/>
-      <h4>Experimental options</h4>
-      <div>
-        <input id="rivalsVisibleInput" name="rivalsVisibleInput" type="checkbox"/> Show rivals
-      </div>
-      <div>
-        <input id="predatorsVisibleInput" name="predatorsVisibleInput" type="checkbox"/> Show predators
-      </div>
-      <div>
-        <input id="tilesMutableInput" name="tilesMutableInput" type="checkbox"/> Allow tiles to be added
-      </div>
-      <div>
-        <input id="tilesRemovableInput" name="tilesRemovableInput" type="checkbox"/> Allow tiles to be removed
-      </div>
-      <div>
-        <input id="backgroundIconsVisibleInput" name="backgroundIconsVisibleInput" type="checkbox"/> Show background icons
-      </div>
+  <div id="testing">
+    <div>
+      <input id="recordingInput" name="recordingInput" type="checkbox"/> Record game
+    </div>
+    <div>
+      <input id="godModeInput" name="godModeInput" type="checkbox"/> Play in 'god' mode
+    </div>
+  </div>
 
 
   </div>
+
 
 </div>

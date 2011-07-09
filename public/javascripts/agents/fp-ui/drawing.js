@@ -643,9 +643,9 @@ FiercePlanet.drawAgents = function() {
         var agent = agents[i];
 
         // Don't process agents we want to block
-        if (! FiercePlanet.rivalsVisible && agent._agentType._name == AgentTypes.RIVAL_AGENT_TYPE._name)
+        if (! FiercePlanet.currentSettings.rivalsVisible && agent._agentType._name == AgentTypes.RIVAL_AGENT_TYPE._name)
             continue;
-        if (! FiercePlanet.predatorsVisible && agent._agentType._name == AgentTypes.PREDATOR_AGENT_TYPE._name)
+        if (! FiercePlanet.currentSettings.predatorsVisible && agent._agentType._name == AgentTypes.PREDATOR_AGENT_TYPE._name)
             continue;
 
         // Get co-ordinates

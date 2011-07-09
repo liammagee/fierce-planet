@@ -70,26 +70,25 @@ FiercePlanet.WAVE_NOTICE_HEIGHT = 150;
 
 // VARIABLES
 
-// Profile variables
+// Current state variables
+//FiercePlanet.currentWorld = new World();
 FiercePlanet.currentProfile = new Profile();
+FiercePlanet.currentSettings = new Settings();
+FiercePlanet.currentLevelNumber = 1;
+FiercePlanet.currentWave = 1;
+FiercePlanet.currentLevelPreset = true;
+FiercePlanet.currentLevel = null;
+FiercePlanet.existingCurrentLevel = null;
+FiercePlanet.currentResourceId = null;
+FiercePlanet.currentResource = null;
+FiercePlanet.currentNotice = null;
 
 
-// Toggleable variables
+// Boolean state variables
 FiercePlanet.inDesignMode = false;
 FiercePlanet.inPlay = false;
 FiercePlanet.isMouseDown = false;
 FiercePlanet.isMouseMoving = false;
-
-// Setting variables
-FiercePlanet.currentSettings = new Settings();
-
-
-// Dev options
-FiercePlanet.predatorsVisible = false;
-FiercePlanet.rivalsVisible = false;
-FiercePlanet.tilesMutable = false;
-FiercePlanet.tilesRemovable = false;
-FiercePlanet.backgroundIconsVisible = false;
 
 
 
@@ -103,16 +102,6 @@ FiercePlanet.resourceTypes = [];
 FiercePlanet.agentTimerId = 0;
 FiercePlanet.eventTarget = new EventTarget();
 FiercePlanet.recordedLevels = [];
-
-// Current state
-FiercePlanet.currentLevelNumber = 1;
-FiercePlanet.currentWave = 1;
-FiercePlanet.currentLevelPreset = true;
-FiercePlanet.currentLevel = null;
-FiercePlanet.existingCurrentLevel = null;
-FiercePlanet.currentResourceId = null;
-FiercePlanet.currentResource = null;
-FiercePlanet.currentNotice = null;
 
 
 // Game play variables
@@ -128,8 +117,6 @@ FiercePlanet.levelDelayCounter = 0;
 FiercePlanet.waveDelayCounter = 0;
 
 FiercePlanet.numAgents = 1;
-
-
 FiercePlanet.waveCounter = 0;
 FiercePlanet.levelCounter = 0;
 FiercePlanet.gameCounter = 0;
@@ -137,10 +124,7 @@ FiercePlanet.globalRecordingCounter = 0;
 
 
 
-
-
 // Dimension variables
-
 FiercePlanet.worldWidth = 14;
 FiercePlanet.worldHeight = 11;
 FiercePlanet.cellWidth = FiercePlanet.WORLD_WIDTH / FiercePlanet.worldWidth;
@@ -170,6 +154,8 @@ FiercePlanet.currentX = null;
 FiercePlanet.currentY = null;
 
 
+// Dialogs
+// TODO: Create separate namespace
 // Main game dialogs
 FiercePlanet.$gameOver = null;
 FiercePlanet.$completeLevel = null;
@@ -181,8 +167,6 @@ FiercePlanet.$newLevel = null;
 FiercePlanet.$settingsDialog = null;
 FiercePlanet.$genericDialog = null;
 FiercePlanet.$highScores = null;
-
-
 
 // Level editor dialogs
 FiercePlanet.$designFeatures = null;
