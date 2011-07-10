@@ -1,45 +1,19 @@
+
+
 describe("agent-related classes", function() {
-  var agentType;
   var agent;
-  var ecoResourceCategory;
-  var envResourceCategory;
-  var socResourceCategory;
-  var ecoResourceType;
-  var envResourceType;
-  var socResourceType;
-  var resourceCategories;
-  var resourceTypes;
 
   beforeEach(function() {
-      // Create categories
-      ecoResourceCategory = new ResourceCategory("Economic", "eco", "44ABE0");
-      envResourceCategory = new ResourceCategory("Environmental", "env", "CBDB2A");
-      socResourceCategory = new ResourceCategory("Social", "soc", "DE1F2A");
-
-      // Create types
-      ecoResourceType = new ResourceType("Farm", "farm", "", 10, 20, 100, 20);
-      envResourceType = new ResourceType("Water", "water", "", 10, 20, 100, 10);
-      socResourceType = new ResourceType("Clinic", "clinic", "", 10, 20, 100, 5);
-
-      // Assign categories to types
-      ecoResourceType.setCategory(ecoResourceCategory);
-      envResourceType.setCategory(envResourceCategory);
-      socResourceType.setCategory(socResourceCategory);
-
-      resourceCategories = [ecoResourceCategory, envResourceCategory, socResourceCategory];
-      resourceTypes = [ecoResourceType, envResourceType, socResourceType];
-
-      agentType = new AgentType("citizen", "000", resourceCategories);
-      agent = new Agent(agentType, 0, 0);
+      agent = new Agent(World.agentTypes[0], 0, 0);
   });
 
     describe("an agent", function() {
         it("should have a type", function() {
-          expect(agent.getType()).toEqual(agentType);
+          expect(agent.getType()).toEqual(World.agentTypes[0]);
         });
 
         it("should have a unique id", function() {
-          expect(agent.getID()).toNotEqual((new Agent(agentType, 0, 0).getID()));
+          expect(agent.getID()).toNotEqual((new Agent(World.agentTypes[0], 0, 0).getID()));
         });
 
         describe("health functions", function() {
@@ -47,9 +21,9 @@ describe("agent-related classes", function() {
                 var healthStats = agent.getHealthStatistics();
 
                 expect(healthStats.length).toEqual(3);
-                expect(healthStats[ecoResourceCategory.getCode()]).toEqual(INITIAL_HEALTH);
-                expect(healthStats[envResourceCategory.getCode()]).toEqual(INITIAL_HEALTH);
-                expect(healthStats[socResourceCategory.getCode()]).toEqual(INITIAL_HEALTH);
+                expect(healthStats[World.resourceCategories[0].getCode()]).toEqual(INITIAL_HEALTH);
+                expect(healthStats[World.resourceCategories[1].getCode()]).toEqual(INITIAL_HEALTH);
+                expect(healthStats[World.resourceCategories[2].getCode()]).toEqual(INITIAL_HEALTH);
             });
 
             describe("when general health is adjusted", function() {
@@ -66,9 +40,9 @@ describe("agent-related classes", function() {
                 it("should also adjust specific health statistics", function() {
                     var healthStats = agent.getHealthStatistics();
 
-                    expect(healthStats[ecoResourceCategory.getCode()]).toEqual(INITIAL_HEALTH + adjustment);
-                    expect(healthStats[envResourceCategory.getCode()]).toEqual(INITIAL_HEALTH + adjustment);
-                    expect(healthStats[socResourceCategory.getCode()]).toEqual(INITIAL_HEALTH + adjustment);
+                    expect(healthStats[World.resourceCategories[0].getCode()]).toEqual(INITIAL_HEALTH + adjustment);
+                    expect(healthStats[World.resourceCategories[1].getCode()]).toEqual(INITIAL_HEALTH + adjustment);
+                    expect(healthStats[World.resourceCategories[2].getCode()]).toEqual(INITIAL_HEALTH + adjustment);
                 });
             });
 
@@ -77,19 +51,19 @@ describe("agent-related classes", function() {
                 var adjustment = -10;
 
                 beforeEach(function() {
-                    resource = new Resource(ecoResourceType, 0, 0);
+                    resource = new Resource(World.resourceTypes[0], 0, 0);
                     agent.adjustHealthForResource(adjustment, resource);
                 });
 
                 it("should adjust health for just that category", function() {
                     var healthStats = agent.getHealthStatistics();
-                    expect(healthStats[ecoResourceCategory.getCode()]).toEqual(INITIAL_HEALTH + adjustment);
-                    expect(healthStats[envResourceCategory.getCode()]).toEqual(INITIAL_HEALTH);
-                    expect(healthStats[socResourceCategory.getCode()]).toEqual(INITIAL_HEALTH);
+                    expect(healthStats[World.resourceCategories[0].getCode()]).toEqual(INITIAL_HEALTH + adjustment);
+                    expect(healthStats[World.resourceCategories[1].getCode()]).toEqual(INITIAL_HEALTH);
+                    expect(healthStats[World.resourceCategories[2].getCode()]).toEqual(INITIAL_HEALTH);
                 });
 
                 it("should also adjust general health by a third of that amount (when there are three resource categories)", function() {
-                    expect(agent.getHealth()).toEqual(INITIAL_HEALTH + (adjustment / resourceCategories.length));
+                    expect(agent.getHealth()).toEqual(INITIAL_HEALTH + (adjustment / World.resourceCategories.length));
                 });
 
                 it("should also return the correct result when health for a given resource is queried", function() {

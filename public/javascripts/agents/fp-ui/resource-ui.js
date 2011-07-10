@@ -115,7 +115,7 @@ FiercePlanet.showInlineResourcePanel = function(e) {
     var posY = __ret.posY;
     if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
         return;
-    if (FiercePlanet.isPositionOccupiedByResource(posX, posY))
+    if (FiercePlanet.currentLevel.isPositionOccupiedByResource(posX, posY))
         return;
 
     var dialogX = FiercePlanet.calculateWorldLeft();
@@ -155,7 +155,7 @@ FiercePlanet.showInlineResourcePanel = function(e) {
                 var posY = __ret.posY;
                 if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
                     return;
-                if (FiercePlanet.isPositionOccupiedByResource(posX, posY))
+                if (FiercePlanet.currentLevel.isPositionOccupiedByResource(posX, posY))
                     return;
 
                 FiercePlanet.currentResourceId = this.id;
@@ -188,24 +188,26 @@ FiercePlanet.makeResourceActive = function (el) {
 
 /**
  * Delete the current resource
+ *
  */
 FiercePlanet.deleteCurrentResource = function () {
-        var foundResource = FiercePlanet.getCurrentResourceIndex();
+        var foundResource = FiercePlanet.currentLevel.getCurrentResourceIndex(FiercePlanet.currentResource);
         if (foundResource > -1) {
             FiercePlanet.currentProfile.current_level_resources_in_store += 5;
             FiercePlanet.currentProfile.current_level_resources_spent -= 5;
-            FiercePlanet.currentLevel.getResources().splice(foundResource, 1);
+//            FiercePlanet.currentLevel.getResources().splice(foundResource, 1);
+            FiercePlanet.currentLevel.removeResource(FiercePlanet.currentResource);
             FiercePlanet.drawResourcesInStore();
-            FiercePlanet.clearCanvas('resourceCanvas');
-            FiercePlanet.drawResources();
+            FiercePlanet.clearResource(FiercePlanet.currentResource);
         }
     };
+
 
 /**
  * Upgrade the current page (NOTE: SHOULD BE TIED TO PROFILE CAPABILITIES
  */
 FiercePlanet.upgradeCurrentResource = function () {
-        var foundResource = FiercePlanet.getCurrentResourceIndex();
+        var foundResource = FiercePlanet.currentLevel.getCurrentResourceIndex(FiercePlanet.currentResource);
         if (foundResource > -1) {
             var p = FiercePlanet.currentLevel.getResources()[foundResource];
             if (p.getUpgradeLevel() <= 4 && FiercePlanet.currentProfile.current_level_resources_in_store >= p.getUpgradeCost()) {
@@ -228,15 +230,15 @@ FiercePlanet.dropItem = function(e) {
         var posY = __ret.posY;
         if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
             return;
-        if (FiercePlanet.isPositionOccupiedByResource(posX, posY))
+        if (FiercePlanet.currentLevel.isPositionOccupiedByResource(posX, posY))
             return;
 
         var resourceCode = FiercePlanet.currentResourceId;
         if (e.dataTransfer)
             resourceCode = e.dataTransfer.getData('Text');
 
-        var kind = FiercePlanet.resolveResourceKind(resourceCode);
-        var resource = new Resource(kind, posX, posY);
+        var resourceType = World.resolveResourceType(resourceCode);
+        var resource = new Resource(resourceType, posX, posY);
 
         if (FiercePlanet.currentProfile.current_level_resources_in_store < resource.getCost()) {
             FiercePlanet.currentNotice = new Notice('Not enough resources for now - save some more agents!');
@@ -245,7 +247,7 @@ FiercePlanet.dropItem = function(e) {
         else {
             var resourceCategory = resource.getCategory().getCode();
             FiercePlanet.currentProfile.spendResource(resource);
-            FiercePlanet.currentLevel.getResources().push(resource);
+            FiercePlanet.currentLevel.addResource(resource);
 
             FiercePlanet.drawResource(resource);
             FiercePlanet.drawResourcesInStore();
@@ -256,40 +258,13 @@ FiercePlanet.dropItem = function(e) {
             FiercePlanet.currentResourceId = null;
     };
 
-/**
- * Find the current resource index
- */
-FiercePlanet.getCurrentResourceIndex = function () {
-        for (var i = 0; i < FiercePlanet.currentLevel.getResources().length; i++) {
-            var p = FiercePlanet.currentLevel.getResources()[i];
-            if (p == FiercePlanet.currentResource) {
-                return i;
-            }
-        }
-        return -1;
-    };
-
-
-/**
- * Find the current resource index
- */
-FiercePlanet.isPositionOccupiedByResource = function (x, y) {
-        for (var i = 0; i < FiercePlanet.currentLevel.getResources().length; i++) {
-            var r = FiercePlanet.currentLevel.getResources()[i];
-            if (r.getPosition()[0] == x && r.getPosition()[1] == y) {
-                return true;
-            }
-        }
-        return false;
-    };
-
 
 /**
  * Draw swatches
  */
 FiercePlanet.initialiseAndLoadResources = function () {
-    if (World.resourceTypes.doSetup)
-        World.resourceTypes.doSetup();
+    if (World.resourceTypeNamespace.doSetup)
+        World.resourceTypeNamespace.doSetup();
 
     for (var i = 0; i < World.resourceCategories.length; i++) {
         var category = World.resourceCategories[i];
@@ -337,115 +312,3 @@ FiercePlanet.initialiseAndLoadResources = function () {
 };
 
 
-
-
-// TODO: Move these methods to core framework
-
-
-/**
- * Calculates the proportion of a particular resource type, relative to the overall number of resources, then returns a log derivative (so minor variations have minimal impact).
- * If the global variable FiercePlanet.ignoreResourceBalance is true, this calculation is ignored.
- * If the global variable FiercePlanet.resourcesInTension is true, this calculation is further adjusted by the proximity of other resources.
- *
- * TODO: Move to Level class
- */
-FiercePlanet.calculateResourceEffect = function (resource) {
-        // Allow this calculation to be ignored
-        if (FiercePlanet.currentSettings.ignoreResourceBalance || FiercePlanet.currentSettings.applyGeneralHealth)
-            return 1;
-
-        var resourceCategory = resource.getCategory().getCode();
-        var resourceCategoryCount = 0;
-        var totalResources = FiercePlanet.currentLevel.getResources().length;
-        if (totalResources == 1)
-            return 1;
-        resourceCategoryCount = FiercePlanet.currentProfile.current_level_resources_spent_by_category[resourceCategory];
-        var resourceTypeProportion = (resourceCategoryCount / totalResources) * totalResources;
-        var proportionOfIdeal = (resourceTypeProportion <= 1) ? resourceTypeProportion : ((totalResources - resourceTypeProportion) / (totalResources - 1));
-        var effect = proportionOfIdeal * proportionOfIdeal;
-
-        // Further adjustment based on surrounding resources
-        if (FiercePlanet.currentSettings.resourcesInTension) {
-            effect *= FiercePlanet.calculateSurroundingResourcesEffects(resource);
-        }
-        return effect;
-    };
-
-/**
- * Calculates the effect of surrounding resources
- *
- * TODO: Move to Level class
- */
-FiercePlanet.calculateSurroundingResourcesEffects = function (resource) {
-        var x = resource.getX();
-        var y = resource.getY();
-        var resourceCategory = resource.getCategory();
-        var baseEffect = 1;
-        for (var j = 0; j < FiercePlanet.currentLevel.getResources().length; j++) {
-            var neighbour = FiercePlanet.currentLevel.getResources()[j];
-            var nx = neighbour.getX();
-            var ny = neighbour.getY();
-            var neighbourCategory = neighbour.getCategory();
-            if ((x != nx || ny != y) && Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
-                // TODO: make this part of the ResourceCategory calculation
-                baseEffect *= resourceCategory.doEvaluateOtherCategoryImpact(neighbourCategory);
-            }
-        }
-        return baseEffect;
-    };
-
-/**
- * Recover resources to a maximum of their initial state
- *
- * TODO: Move to Level class
- */
-FiercePlanet.recoverResources = function () {
-        for (var j = 0; j < FiercePlanet.currentLevel.getResources().length; j++) {
-            var p = FiercePlanet.currentLevel.getResources()[j];
-            /* Test code for restoring resource health, as opposed to resetting at the end of each wave */
-            if (p.getTotalYield() < p.getInitialTotalYield()) {
-                /* Overly generous... */
-    //            p.setTotalYield(p.getTotalYield() + p.getPerAgentYield());
-                p.setTotalYield(p.getTotalYield() + 1);
-                FiercePlanet.drawResource(p);
-            }
-        }
-    };
-
-/**
- *
- * TODO: Move to Level class
- */
-FiercePlanet.resetResourceYields = function () {
-        for (var i = 0; i < FiercePlanet.currentLevel.getResources().length; i++) {
-            var p = FiercePlanet.currentLevel.getResources()[i];
-            p.setTotalYield(p.getInitialTotalYield());
-        }
-    };
-
-
-/**
- * Generic resource kind functions
- */
-FiercePlanet.resolveResourceKind = function (code) {
-    for (var i = 0; i < World.resourceTypes.length; i++) {
-        var resourceKind = World.resourceTypes[i];
-        if (resourceKind._code == code)
-            return resourceKind;
-    }
-    return null;
-};
-
-/**
- * Registers resource categories
- */
-FiercePlanet.registerResourceCategories = function (resourceCategories) {
-    World.resourceCategories = resourceCategories;
-};
-
-/**
- * Registers resource categories
- */
-FiercePlanet.registerResourceTypes = function (resourceTypes) {
-    World.resourceTypes = resourceTypes;
-};

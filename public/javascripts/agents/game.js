@@ -21,7 +21,7 @@ $(document).ready(function() {
     FiercePlanet.loadGame();
 
     // Set up shortcut variable names for debugging convenience
-    $fp.w = $fp.w || FiercePlanet.currentWorld;
+    $fp.w = $fp.w || World;
     $fp.p = $fp.p || FiercePlanet.currentProfile;
     $fp.s = $fp.s || FiercePlanet.currentSettings;
     $fp.l = $fp.l || FiercePlanet.currentLevel;
@@ -66,8 +66,10 @@ FiercePlanet.processAgents = function() {
     FiercePlanet.gameCounter++;
 
 
+    if (FiercePlanet.nullifiedAgents)
+        FiercePlanet.clearAgentGroup(FiercePlanet.nullifiedAgents);
+    FiercePlanet.nullifiedAgents = [];
     FiercePlanet.clearAgents();
-
     var nullifiedAgents = [];
     var citizenCount = 0;
     var agents = FiercePlanet.currentLevel.getCurrentAgents();
@@ -135,6 +137,8 @@ FiercePlanet.processAgents = function() {
                         agent.adjustGeneralHealth(FiercePlanet.MOVE_HEALTH_COST);
                     if (agent.getHealth() <= 0) {
                         nullifiedAgents.push(i);
+                        FiercePlanet.nullifiedAgents.push(agent);
+                        FiercePlanet.drawExpiredAgent(agent);
                         if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE)
                             FiercePlanet.currentProfile.current_level_expired++;
                        FiercePlanet.drawExpired();
@@ -148,8 +152,6 @@ FiercePlanet.processAgents = function() {
                     }
                 }
             }
-//            else {
-//            }
             if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE) {
                 agent.incrementCountdownToMove();
             }
@@ -166,6 +168,7 @@ FiercePlanet.processAgents = function() {
     for (var i = nullifiedAgents.length - 1; i >= 0; i-= 1) {
         FiercePlanet.currentLevel.getCurrentAgents().splice(nullifiedAgents[i], 1);
     }
+
     // No agents left? End of wave
     if (citizenCount == 0) {
         // Start a new wave
@@ -182,8 +185,13 @@ FiercePlanet.processAgents = function() {
         }
     }
     else {
-        if (FiercePlanet.waveCounter % FiercePlanet.resourceRecoveryCycle == 0)
-            FiercePlanet.recoverResources();
+        if (FiercePlanet.waveCounter % FiercePlanet.resourceRecoveryCycle == 0) {
+            FiercePlanet.currentLevel.recoverResources().forEach(function(resource) {
+                FiercePlanet.drawResource(resource);
+            });
+//            FiercePlanet.recoverResources();
+//            FiercePlanet.drawResources();
+        }
         FiercePlanet.drawAgents();
     }
 
@@ -196,6 +204,8 @@ FiercePlanet.processAgents = function() {
 
 /**
  * Processes neighbouring resources
+ *
+ * TODO: Move to level
  */
 FiercePlanet.processNeighbouringResources = function(agent) {
     var x = agent.getX();
@@ -205,8 +215,16 @@ FiercePlanet.processNeighbouringResources = function(agent) {
         var rx = resource.getX();
         var ry = resource.getY();
         if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
-            var resourceEffect = FiercePlanet.calculateResourceEffect(resource);
-            resource.provideYield(agent, resourceEffect, FiercePlanet.currentSettings.applyGeneralHealth, !FiercePlanet.currentLevel._noSpeedChange);
+            var resourceEffect = FiercePlanet.currentLevel.calculateResourceEffect(
+                resource,
+                FiercePlanet.currentSettings.ignoreResourceBalance || FiercePlanet.currentSettings.applyGeneralHealth,
+                FiercePlanet.currentSettings.resourcesInTension
+            );
+            resource.provideYield(
+                agent,
+                resourceEffect,
+                FiercePlanet.currentSettings.applyGeneralHealth, !FiercePlanet.currentLevel._noSpeedChange
+            );
             FiercePlanet.drawResource(resource);
         }
     }
@@ -215,6 +233,8 @@ FiercePlanet.processNeighbouringResources = function(agent) {
 
 /**
  * Processes neighbouring agents
+ *
+ * TODO: Move to level
  */
 FiercePlanet.processNeighbouringAgents = function(agent) {
     var x = agent.getX();

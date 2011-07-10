@@ -121,7 +121,7 @@ FiercePlanet.hookUpCustomEventListeners = function() {
             var resourceCategoryName = resourceCategory.getName();
             var resourceCategoryColor = resourceCategory.getColor();
             var resourceCategoryCode = resourceCategory.getCode();
-            var categoryCount = FiercePlanet.currentProfile.current_level_resources_spent_by_category[resourceCategoryCode];
+            var categoryCount = FiercePlanet.currentLevel.getResourceCategoryCount(resourceCategoryCode);
             if (categoryCount == 1) {
                 FiercePlanet.currentNotice = new Notice("Well done! You've added your first " + resourceCategoryName + " resource!");
                 FiercePlanet.currentNotice._height = 80;

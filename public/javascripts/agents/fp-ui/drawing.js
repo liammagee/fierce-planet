@@ -496,12 +496,18 @@ FiercePlanet.clearCanvas = function(canvasID) {
 };
 
 /**
- *
+ * Clear all active agents
  */
 FiercePlanet.clearAgents = function() {
+    FiercePlanet.clearAgentGroup(FiercePlanet.currentLevel._currentAgents);
+};
+
+/**
+ * Clear the agent group
+ */
+FiercePlanet.clearAgentGroup = function(agents) {
     var canvas = $('#agentCanvas')[0];
     var ctx = canvas.getContext('2d');
-    var agents = FiercePlanet.currentLevel._currentAgents;
     if (FiercePlanet.waveCounter > 0) {
         for (var i = 0; i < agents.length; i += 1) {
             var agent = agents[i];
@@ -671,8 +677,30 @@ FiercePlanet.drawAgents = function() {
             eval(AgentTypes.CITIZEN_AGENT_TYPE.getDrawFunction())(ctx, agent, intX, intY, FiercePlanet.pieceWidth, FiercePlanet.pieceHeight, newColor, FiercePlanet.waveCounter, direction);
         }
 
-
     }
+};
+
+/**
+ * Draw agents on the agent canvas
+ */
+FiercePlanet.drawExpiredAgent = function(agent) {
+    var canvas = $('#agentCanvas')[0];
+    var ctx = canvas.getContext('2d');
+
+    // Don't process agents we want to block
+
+    // Get co-ordinates
+    var wx = agent._wanderX;
+    var wy = agent._wanderY;
+    var __ret = FiercePlanet.getDrawingPosition(agent, FiercePlanet.waveCounter);
+    var intX = __ret.intX * FiercePlanet.cellWidth + wx + FiercePlanet.cellWidth / 2;
+    var intY = __ret.intY * FiercePlanet.cellHeight + wy + FiercePlanet.cellHeight / 4;
+    var direction = FiercePlanet.getAgentDirection(agent);
+
+    var newColor = "f00";
+
+    if (agent.getType().drawExpired)
+        agent.getType().drawExpired(ctx, agent, intX, intY, FiercePlanet.pieceWidth, FiercePlanet.pieceHeight, newColor, FiercePlanet.waveCounter, direction);
 };
 
 /**

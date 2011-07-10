@@ -31,6 +31,7 @@ AgentType.prototype.getName = function() { return this._name;};
 AgentType.prototype.getColor = function() { return this._color;};
 AgentType.prototype.getHealth = function() { return this._health; };
 AgentType.prototype.getHealthCategories = function() { return this._healthCategories; };
+AgentType.prototype.setHealthCategories = function(healthCategories) { this._healthCategories = healthCategories; };
 AgentType.prototype.getDrawFunction = function() { return this._drawFunction; };
 AgentType.prototype.setDrawFunction = function(drawFunction) { this._drawFunction = drawFunction; };
 

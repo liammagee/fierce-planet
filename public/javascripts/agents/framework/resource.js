@@ -117,6 +117,7 @@ Resource.prototype.getUpgradeLevel = function() { return this._upgradeLevel; };
 Resource.prototype.setUpgradeLevel = function(upgradeLevel) { this._upgradeLevel = upgradeLevel; };
 Resource.prototype.getTotalYield = function() { return this._totalYield; };
 Resource.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; };
+Resource.prototype.incrementTotalYield = function(totalYield) { this._totalYield++; };
 Resource.prototype.getPosition = function() { return [this._x, this._y]; };
 Resource.prototype.setPosition = function(x, y) { this._x =x; this._y = y; };
 Resource.prototype.getX = function() { return this._x; };
@@ -140,13 +141,18 @@ Resource.prototype.provideYield = function(agent, resourceEffect, applyGeneralHe
         }
         else {
             if (agent.getHealthForResource(this) < 100) {
-                adjustment = this._perAgentYield * this._upgradeLevel * 3 * resourceEffect;
+                var rawAdjustment = this._perAgentYield * this._upgradeLevel * World.resourceCategories.length;
+                adjustment = rawAdjustment * resourceEffect;
                 agent.adjustHealthForResource(adjustment, this);
                 if (adjustSpeedToYield)
                     agent.setSpeed(this._perAgentYield);
                 // This lowers the impact of resources on agents' speed - but need delay for 'followers' to get resources of their own.
 //                    agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));
+
+                // Old way - yields are constant
                 this._totalYield -= this._perAgentYield;
+//                New way - yields decreases reflect upgrade and actual yield to the agent - but too hard
+//                this._totalYield -= rawAdjustment;
             }
         }
     }

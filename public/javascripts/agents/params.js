@@ -71,7 +71,7 @@ FiercePlanet.WAVE_NOTICE_HEIGHT = 150;
 // VARIABLES
 
 // Current state variables
-//FiercePlanet.currentWorld = new World();
+World.resourceTypeNamespace = TBL;
 FiercePlanet.currentProfile = new Profile();
 FiercePlanet.currentSettings = new Settings();
 FiercePlanet.currentLevelNumber = 1;
@@ -90,12 +90,6 @@ FiercePlanet.inPlay = false;
 FiercePlanet.isMouseDown = false;
 FiercePlanet.isMouseMoving = false;
 
-
-
-// Resource variables
-//FiercePlanet.resourceTypeNamespace = TBL;
-//FiercePlanet.resourceCategories = [];
-//FiercePlanet.resourceTypes = [];
 
 
 // Timer variables

@@ -20,10 +20,10 @@ TBL.ECO_CATEGORY.setEvaluateOtherCategoryImpact(function(otherCategory) {
     var neighbourCategoryCode = otherCategory.getCode();
     var baseEffect = 1.0;
     if (neighbourCategoryCode == "eco") {
-        baseEffect *= 1.2;
+        baseEffect *= 1.0;
     }
     else if (neighbourCategoryCode == "env") {
-        baseEffect *= 1.0;
+        baseEffect *= 1.2;
     }
     else if (neighbourCategoryCode == "soc") {
         baseEffect *= 0.8;
@@ -92,7 +92,6 @@ TBL.doSetup = function() {
     TBL.SOC_CATEGORY.addType(FiercePlanet.DEMOCRACY_RESOURCE_TYPE);
     TBL.SOC_CATEGORY.addType(FiercePlanet.FESTIVAL_RESOURCE_TYPE);
 
-    FiercePlanet.registerResourceCategories([TBL.ECO_CATEGORY, TBL.ENV_CATEGORY, TBL.SOC_CATEGORY]);
-    FiercePlanet.registerResourceTypes(TBL.ECONOMIC_RESOURCE_TYPES.concat(TBL.ENVIRONMENTAL_RESOURCE_TYPES.concat(TBL.SOCIAL_RESOURCE_TYPES)));
-    FiercePlanet.registerDefaultAgentTypes();
+    World.registerResourceCategories([TBL.ECO_CATEGORY, TBL.ENV_CATEGORY, TBL.SOC_CATEGORY]);
+    World.registerResourceTypes(TBL.ECONOMIC_RESOURCE_TYPES.concat(TBL.ENVIRONMENTAL_RESOURCE_TYPES.concat(TBL.SOCIAL_RESOURCE_TYPES)));
 };

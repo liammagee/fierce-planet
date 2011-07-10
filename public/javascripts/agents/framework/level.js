@@ -50,6 +50,7 @@ function Level(id) {
     this._currentAgentsMap = [];
     this._cells = [];
     this._resources = [];
+    this._resourceCategoryCounts = this.resetResourceCategoryCounts();
     this._catastrophe = null;
 
     // User interface elements
@@ -232,7 +233,70 @@ Level.prototype.setCurrentAgents = function(currentAgents) {
 };
 Level.prototype.getAgentByID = function(agentID) { return this._currentAgentsMap[agentID]; };
 Level.prototype.getResources = function() { return this._resources; };
-Level.prototype.setResources = function(resources) { this._resources = resources; };
+Level.prototype.setResources = function(resources) {
+    this._resources = resources;
+    this._resourceCategoryCounts = this.resetResourceCategoryCounts();
+};
+Level.prototype.addResource = function(resource) {
+    this._resources.push(resource);
+    this.incrementResourceCategoryCount(resource);
+};
+Level.prototype.removeResource = function(resource) {
+    var index = this.getCurrentResourceIndex(resource);
+    if (index > -1)
+        this._resources.splice(index, 1);
+    this.decrementResourceCategoryCount(resource);
+};
+Level.prototype.resetResourceCategoryCounts = function() {
+    var rcc = {};
+    World.resourceCategories.forEach(function(resourceCategory) {
+        rcc[resourceCategory.getCode()] = 0;
+    });
+    this._resources.forEach(function(resource) {
+        rcc[resource.getCategory().getCode()] += 1;
+    });
+    return rcc;
+};
+Level.prototype.incrementResourceCategoryCount = function(resource) {
+    this._resourceCategoryCounts[resource.getCategory().getCode()] += 1;
+};
+Level.prototype.decrementResourceCategoryCount = function(resource) {
+    this._resourceCategoryCounts[resource.getCategory().getCode()] -= 1;
+};
+Level.prototype.getResourceCategoryCounts = function() {
+    return this._resourceCategoryCounts;
+};
+Level.prototype.getResourceCategoryCount = function(code) {
+    return this._resourceCategoryCounts[code];
+};
+Level.prototype.getResourceCategoryProportion = function(code) {
+    return this.getResourceCategoryCount(code) / this._resources.length;
+};
+
+/**
+ * Find the current resource index
+ */
+Level.prototype.getCurrentResourceIndex = function (resource) {
+    for (var i = 0; i < this._resources.length; i++) {
+        var tmp = this._resources[i];
+        if (tmp == resource) {
+            return i;
+        }
+    }
+    return -1;
+};
+/**
+ * Find the current resource index
+ */
+Level.prototype.isPositionOccupiedByResource = function (x, y) {
+    for (var i = 0; i < this._resources.length; i++) {
+        var resource = this._resources[i];
+        if (resource.getX() == x && resource.getY() == y)
+            return true;
+    }
+    return false;
+};
+
 Level.prototype.getCatastrophe = function() { return this._catastrophe; };
 Level.prototype.setCatastrophe = function(catastrophe) { this._catastrophe = catastrophe; };
 Level.prototype.getCells = function() { return this._cells; };
@@ -325,7 +389,86 @@ Level.prototype.getTotalSaveable = function () {
     return totalSaveable;
 };
 
+
+
+
 /**
- * Stub method, for setting up a new level
+ * Calculates the proportion of a particular resource type, relative to the overall number of resources, then returns a log derivative (so minor variations have minimal impact).
+ * If the global variable FiercePlanet.ignoreResourceBalance is true, this calculation is ignored.
+ * If the global variable FiercePlanet.resourcesInTension is true, this calculation is further adjusted by the proximity of other resources.
+ *
+ * @param   The resource to calculate the effect for
+ * @param   Whether the resource mix should be ignored (TODO: should be moved to the World object)
+ * @param   Whether tensions between resource categories should be factored in (TODO: should be moved to the World object)
  */
-Level.prototype.setup = function() {};
+Level.prototype.calculateResourceEffect = function (resource, ignoreResourceMix, resourcesInTension) {
+        // Allow this calculation to be ignored
+        if (ignoreResourceMix || this._resources.length <= 1)
+            return 1;
+
+        var code = resource.getCategory().getCode();
+        var totalResources = this._resources.length;
+        var resourceCategoryCount = this.getResourceCategoryCount(code);
+        var resourceTypeProportion = (resourceCategoryCount / totalResources) * totalResources;
+        var proportionOfIdeal = (resourceTypeProportion <= 1) ? resourceTypeProportion : ((totalResources - resourceTypeProportion) / (totalResources - 1));
+        var effect = proportionOfIdeal * proportionOfIdeal;
+
+        // Further adjustment based on surrounding resources
+        if (resourcesInTension) {
+            effect *= this.calculateSurroundingResourcesEffects(resource);
+        }
+        return effect;
+    };
+
+/**
+ * Calculates the effect of surrounding resources
+ *
+ * @param   A resource to calculate the effect for
+ * @returns   The effect to apply
+ */
+Level.prototype.calculateSurroundingResourcesEffects = function (resource) {
+        var x = resource.getX();
+        var y = resource.getY();
+        var resourceCategory = resource.getCategory();
+        var baseEffect = 1;
+        for (var i in this._resources) {
+            var neighbour = this._resources[i];
+            var nx = neighbour.getX();
+            var ny = neighbour.getY();
+            if (nx == x && ny == y)
+                continue;
+            if (Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
+                var neighbourCategory = neighbour.getCategory();
+                baseEffect *= resourceCategory.doEvaluateOtherCategoryImpact(neighbourCategory);
+            }
+        }
+        return baseEffect;
+    };
+
+/**
+ * Resets all resource yields to their original values
+ */
+Level.prototype.resetResourceYields = function () {
+    this._resources.forEach(function(resource) {
+        resource.setTotalYield(resource.getInitialTotalYield());
+    });
+};
+
+
+/**
+ * Recover resources to a maximum of their initial state
+ *
+ * @returns An array of recovered resources
+ */
+Level.prototype.recoverResources = function () {
+    var recoveredResources = [];
+    this._resources.forEach(function(resource) {
+        if (resource.getTotalYield() < resource.getInitialTotalYield()) {
+            /* Overly generous... */
+//          resource.setTotalYield(p.getTotalYield() + p.getPerAgentYield());
+            resource.incrementTotalYield();
+            recoveredResources.push(resource);
+        }
+    });
+    return recoveredResources;
+};
