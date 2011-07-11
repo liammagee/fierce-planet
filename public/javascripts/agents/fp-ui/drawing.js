@@ -119,7 +119,7 @@ FiercePlanet.drawPath = function() {
         var y = yPos * FiercePlanet.cellHeight;
         ctx.clearRect(x + 1, y + 1, FiercePlanet.cellWidth - 1, FiercePlanet.cellHeight - 1);
 
-        if (!FiercePlanet.currentSettings.invisiblePath) {
+        if (!World.settings.invisiblePath) {
             if (yPos == 0 || FiercePlanet.currentLevel.getTile(xPos, yPos - 1) != undefined) {
                 var my_gradient = ctx.createLinearGradient(x, y, x, y + FiercePlanet.cellHeight / 4);
                 my_gradient.addColorStop(0, "#ccc");
@@ -517,7 +517,7 @@ FiercePlanet.clearAgentGroup = function(agents) {
             var intX = __ret.intX * FiercePlanet.cellWidth + wx + 1;
             var intY = __ret.intY * FiercePlanet.cellHeight + wy + 1;
             ctx.clearRect(intX, intY, FiercePlanet.cellWidth + wx + 1, FiercePlanet.cellHeight + wy + 1);
-            if (FiercePlanet.currentSettings.agentTracing) {
+            if (World.settings.agentTracing) {
                 ctx.beginPath();
                 ctx.arc(intX + FiercePlanet.cellWidth / 2, intY + FiercePlanet.cellHeight * 1.2, 2, 0, Math.PI * 2, false);
                 ctx.closePath();
@@ -649,9 +649,9 @@ FiercePlanet.drawAgents = function() {
         var agent = agents[i];
 
         // Don't process agents we want to block
-        if (! FiercePlanet.currentSettings.rivalsVisible && agent._agentType._name == AgentTypes.RIVAL_AGENT_TYPE._name)
+        if (! World.settings.rivalsVisible && agent._agentType._name == AgentTypes.RIVAL_AGENT_TYPE._name)
             continue;
-        if (! FiercePlanet.currentSettings.predatorsVisible && agent._agentType._name == AgentTypes.PREDATOR_AGENT_TYPE._name)
+        if (! World.settings.predatorsVisible && agent._agentType._name == AgentTypes.PREDATOR_AGENT_TYPE._name)
             continue;
 
         // Get co-ordinates
@@ -707,14 +707,14 @@ FiercePlanet.drawExpiredAgent = function(agent) {
  * Draw the scrolling layer
  */
 FiercePlanet.drawScrollingLayer = function() {
-    if (FiercePlanet.currentSettings.scrollingImageVisible) {
+    if (World.settings.scrollingImageVisible) {
         FiercePlanet.clearCanvas('scrollingCanvas');
         var canvas = $('#scrollingCanvas')[0];
         var ctx = canvas.getContext('2d');
 
         // Add logic for catastrophe here
 
-        if (FiercePlanet.currentSettings.catastrophesVisible && FiercePlanet.currentLevel.getCatastrophe() != undefined) {
+        if (World.settings.catastrophesVisible && FiercePlanet.currentLevel.getCatastrophe() != undefined) {
             var catastrophe = FiercePlanet.currentLevel.getCatastrophe();
             if (catastrophe._notice._start <= FiercePlanet.levelCounter && (catastrophe._start + catastrophe._duration) >= FiercePlanet.levelCounter) {
                 FiercePlanet.currentNotice = catastrophe._notice;

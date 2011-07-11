@@ -13,31 +13,31 @@
 
   <div id="game-settings">
     <div>
-      <input id="agentsCanCommunicateInput" name="agentsCanCommunicateInput" type="checkbox" checked="checked"/>
+      <input id="agentsCanCommunicate"  type="checkbox" checked="checked"/>
       Allow agents to share their memories
     </div>
     <div>
-      <input id="resourcesInTensionInput" name="resourcesInTensionInput" type="checkbox"/>
+      <input id="resourcesInTension"  type="checkbox"/>
       Resources affect neighbouring resources
     </div>
     <div>
-      <input id="resourcesAffectAllOtherResourcesInput" name="resourcesAffectAllOtherResourcesInput" type="checkbox"/>
+      <input id="resourcesAffectAllOtherResources"  type="checkbox"/>
       Resources affect all other resources [NOT YET FUNCTIONAL]
     </div>
     <div>
-      <input id="ignoreResourceBalanceInput" name="ignoreResourceBalanceInput" type="checkbox"/>
+      <input id="ignoreResourceBalance"  type="checkbox"/>
       Ignore mix of resource categories
     </div>
     <div>
-      <input id="applyGeneralHealthInput" name="applyGeneralHealthInput" type="checkbox"/>
+      <input id="applyGeneralHealth"  type="checkbox"/>
       Ignore resource categories altogether
     </div>
     <div>
-      <input id="resourceBonusInput" name="resourceBonusInput" type="checkbox"/>
+      <input id="resourceBonus"  type="checkbox"/>
       Resource mix bonus [NOT YET FUNCTIONAL]
     </div>
     <div>
-      <input id="resourcesUpgradeableInput" name="resourcesUpgradeableInput" type="checkbox"/>
+      <input id="resourcesUpgradeable"  type="checkbox"/>
       Resources can be upgraded [NOT YET FUNCTIONAL]
     </div>
   </div>
@@ -46,35 +46,35 @@
 
   <div id="user-interface">
     <div>
-      <input id="noticesVisibleInput" name="noticesVisibleInput" type="checkbox" checked="checked"/> Show notices
+      <input id="noticesVisible"  type="checkbox" checked="checked"/> Show notices
     </div>
     <div>
-      <input id="scrollingImageVisibleInput" name="scrollingImageVisibleInput" type="checkbox" checked="checked"/>
+      <input id="scrollingImageVisible"  type="checkbox" checked="checked"/>
       Show scrolling image
     </div>
     <div>
-      <input id="catastrophesVisibleInput" name="catastrophesVisibleInput" type="checkbox" checked="checked"/>
+      <input id="catastrophesVisible"  type="checkbox" checked="checked"/>
       Show catastrophes
     </div>
     <div>
-      <input id="disableKeyboardShortcutsInput" name="disableKeyboardShortcutsInput" type="checkbox"/> Disable keyboard shortcuts
+      <input id="disableKeyboardShortcuts"  type="checkbox"/> Disable keyboard shortcuts
     </div>
     <div>
-      <input id="soundsPlayableInput" name="soundsPlayableInput" type="checkbox"/> Play sounds
+      <input id="soundsPlayable"  type="checkbox"/> Play sounds
     </div>
     <div>
-      <input id="useInlineResourceSwatchInput" name="useInlineResourceSwatchInput" type="checkbox" />
+      <input id="useInlineResourceSwatch"  type="checkbox" />
       Show inline resource pop-up
     </div>
     <div>
-      <input id="allowInlinePanningInput" name="allowInlinePanningInput" type="checkbox" />
+      <input id="allowInlinePanning"  type="checkbox" />
       Allow inline panning
     </div>
     <div>
-      <input id="agentTracingInput" name="agentTracingInput" type="checkbox"/> Show agent movement
+      <input id="agentTracing"  type="checkbox"/> Show agent movement
     </div>
     <div>
-      <input id="invisiblePathInput" name="invisiblePathInput" type="checkbox"/> Make path invisible
+      <input id="invisiblePath"  type="checkbox"/> Make path invisible
     </div>
   </div>
 
@@ -84,28 +84,28 @@
   <div id="experimental" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
         <h4>Experimental options</h4>
         <div>
-          <input id="rivalsVisibleInput" name="rivalsVisibleInput" type="checkbox"/> Show rivals
+          <input id="rivalsVisible"  type="checkbox"/> Show rivals
         </div>
         <div>
-          <input id="predatorsVisibleInput" name="predatorsVisibleInput" type="checkbox"/> Show predators
+          <input id="predatorsVisible"  type="checkbox"/> Show predators
         </div>
         <div>
-          <input id="tilesMutableInput" name="tilesMutableInput" type="checkbox"/> Allow tiles to be added
+          <input id="tilesMutable"  type="checkbox"/> Allow tiles to be added
         </div>
         <div>
-          <input id="tilesRemovableInput" name="tilesRemovableInput" type="checkbox"/> Allow tiles to be removed
+          <input id="tilesRemovable"  type="checkbox"/> Allow tiles to be removed
         </div>
         <div>
-          <input id="backgroundIconsVisibleInput" name="backgroundIconsVisibleInput" type="checkbox"/> Show background icons
+          <input id="backgroundIconsVisible"  type="checkbox"/> Show background icons
         </div>
   </div>
 
   <div id="testing">
     <div>
-      <input id="recordingInput" name="recordingInput" type="checkbox"/> Record game
+      <input id="recording"  type="checkbox"/> Record game
     </div>
     <div>
-      <input id="godModeInput" name="godModeInput" type="checkbox"/> Play in 'god' mode
+      <input id="godMode"  type="checkbox"/> Play in 'god' mode
     </div>
   </div>
 

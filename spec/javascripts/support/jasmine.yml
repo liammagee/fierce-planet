@@ -13,6 +13,7 @@
 src_files:
   - public/javascripts/jquery.min.js
   - public/javascripts/jasmine-jquery-1.2.0.js
+  - public/javascripts/jquery.json-2.2.min.js
   - public/javascripts/Player.js
   - public/javascripts/Song.js
   - public/javascripts/agents/framework/resource.js

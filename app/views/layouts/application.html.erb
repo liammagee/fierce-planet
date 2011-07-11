@@ -114,8 +114,8 @@ var ua = navigator.userAgent.toLowerCase();
 var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
 if(isAndroid) {
   // Do something!
-  FiercePlanet.currentSettings.agentsCanCommunicate = false;
-  FiercePlanet.currentSettings.scrollingImageVisible = false;
+  World.settings.agentsCanCommunicate = false;
+  World.settings.scrollingImageVisible = false;
 }
 
 // TODO: Test code for iframe (i.e. Facebook app version)

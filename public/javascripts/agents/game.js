@@ -23,7 +23,7 @@ $(document).ready(function() {
     // Set up shortcut variable names for debugging convenience
     $fp.w = $fp.w || World;
     $fp.p = $fp.p || FiercePlanet.currentProfile;
-    $fp.s = $fp.s || FiercePlanet.currentSettings;
+    $fp.s = $fp.s || World.settings;
     $fp.l = $fp.l || FiercePlanet.currentLevel;
     $fp.r = $fp.r || FiercePlanet.currentResource;
     $fp.rid = $fp.rid || FiercePlanet.currentResourceId;
@@ -44,7 +44,7 @@ FiercePlanet.processAgents = function() {
     FiercePlanet.drawScrollingLayer();
 
     // Draw any notices
-    if (FiercePlanet.currentSettings.noticesVisible && FiercePlanet.currentNotice != undefined) {
+    if (World.settings.noticesVisible && FiercePlanet.currentNotice != undefined) {
         FiercePlanet.drawNotice(FiercePlanet.currentNotice);
     }
 
@@ -90,9 +90,9 @@ FiercePlanet.processAgents = function() {
         var agent = agents[i];
 
         // Don't process agents we want to block
-        if (! FiercePlanet.currentSettings.rivalsVisible && agent.getType() == AgentTypes.RIVAL_AGENT_TYPE)
+        if (! World.settings.rivalsVisible && agent.getType() == AgentTypes.RIVAL_AGENT_TYPE)
             continue;
-        if (! FiercePlanet.currentSettings.predatorsVisible && agent.getType() == AgentTypes.PREDATOR_AGENT_TYPE)
+        if (! World.settings.predatorsVisible && agent.getType() == AgentTypes.PREDATOR_AGENT_TYPE)
             continue;
 
         var speed = agent.getSpeed();
@@ -133,7 +133,7 @@ FiercePlanet.processAgents = function() {
 
                 // TODO: should be in-lined?
                 if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE || agent.getType() == AgentTypes.RIVAL_AGENT_TYPE) {
-                    if (!FiercePlanet.currentSettings.godMode)
+                    if (!World.settings.godMode)
                         agent.adjustGeneralHealth(FiercePlanet.MOVE_HEALTH_COST);
                     if (agent.getHealth() <= 0) {
                         nullifiedAgents.push(i);
@@ -196,7 +196,7 @@ FiercePlanet.processAgents = function() {
     }
 
     // Post-move processing
-    if (FiercePlanet.currentSettings.recording)
+    if (World.settings.recording)
         FiercePlanet.recordWorld();
 
 };
@@ -217,13 +217,13 @@ FiercePlanet.processNeighbouringResources = function(agent) {
         if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
             var resourceEffect = FiercePlanet.currentLevel.calculateResourceEffect(
                 resource,
-                FiercePlanet.currentSettings.ignoreResourceBalance || FiercePlanet.currentSettings.applyGeneralHealth,
-                FiercePlanet.currentSettings.resourcesInTension
+                World.settings.ignoreResourceBalance || World.settings.applyGeneralHealth,
+                World.settings.resourcesInTension
             );
             resource.provideYield(
                 agent,
                 resourceEffect,
-                FiercePlanet.currentSettings.applyGeneralHealth, !FiercePlanet.currentLevel._noSpeedChange
+                World.settings.applyGeneralHealth, !FiercePlanet.currentLevel._noSpeedChange
             );
             FiercePlanet.drawResource(resource);
         }
@@ -246,7 +246,7 @@ FiercePlanet.processNeighbouringAgents = function(agent) {
         var ax = a.getX();
         var ay = a.getY();
         if (Math.abs(ax - x) <= 1 && Math.abs(ay - y) <= 1) {
-            if (!FiercePlanet.currentSettings.godMode && FiercePlanet.currentSettings.predatorsVisible && agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE && a.getType() == AgentTypes.PREDATOR_AGENT_TYPE) {
+            if (!World.settings.godMode && World.settings.predatorsVisible && agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE && a.getType() == AgentTypes.PREDATOR_AGENT_TYPE) {
                 agent.setIsHit(true);
             }
         }

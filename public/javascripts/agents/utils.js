@@ -50,116 +50,6 @@ FiercePlanet.checkInteger = function(value) {
     return Math.floor(value);
 };
 
-/**
- * Gets a property from local storage, and sets this on the settings dialog.
- *
- * @param property
- */
-FiercePlanet.getAndRetrieveProperty = function(property) {
-    if ($('#' + property + 'Input')[0] != undefined) {
-        if (localStorage[property] == "true") {
-            this.currentSettings[property] = true;
-            $('#' + property + 'Input')[0].checked = true;
-        }
-    }
-};
-
-/**
- * Sets a property local storage based on values in the settings dialog.
- *
- * @param property
- */
-FiercePlanet.setAndStoreProperty = function(property) {
-    if ($("#" + property + "Input")[0] != undefined) {
-        var propertyInputValue = $("#" + property + "Input")[0].checked;
-        this.currentSettings[property] = propertyInputValue;
-        localStorage[property] = propertyInputValue;
-    }
-};
-
-/**
- * Gets all properties from local storage, and sets them on the settings dialog.
- */
-FiercePlanet.getAndRetrieveProperties = function() {
-    FiercePlanet.getAndRetrieveProperty('noticesVisible');
-    FiercePlanet.getAndRetrieveProperty('scrollingImageVisible');
-    FiercePlanet.getAndRetrieveProperty('catastrophesVisible');
-    FiercePlanet.getAndRetrieveProperty('soundsPlayable');
-    FiercePlanet.getAndRetrieveProperty('useInlineResourceSwatch');
-    FiercePlanet.getAndRetrieveProperty('allowInlinePanning');
-    FiercePlanet.getAndRetrieveProperty('disableKeyboardShortcuts');
-    FiercePlanet.getAndRetrieveProperty('agentsCanCommunicate');
-
-    FiercePlanet.getAndRetrieveProperty('recording');
-
-    FiercePlanet.getAndRetrieveProperty('invisiblePath');
-    FiercePlanet.getAndRetrieveProperty('agentTracing');
-
-    FiercePlanet.getAndRetrieveProperty('resourcesUpgradeable');
-    FiercePlanet.getAndRetrieveProperty('resourcesInTension');
-    FiercePlanet.getAndRetrieveProperty('resourceBonus');
-    FiercePlanet.getAndRetrieveProperty('applyGeneralHealth');
-    FiercePlanet.getAndRetrieveProperty('ignoreResourceBalance');
-
-    FiercePlanet.getAndRetrieveProperty('godMode');
-
-    FiercePlanet.getAndRetrieveProperty('rivalsVisible');
-    FiercePlanet.getAndRetrieveProperty('predatorsVisible');
-    FiercePlanet.getAndRetrieveProperty('tilesMutable');
-    FiercePlanet.getAndRetrieveProperty('tilesRemovable');
-    FiercePlanet.getAndRetrieveProperty('backgroundIconsVisible');
-};
-
-/**
- * Sets all properties on settings dialog, and stores property values in local storage.
- */
-FiercePlanet.setAndStoreProperties = function() {
-    FiercePlanet.setAndStoreProperty('noticesVisible');
-    FiercePlanet.setAndStoreProperty('scrollingImageVisible');
-    FiercePlanet.setAndStoreProperty('catastrophesVisible');
-    FiercePlanet.setAndStoreProperty('soundsPlayable');
-    FiercePlanet.setAndStoreProperty('useInlineResourceSwatch');
-    FiercePlanet.setAndStoreProperty('allowInlinePanning');
-    FiercePlanet.setAndStoreProperty('disableKeyboardShortcuts');
-    FiercePlanet.setAndStoreProperty('agentsCanCommunicate');
-
-    FiercePlanet.setAndStoreProperty('recording');
-
-    FiercePlanet.setAndStoreProperty('invisiblePath');
-    FiercePlanet.setAndStoreProperty('agentTracing');
-
-    FiercePlanet.setAndStoreProperty('resourcesUpgradeable');
-    FiercePlanet.setAndStoreProperty('resourcesInTension');
-    FiercePlanet.setAndStoreProperty('resourceBonus');
-    FiercePlanet.setAndStoreProperty('applyGeneralHealth');
-    FiercePlanet.setAndStoreProperty('ignoreResourceBalance');
-
-    FiercePlanet.setAndStoreProperty('godMode');
-
-    FiercePlanet.setAndStoreProperty('rivalsVisible');
-    FiercePlanet.setAndStoreProperty('predatorsVisible');
-    FiercePlanet.setAndStoreProperty('tilesMutable');
-    FiercePlanet.setAndStoreProperty('tilesRemovable');
-    FiercePlanet.setAndStoreProperty('backgroundIconsVisible');
-
-    if (FiercePlanet.currentSettings.disableKeyboardShortcuts)
-        $(document).unbind('keydown');
-    else {
-        $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
-    }
-
-    // Update based on allowInlinePanning property
-    FiercePlanet.unbindGameMouseEvents();
-    FiercePlanet.bindGameMouseEvents();
-
-    if (FiercePlanet.currentSettings.resourcesUpgradeable)
-        $('#upgrade-option').css('display', 'block');
-    else
-        $('#upgrade-option').css('display', 'none');
-
-
-    FiercePlanet.restartLevel();
-};
 
 /**
  * Sourced from: http://stackoverflow.com/questions/1267283/how-can-i-create-a-zerofilled-value-using-javascript/1267338#1267338.
@@ -173,4 +63,58 @@ FiercePlanet.zeroFill = function ( number, width ){
     return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
   }
   return number;
+};
+
+
+
+/**
+ * Gets all properties from local storage, and sets them on the settings dialog.
+ */
+FiercePlanet.getAndRetrieveProperties = function() {
+    // Retrieve properties
+    World.settings.load();
+
+    // Get the settings from the World object
+    for (var key in World.settings) {
+        // Make sure we're only capturing numbers, strings, booleans (not objects, functions or undefineds)
+        if (World.settings.hasOwnProperty(key) && $.inArray(typeof World.settings[key], ["number", "string", "boolean"]) > -1) {
+            $('#' + key)[0].checked = World.settings[key];
+        }
+    }
+};
+
+
+/**
+ * Sets all properties on settings dialog, and stores property values in local storage.
+ */
+FiercePlanet.setAndStoreProperties = function() {
+
+    // Set the settings on the World object
+    var inputs = $('#settings-dialog input[type="checkbox"]');
+    for (var key in inputs) {
+        var inputID = inputs[key].id;
+        World.settings[inputID] = inputs[key].checked;
+    }
+
+    // Store all settings
+    World.settings.store();
+
+
+    if (World.settings.disableKeyboardShortcuts)
+        $(document).unbind('keydown');
+    else {
+        $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
+    }
+
+    // Update based on allowInlinePanning property
+    FiercePlanet.unbindGameMouseEvents();
+    FiercePlanet.bindGameMouseEvents();
+
+    if (World.settings.resourcesUpgradeable)
+        $('#upgrade-option').css('display', 'block');
+    else
+        $('#upgrade-option').css('display', 'none');
+
+
+    FiercePlanet.restartLevel();
 };

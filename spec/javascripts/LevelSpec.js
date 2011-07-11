@@ -6,6 +6,25 @@ describe("level-related classes", function() {
       level = new Level(1);
   });
 
+
+    describe("handling tiles, cells, entry and exit points", function() {
+        beforeEach(function() {
+        });
+
+        it("should do something with tiles", function() {
+        });
+
+        it("should do something with cells", function() {
+        });
+
+        it("should do something with entry points", function() {
+        });
+
+        it("should do something with exit points", function() {
+        });
+    });
+
+
     describe("handling resources", function() {
         var resource;
         beforeEach(function() {
@@ -161,9 +180,17 @@ describe("level-related classes", function() {
             });
 
         });
-
-
     });
+
+
+    describe("handling agents", function() {
+        beforeEach(function() {
+        });
+
+        it("should do something with agents", function() {
+        });
+    });
+
 
 
 });

@@ -69,73 +69,6 @@ Level.prototype.getName = function() { return this._name; };
 Level.prototype.setName = function(name) { this._name = name; };
 Level.prototype.getInitialAgentNumber = function() { return this._initialAgentNumber; };
 Level.prototype.setInitialAgentNumber = function(initialAgentNumber) { this._initialAgentNumber = initialAgentNumber; };
-Level.prototype.getEntryPoints = function() { return this._entryPoints; };
-Level.prototype.setEntryPoints = function(entryPoints) { this._entryPoints = entryPoints; };
-Level.prototype.addEntryPoint = function(x, y) {
-    var found = false;
-    for (var i = 0; i < this._entryPoints.length; i++) {
-        var point = this._entryPoints[i];
-        if (point[0] == x && point[1]== y) {
-            found = true;
-            break;
-        }
-    }
-    if (!found)
-        this._entryPoints.push([x, y]);
-};
-Level.prototype.resetEntryPoints = function() {
-    this._entryPoints = [];
-    this.addEntryPoint(0, 0);
-};
-Level.prototype.removeEntryPoint = function(x, y) {
-    var position = -1;
-    for (var i = 0; i < this._entryPoints.length; i++) {
-        var point = this._entryPoints[i];
-        if (point[0] == x && point[1] == y)
-            position = i;
-    }
-    if (position > -1) {
-        this._entryPoints.splice(position, 1);
-    }
-};
-Level.prototype.getFirstEntryPoint = function() { return this._entryPoints[0]; };
-Level.prototype.getExitPoints = function() { return this._exitPoints; };
-Level.prototype.setExitPoints = function(exitPoints) { this._exitPoints = exitPoints; };
-Level.prototype.isExitPoint = function(x, y) {
-    for (var i = 0; i < this._exitPoints.length; i++) {
-        var point = this._exitPoints[i];
-        if (point[0] == x && point[1]== y) {
-            return true;
-        }
-    }
-    return false;
-};
-Level.prototype.addExitPoint = function(x, y) {
-    var found = false;
-    for (var i = 0; i < this._exitPoints.length; i++) {
-        var point = this._exitPoints[i];
-        if (point[0] == x && point[1]== y) {
-            found = true;
-            break;
-        }
-    }
-    if (!found)
-        this._exitPoints.push([x, y]);
-};
-Level.prototype.resetExitPoints = function() {
-    this._exitPoints = [];
-};
-Level.prototype.removeExitPoint = function(x, y) {
-    var position = -1;
-    for (var i = 0; i < this._exitPoints.length; i++) {
-        var point = this._exitPoints[i];
-        if (point[0] == x && point[1] == y)
-            position = i;
-    }
-    if (position > -1) {
-        this._exitPoints.splice(position, 1);
-    }
-};
 Level.prototype.getInitialResourceStore = function() { return this._initialResourceStore; };
 Level.prototype.setInitialResourceStore = function(initialResourceStore) { this._initialResourceStore = initialResourceStore; };
 Level.prototype.getWorldWidth = function() { return this._worldWidth; };
@@ -166,6 +99,18 @@ Level.prototype.getImageAttribution = function() { return this._imageAttribution
 Level.prototype.setImageAttribution = function(imageAttribution) { this._imageAttribution = imageAttribution; };
 Level.prototype.getSoundSrc = function() { return this._soundSrc; };
 Level.prototype.setSoundSrc = function(soundSrc) { this._soundSrc = soundSrc; };
+Level.prototype.getMapOptions = function() { return this._mapOptions; };
+Level.prototype.setMapOptions = function(mapOptions) { this._mapOptions = mapOptions; };
+Level.prototype.getMapURL = function() { return this._mapURL; };
+Level.prototype.setMapURL = function(mapURL) { this._mapURL = mapURL; };
+Level.prototype.getBackgroundImage = function() { return this._backgroundImage; };
+Level.prototype.setBackgroundImage = function(backgroundImage) { this._backgroundImage = backgroundImage; };
+Level.prototype.isCustomLevel = function() { return this._customLevel; };
+Level.prototype.setCustomLevel = function(customLevel) { this._customLevel = customLevel; };
+Level.prototype.getCatastrophe = function() { return this._catastrophe; };
+Level.prototype.setCatastrophe = function(catastrophe) { this._catastrophe = catastrophe; };
+
+// Tile functions
 Level.prototype.getTile = function(x, y) {
     var tilePosition = y * this.getWorldWidth() + x;
     return this._tiles[tilePosition];
@@ -210,14 +155,125 @@ Level.prototype.removeAllTiles = function() {
 
     }
 };
-Level.prototype.getMapOptions = function() { return this._mapOptions; };
-Level.prototype.setMapOptions = function(mapOptions) { this._mapOptions = mapOptions; };
-Level.prototype.getMapURL = function() { return this._mapURL; };
-Level.prototype.setMapURL = function(mapURL) { this._mapURL = mapURL; };
-Level.prototype.getBackgroundImage = function() { return this._backgroundImage; };
-Level.prototype.setBackgroundImage = function(backgroundImage) { this._backgroundImage = backgroundImage; };
-Level.prototype.isCustomLevel = function() { return this._customLevel; };
-Level.prototype.setCustomLevel = function(customLevel) { this._customLevel = customLevel; };
+Level.prototype.getPath = function() {
+    var pathCells = [];
+    for (var i = 0; i < this._worldHeight; i++) {
+        for (var j = 0; j < this._worldWidth; j++) {
+            var tilePosition = i * this._worldWidth + j;
+            if (this._tiles[tilePosition] == undefined)
+                pathCells.push([j, i]);
+        }
+
+    }
+    return pathCells;
+};
+Level.prototype.fillWithTiles = function() {
+    this._tiles = [];
+    for (var i = 0; i < this._worldHeight; i++) {
+        for (var j = 0; j < this._worldWidth; j++) {
+            var tile = new Tile(DEFAULT_TILE_COLOR, j, i);
+            this._tiles.push(tile);
+            this.addCell(tile._x, tile._y, tile);
+        }
+    }
+};
+Level.prototype.clearTiles = function(start, number) {
+    for (var i = start; i < start + number; i++) {
+        if (i >= 0 && i < this._tiles.length) {
+            var tile = this._tiles[i];
+            this._tiles[i] = undefined;
+            this.annulCell(tile._x, tile._y);
+        }
+    }
+};
+
+// Cell functions
+Level.prototype.getCells = function() { return this._cells; };
+Level.prototype.getCell = function(x, y) { return this._cells[[x, y]]; };
+Level.prototype.setCells = function(cells) { this._cells = cells; };
+Level.prototype.addCell = function(x, y, value) { this._cells[[x, y]] = value; };
+Level.prototype.annulCell = function(x, y) { this._cells[[x, y]] = undefined; };
+Level.prototype.assignCells = function() {
+    for (var i = 0; i < this._tiles.length; i++) {
+        var tile = this._tiles[i];
+        if (tile != undefined)
+            this.addCell(tile._x, tile._y, tile);
+    }
+};
+
+// Entry point functions
+Level.prototype.getEntryPoints = function() { return this._entryPoints; };
+Level.prototype.setEntryPoints = function(entryPoints) { this._entryPoints = entryPoints; };
+Level.prototype.addEntryPoint = function(x, y) {
+    var found = false;
+    for (var i = 0; i < this._entryPoints.length; i++) {
+        var point = this._entryPoints[i];
+        if (point[0] == x && point[1]== y) {
+            found = true;
+            break;
+        }
+    }
+    if (!found)
+        this._entryPoints.push([x, y]);
+};
+Level.prototype.resetEntryPoints = function() {
+    this._entryPoints = [];
+    this.addEntryPoint(0, 0);
+};
+Level.prototype.removeEntryPoint = function(x, y) {
+    var position = -1;
+    for (var i = 0; i < this._entryPoints.length; i++) {
+        var point = this._entryPoints[i];
+        if (point[0] == x && point[1] == y)
+            position = i;
+    }
+    if (position > -1) {
+        this._entryPoints.splice(position, 1);
+    }
+};
+Level.prototype.getFirstEntryPoint = function() { return this._entryPoints[0]; };
+
+// Exit point functions
+Level.prototype.getExitPoints = function() { return this._exitPoints; };
+Level.prototype.setExitPoints = function(exitPoints) { this._exitPoints = exitPoints; };
+Level.prototype.isExitPoint = function(x, y) {
+    for (var i = 0; i < this._exitPoints.length; i++) {
+        var point = this._exitPoints[i];
+        if (point[0] == x && point[1]== y) {
+            return true;
+        }
+    }
+    return false;
+};
+Level.prototype.addExitPoint = function(x, y) {
+    var found = false;
+    for (var i = 0; i < this._exitPoints.length; i++) {
+        var point = this._exitPoints[i];
+        if (point[0] == x && point[1]== y) {
+            found = true;
+            break;
+        }
+    }
+    if (!found)
+        this._exitPoints.push([x, y]);
+};
+Level.prototype.resetExitPoints = function() {
+    this._exitPoints = [];
+};
+Level.prototype.removeExitPoint = function(x, y) {
+    var position = -1;
+    for (var i = 0; i < this._exitPoints.length; i++) {
+        var point = this._exitPoints[i];
+        if (point[0] == x && point[1] == y)
+            position = i;
+    }
+    if (position > -1) {
+        this._exitPoints.splice(position, 1);
+    }
+};
+
+
+// Agent functions
 Level.prototype.getLevelAgents = function() { return this._levelAgents; };
 Level.prototype.setLevelAgents = function(levelAgents) { this._levelAgents = levelAgents; };
 Level.prototype.addLevelAgent = function(agent) { this._levelAgents.push(agent); };
@@ -232,6 +288,56 @@ Level.prototype.setCurrentAgents = function(currentAgents) {
     }
 };
 Level.prototype.getAgentByID = function(agentID) { return this._currentAgentsMap[agentID]; };
+Level.prototype.generateWaveAgents = function(numAgents) {
+    var newAgents = [];
+    for (var j = 0; j < numAgents; j++) {
+        for (var i = 0; i < this._waveAgents.length; i++) {
+            var waveAgent = this._waveAgents[i];
+            newAgents.push(new Agent(waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
+        }
+    }
+    return newAgents;
+};
+Level.prototype.presetAgents = function(agentType, number, canCommunicateWithOtherAgents) {
+    var agents = [];
+    for (var j = 0; j < this._entryPoints.length; j++) {
+        var point = this._entryPoints[j];
+        var x = point[0];
+        var y = point[1];
+        for (var i = 0; i < number; i ++) {
+            var agent = new Agent(agentType, x, y);
+            var colorSeed = j % 3;
+            var colorScheme = (colorSeed == 0 ? "000" : (colorSeed == 1 ? "0f0" : "00f"));
+            // TODO: Make this option configurable
+//            agent.setColor(colorScheme);
+            var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
+            agent.setDelay(delay);
+            agent.setCanCommunicateWithOtherAgents(canCommunicateWithOtherAgents);
+            agents.push(agent);
+        }
+    }
+    $.merge(agents, this.generateWaveAgents());
+    $.merge(agents, this.getLevelAgents());
+
+    this.setCurrentAgents(agents);
+};
+
+/**
+ * Indicates total number of agents saveable on this level
+ */
+Level.prototype.getTotalSaveable = function () {
+    var firstWave = this._initialAgentNumber;
+    var lastWave = this._waveNumber + this._initialAgentNumber -1;
+    var minor = (firstWave * (firstWave - 1)) / 2;
+    var major = (lastWave * (lastWave + 1)) / 2;
+    var saveablePerEntryPoint = major - minor;
+    var totalSaveable = saveablePerEntryPoint * this._entryPoints.length;
+    return totalSaveable;
+};
+
+
+
+// Resource functions
 Level.prototype.getResources = function() { return this._resources; };
 Level.prototype.setResources = function(resources) {
     this._resources = resources;
@@ -296,100 +402,6 @@ Level.prototype.isPositionOccupiedByResource = function (x, y) {
     }
     return false;
 };
-
-Level.prototype.getCatastrophe = function() { return this._catastrophe; };
-Level.prototype.setCatastrophe = function(catastrophe) { this._catastrophe = catastrophe; };
-Level.prototype.getCells = function() { return this._cells; };
-Level.prototype.getCell = function(x, y) { return this._cells[[x, y]]; };
-Level.prototype.setCells = function(cells) { this._cells = cells; };
-Level.prototype.addCell = function(x, y, value) { this._cells[[x, y]] = value; };
-Level.prototype.annulCell = function(x, y) { this._cells[[x, y]] = undefined; };
-Level.prototype.assignCells = function() {
-    for (var i = 0; i < this._tiles.length; i++) {
-        var tile = this._tiles[i];
-        if (tile != undefined)
-            this.addCell(tile._x, tile._y, tile);
-    }
-};
-Level.prototype.generateWaveAgents = function(numAgents) {
-    var newAgents = [];
-    for (var j = 0; j < numAgents; j++) {
-        for (var i = 0; i < this._waveAgents.length; i++) {
-            var waveAgent = this._waveAgents[i];
-            newAgents.push(new Agent(waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
-        }
-    }
-    return newAgents;
-};
-Level.prototype.getPath = function() {
-    var pathCells = [];
-    for (var i = 0; i < this._worldHeight; i++) {
-        for (var j = 0; j < this._worldWidth; j++) {
-            var tilePosition = i * this._worldWidth + j;
-            if (this._tiles[tilePosition] == undefined)
-                pathCells.push([j, i]);
-        }
-
-    }
-    return pathCells;
-};
-Level.prototype.fillWithTiles = function() {
-    this._tiles = [];
-    for (var i = 0; i < this._worldHeight; i++) {
-        for (var j = 0; j < this._worldWidth; j++) {
-            var tile = new Tile(DEFAULT_TILE_COLOR, j, i);
-            this._tiles.push(tile);
-            this.addCell(tile._x, tile._y, tile);
-        }
-    }
-};
-Level.prototype.clearTiles = function(start, number) {
-    for (var i = start; i < start + number; i++) {
-        if (i >= 0 && i < this._tiles.length) {
-            var tile = this._tiles[i];
-            this._tiles[i] = undefined;
-            this.annulCell(tile._x, tile._y);
-        }
-    }
-};
-Level.prototype.presetAgents = function(agentType, number, canCommunicateWithOtherAgents) {
-    var agents = [];
-    for (var j = 0; j < this._entryPoints.length; j++) {
-        var point = this._entryPoints[j];
-        var x = point[0];
-        var y = point[1];
-        for (var i = 0; i < number; i ++) {
-            var agent = new Agent(agentType, x, y);
-            var colorSeed = j % 3;
-            var colorScheme = (colorSeed == 0 ? "000" : (colorSeed == 1 ? "0f0" : "00f"));
-            // TODO: Make this option configurable
-//            agent.setColor(colorScheme);
-            var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
-            agent.setDelay(delay);
-            agent.setCanCommunicateWithOtherAgents(canCommunicateWithOtherAgents);
-            agents.push(agent);
-        }
-    }
-    $.merge(agents, this.generateWaveAgents());
-    $.merge(agents, this.getLevelAgents());
-
-    this.setCurrentAgents(agents);
-};
-
-/**
- * Indicates total number of agents saveable on this level
- */
-Level.prototype.getTotalSaveable = function () {
-    var firstWave = this._initialAgentNumber;
-    var lastWave = this._waveNumber + this._initialAgentNumber -1;
-    var minor = (firstWave * (firstWave - 1)) / 2;
-    var major = (lastWave * (lastWave + 1)) / 2;
-    var saveablePerEntryPoint = major - minor;
-    var totalSaveable = saveablePerEntryPoint * this._entryPoints.length;
-    return totalSaveable;
-};
-
-
 
 
 /**

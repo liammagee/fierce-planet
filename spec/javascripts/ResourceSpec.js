@@ -21,6 +21,13 @@ describe("resource-related classes", function() {
           expect(resource.getType()).toEqual(World.resourceTypes[0]);
         });
 
+        describe("providing a yield", function() {
+            beforeEach(function() {
+            });
+
+            it("should do something with a yield", function() {
+            });
+        });
     });
 
 

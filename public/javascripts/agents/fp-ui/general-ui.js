@@ -64,7 +64,7 @@ FiercePlanet.hookUpUIEventListeners = function() {
     }
 
     // Trap relevant key strokes
-    if (!FiercePlanet.currentSettings.disableKeyboardShortcuts) {
+    if (!World.settings.disableKeyboardShortcuts) {
         $(document).keydown(FiercePlanet.handleKeyboardShortcuts);
         $('input, textarea, select, form').focus(function() {
             $(document).unbind("keydown");
@@ -93,7 +93,7 @@ FiercePlanet.bindGameMouseEvents = function() {
     console.log('binding mouse events');
     agentCanvas.click(FiercePlanet.handleNoticeEvents);
     agentCanvas.click(FiercePlanet.processResourceCanvasClick);
-    if (FiercePlanet.currentSettings.allowInlinePanning) {
+    if (World.settings.allowInlinePanning) {
         agentCanvas.mousedown(FiercePlanet.registerMouseDown);
         agentCanvas.mousemove(FiercePlanet.registerMouseMove);
         agentCanvas.mouseup(FiercePlanet.registerMouseUp);
@@ -190,7 +190,7 @@ FiercePlanet.registerMouseUp = function(e) {
  *  Add key handling events
  */
 FiercePlanet.handleKeyboardShortcuts = function(e) {
-    if (FiercePlanet.currentSettings.disableKeyboardShortcuts)
+    if (World.settings.disableKeyboardShortcuts)
         return;
 
     // Return if command keys are selected

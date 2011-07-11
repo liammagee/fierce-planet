@@ -81,7 +81,7 @@ FiercePlanet.processResourceCanvasClick = function(e) {
         }
     }
     var currentTile = FiercePlanet.currentLevel.getTile(posX, posY);
-    if (FiercePlanet.currentSettings.tilesMutable) {
+    if (World.settings.tilesMutable) {
         if (currentTile == undefined) {
             FiercePlanet.currentLevel.addTile(new Tile(DEFAULT_TILE_COLOR, posX, posY));
             FiercePlanet.drawCanvases();
@@ -98,7 +98,7 @@ FiercePlanet.processResourceCanvasClick = function(e) {
         if (FiercePlanet.currentResourceId != null) {
             FiercePlanet.dropItem(e);
         }
-        else if (FiercePlanet.currentSettings.useInlineResourceSwatch) {
+        else if (World.settings.useInlineResourceSwatch) {
             FiercePlanet.showInlineResourcePanel(e);
 
         }
@@ -254,7 +254,7 @@ FiercePlanet.dropItem = function(e) {
 
             FiercePlanet.eventTarget.fire(new Event("resource", resource, "added", FiercePlanet.gameCounter, FiercePlanet.currentLevel));
         }
-        if (FiercePlanet.currentSettings.useInlineResourceSwatch)
+        if (World.settings.useInlineResourceSwatch)
             FiercePlanet.currentResourceId = null;
     };
 

@@ -98,7 +98,7 @@ FiercePlanet.newWave = function() {
     FiercePlanet.waveDelayCounter = 0;
     FiercePlanet.currentProfile.current_level_saved_this_wave = 0;
 
-    FiercePlanet.currentLevel.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, FiercePlanet.numAgents, FiercePlanet.currentSettings.agentsCanCommunicate);
+    FiercePlanet.currentLevel.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, FiercePlanet.numAgents, World.settings.agentsCanCommunicate);
 
     FiercePlanet.notify("New wave coming...");
 
@@ -297,7 +297,7 @@ FiercePlanet._startAgents = function () {
 
 
     // Play sound, if any are set
-    if (FiercePlanet.currentSettings.soundsPlayable) {
+    if (World.settings.soundsPlayable) {
         if (FiercePlanet.audio != undefined) {
             FiercePlanet.audio.play();
         }
@@ -327,7 +327,7 @@ FiercePlanet._stopAgents = function () {
     clearInterval(FiercePlanet.agentTimerId);
     FiercePlanet.inPlay = false;
 
-    if (FiercePlanet.currentSettings.soundsPlayable) {
+    if (World.settings.soundsPlayable) {
         if (FiercePlanet.audio != undefined)
             FiercePlanet.audio.pause();
     }
