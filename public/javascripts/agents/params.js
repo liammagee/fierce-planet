@@ -154,7 +154,6 @@ FiercePlanet.currentY = null;
 FiercePlanet.$gameOver = null;
 FiercePlanet.$completeLevel = null;
 FiercePlanet.$completeGame = null;
-FiercePlanet.$levelList = null;
 FiercePlanet.$upgradeDelete = null;
 FiercePlanet.$resourceGallery = null;
 FiercePlanet.$newLevel = null;

@@ -182,6 +182,27 @@ FiercePlanet.setupDialogs = function() {
             }
         });
 
+    FiercePlanet.$levelGalleryDialog = $('#level-gallery-dialog')
+        .dialog({
+                                          position: [dialogX, dialogY],
+                                                       width: FiercePlanet.WORLD_WIDTH + 7,
+                                                       height: FiercePlanet.WORLD_HEIGHT + 7,
+            autoOpen: false,
+            modal: true,
+            title: 'Level Gallery',
+            buttons: {
+                "Open level": function() {
+                    FiercePlanet.newLevel();
+                    $( this ).dialog( "close" );
+                },
+                "Cancel": function() {
+                    $( this ).dialog( "close" );
+                }
+            },
+              open: function(){
+                $("#level-gallery-tabs").tabs();
+              }
+        });
     FiercePlanet.$settingsDialog = $('#settings-dialog')
         .dialog({
                                           position: [dialogX, dialogY],
@@ -458,6 +479,14 @@ FiercePlanet.showResourceGallery = function() {
 FiercePlanet.showSettings = function() {
     FiercePlanet.pauseGame();
     FiercePlanet.$settingsDialog.dialog('open');
+};
+
+/**
+ * Shows the Fierce Planet level gallery
+ */
+FiercePlanet.showLevelGallery = function() {
+    FiercePlanet.pauseGame();
+    FiercePlanet.$levelGalleryDialog.dialog('open');
 };
 
 /**

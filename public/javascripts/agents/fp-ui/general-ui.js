@@ -36,8 +36,10 @@ FiercePlanet.hookUpUIEventListeners = function() {
     $('#zoomIn').click(function() { FiercePlanet.zoom(1);});
     $('#zoomOut').click(function() { FiercePlanet.zoom(-1);});
     $('#zoomReset').click(function() { FiercePlanet.zoom(0);});
+
     $('#settings').click(FiercePlanet.showSettings);
     $('#credits').click(FiercePlanet.showCredits);
+    $('#openLevelGallery').click(FiercePlanet.showLevelGallery);
 
     // Admin functions
     $('#debug').click(FiercePlanet.processAgents);

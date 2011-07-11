@@ -1,0 +1,58 @@
+<div id="level-gallery-dialog" style="display: none;">
+
+  <div id="level-gallery-tabs">
+
+  	<ul>
+        <li><a href="#default-levels">Default levels</a></li>
+		<li>
+          <a href="/levels/gallery">Custom levels</a>
+        </li>
+	</ul>
+
+
+
+  <div id="default-levels">
+    <form>
+      <div>
+        Select a level:
+        <br/>
+        <select id="levelInput" name="levelInput" size="11">
+          <option value="1">Level 1: Welcome to Fierce Planet!</option>
+          <option value="2">Level 2: Twists and Turns</option>
+          <option value="3">Level 3: Waves of Uncertainty</option>
+          <option value="4">Level 4: Spiral of Doom</option>
+          <option value="5">Level 5: A-mazing Grace</option>
+          <option value="6">Level 6: Dire Straits</option>
+          <option value="7">Level 7: Like, Totally Random...</option>
+          <option value="8">Level 8: A Fork (or Two) in the Road</option>
+          <option value="9">Level 9: Cascades</option>
+          <option value="10">Level 10: Fields of Ma(i)ze</option>
+          <option value="11">Level 11: It's a Mad World</option>
+        </select>
+      </div>
+      <div>
+        Select difficulty:
+        <br/>
+        <select id="difficultyInput" name="difficultyInput" size="4">
+          <option value="1">Easy</option>
+          <option value="2" selected="selected">Medium</option>
+          <option value="3">Hard</option>
+          <option value="4">EXTREME</option>
+        </select>
+      </div>
+
+    </form>
+  </div>
+
+
+</div>
+
+
+<script>
+// Add event handlers when dialog is loaded
+$(document).ready(function() {
+    $('#levelInput').change(FiercePlanet.changePresetLevel);
+    $('#difficultyInput').change(FiercePlanet.changeDifficulty);
+});
+
+</script>

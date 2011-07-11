@@ -1,5 +1,5 @@
 $('#notifications').html("<p>Opening level <%= @level.name %>...</p>");
-FiercePlanet.$levelList.dialog('close');
+FiercePlanet.$levelGalleryDialog.dialog('close');
 <%=  render('levels/setup_level', :locals => { :level => @level}) %>
 FiercePlanet.newLevel();
 
