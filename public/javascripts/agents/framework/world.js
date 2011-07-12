@@ -25,14 +25,14 @@ var World = (function() {
             /** Are resources in tension - does proximity of resources impact on their benefit */
             resourcesInTension: false,
 
-            /** Does a resource bonus apply, for using an even mix of resources? TODO: not yet implemented */
-            resourceBonus: false,
-
             /** Do all resources impact upon agents equivalently? */
             applyGeneralHealth: false,
 
             /** Ignores the weighting of resources when calculating benefits */
             ignoreResourceBalance: false,
+
+            /** Does a resource bonus apply, for using an even mix of resources? TODO: not yet implemented */
+            resourceBonus: false,
 
             /** Serialise just the settings to JSON */
             toJSON: function toJSON() {
@@ -104,7 +104,15 @@ var World = (function() {
                     return resourceType;
             }
             return undefined;
-        }
+        },
+
+
+        // State variables
+        currentLevel: null,
+
+        currentWave: null,
+
+        currentResource: null
 
 
     };

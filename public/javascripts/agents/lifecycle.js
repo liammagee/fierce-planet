@@ -98,7 +98,7 @@ FiercePlanet.newWave = function() {
     FiercePlanet.waveDelayCounter = 0;
     FiercePlanet.currentProfile.current_level_saved_this_wave = 0;
 
-    FiercePlanet.currentLevel.presetAgents(AgentTypes.CITIZEN_AGENT_TYPE, FiercePlanet.numAgents, World.settings.agentsCanCommunicate);
+    FiercePlanet.currentLevel.generateAgents(AgentTypes.CITIZEN_AGENT_TYPE, FiercePlanet.numAgents);
 
     FiercePlanet.notify("New wave coming...");
 

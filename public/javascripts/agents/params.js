@@ -73,7 +73,6 @@ FiercePlanet.WAVE_NOTICE_HEIGHT = 150;
 // Current state variables
 World.resourceTypeNamespace = TBL;
 FiercePlanet.currentProfile = new Profile();
-FiercePlanet.currentSettings = new Settings();
 FiercePlanet.currentLevelNumber = 1;
 FiercePlanet.currentWave = 1;
 FiercePlanet.currentLevelPreset = true;

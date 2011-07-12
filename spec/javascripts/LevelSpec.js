@@ -524,12 +524,82 @@ describe("level-related classes", function() {
 
     describe("handling agents", function() {
         beforeEach(function() {
+            level.addEntryPoint(0, 0);
+            level.generateAgents(World.agentTypes[0], 10);
         });
 
-        it("should do something with agents", function() {
+        it("should generate a set of standard agents at the entry point", function() {
+            expect(level.getCurrentAgents().length).toEqual(10);
+        });
+
+        it("should retrieve an agent by an ID", function() {
+            var agent = level.getCurrentAgents()[0];
+            expect(level.getAgentByID(agent.getID())).toEqual(agent);
+        });
+
+        it("should calculate the correct number of total saveable agents", function() {
+            expect(level.getTotalSaveableAgents()).toEqual(55);
+        });
+
+
+        describe("handling level agents", function() {
+            beforeEach(function() {
+                level.addLevelAgent(new Agent(World.agentTypes[0], 0, 0));
+                level.generateAgents(World.agentTypes[0], 10);
+            });
+
+            it("should add a level agent to the current agents", function() {
+                expect(level.getLevelAgents().length).toEqual(1);
+                expect(level.getCurrentAgents().length).toEqual(11);
+            });
+        });
+
+        describe("handling wave agents", function() {
+            beforeEach(function() {
+                level.addWaveAgent(new Agent(World.agentTypes[0], 0, 0));
+                level.generateAgents(World.agentTypes[0], 10);
+            });
+
+            it("should add a set of wave agent to the current agents", function() {
+                expect(level.getWaveAgents().length).toEqual(1);
+                expect(level.getCurrentAgents().length).toEqual(20);
+            });
+        });
+
+        describe("adding multiple entry points", function() {
+            beforeEach(function() {
+                level.addEntryPoint(9, 9);
+            });
+
+            it("should generate 2 x the number of agents", function() {
+                level.generateAgents(World.agentTypes[0], 10);
+                expect(level.getCurrentAgents().length).toEqual(20);
+            });
+
+            describe("handling level agents", function() {
+                beforeEach(function() {
+                    level.addLevelAgent(new Agent(World.agentTypes[0], 0, 0));
+                });
+
+                it("should add only one level agent to the current agents", function() {
+                    level.generateAgents(World.agentTypes[0], 10);
+                    expect(level.getLevelAgents().length).toEqual(1);
+                    expect(level.getCurrentAgents().length).toEqual(21);
+                });
+            });
+
+            describe("handling wave agents", function() {
+                beforeEach(function() {
+                    level.addWaveAgent(new Agent(World.agentTypes[0], 0, 0));
+                });
+
+                it("should add only one set of wave agent to the current agents", function() {
+                    level.generateAgents(World.agentTypes[0], 10);
+                    expect(level.getWaveAgents().length).toEqual(1);
+                    expect(level.getCurrentAgents().length).toEqual(30);
+                });
+            });
         });
     });
-
-
 
 });

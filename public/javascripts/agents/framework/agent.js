@@ -312,10 +312,10 @@ Agent.prototype.setCountdownToMove = function(countdownToMove) { this._countdown
 Agent.prototype.incrementCountdownToMove = function() { this._countdownToMove ++; };
 Agent.prototype.resetCountdownToMove = function() { this._countdownToMove = 0; };
 Agent.prototype.readyToMove = function() { return this._countdownToMove == 0; };
-Agent.prototype.getSpeed = function() { return this._speed; };
-Agent.prototype.setSpeed = function(speed) { this._speed = speed; };
 Agent.prototype.getMoves = function() { return this._age; };
 Agent.prototype.setMoves = function(moves) { this._age = moves; };
+Agent.prototype.getSpeed = function() { return this._speed; };
+Agent.prototype.setSpeed = function(speed) { this._speed = speed; };
 Agent.prototype.incrementMoves = function() { this._age++; };
 /**
  * Change the speed, but sparingly as the speed moves away from the standard speed: MOVE_INCREMENTS
@@ -351,23 +351,6 @@ Agent.prototype.adjustSpeed = function() {
 
     if (tmpSpeed > 0)
         this._speed = tmpSpeed;
-};
-
-/**
- * Main method for evaluating and making moves
- *
- * @param options
- */
-Agent.prototype.evaluateMove = function(level, options) {
-    // TODO: Make these parameters of the level
-    var withNoRepeat = options["withNoRepeat"];
-    var withNoCollision = options["withNoCollision"];
-
-    var position = this.findPosition(level, withNoRepeat, withNoCollision, level.getAllowOffscreenCycling());
-
-    // Set the position and add the move to the agent's memory
-    this.setPosition(position[0], position[1]);
-    this.incrementMoves();
 };
 
 /**
@@ -497,6 +480,25 @@ Agent.prototype.memorise = function(level) {
         }
     }
 };
+
+
+/**
+ * Main method for evaluating and making moves
+ *
+ * @param options
+ */
+Agent.prototype.evaluateMove = function(level, options) {
+    // TODO: Make these parameters of the level
+    var withNoRepeat = options["withNoRepeat"];
+    var withNoCollision = options["withNoCollision"];
+
+    var position = this.findPosition(level, withNoRepeat, withNoCollision, level.getAllowOffscreenCycling());
+
+    // Set the position and add the move to the agent's memory
+    this.setPosition(position[0], position[1]);
+    this.incrementMoves();
+};
+
 
 /**
 <div>

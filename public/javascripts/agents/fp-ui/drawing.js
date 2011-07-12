@@ -823,7 +823,7 @@ FiercePlanet.drawExpired = function() {
 FiercePlanet.drawSaved = function() {
     var e = $('#saved-display')[0];
     var saved = FiercePlanet.currentProfile.current_level_saved.toString();
-    var totalSaveable = FiercePlanet.currentLevel.getTotalSaveable();
+    var totalSaveable = FiercePlanet.currentLevel.getTotalSaveableAgents();
     e.innerHTML = saved + " out of " + totalSaveable;
 };
 

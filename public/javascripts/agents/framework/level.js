@@ -41,7 +41,7 @@ function Level(id) {
     this._levelAgents = [];
     this._waveAgents = [];
     this._currentAgents = [];
-    this._currentAgentsMap = [];
+    this._currentAgentsMap = {};
     this._resources = [];
     this._resourceCategoryCounts = this.resetResourceCategoryCounts();
 
@@ -401,32 +401,18 @@ Level.prototype.addWaveAgent = function(agent) { this._waveAgents.push(agent); }
 Level.prototype.getCurrentAgents = function() { return this._currentAgents; };
 Level.prototype.setCurrentAgents = function(currentAgents) {
     this._currentAgents = currentAgents;
-    for (var agent in this._currentAgents) {
+    for (var i in this._currentAgents) {
+        var agent = this._currentAgents[i];
         this._currentAgentsMap[agent._id] = agent;
     }
 };
 Level.prototype.getAgentByID = function(agentID) { return this._currentAgentsMap[agentID]; };
 /**
- * 
- * @param numAgents
- */
-Level.prototype.generateWaveAgents = function(numAgents) {
-    var newAgents = [];
-    for (var j = 0; j < numAgents; j++) {
-        for (var i = 0; i < this._waveAgents.length; i++) {
-            var waveAgent = this._waveAgents[i];
-            newAgents.push(new Agent(waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
-        }
-    }
-    return newAgents;
-};
-/**
  *
  * @param agentType
  * @param number
- * @param canCommunicateWithOtherAgents
  */
-Level.prototype.presetAgents = function(agentType, number, canCommunicateWithOtherAgents) {
+Level.prototype.generateAgents = function(agentType, number) {
     var agents = [];
     for (var j = 0; j < this._entryPoints.length; j++) {
         var point = this._entryPoints[j];
@@ -440,20 +426,34 @@ Level.prototype.presetAgents = function(agentType, number, canCommunicateWithOth
 //            agent.setColor(colorScheme);
             var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
             agent.setDelay(delay);
-            agent.setCanCommunicateWithOtherAgents(canCommunicateWithOtherAgents);
+            agent.setCanCommunicateWithOtherAgents(World.settings.agentsCanCommunicate);
             agents.push(agent);
         }
     }
-    $.merge(agents, this.generateWaveAgents());
+    $.merge(agents, this.generateWaveAgents(number));
     $.merge(agents, this.getLevelAgents());
 
     this.setCurrentAgents(agents);
+};
+/**
+ *
+ * @param numAgents
+ */
+Level.prototype.generateWaveAgents = function(numAgents) {
+    var newAgents = [];
+    for (var j = 0; j < numAgents; j++) {
+        for (var i = 0; i < this._waveAgents.length; i++) {
+            var waveAgent = this._waveAgents[i];
+            newAgents.push(new Agent(waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
+        }
+    }
+    return newAgents;
 };
 
 /**
  * Indicates total number of agents saveable on this level
  */
-Level.prototype.getTotalSaveable = function () {
+Level.prototype.getTotalSaveableAgents = function () {
     var firstWave = this._initialAgentNumber;
     var lastWave = this._waveNumber + this._initialAgentNumber -1;
     var minor = (firstWave * (firstWave - 1)) / 2;
