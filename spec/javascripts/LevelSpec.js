@@ -55,7 +55,6 @@ describe("level-related classes", function() {
         });
 
         it("should determine whether a given position is occupied by a resource", function() {
-            console.log(level.isPositionOccupiedByResource(0, 0));
           expect(level.isPositionOccupiedByResource(0, 0)).toBeTruthy();
           expect(level.isPositionOccupiedByResource(1, 1)).toBeFalsy();
         });
