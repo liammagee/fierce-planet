@@ -97,7 +97,7 @@ function Resource(kind, x, y) {
 
     this._totalYield = kind.getTotalYield();
     this._upgradeLevel = 1;
-    this.setPosition(x, y);
+    this.moveTo(x, y);
 }
 // Kind properties
 Resource.prototype.getName = function() { return this._resourceName; };
@@ -119,7 +119,7 @@ Resource.prototype.getTotalYield = function() { return this._totalYield; };
 Resource.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; };
 Resource.prototype.incrementTotalYield = function(totalYield) { this._totalYield++; };
 Resource.prototype.getPosition = function() { return [this._x, this._y]; };
-Resource.prototype.setPosition = function(x, y) { this._x =x; this._y = y; };
+Resource.prototype.moveTo = function(x, y) { this._x =x; this._y = y; };
 Resource.prototype.getX = function() { return this._x; };
 Resource.prototype.setX = function(x) { this._x = x; };
 Resource.prototype.getY = function() { return this._y; };

@@ -4,7 +4,6 @@ describe("level-related classes", function() {
 
   beforeEach(function() {
       level = new Level(1);
-
   });
 
     it("should have a series of default values", function() {

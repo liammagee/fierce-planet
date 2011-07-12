@@ -219,7 +219,15 @@ function Agent(agentType, x, y) {
 Agent.prototype.getAge = function() { return this._age; };
 Agent.prototype.setAge = function(age) { this._age = age; };
 Agent.prototype.getPosition = function() { return [this._x, this._y]; };
-Agent.prototype.setPosition = function(x, y) { this._x = x; this._y = y; };
+/**
+ * 
+ * @param x
+ * @param y
+ */
+Agent.prototype.moveTo = function(x, y) {
+    this._x = x; this._y = y;
+    this.incrementMoves();
+};
 Agent.prototype.lastPosition = function() { return this.getLastMemory(); };
 Agent.prototype.getX = function() { return this._x; };
 Agent.prototype.setX = function(x) { this._x = x; };
@@ -495,8 +503,7 @@ Agent.prototype.evaluateMove = function(level, options) {
     var position = this.findPosition(level, withNoRepeat, withNoCollision, level.getAllowOffscreenCycling());
 
     // Set the position and add the move to the agent's memory
-    this.setPosition(position[0], position[1]);
-    this.incrementMoves();
+    this.moveTo(position[0], position[1]);
 };
 
 
@@ -831,7 +838,6 @@ Agent.prototype.randomDirectionOrder = function() {
     var orderedDirections = [0, 1, 2, 3];
     var odl = orderedDirections.length;
     for (var i = 0; i < odl; i++) {
-        var obj = directions[i];
         var remainingLength = orderedDirections.length;
         var pos = Math.floor(Math.random() * remainingLength);
         directions.push(orderedDirections[pos]);
