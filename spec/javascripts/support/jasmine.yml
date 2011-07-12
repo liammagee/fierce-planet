@@ -20,6 +20,7 @@ src_files:
   - public/javascripts/agents/framework/agent.js
   - public/javascripts/agents/framework/world.js
   - public/javascripts/agents/framework/level.js
+  - public/javascripts/agents/framework/tile.js
 
 # stylesheets
 #

@@ -20,8 +20,8 @@ function Level(id) {
     this._exitPoints = [];
 
     // Dimensions
-    this._worldWidth = 11;
-    this._worldHeight = 11;
+    this._worldWidth = 10;
+    this._worldHeight = 10;
 
     // Parameters
     this._initialAgentNumber = 1;
@@ -34,12 +34,6 @@ function Level(id) {
     this._noWander = false;
     this._noSpeedChange = false;
 
-    // Google map options
-    this._mapOptions = null;
-    this._mapURL = null;
-    this._image = null;
-    this._imageAttribution = null;
-
 
     // Current level state
     this._tiles = [];
@@ -48,16 +42,25 @@ function Level(id) {
     this._waveAgents = [];
     this._currentAgents = [];
     this._currentAgentsMap = [];
-    this._cells = [];
     this._resources = [];
     this._resourceCategoryCounts = this.resetResourceCategoryCounts();
-    this._catastrophe = null;
+
+    /** Object for storing tiles, resources and other level entities for co-ordinate based look-up */
+    this._cells = {};
+
 
     // User interface elements
     this._tip = null;
     this._introduction = "Welcome to level " + this._id + ".";
     this._conclusion = "Congratulations! You have completed level " + this._id + ".";
+    this._catastrophe = null;
+
+
+    // Google map, image and sound options
+    this._mapOptions = null;
+    this._mapURL = null;
     this._image = null;
+    this._imageAttribution = null;
     this._soundSrc = null;
 
 }
@@ -119,42 +122,108 @@ Level.prototype.getSurroundingTiles = function(x, y) {
     var surroundingTiles = [];
 
     if (x > 0)
-        surroundingTiles.add(this.getTile(x - 1, y));
+        surroundingTiles.push(this.getTile(x - 1, y));
     if (x < this._worldWidth - 1)
-        surroundingTiles.add(this.getTile(x + 1, y));
+        surroundingTiles.push(this.getTile(x + 1, y));
     if (y > 0)
-        surroundingTiles.add(this.getTile(x, y - 1));
+        surroundingTiles.push(this.getTile(x, y - 1));
     if (y < this._worldHeight - 1)
-        surroundingTiles.add(this.getTile(x, y + 1));
+        surroundingTiles.push(this.getTile(x, y + 1));
 
     return surroundingTiles;
 };
+/**
+ *
+ */
 Level.prototype.getTiles = function() { return this._tiles; };
+/**
+ * 
+ * @param tiles
+ */
 Level.prototype.setTiles = function(tiles) {
     this._tiles = tiles;
     this.assignCells();
 };
+/**
+ *
+ * @param tile
+ */
 Level.prototype.addTile = function(tile) {
+    var position = tile._y * this._worldWidth + tile._x;
+    if (this._tiles[tile._y * this._worldWidth + tile._x] != null)
+        throw new Error("Tile is already occupied!");
     this._tiles[tile._y * this._worldWidth + tile._x] = tile;
     this.removeEntryPoint(tile._x, tile._y);
     this.removeExitPoint(tile._x, tile._y);
     this.addCell(tile._x, tile._y, tile);
 };
+/**
+ *
+ * @param x
+ * @param y
+ */
+Level.prototype.addDefaultTile = function(x, y) {
+    this.addTile(new Tile(DEFAULT_TILE_COLOR, x, y));
+};
+/**
+ * 
+ * @param x
+ * @param y
+ */
 Level.prototype.removeTile = function(x, y) {
     var tilePosition = y * this.getWorldWidth() + x;
     this._tiles[tilePosition] = undefined;
+    // This fails when trying to add back tile at this co-ordinate
+//    this._tiles.splice(tilePosition, 1);
     this.annulCell(x, y);
 };
+
+/**
+ *
+ */
+Level.prototype.fillWithTiles = function() {
+    this._tiles = [];
+    for (var i = 0; i < this._worldHeight; i++) {
+        for (var j = 0; j < this._worldWidth; j++) {
+            var tile = new Tile(DEFAULT_TILE_COLOR, j, i);
+            this._tiles.push(tile);
+            this.addCell(tile._x, tile._y, tile);
+        }
+    }
+};
+
+/**
+ *
+ */
 Level.prototype.removeAllTiles = function() {
+//    this._tiles = [];
+//    this._cells = {};
     for (var i = 0; i < this.getWorldWidth(); i++) {
         for (var j = 0; j < this.getWorldHeight(); j++) {
             var tilePosition = j * this.getWorldWidth() + i;
             this._tiles[tilePosition] = undefined;
-            this._cells[[i, j]] = undefined;
+            this.annulCell(i, j);
         }
-
     }
 };
+/**
+ *
+ * @param start
+ * @param number
+ */
+Level.prototype.removeTiles = function(start, number) {
+    for (var i = start; i < start + number; i++) {
+        if (i >= 0 && i < this._tiles.length) {
+            var tile = this._tiles[i];
+            this._tiles[i] = undefined;
+            this.annulCell(tile._x, tile._y);
+        }
+    }
+};
+
+/**
+ *
+ */
 Level.prototype.getPath = function() {
     var pathCells = [];
     for (var i = 0; i < this._worldHeight; i++) {
@@ -167,33 +236,41 @@ Level.prototype.getPath = function() {
     }
     return pathCells;
 };
-Level.prototype.fillWithTiles = function() {
-    this._tiles = [];
-    for (var i = 0; i < this._worldHeight; i++) {
-        for (var j = 0; j < this._worldWidth; j++) {
-            var tile = new Tile(DEFAULT_TILE_COLOR, j, i);
-            this._tiles.push(tile);
-            this.addCell(tile._x, tile._y, tile);
-        }
-    }
-};
-Level.prototype.clearTiles = function(start, number) {
-    for (var i = start; i < start + number; i++) {
-        if (i >= 0 && i < this._tiles.length) {
-            var tile = this._tiles[i];
-            this._tiles[i] = undefined;
-            this.annulCell(tile._x, tile._y);
-        }
-    }
-};
 
 // Cell functions
+/**
+ *
+ */
 Level.prototype.getCells = function() { return this._cells; };
+/**
+ * 
+ * @param x
+ * @param y
+ */
 Level.prototype.getCell = function(x, y) { return this._cells[[x, y]]; };
+/**
+ *
+ * @param cells
+ */
 Level.prototype.setCells = function(cells) { this._cells = cells; };
-Level.prototype.addCell = function(x, y, value) { this._cells[[x, y]] = value; };
+/**
+ * 
+ * @param x
+ * @param y
+ * @param value
+ */
+Level.prototype.addCell = function(x, y, value) {this._cells[[x, y]] = value;};
+/**
+ *
+ * @param x
+ * @param y
+ */
 Level.prototype.annulCell = function(x, y) { this._cells[[x, y]] = undefined; };
+/**
+ *
+ */
 Level.prototype.assignCells = function() {
+    this._cells = [];
     for (var i = 0; i < this._tiles.length; i++) {
         var tile = this._tiles[i];
         if (tile != undefined)
@@ -203,19 +280,19 @@ Level.prototype.assignCells = function() {
 
 // Entry point functions
 Level.prototype.getEntryPoints = function() { return this._entryPoints; };
-Level.prototype.setEntryPoints = function(entryPoints) { this._entryPoints = entryPoints; };
+Level.prototype.setEntryPoints = function(entryPoints) {
+    entryPoints.forEach(function(ep) { this.addEntryPoint(ep); })
+};
+/**
+ *
+ * @param x
+ * @param y
+ */
 Level.prototype.addEntryPoint = function(x, y) {
-    var found = false;
-    for (var i = 0; i < this._entryPoints.length; i++) {
-        var point = this._entryPoints[i];
-        if (point[0] == x && point[1]== y) {
-            found = true;
-            break;
-        }
-    }
-    if (!found)
+    if (!this.isEntryOrExitPoint(x, y))
         this._entryPoints.push([x, y]);
 };
+
 Level.prototype.resetEntryPoints = function() {
     this._entryPoints = [];
     this.addEntryPoint(0, 0);
@@ -235,7 +312,14 @@ Level.prototype.getFirstEntryPoint = function() { return this._entryPoints[0]; }
 
 // Exit point functions
 Level.prototype.getExitPoints = function() { return this._exitPoints; };
-Level.prototype.setExitPoints = function(exitPoints) { this._exitPoints = exitPoints; };
+Level.prototype.setExitPoints = function(exitPoints) {
+    exitPoints.forEach(function(ep) { this.addExitPoint(ep); })
+};
+/**
+ *
+ * @param x
+ * @param y
+ */
 Level.prototype.isExitPoint = function(x, y) {
     for (var i = 0; i < this._exitPoints.length; i++) {
         var point = this._exitPoints[i];
@@ -245,6 +329,11 @@ Level.prototype.isExitPoint = function(x, y) {
     }
     return false;
 };
+/**
+ *
+ * @param x
+ * @param y
+ */
 Level.prototype.addExitPoint = function(x, y) {
     var found = false;
     for (var i = 0; i < this._exitPoints.length; i++) {
@@ -257,9 +346,17 @@ Level.prototype.addExitPoint = function(x, y) {
     if (!found)
         this._exitPoints.push([x, y]);
 };
+/**
+ *
+ */
 Level.prototype.resetExitPoints = function() {
     this._exitPoints = [];
 };
+/**
+ *
+ * @param x
+ * @param y
+ */
 Level.prototype.removeExitPoint = function(x, y) {
     var position = -1;
     for (var i = 0; i < this._exitPoints.length; i++) {
@@ -270,6 +367,27 @@ Level.prototype.removeExitPoint = function(x, y) {
     if (position > -1) {
         this._exitPoints.splice(position, 1);
     }
+};
+
+/**
+ * Determines whether a cell at a given co-ordinate is either an entry or an exit point
+ * @param x
+ * @param y
+ */
+Level.prototype.isEntryOrExitPoint = function(x, y) {
+    for (var i in this._entryPoints) {
+        var point = this._entryPoints[i];
+        if (point[0] == x && point[1]== y) {
+            return true;
+        }
+    }
+    for (var i in this._exitPoints) {
+        var point = this._exitPoints[i];
+        if (point[0] == x && point[1]== y) {
+            return true;
+        }
+    }
+    return false;
 };
 
 
@@ -288,6 +406,10 @@ Level.prototype.setCurrentAgents = function(currentAgents) {
     }
 };
 Level.prototype.getAgentByID = function(agentID) { return this._currentAgentsMap[agentID]; };
+/**
+ * 
+ * @param numAgents
+ */
 Level.prototype.generateWaveAgents = function(numAgents) {
     var newAgents = [];
     for (var j = 0; j < numAgents; j++) {
@@ -298,6 +420,12 @@ Level.prototype.generateWaveAgents = function(numAgents) {
     }
     return newAgents;
 };
+/**
+ *
+ * @param agentType
+ * @param number
+ * @param canCommunicateWithOtherAgents
+ */
 Level.prototype.presetAgents = function(agentType, number, canCommunicateWithOtherAgents) {
     var agents = [];
     for (var j = 0; j < this._entryPoints.length; j++) {
@@ -338,21 +466,39 @@ Level.prototype.getTotalSaveable = function () {
 
 
 // Resource functions
+/**
+ *
+ */
 Level.prototype.getResources = function() { return this._resources; };
+/**
+ * 
+ * @param resources
+ */
 Level.prototype.setResources = function(resources) {
     this._resources = resources;
     this._resourceCategoryCounts = this.resetResourceCategoryCounts();
 };
+/**
+ *
+ * @param resource
+ */
 Level.prototype.addResource = function(resource) {
     this._resources.push(resource);
     this.incrementResourceCategoryCount(resource);
 };
+/**
+ * 
+ * @param resource
+ */
 Level.prototype.removeResource = function(resource) {
     var index = this.getCurrentResourceIndex(resource);
     if (index > -1)
         this._resources.splice(index, 1);
     this.decrementResourceCategoryCount(resource);
 };
+/**
+ * 
+ */
 Level.prototype.resetResourceCategoryCounts = function() {
     var rcc = {};
     World.resourceCategories.forEach(function(resourceCategory) {
@@ -363,6 +509,10 @@ Level.prototype.resetResourceCategoryCounts = function() {
     });
     return rcc;
 };
+/**
+ *
+ * @param resource
+ */
 Level.prototype.incrementResourceCategoryCount = function(resource) {
     this._resourceCategoryCounts[resource.getCategory().getCode()] += 1;
 };

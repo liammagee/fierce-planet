@@ -4,24 +4,364 @@ describe("level-related classes", function() {
 
   beforeEach(function() {
       level = new Level(1);
+
   });
 
+    it("should have a series of default values", function() {
+        expect(level.getWorldWidth()).toEqual(10);
+        expect(level.getWorldHeight()).toEqual(10);
+        expect(level.getWaveNumber()).toEqual(10);
+        expect(level.getExpiryLimit()).toEqual(20);
+        expect(level.getInitialResourceStore()).toEqual(100);
+        expect(level.getAllowOffscreenCycling()).toBeFalsy();
+        expect(level.getAllowResourcesOnPath()).toBeFalsy();
+        expect(level.getNoWander()).toBeFalsy();
+        expect(level.getNoSpeedChange()).toBeFalsy();
+        
+        expect(level.getTiles()).toEqual([]);
+        expect(level.getLevelAgents()).toEqual([]);
+        expect(level.getWaveAgents()).toEqual([]);
+        expect(level.getCurrentAgents()).toEqual([]);
+        expect(level.getCells()).toEqual([]);
+        expect(level.getResources()).toEqual([]);
+        expect(level.getResourceCategoryCounts()).toEqual({'eco': 0, 'env': 0, 'soc': 0 });
+
+        expect(level.getTip()).toBeNull();
+        expect(level.getIntroduction()).toEqual("Welcome to level 1.");
+        expect(level.getConclusion()).toEqual("Congratulations! You have completed level 1.");
+        expect(level.getCatastrophe()).toBeNull();
+
+        expect(level.getMapOptions()).toBeNull();
+        expect(level.getMapURL()).toBeNull();
+        expect(level.getImage()).toBeNull();
+        expect(level.getImageAttribution()).toBeNull();
+        expect(level.getSoundSrc()).toBeNull();
+    });
 
     describe("handling tiles, cells, entry and exit points", function() {
-        beforeEach(function() {
+        beforeEach(function() {});
+
+        describe("working with tiles", function() {
+            beforeEach(function() {
+                level.fillWithTiles();
+            });
+
+            it("should have 100 tiles", function() {
+                expect(level.getTiles().length).toEqual(100);
+            });
+
+            it("should have a cell at various co-ordinates between [0, 0] and [9, 9]", function() {
+                for (var i = 0; i < level.getWorldWidth(); i++) {
+                    for (var j = 0; j < level.getWorldHeight(); j++) {
+                        expect(level.getCell(i, j)).toBeDefined();
+                    }
+                }
+                expect(level.getCell(-1, -1)).toBeUndefined();
+                expect(level.getCell(level.getWorldWidth(), level.getWorldHeight())).toBeUndefined();
+            });
+
+            it("should have surrounding tiles", function() {
+                var surroundingTiles = level.getSurroundingTiles(5, 5);
+                expect(surroundingTiles.length).toEqual(4);
+                surroundingTiles = level.getSurroundingTiles(0, 0);
+                expect(surroundingTiles.length).toEqual(2);
+                surroundingTiles = level.getSurroundingTiles(9, 9);
+                expect(surroundingTiles.length).toEqual(2);
+            });
+
+            it("should be possible to set the entire tile collection", function() {
+                var tiles = level.getTiles();
+                // At co-ordinate [0, 9]
+                tiles.splice(0, 1);
+                level.setTiles(tiles);
+                expect(level.getTiles().length).toEqual(99);
+                expect(level.getCell(0, 0)).toBeUndefined();
+
+                tiles.splice(9, 1);
+                level.setTiles(tiles);
+                expect(level.getTiles().length).toEqual(98);
+                expect(level.getCell(0, 1)).toBeUndefined();
+            });
+
+            describe("removing one tile", function() {
+                beforeEach(function() {
+                    level.removeTile(5, 5);
+                });
+
+                it("should have same number of tiles, but tile at this co-ordinate should be undefined", function() {
+                    expect(level.getTiles().length).toEqual(100);
+                    expect(level.getTile(5, 5)).toBeUndefined();
+                });
+
+                it("should not have a result at the corresponding co-ordinate", function() {
+                    expect(level.getCell(5, 5)).toBeUndefined();
+                });
+
+                it("should have a path corresponding to the removed tiles", function() {
+                    var path = level.getPath();
+                    expect(path.length).toEqual(1);
+                    expect(path[0]).toEqual([5, 5]);
+                });
+
+                describe("adding a tile based on co-ordinates", function() {
+                    beforeEach(function() {
+                        level.addDefaultTile(5, 5);
+                    });
+
+                    it("should have 1 move tile", function() {
+                        expect(level.getTiles().length).toEqual(100);
+                        expect(level.getTile(5, 5)).toBeDefined();
+                    });
+
+                    it("should have a result at the corresponding co-ordinate", function() {
+                        expect(level.getCell(5, 5)).toBeDefined();
+                    });
+                });
+
+                describe("adding a tile object", function() {
+                    beforeEach(function() {
+                        level.addTile(new Tile("0FFF1F", 5, 5));
+                    });
+
+                    it("should have 1 move tile", function() {
+                        expect(level.getTiles().length).toEqual(100);
+                        expect(level.getTile(5, 5)).toBeDefined();
+                    });
+
+                    it("should have a result at the corresponding co-ordinate", function() {
+                        expect(level.getCell(5, 5)).toBeDefined();
+                    });
+                });
+            });
+
+            describe("removing all tiles", function() {
+                beforeEach(function() {
+                    level.removeAllTiles();
+                });
+
+                it("should have same number of tiles, but tile at this co-ordinate should be undefined", function() {
+                    expect(level.getTiles().length).toEqual(100);
+                    expect(level.getTile(0, 0)).toBeUndefined();
+                    expect(level.getTile(5, 5)).toBeUndefined();
+                    expect(level.getTile(9, 9)).toBeUndefined();
+                });
+
+                it("should not have a result at the corresponding co-ordinate", function() {
+                    expect(level.getCell(0, 0)).toBeUndefined();
+                    expect(level.getCell(5, 5)).toBeUndefined();
+                    expect(level.getCell(9, 9)).toBeUndefined();
+                });
+
+                it("should have a path corresponding to the removed tiles", function() {
+                    var path = level.getPath();
+                    expect(path.length).toEqual(100);
+                    expect(path[0]).toEqual([0, 0]);
+                    expect(path[99]).toEqual([9, 9]);
+                });
+            });
+            
+            describe("removing selected tiles", function() {
+                beforeEach(function() {
+                    level.removeTiles(20, 30);
+                });
+
+                it("should have same number of tiles, but tiles at relevant co-ordinates should be undefined", function() {
+                    expect(level.getTiles().length).toEqual(100);
+                    expect(level.getTile(0, 0)).toBeDefined();
+                    expect(level.getTile(0, 2)).toBeUndefined();
+                    expect(level.getTile(9, 4)).toBeUndefined();
+                    expect(level.getTile(0, 5)).toBeDefined();
+                });
+
+                it("should not have a result at the corresponding co-ordinate", function() {
+                    expect(level.getCell(0, 0)).toBeDefined();
+                    expect(level.getCell(0, 2)).toBeUndefined();
+                    expect(level.getCell(9, 4)).toBeUndefined();
+                    expect(level.getCell(0, 5)).toBeDefined();
+                });
+
+                it("should have a path corresponding to the removed tiles", function() {
+                    var path = level.getPath();
+                    expect(path.length).toEqual(30);
+                    expect(path[0]).toEqual([0, 2]);
+                    expect(path[29]).toEqual([9, 4]);
+                });
+
+                describe("adding a tile based on co-ordinates", function() {
+                    beforeEach(function() {
+                        level.addDefaultTile(0, 2);
+                    });
+
+                    it("should have 1 move tile", function() {
+                        expect(level.getTiles().length).toEqual(100);
+                        expect(level.getTile(0, 2)).toBeDefined();
+                    });
+
+                    it("should have a result at the corresponding co-ordinate", function() {
+                        expect(level.getCell(0, 2)).toBeDefined();
+                    });
+                });
+            });
         });
 
-        it("should do something with tiles", function() {
+
+        describe("adding entry points", function() {
+
+            beforeEach(function() {
+                level.addEntryPoint(0, 0);
+            });
+
+            it("should be an entry or exit point", function() {
+                expect(level.isEntryOrExitPoint(0, 0)).toBeTruthy();
+                expect(level.isEntryOrExitPoint(1, 1)).toBeFalsy();
+            });
+
+            it("should have an entry point", function() {
+                expect(level.getEntryPoints().length).toEqual(1);
+                expect(level.getEntryPoints()[0]).toEqual([0, 0]);
+                expect(level.getFirstEntryPoint()).toEqual([0, 0]);
+            });
+
+            describe("removing entry points", function() {
+                beforeEach(function() {
+                    level.removeEntryPoint(0, 0);
+                });
+
+                it("should have no entry points", function() {
+                    expect(level.getEntryPoints().length).toEqual(0);
+                    expect(level.getEntryPoints()[0]).toBeUndefined();
+                    expect(level.getFirstEntryPoint()).toBeUndefined();
+                });
+            });
+
+            describe("duplicating entry points", function() {
+                beforeEach(function() {
+                    level.addEntryPoint(0, 0);
+                });
+
+                it("should have just one entry point", function() {
+                    expect(level.getEntryPoints().length).toEqual(1);
+                    expect(level.getEntryPoints()[0]).toEqual([0, 0]);
+                    expect(level.getFirstEntryPoint()).toEqual([0, 0]);
+                });
+            });
+
+            describe("resetting entry points", function() {
+                beforeEach(function() {
+                    level.resetEntryPoints();
+                });
+
+                it("should have just one entry point", function() {
+                    expect(level.getEntryPoints().length).toEqual(1);
+                    expect(level.getEntryPoints()[0]).toEqual([0, 0]);
+                    expect(level.getFirstEntryPoint()).toEqual([0, 0]);
+                });
+            });
+
+            describe("adding multiple entry points", function() {
+                beforeEach(function() {
+                    level.addEntryPoint(9, 9);
+                });
+
+                it("should have two entry points", function() {
+                    expect(level.getEntryPoints().length).toEqual(2);
+                    expect(level.getEntryPoints()[0]).toEqual([0, 0]);
+                    expect(level.getEntryPoints()[1]).toEqual([9, 9]);
+                    expect(level.getFirstEntryPoint()).toEqual([0, 0]);
+                });
+            });
+
+            describe("adding an entry point to an exit point", function() {
+                beforeEach(function() {
+                    level.addExitPoint(9, 9);
+                    level.addEntryPoint(9, 9);
+                });
+
+                it("should have just one entry point", function() {
+                    expect(level.getEntryPoints().length).toEqual(1);
+                    expect(level.getEntryPoints()[0]).toEqual([0, 0]);
+                    expect(level.getFirstEntryPoint()).toEqual([0, 0]);
+                });
+            });
+
         });
 
-        it("should do something with cells", function() {
+        describe("adding exit points", function() {
+
+            beforeEach(function() {
+                level.addExitPoint(9, 9);
+            });
+
+            it("should be an entry or exit point", function() {
+                expect(level.isEntryOrExitPoint(9, 9)).toBeTruthy();
+            });
+
+            it("should have an exit point", function() {
+                expect(level.getExitPoints().length).toEqual(1);
+                expect(level.getExitPoints()[0]).toEqual([9, 9]);
+            });
+
+            describe("removing exit points", function() {
+                beforeEach(function() {
+                    console.log(level.getExitPoints());
+                    level.removeExitPoint(9, 9);
+                    console.log(level.getExitPoints());
+                });
+
+                it("should have no exit points", function() {
+                    expect(level.getExitPoints().length).toEqual(0);
+                    expect(level.getExitPoints()[0]).toBeUndefined();
+                });
+            });
+
+            describe("duplicating exit points", function() {
+                beforeEach(function() {
+                    level.addEntryPoint(9, 9);
+                });
+
+                it("should have just one exit point", function() {
+                    expect(level.getExitPoints().length).toEqual(1);
+                    expect(level.getExitPoints()[0]).toEqual([9, 9]);
+                });
+            });
+
+            describe("resetting exit points", function() {
+                beforeEach(function() {
+                    level.resetExitPoints();
+                });
+
+                it("should have no exit points", function() {
+                    expect(level.getExitPoints().length).toEqual(0);
+                    expect(level.getExitPoints()[0]).toBeUndefined();
+                });
+            });
+
+            describe("adding multiple exit points", function() {
+                beforeEach(function() {
+                    level.addExitPoint(5, 5);
+                });
+
+                it("should have two exit points", function() {
+                    expect(level.getExitPoints().length).toEqual(2);
+                    expect(level.getExitPoints()[0]).toEqual([9, 9]);
+                    expect(level.getExitPoints()[1]).toEqual([5, 5]);
+                });
+            });
+
+            describe("adding an exit point to an entry point", function() {
+                beforeEach(function() {
+                    level.addEntryPoint(9, 9);
+                    level.addExitPoint(9, 9);
+                });
+
+                it("should have just one exit point", function() {
+                    expect(level.getExitPoints().length).toEqual(1);
+                    expect(level.getExitPoints()[0]).toEqual([9, 9]);
+                });
+            });
+
         });
 
-        it("should do something with entry points", function() {
-        });
-
-        it("should do something with exit points", function() {
-        });
     });
 
 
