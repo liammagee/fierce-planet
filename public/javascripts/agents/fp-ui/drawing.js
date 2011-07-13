@@ -421,20 +421,42 @@ FiercePlanet.drawResource = function(resource) {
     var canvas = $('#resourceCanvas')[0];
     var ctx = canvas.getContext('2d');
 
+    // Variables
     var x = resource._x * FiercePlanet.cellWidth;
     var y = resource._y * FiercePlanet.cellHeight;
-    var s = resource._totalYield / resource._initialTotalYield * 100;
+    var s = (resource._totalYield / resource._initialTotalYield) * 100;
     var c = resource._color;
+    
+    // Clear and fill the resource tile with a white background
+    ctx.clearRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
+
+    // Determine drawing colours and offsets
     var newColor = FiercePlanet.diluteColour(s, s, s, c);
-    ctx.clearRect(x + 1, y + 1, FiercePlanet.cellWidth - 1, FiercePlanet.cellHeight - 1);
-    ctx.fillStyle = "#" + newColor;
+    var yOffset = ((FiercePlanet.cellHeight) * (1 - (s / 100)));
+
+    // Create a gradient to fill the cell from the bottom up
+    var resourceGradient = ctx.createLinearGradient(x, y + yOffset, x, y + FiercePlanet.cellHeight);
+    resourceGradient.addColorStop(0, "#fff");
+    resourceGradient.addColorStop(1, c);
+
+    ctx.fillStyle = resourceGradient;
     ctx.strokeStyle = "#333";
+
+    // Straight drawing
+//    ctx.fillStyle = "#" + newColor;
+//    ctx.strokeStyle = "#333";
 
 
     // Fill whole square
 //    ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
     // Fill smaller square
-    ctx.fillRect(x + 4, y + 4, FiercePlanet.cellWidth - 8, FiercePlanet.cellHeight - 8);
+//    ctx.fillRect(100, 100, 200, 200);
+    ctx.fillRect(x, y + yOffset, FiercePlanet.cellWidth, (FiercePlanet.cellHeight - yOffset));
+
+
+    // Add upgrade border?
     switch (resource._upgradeLevel) {
         case 1:
             break;
@@ -457,8 +479,10 @@ FiercePlanet.drawResource = function(resource) {
     ctx.lineWidth = 4;
     ctx.strokeStyle = "#" + newColor;
 //    ctx.strokeRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
-    ctx.strokeRect(x + 2, y + 2, FiercePlanet.cellWidth - 4, FiercePlanet.cellHeight - 4);
 //    ctx.strokeText(p.getUpgradeLevel(), x + 10, y + 10);
+
+    // Actual rect to draw
+//    ctx.strokeRect(x + 2, y + 2, FiercePlanet.cellWidth - 4, FiercePlanet.cellHeight - 4);
 
     // Draw resource-specific representation here
     if (resource._kind._image) {

@@ -14,7 +14,7 @@ var TBL = TBL || {};
 
 // Resource categories
 TBL.ECO_CATEGORY = new ResourceCategory("Economic", "eco", "44ABE0");
-TBL.ENV_CATEGORY = new ResourceCategory("Environmental", "env", "CBDB2A");
+TBL.ENV_CATEGORY = new ResourceCategory("Environmental", "env", "ABBB2A");
 TBL.SOC_CATEGORY = new ResourceCategory("Social", "soc", "DE1F2A");
 TBL.ECO_CATEGORY.setEvaluateOtherCategoryImpact(function(otherCategory) {
     var neighbourCategoryCode = otherCategory.getCode();
