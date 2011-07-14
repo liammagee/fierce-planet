@@ -984,3 +984,26 @@ FiercePlanet.zoom = function(direction) {
     FiercePlanet.drawCanvases();
 };
 
+
+/**
+ * Tries to draw all of the canvases as a consolidated thumbnail
+ * TODO: needs to be posted back to the server
+ */
+FiercePlanet.drawThumbnail = function() {
+    var imageCanvas = $('#imageCanvas')[0];
+    var baseCanvas = $('#baseCanvas')[0];
+    var resourceCanvas = $('#resourceCanvas')[0];
+    var scrollingCanvas = $('#scrollingCanvas')[0];
+    var noticeCanvas = $('#noticeCanvas')[0];
+    var agentCanvas = $('#agentCanvas')[0];
+    imageCanvas.getContext('2d').drawImage(baseCanvas, 0, 0);
+    imageCanvas.getContext('2d').drawImage(resourceCanvas, 0, 0);
+    imageCanvas.getContext('2d').drawImage(scrollingCanvas, 0, 0);
+    imageCanvas.getContext('2d').drawImage(noticeCanvas, 0, 0);
+    imageCanvas.getContext('2d').drawImage(agentCanvas, 0, 0);
+    var imageData = imageCanvas.toDataURL();
+    $.post('/levels/' + FiercePlanet.currentLevel.getId() + '/save_thumbnail',
+        {thumbnail: imageData},
+        function(data) {alert('data posted')}
+    );
+}

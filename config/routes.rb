@@ -10,12 +10,17 @@ FiercePlanet::Application.routes.draw do
     end
     member do
       post 'update_stats'
+      get 'update_stats'
     end
   end
 
   resources :levels do
     collection do
       get 'gallery'
+    end
+    member do
+      post 'save_thumbnail'
+      get 'save_thumbnail'
     end
   end
 

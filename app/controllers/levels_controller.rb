@@ -104,6 +104,23 @@ class LevelsController < ApplicationController
     end
   end
 
+  # POST /levels/save_thumbnail
+  # POST /levels/save_thumbnail.xml
+  def save_thumbnail
+    id = params[:id]
+    thumbnail = params[:thumbnail]
+    puts id
+    filename = "#{Rails.root}/public/images/levels/level-thumbnail-#{ id.to_s} .png"
+    f = File.new(filename, "w")
+    f.write thumbnail
+    f.close
+
+    respond_to do |format|
+      format.html   { render :text => 'alert("hello")' }
+      format.js   { render :text => 'alert("hello")' }
+    end
+  end
+
   # DELETE /levels/1
   # DELETE /levels/1.xml
   def destroy
