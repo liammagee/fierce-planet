@@ -434,11 +434,12 @@ FiercePlanet.drawResource = function(resource) {
 
     // Determine drawing colours and offsets
     var newColor = FiercePlanet.diluteColour(s, s, s, c);
-    var yOffset = ((FiercePlanet.cellHeight) * (1 - (s / 100)));
+    var yOffset = ((FiercePlanet.cellHeight) * (1.0 - (s / 100))) / 2;
 
     // Create a gradient to fill the cell from the bottom up
     var resourceGradient = ctx.createLinearGradient(x, y + yOffset, x, y + FiercePlanet.cellHeight);
     resourceGradient.addColorStop(0, "#fff");
+    resourceGradient.addColorStop(0.5, c);
     resourceGradient.addColorStop(1, c);
 
     ctx.fillStyle = resourceGradient;

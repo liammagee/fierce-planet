@@ -60,7 +60,10 @@ function AgentStickFigure() {
             var fHipAngle, fKneeAngle, bHipAngle, bKneeAngle;
 
             var frames = 3;
-            if (counter % frames == 1) {
+            var speed = agent.getSpeed();
+            var countdown = agent.getCountdownToMove();
+            var frame = ((countdown / speed) * 3) | 0;
+            if (frame == 1) {
                 fShoulderAngle = Math.PI * (12 / 12);
                 fElbowAngle = Math.PI * (6 / 12);
                 bShoulderAngle = Math.PI * (4 / 12);
@@ -71,7 +74,7 @@ function AgentStickFigure() {
                 bHipAngle = Math.PI * (1 / 12);
                 bKneeAngle = Math.PI * (7 / 12);
             }
-            else if (counter % frames == 2 ) {
+            else if (frame == 2 ) {
                 fShoulderAngle = Math.PI * (9 / 12);
                 fElbowAngle = Math.PI * (3 / 12);
                 bShoulderAngle = Math.PI * (5 / 12);
