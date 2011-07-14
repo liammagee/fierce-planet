@@ -785,7 +785,7 @@ PresetLevels.level11.addExitPoint(12, 17);
 PresetLevels.level11.addExitPoint(17, 7);
 PresetLevels.level11.setWorldWidth(30);
 PresetLevels.level11.setWorldHeight(25);
-PresetLevels.level11.setInitialAgentNumber(3);
+PresetLevels.level11.setInitialAgentNumber(4);
 PresetLevels.level11.setWaveNumber(3);
 PresetLevels.level11.setExpiryLimit(10);
 PresetLevels.level11.setInitialResourceStore(3000);
