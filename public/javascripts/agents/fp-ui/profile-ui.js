@@ -24,11 +24,6 @@ FiercePlanet.loadSettingsFromStorage = function () {
 //        FiercePlanet.currentProfile = $.evalJSON(cp);
     }
 
-
-//    FiercePlanet.totalSaved = (localStorage.totalSaved != undefined ? parseInt(localStorage.totalSaved) : FiercePlanet.totalSaved);
-//    FiercePlanet.profileClass = (localStorage.profileClass != undefined ? localStorage.profileClass : FiercePlanet.profileClass);
-//    FiercePlanet.credits = (localStorage.credits != undefined ? parseInt(localStorage.credits) : FiercePlanet.credits);
-//    FiercePlanet.capabilities = (localStorage.capabilities != undefined ? localStorage.capabilities : FiercePlanet.capabilities);
 };
 
 /**

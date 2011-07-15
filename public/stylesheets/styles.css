@@ -380,6 +380,7 @@ ul, li {
  *:-khtml-drag {
  background-color: rgba(238, 238, 238, 0.5);
 }
+/*
 li a:hover {
 	border: #999 3px solid;
 	background: #fff;
@@ -388,6 +389,7 @@ li.over {
 	border-color: #333;
 	background: #ccc;
 }
+*/
 #info h2 {
 	margin-top: 0px;
 }
@@ -416,3 +418,39 @@ li.over {
 #swatch_social{
 	background:#DE1F2A;
 }
+
+/* For dialogs */
+
+#default-levels {
+     padding: 4px;
+    overflow: auto;
+ }
+ .thumbnail {
+     border: 1px solid;
+     margin: 2px;
+     padding: 2px;
+     float: left;
+     width: 96px;
+     height: 130px;
+     font-size: 0.8em;
+ }
+
+/* For documentation */
+  .doc {
+      border-radius:4px;
+      background:#1F62C1;
+      padding:1em;
+      border: #fff 1px solid;
+  }
+
+        .doc div {
+            margin-top: 1em;
+        }
+
+        .doc ul {
+            margin: 1em 1em 1em 2em;
+        }
+
+        .doc li {
+            list-style: circle;
+        }

@@ -18,6 +18,11 @@ FiercePlanet.loadGame = function() {
     // Load relevant settings, if available
     FiercePlanet.loadSettingsFromStorage();
 
+    // Initialise World settings
+    FiercePlanet.initialiseWorldSettings();
+
+
+
     // Set up dialogs
     FiercePlanet.setupDialogs();
 
@@ -67,6 +72,7 @@ FiercePlanet.newLevel = function() {
         FiercePlanet.audio = undefined;
     }
     FiercePlanet.recordedLevels = [];
+    FiercePlanet.bindVariables();
 
     FiercePlanet._initialiseGame();
 

@@ -429,9 +429,41 @@ FiercePlanet.changePresetLevel =  function() {
 };
 
 /**
+ * Changes the preset level
+ */
+FiercePlanet.changePresetLevelDirectly =  function() {
+//    $('.thumbnail').css({color: 'inherit', backgroundColor: 'inherit' });
+//    $(this).animate({
+//        color: "#000",
+//        backgroundColor: "#ffffaa"
+//      }, 500 );
+    var level = $(this).attr('id');
+    level = level.substring(11);
+    FiercePlanet.highlightGalleryItem(level);
+    FiercePlanet.currentLevelNumber = FiercePlanet.checkInteger(level);
+    FiercePlanet.currentLevelPreset = true;
+    // Remember this level, along with other data
+    FiercePlanet.storeData();
+};
+
+/**
+ * Changes the preset level
+ */
+FiercePlanet.highlightGalleryItem =  function(level) {
+    $('.thumbnail').css({color: 'inherit', backgroundColor: 'inherit' });
+    if (level > 0 && level <= 11) {
+        $('#levelSelect' + level).animate({
+            color: "#000",
+            backgroundColor: "#ffffaa"
+          }, 500 );
+    }
+};
+
+
+/**
  * Changes the difficulty
  */
 FiercePlanet.changeDifficulty = function () {
-    var difficulty = $('#difficultyInput').val();
-  FiercePlanet.levelOfDifficulty = FiercePlanet.checkInteger(difficulty);
+    var difficulty = $("input[@name=difficultyInput]:checked").val();
+    FiercePlanet.levelOfDifficulty = FiercePlanet.checkInteger(difficulty);
 };

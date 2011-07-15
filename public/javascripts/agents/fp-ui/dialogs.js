@@ -75,7 +75,10 @@ FiercePlanet.setupDialogs = function() {
                 "Cancel": function() {
                     $( this ).dialog( "close" );
                 }
-            }
+            },
+              open: function(){
+                $("#level-gallery-tabs").tabs();
+              }
         });
 
     FiercePlanet.$completeLevel = $('<div></div>')

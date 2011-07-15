@@ -344,8 +344,12 @@ Agent.prototype.adjustSpeed = function() {
 
 
     var r = Math.floor(Math.random() * 3 * prob - 1);
+
+    // Adjust by the square root of the current variance
+    var increment = Math.pow(Math.abs(variance), 0.5) + 0.5 | 0;
+
     // Set the speed to above, equal or below the current speed
-    var change = (r < 0 ? -1 : (r > 0 ? 1 : 0));
+    var change = (r < 0 ? -increment : (r > 0 ? increment : 0));
     // Change direction if the speed is already negative
     change = (variance > 0 ? -change : change);
 

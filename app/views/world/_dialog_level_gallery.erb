@@ -7,13 +7,60 @@
 		<li>
           <a href="/levels/gallery">Custom levels</a>
         </li>
+        <li><a href="#difficulty">Difficulty</a></li>
 	</ul>
 
 
-
   <div id="default-levels">
+    <div id="thumbnails">
+      <div id="levelSelect1" class="thumbnail"><img src="/images/levels/level-thumbnail-1.png" alt="">
+
+        <div>Level 1: Welcome to Fierce Planet!</div>
+      </div>
+      <div id="levelSelect2" class="thumbnail"><img src="/images/levels/level-thumbnail-2.png" alt="">
+
+        <div>Level 2: Twists and Turns</div>
+      </div>
+      <div id="levelSelect3" class="thumbnail"><img src="/images/levels/level-thumbnail-3.png" alt="">
+
+        <div>Level 3: Waves of Uncertainty</div>
+      </div>
+      <div id="levelSelect4" class="thumbnail"><img src="/images/levels/level-thumbnail-4.png" alt="">
+
+        <div>Level 4: Spiral of Doom</div>
+      </div>
+      <div id="levelSelect5" class="thumbnail"><img src="/images/levels/level-thumbnail-5.png" alt="">
+
+        <div>Level 5: A-mazing Grace</div>
+      </div>
+      <div id="levelSelect6" class="thumbnail"><img src="/images/levels/level-thumbnail-6.png" alt="">
+
+        <div>Level 6: Dire Straits</div>
+      </div>
+      <div id="levelSelect7" class="thumbnail"><img src="/images/levels/level-thumbnail-7.png" alt="">
+
+        <div>Level 7: Like, Totally Random...</div>
+      </div>
+      <div id="levelSelect8" class="thumbnail"><img src="/images/levels/level-thumbnail-8.png" alt="">
+
+        <div>Level 8: A Fork (or Two) in the Road</div>
+      </div>
+      <div id="levelSelect9" class="thumbnail"><img src="/images/levels/level-thumbnail-9.png" alt="">
+
+        <div>Level 9: Cascades</div>
+      </div>
+      <div id="levelSelect10" class="thumbnail"><img src="/images/levels/level-thumbnail-10.png" alt="">
+
+        <div>Level 10: Fields of Ma(i)ze</div>
+      </div>
+      <div id="levelSelect11" class="thumbnail"><img src="/images/levels/level-thumbnail-11.png" alt="">
+
+        <div>Level 11: It's a Mad World</div>
+      </div>
+    </div>
+    
     <form>
-      <div>
+      <div style="clear:both; display: none">
         Select a level:
         <br/>
         <select id="levelInput" name="levelInput" size="11">
@@ -30,29 +77,51 @@
           <option value="11">Level 11: It's a Mad World</option>
         </select>
       </div>
+
+    </form>
+  </div>
+
+
+  <div id="difficulty">
+    <form>
       <div>
         Select difficulty:
         <br/>
-        <select id="difficultyInput" name="difficultyInput" size="4">
-          <option value="1">Easy</option>
-          <option value="2" selected="selected">Medium</option>
-          <option value="3">Hard</option>
-          <option value="4">EXTREME</option>
-        </select>
+        <!--<select id="difficultyInput" name="difficultyInput" size="4">-->
+          <!--<option value="1">Easy</option>-->
+          <!--<option value="2" selected="selected">Medium</option>-->
+          <!--<option value="3">Hard</option>-->
+          <!--<option value="4">EXTREME</option>-->
+        <!--</select>-->
+
+        <div><input id="difficulty-input-1" class="difficultyInput" name="difficultyInput" type="radio" value="1">Easy</div>
+        <div><input id="difficulty-input-2" class="difficultyInput" name="difficultyInput" type="radio" value="2" checked="checked">Medium</div>
+        <div><input id="difficulty-input-3" class="difficultyInput" name="difficultyInput" type="radio" value="3">Hard</div>
+        <div><input id="difficulty-input-4" class="difficultyInput" name="difficultyInput" type="radio" value="4">Extreme</div>
+
+
+
+        
       </div>
 
     </form>
   </div>
 
 
+    </div>
 </div>
 
 
 <script>
 // Add event handlers when dialog is loaded
 $(document).ready(function() {
-    $('#levelInput').change(FiercePlanet.changePresetLevel);
-    $('#difficultyInput').change(FiercePlanet.changeDifficulty);
+    $('.thumbnail').click(FiercePlanet.changePresetLevelDirectly);
+    FiercePlanet.highlightGalleryItem(FiercePlanet.currentLevelNumber);
+//    $('#levelInput').change(FiercePlanet.changePresetLevel);
+
+    $('#difficulty-input-' + FiercePlanet.levelOfDifficulty).attr('checked', 'checked');
+    $(".difficultyInput").click(FiercePlanet.changeDifficulty);
+//    $('#difficultyInput').change(FiercePlanet.changeDifficulty);
 });
 
 </script>

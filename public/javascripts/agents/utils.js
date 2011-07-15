@@ -50,6 +50,42 @@ FiercePlanet.checkInteger = function(value) {
     return Math.floor(value);
 };
 
+/**
+ * Binds shortcut variables for use in the console
+ */
+FiercePlanet.bindVariables = function() {
+    // Set up shortcut variable names for debugging convenience
+    $fp.w = $fp.w || World;
+    $fp.s = $fp.s || World.settings;
+    $fp.p = FiercePlanet.currentProfile;
+    $fp.l = FiercePlanet.currentLevel;
+    $fp.r = FiercePlanet.currentResource;
+    $fp.rid = FiercePlanet.currentResourceId;
+    $fp.x = FiercePlanet.currentX;
+    $fp.y = FiercePlanet.currentY;
+};
+
+/**
+ * Initialises World settings
+ */
+FiercePlanet.initialiseWorldSettings = function() {
+    World.settings.noticesVisible = World.settings.noticesVisible || true;
+    World.settings.scrollingImageVisible = World.settings.scrollingImageVisible || true;
+    World.settings.catastrophesVisible = World.settings.catastrophesVisible || true;
+    World.settings.disableKeyboardShortcuts = World.settings.disableKeyboardShortcuts || true;
+    World.settings.soundsPlayable = World.settings.soundsPlayable || false;
+    World.settings.useInlineResourceSwatch = World.settings.useInlineResourceSwatch || false;
+    World.settings.allowInlinePanning = World.settings.allowInlinePanning || false;
+    World.settings.agentTracing = World.settings.agentTracing || false;
+    World.settings.invisiblePath = World.settings.invisiblePath || false;
+    World.settings.rivalsVisible = World.settings.rivalsVisible || false;
+    World.settings.predatorsVisible = World.settings.predatorsVisible || false;
+    World.settings.tilesMutable = World.settings.tilesMutable || false;
+    World.settings.tilesRemovable = World.settings.tilesRemovable || false;
+    World.settings.backgroundIconsVisible = World.settings.backgroundIconsVisible || false;
+    World.settings.recording = World.settings.recording || false;
+    World.settings.godMode = World.settings.godMode || false;
+}
 
 /**
  * Sourced from: http://stackoverflow.com/questions/1267283/how-can-i-create-a-zerofilled-value-using-javascript/1267338#1267338.
