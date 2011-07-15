@@ -58,7 +58,7 @@ FiercePlanet.setupDialogs = function() {
                     // Animation effect
                     // For spinning, try: http://www.zachstronaut.com/posts/2009/08/07/jquery-animate-css-rotate-scale.html
                     $( this ).dialog( "close" );
-                    var canvases = $('#map_canvas, #baseCanvas');
+                    var canvases = $('#map_canvas, #baseCanvas, #scrollingCanvas, #noticeCanvas');
                     var world = $('#world');
                     var rwl = world.position().left;
                     var rwt = world.position().top;
