@@ -302,9 +302,7 @@ describe("level-related classes", function() {
 
             describe("removing exit points", function() {
                 beforeEach(function() {
-                    console.log(level.getExitPoints());
                     level.removeExitPoint(9, 9);
-                    console.log(level.getExitPoints());
                 });
 
                 it("should have no exit points", function() {

@@ -352,12 +352,11 @@ Agent.prototype.adjustSpeed = function() {
     var change = (r < 0 ? -increment : (r > 0 ? increment : 0));
     // Change direction if the speed is already negative
     change = (variance > 0 ? -change : change);
+    console.log(change)
 
     // Add a multiplier to the change
 //    var multiplier = Math.ceil(Math.random() * 3);
     var multiplier = 1;
-
-    var s = this._speed;
 
     tmpSpeed = this._speed + change * multiplier;
 

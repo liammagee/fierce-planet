@@ -88,6 +88,53 @@ describe("agent-related classes", function() {
             });
         });
 
+
+        describe("adjusting speed directions", function() {
+            var level;
+            beforeEach(function() {
+                level = new Level(1);
+                // Add a cross path in the middle of the level
+                level.removeTiles(45, 1);
+                level.removeTiles(53, 4);
+                level.removeTiles(65, 1);
+
+                // Place the agent at a co-ordinate on the path
+                agent = new Agent(World.agentTypes[0], 4, 5);
+            });
+
+            it("should have a default speed", function() {
+                expect(agent.getSpeed()).toEqual(5);
+            });
+
+            it("should change speed after a move", function() {
+                agent.evaluateMove(level, {});
+                console.log(agent.getX());
+                console.log(agent.getY());
+                console.log(agent.getSpeed());
+                agent.adjustSpeed();
+                expect(agent.getSpeed()).toNotEqual(5);
+            });
+
+            describe("adjusting speed directions", function() {
+                beforeEach(function() {
+                    level = new Level(1);
+                    // Add a cross path in the middle of the level
+                    level.removeTiles(45, 1);
+                    level.removeTiles(53, 4);
+                    level.removeTiles(65, 1);
+
+                    // Place the agent at a co-ordinate on the path
+                    agent = new Agent(World.agentTypes[0], 4, 5);
+                });
+
+                it("should have a default speed", function() {
+                    expect(agent.getSpeed()).toEqual(5);
+                });
+            });
+        });
+
+
+
         describe("memories", function() {
             var level;
             beforeEach(function() {
