@@ -426,7 +426,6 @@ li.over {
     overflow: auto;
  }
  .thumbnail {
-     border: 1px solid;
      margin: 2px;
      padding: 2px;
      float: left;

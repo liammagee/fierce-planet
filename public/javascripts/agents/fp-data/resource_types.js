@@ -9,7 +9,7 @@ FiercePlanet.STOCKMARKET_RESOURCE_TYPE = new ResourceType("Stockmarket", "stockm
 
 
 // Environmental resources
-FiercePlanet.FRESH_WATER_RESOURCE_TYPE = new ResourceType("Fresh Water", "water", "/images/icons/recycled-water-2.png", 10, 20, 100, 10);
+FiercePlanet.FRESH_WATER_RESOURCE_TYPE = new ResourceType("Fresh Water", "water", "/images/icons/recycled-water.png", 10, 20, 100, 10);
 FiercePlanet.WILDLIFE_PARK_RESOURCE_TYPE = new ResourceType("Wildlife Park", "park", "/images/icons/butterfly.png", 15, 25, 150, 15);
 FiercePlanet.CLEAN_AIR_RESOURCE_TYPE = new ResourceType("Clear Air", "air", "/images/icons/renewable.png", 20, 30, 200, 25);
 FiercePlanet.GREEN_ENERGY_RESOURCE_TYPE = new ResourceType("Green Energy", "energy", "/images/icons/eco-power.png", 25, 40, 250, 35);

@@ -439,8 +439,8 @@ FiercePlanet.drawResource = function(resource) {
     // Create a gradient to fill the cell from the bottom up
     var resourceGradient = ctx.createLinearGradient(x, y + yOffset, x, y + FiercePlanet.cellHeight);
     resourceGradient.addColorStop(0, "#fff");
-    resourceGradient.addColorStop(0.5, c);
-    resourceGradient.addColorStop(1, c);
+    resourceGradient.addColorStop(0.5, "#" + c);
+    resourceGradient.addColorStop(1, "#" + c);
 
     ctx.fillStyle = resourceGradient;
     ctx.strokeStyle = "#333";
