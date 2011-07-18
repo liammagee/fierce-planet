@@ -860,26 +860,28 @@ PresetLevels.level11.setImageAttribution("Sir John Tenniel, 1865");
 
 
 /* Alternatives from DeviantArt  - NB. Permission required before making live !*/
+//PresetLevels.level1.setImage("http://fc01.deviantart.net/fs47/f/2009/208/0/e/0e1104dde79e3ff96918b1efc02b8505.jpg");
+PresetLevels.level1.setImage("http://fc06.deviantart.net/fs70/i/2011/141/8/4/post_apocalypse_new_york_city_by_sad_cat-d3gv7j8.jpg");
 //PresetLevels.level1.setImage("http://fc00.deviantart.net/fs71/i/2011/034/6/6/nuclear_winter__apocalypse_by_nuclearsyndrom-d38q2ak.jpg");
-//PresetLevels.level1.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=8647&picture=skyline">Skyline</a> by Bobby Mikul');
-//PresetLevels.level2.setImage("http://fc02.deviantart.net/fs22/f/2007/314/f/3/Apocalypse_in_Rome_by_UltimateGemini82.jpg");
-//PresetLevels.level2.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=1580&picture=city-at-night">City At Night</a> by Petr Kratochvil');
-//PresetLevels.level3.setImage("http://th04.deviantart.net/fs6/PRE/i/2005/071/b/6/Term_1__Art_Major_by_ya3.jpg");
-//PresetLevels.level3.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=6310&picture=city-skyline">City Skyline</a> by Samantha DeWitt');
-//PresetLevels.level4.setImage("http://fc07.deviantart.net/fs70/i/2010/226/c/8/Dead_City_by_JacobCharlesDietz.jpg");
-//PresetLevels.level4.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=8701&picture=warsaw-city-centre">Warsaw City Centre</a> by Yana Ray');
-//PresetLevels.level5.setImage("http://fc04.deviantart.net/fs71/f/2010/328/c/f/apocalypse_by_sethpda-d33hvxo.jpg");
-//PresetLevels.level5.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=5606&picture=forbidden-city-wall">Forbidden City Wall</a> by Scott Meltzer');
-//PresetLevels.level6.setImage("http://fc04.deviantart.net/fs13/i/2007/014/2/c/Apocalypse_City_by_Toothless_Wonder.jpg");
-//PresetLevels.level6.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=10751&picture=city-pollution">City Pollution</a> by Peter Griffin');
-//PresetLevels.level7.setImage("http://fc06.deviantart.net/fs9/i/2006/146/1/f/Apocalypse_by_Sadir89.jpg");
-//PresetLevels.level7.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=3948&picture=ocean-city">Ocean City</a> by Shari Weinsheimer');
-//PresetLevels.level8.setImage("http://fc06.deviantart.net/fs70/f/2010/342/c/5/c5f1fadc7c4da828df728dc273407537-d10qofi.jpg");
-//PresetLevels.level8.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=6265&picture=shadow">Shadow</a> by Bobby Mikul');
-//PresetLevels.level9.setImage("http://fc04.deviantart.net/fs42/i/2009/064/7/f/Apocalypse_by_jonny_rawkus.jpg");
-//PresetLevels.level9.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=7605&picture=sailboats">Sailboats</a> by Bobby Mikul');
-//PresetLevels.level10.setImage("http://fc02.deviantart.net/fs71/i/2011/034/9/6/nuclear_spring__apocalypse_by_nuclearsyndrom-d38q1ub.jpg");
-//PresetLevels.level10.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=10783&picture=night-in-the-city">Night In The City</a> by Bobby Mikul');
+PresetLevels.level1.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=8647&picture=skyline">Skyline</a> by Bobby Mikul');
+PresetLevels.level2.setImage("http://fc02.deviantart.net/fs22/f/2007/314/f/3/Apocalypse_in_Rome_by_UltimateGemini82.jpg");
+PresetLevels.level2.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=1580&picture=city-at-night">City At Night</a> by Petr Kratochvil');
+PresetLevels.level3.setImage("http://th04.deviantart.net/fs6/PRE/i/2005/071/b/6/Term_1__Art_Major_by_ya3.jpg");
+PresetLevels.level3.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=6310&picture=city-skyline">City Skyline</a> by Samantha DeWitt');
+PresetLevels.level4.setImage("http://fc07.deviantart.net/fs70/i/2010/226/c/8/Dead_City_by_JacobCharlesDietz.jpg");
+PresetLevels.level4.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=8701&picture=warsaw-city-centre">Warsaw City Centre</a> by Yana Ray');
+PresetLevels.level5.setImage("http://fc04.deviantart.net/fs71/f/2010/328/c/f/apocalypse_by_sethpda-d33hvxo.jpg");
+PresetLevels.level5.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=5606&picture=forbidden-city-wall">Forbidden City Wall</a> by Scott Meltzer');
+PresetLevels.level6.setImage("http://fc04.deviantart.net/fs13/i/2007/014/2/c/Apocalypse_City_by_Toothless_Wonder.jpg");
+PresetLevels.level6.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=10751&picture=city-pollution">City Pollution</a> by Peter Griffin');
+PresetLevels.level7.setImage("http://fc06.deviantart.net/fs9/i/2006/146/1/f/Apocalypse_by_Sadir89.jpg");
+PresetLevels.level7.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=3948&picture=ocean-city">Ocean City</a> by Shari Weinsheimer');
+PresetLevels.level8.setImage("http://fc06.deviantart.net/fs70/f/2010/342/c/5/c5f1fadc7c4da828df728dc273407537-d10qofi.jpg");
+PresetLevels.level8.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=6265&picture=shadow">Shadow</a> by Bobby Mikul');
+PresetLevels.level9.setImage("http://fc04.deviantart.net/fs42/i/2009/064/7/f/Apocalypse_by_jonny_rawkus.jpg");
+PresetLevels.level9.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=7605&picture=sailboats">Sailboats</a> by Bobby Mikul');
+PresetLevels.level10.setImage("http://fc02.deviantart.net/fs71/i/2011/034/9/6/nuclear_spring__apocalypse_by_nuclearsyndrom-d38q1ub.jpg");
+PresetLevels.level10.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=10783&picture=night-in-the-city">Night In The City</a> by Bobby Mikul');
 
 
 /* Google Map links */
