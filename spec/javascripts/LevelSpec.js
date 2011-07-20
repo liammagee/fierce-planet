@@ -597,6 +597,46 @@ describe("level-related classes", function() {
                 });
             });
         });
+
+
+        describe("processing neighbouring resources", function() {
+            var agent, resource;
+
+            beforeEach(function() {
+                level.generateAgents(World.agentTypes[0], 10);
+                level.addResource(new Resource(World.resourceTypes[0], 1, 1));
+                agent = level.getCurrentAgents()[0];
+                resource = level.getResources()[0];
+                agent.adjustGeneralHealth(-90);
+            });
+
+            it("should get a benefit from a neighbouring resource", function() {
+                level.processNeighbouringResources(agent);
+
+                expect(agent.getHealthForResource(resource)).toEqual(70);
+                expect(resource.getTotalYield()).toEqual(80);
+            });
+        });
+
+        describe("processing neighbouring agents", function() {
+            var hittingAgent, hitAgent;
+
+            beforeEach(function() {
+                World.settings.predatorsVisible = true;
+                World.agentTypes[0].setHitable(true);
+                World.agentTypes[1].setCanHit(true);
+                hittingAgent = new Agent(World.agentTypes[1], 0, 0);
+                level.addLevelAgent(hittingAgent);
+                level.generateAgents(World.agentTypes[0], 10);
+                hitAgent = level.getCurrentAgents()[0];
+            });
+
+            it("should get a benefit from a neighbouring resource", function() {
+                level.processNeighbouringAgents(hitAgent);
+                expect(hitAgent.getIsHit()).toBeTruthy();
+            });
+        });
+
     });
 
 });

@@ -20,8 +20,9 @@
     var resourceTypes = [ecoResourceType, envResourceType, socResourceType];
 
     // Create agent types
-    var citizentAgentType = new AgentType("citizen", "000", resourceCategories);
-    var agentTypes = [citizentAgentType];
+    var citizenAgentType = new AgentType("citizen", "000", resourceCategories);
+    var predatorAgentType = new AgentType("predator", "000", resourceCategories);
+    var agentTypes = [citizenAgentType, predatorAgentType];
 
     World.registerResourceCategories(resourceCategories);
     World.registerResourceTypes(resourceTypes);
@@ -43,8 +44,8 @@ describe("world-related classes", function() {
             expect(World.resourceTypes.length).toEqual(3);
         });
 
-        it("should have 1 agent type", function() {
-            expect(World.agentTypes.length).toEqual(1);
+        it("should have 2 agent types", function() {
+            expect(World.agentTypes.length).toEqual(2);
         });
 
         it("should resolve a type given its code", function() {

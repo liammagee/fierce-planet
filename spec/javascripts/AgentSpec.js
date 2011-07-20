@@ -74,7 +74,7 @@ describe("agent-related classes", function() {
         });
 
 
-        describe("finding directions", function() {
+        describe("getting directions", function() {
             beforeEach(function() {
             });
 
@@ -91,6 +91,8 @@ describe("agent-related classes", function() {
 
         describe("adjusting speed directions", function() {
             var level;
+
+
             beforeEach(function() {
                 level = new Level(1);
                 // Add a cross path in the middle of the level
@@ -102,32 +104,122 @@ describe("agent-related classes", function() {
                 agent = new Agent(World.agentTypes[0], 4, 5);
             });
 
+
+
             it("should have a default speed", function() {
                 expect(agent.getSpeed()).toEqual(5);
             });
 
-            it("should change speed after a move", function() {
-                agent.evaluateMove(level, {});
-                console.log(agent.getX());
-                console.log(agent.getY());
-                console.log(agent.getSpeed());
+
+            it("should have a speed range", function() {
+                Log.level = Log.DEBUG;
                 agent.adjustSpeed();
-                expect(agent.getSpeed()).toNotEqual(5);
+
+                expect(agent.getSpeed()).toBeLessThan(7);
+                expect(agent.getSpeed()).toBeGreaterThan(3);
+                Log.level = Log.WARN;
+            });
+
+
+
+            it("should change speed when the current speed deviates from the default", function() {
+                agent.setSpeed(100);
+                agent.adjustSpeed();
+
+                expect(agent.getSpeed()).toBeLessThan(100);
+            });
+
+            function calculateSpeeds(iterations) {
+                var aggregateSpeeds = 0;
+                var aboveCurrent = 0;
+                var belowCurrent = 0;
+                var notCurrent = 0;
+                var areCurrent = 0;
+
+                var currentSpeed = agent.getSpeed();
+                for (var i =0 ; i < iterations; i++) {
+                    agent.adjustSpeed();
+                    aggregateSpeeds += agent.getSpeed();
+                    if (agent.getSpeed() > currentSpeed) {
+                        notCurrent++;
+                        aboveCurrent++;
+                    }
+                    else if (agent.getSpeed() < currentSpeed) {
+                        notCurrent++;
+                        belowCurrent++;
+                    }
+                    else {
+                        areCurrent++;
+                    }
+                    // Reset agent's speed
+                    agent.setSpeed(currentSpeed);
+                }
+
+                var averageSpeed = Math.round(aggregateSpeeds / iterations);
+                var ret = {averageSpeed:averageSpeed,aboveCurrent:aboveCurrent, belowCurrent:belowCurrent, notCurrent:notCurrent, areCurrent:areCurrent}
+                return ret;
+            }
+
+            it("should change speed some of the time", function() {
+                var speeds = calculateSpeeds(1000);
+                expect(speeds.averageSpeed).toEqual(5);
+
+                // Allow for reasonable margins of error - some probability these will fail
+                expect(speeds.aboveCurrent).toBeGreaterThan(300);
+                expect(speeds.belowCurrent).toBeGreaterThan(300);
+                expect(speeds.notCurrent).toBeGreaterThan(600);
+                expect(speeds.areCurrent).toBeGreaterThan(300);
+                expect(speeds.aboveCurrent).toBeLessThan(400);
+                expect(speeds.belowCurrent).toBeLessThan(400);
+                expect(speeds.notCurrent).toBeLessThan(800);
+                expect(speeds.areCurrent).toBeLessThan(400);
+            });
+
+            it("should change speed by average quantities when the current speed deviates from the default", function() {
+                agent.setSpeed(100);
+                var speeds = calculateSpeeds(1000);
+                expect(speeds.averageSpeed).toBeLessThan(100);
+                expect(speeds.averageSpeed).toBeGreaterThan(5);
+
+                // Allow for reasonable margins of error - some probability these will fail
+                expect(speeds.aboveCurrent).toBeGreaterThan(-1);
+                expect(speeds.belowCurrent).toBeGreaterThan(900);
+                expect(speeds.notCurrent).toBeGreaterThan(900);
+                expect(speeds.areCurrent).toBeGreaterThan(-1);
+                expect(speeds.aboveCurrent).toBeLessThan(20);
+                expect(speeds.belowCurrent).toBeLessThan(1001);
+                expect(speeds.notCurrent).toBeLessThan(1001);
+                expect(speeds.areCurrent).toBeLessThan(20);
             });
 
             describe("adjusting speed directions", function() {
+                var resource;
                 beforeEach(function() {
                     level = new Level(1);
                     // Add a cross path in the middle of the level
                     level.removeTiles(45, 1);
                     level.removeTiles(53, 4);
                     level.removeTiles(65, 1);
+                    resource = new Resource(World.resourceTypes[0], 3, 4);
+                    level.addResource(new Resource(World.resourceTypes[0], 3, 4));
 
                     // Place the agent at a co-ordinate on the path
                     agent = new Agent(World.agentTypes[0], 4, 5);
+                    agent.adjustGeneralHealth(-50);
                 });
 
                 it("should have a default speed", function() {
+                    expect(agent.getSpeed()).toEqual(5);
+                });
+
+                it("should have a new speed when it meets a resource", function() {
+                    level.processNeighbouringResources(agent);
+                    expect(agent.getSpeed()).toEqual(20);
+                });
+
+                it("should not have a new speed when it meets a resource and has full health", function() {
+                    agent.adjustGeneralHealth(100);
+                    level.processNeighbouringResources(agent);
                     expect(agent.getSpeed()).toEqual(5);
                 });
             });
@@ -229,6 +321,14 @@ describe("agent-related classes", function() {
                     });
 
                 });
+            });
+        });
+
+        describe("finding positions", function() {
+            beforeEach(function() {
+            });
+
+            it("should find a position", function() {
             });
         });
 
