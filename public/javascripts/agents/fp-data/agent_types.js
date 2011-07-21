@@ -21,6 +21,7 @@ function AgentStickFigure() {
  */
 (function() {
     AgentTypes.CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000", World.resourceCategories);
+    AgentTypes.CITIZEN_AGENT_TYPE.setHitable(true);
     AgentTypes.CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, pieceHeight, newColor, counter, direction) {
 
         if (pieceWidth < 8 || pieceHeight < 8) {
@@ -286,6 +287,7 @@ function AgentStickFigure() {
     };
 
     AgentTypes.PREDATOR_AGENT_TYPE = new AgentType("Predator", "fbe53b", World.resourceCategories);
+    AgentTypes.PREDATOR_AGENT_TYPE.setCanHit(true);
     AgentTypes.PREDATOR_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
         var radius = (pieceWidth / 4);
         var bodyLength = (pieceWidth / 2);

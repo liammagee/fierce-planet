@@ -16,6 +16,7 @@ src_files:
   - public/javascripts/jquery.json-2.2.min.js
   - public/javascripts/Player.js
   - public/javascripts/Song.js
+  - public/javascripts/agents/utils/log.js
   - public/javascripts/agents/framework/resource.js
   - public/javascripts/agents/framework/agent.js
   - public/javascripts/agents/framework/world.js

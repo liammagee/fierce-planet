@@ -424,7 +424,7 @@ Level.prototype.generateAgents = function(agentType, number) {
             var colorScheme = (colorSeed == 0 ? "000" : (colorSeed == 1 ? "0f0" : "00f"));
             // TODO: Make this option configurable
 //            agent.setColor(colorScheme);
-            var delay = parseInt(Math.random() * MOVE_INCREMENTS * 5);
+            var delay = parseInt(Math.random() * DEFAULT_SPEED * 5);
             agent.setDelay(delay);
             agent.setCanCommunicateWithOtherAgents(World.settings.agentsCanCommunicate);
             agents.push(agent);
@@ -634,3 +634,67 @@ Level.prototype.recoverResources = function () {
     });
     return recoveredResources;
 };
+
+
+/**
+ * Processes neighbouring resources
+ *
+ * TODO: Add tests
+ */
+Level.prototype.processNeighbouringResources = function(agent) {
+    var x = agent.getX();
+    var y = agent.getY();
+    var foundResources = [];
+    for (var j = 0; j < this.getResources().length; j++) {
+        var resource = this.getResources()[j];
+        var rx = resource.getX();
+        var ry = resource.getY();
+        if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
+            var resourceEffect = this.calculateResourceEffect(
+                resource,
+                World.settings.ignoreResourceBalance || World.settings.applyGeneralHealth,
+                World.settings.resourcesInTension
+            );
+
+            resource.provideYield(
+                agent,
+                resourceEffect,
+                World.settings.applyGeneralHealth, !this._noSpeedChange
+            );
+//            FiercePlanet.drawResource(resource);
+        }
+    }
+    return foundResources;
+};
+
+
+/**
+ * Processes neighbouring agents
+ *
+ * TODO: Add tests
+ */
+Level.prototype.processNeighbouringAgents = function(agent) {
+    if (World.settings.godMode || !World.settings.predatorsVisible)
+        return;
+
+    var x = agent.getX();
+    var y = agent.getY();
+    agent.setIsHit(false);
+    var agents = this.getCurrentAgents();
+    for (var j = 0; j < agents.length; j++) {
+        var a = agents[j];
+        var ax = a.getX();
+        var ay = a.getY();
+        if (Math.abs(ax - x) <= 1 && Math.abs(ay - y) <= 1) {
+            if (!World.settings.godMode && World.settings.predatorsVisible && agent.getType().isHitable() && a.getType().canHit()) {
+                agent.setIsHit(true);
+            }
+        }
+    }
+    if (agent.getIsHit())
+        agent.adjustGeneralHealth(-10);
+};
+
+
+
+

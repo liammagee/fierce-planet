@@ -9,7 +9,14 @@
  * Agent constants
  */
 var INITIAL_HEALTH = 100;
-var MOVE_INCREMENTS = 5;
+var DEFAULT_SPEED = 5;
+
+var VERY_UNLIKELY = 0;
+var UNLIKELY = 1;
+var MODERATELY_LIKELY = 2;
+var EVEN_CHANCE = 3;
+var PROBABILITY_STRATEGY_TO_DEVIATE = UNLIKELY;
+
 
 /**
  * Defines the type of an agent.
@@ -23,8 +30,10 @@ function AgentType(name, color, healthCategories, speed, health, drawFunction) {
     this._name = name;
     this._color = color;
     this._healthCategories = healthCategories || [];
-    this._speed = speed || MOVE_INCREMENTS;
+    this._speed = speed || DEFAULT_SPEED;
     this._health = health || INITIAL_HEALTH;
+    this._isHitable = false;
+    this._canHit = false;
     this._drawFunction = drawFunction || function(){};
 }
 AgentType.prototype.getName = function() { return this._name;};
@@ -34,6 +43,10 @@ AgentType.prototype.getHealthCategories = function() { return this._healthCatego
 AgentType.prototype.setHealthCategories = function(healthCategories) { this._healthCategories = healthCategories; };
 AgentType.prototype.getDrawFunction = function() { return this._drawFunction; };
 AgentType.prototype.setDrawFunction = function(drawFunction) { this._drawFunction = drawFunction; };
+AgentType.prototype.isHitable = function() { return this._isHitable;};
+AgentType.prototype.setHitable = function(hitable) { this._isHitable = hitable;};
+AgentType.prototype.canHit = function() { return this._canHit;};
+AgentType.prototype.setCanHit = function(canHit) { this._canHit = canHit;};
 
 
 /**
@@ -162,7 +175,7 @@ function Agent(agentType, x, y) {
     this._delay = 0;
     this._wanderX = 0;
     this._wanderY = 0;
-    this._speed = MOVE_INCREMENTS;
+    this._speed = DEFAULT_SPEED;
     this._countdownToMove = 0;
 
     // Health related
@@ -325,40 +338,103 @@ Agent.prototype.setMoves = function(moves) { this._age = moves; };
 Agent.prototype.getSpeed = function() { return this._speed; };
 Agent.prototype.setSpeed = function(speed) { this._speed = speed; };
 Agent.prototype.incrementMoves = function() { this._age++; };
+
+
 /**
- * Change the speed, but sparingly as the speed moves away from the standard speed: MOVE_INCREMENTS
+ <div>
+ This function adjusts the speed of an agent, based on the following algorithm:
+ </div>
+
+ <ul>
+   <li>Firstly, the variance, the absolute difference between the agent's current and default speed, is calculated.</li>
+   <li>Then, a probability that the agent's speed will change is derived by taking the square of the variance plus one.</li>
+   <li>A random value is then generated between -1 and the probability value  - 1. This value ensures
+     that it is likely the speed adjustment comes closer to the default speed, but with always some probability it will
+     deviate further away.
+   </li>
+
+   <li>
+     Separately, the square root of the variance, the adjustment value, is taken as the amount to actually adjust the speed by.
+   </li>
+   <li>
+     The impact of these values means that when the current speed is very different from the default, both the probability that it will regress to
+     the default, and the extent of the regression, are relatively high.
+   </li>
+   <li>
+     The actual adjustment is then normalised based on the direction (up or down) of the variance.
+   </li>
+   <li>The actual adjustment is then added to the current speed.</li>
+ </ul>
+
+<div>
+The net effect is that for zero or low variances from the default speed, the current speed has a good probability
+of moving away as well as returning to the default speed. As an example, if the current speed differs from the default speed
+ by 2, then the odds of returning towards the default as opposed to moving away are 8 (2 + 1 to the power of 2) to 1.
+ The extent of the move is the rounded root of the difference, i.e. 1.
+ </div>
+
+<div>
+One important consequence is that proximity to resources artificially deviates an agent's speed from its default speed
+ (making it slower, because it takes time to utilise the resource).
+ This automatic adjustment, which should be called at each 'tick'
+ in the processing loop, has the effect of regressing this deviance back towards the default.
+ In the meantime however, other agents have the opportunity to 'leap frog' the current agent, and progress
+ more quickly towards the next resource.
+</div>
  */
 Agent.prototype.adjustSpeed = function() {
     var tmpSpeed = this._speed;
-    var variance = this._speed - MOVE_INCREMENTS;
+    var variance = this._speed - DEFAULT_SPEED;
 
-    // Makes movement away from MOVE_INCREMENTS very unlikely
-//    var prob = Math.pow(Math.abs(variance), Math.abs(variance));
-    // Makes movement away from MOVE_INCREMENTS unlikely
-    var prob = Math.pow(Math.abs(variance) + 1, 2);
-//    Makes movement away from MOVE_INCREMENTS moderately likely
-//    var prob = Math.abs(variance);
-    // Makes movement away from MOVE_INCREMENTS an even chance
-//    var prob = 1;
-//    prob = (prob == 0 ? 1 : prob);
+    // Calculate probability of adjustment
+    var prob = 0;
+    switch (PROBABILITY_STRATEGY_TO_DEVIATE) {
+        case VERY_UNLIKELY:
+            // Makes movement away from MOVE_INCREMENTS very unlikely: EXP(N, N)
+            prob = Math.pow(Math.abs(variance), Math.abs(variance)) + 2;
+            break;
+        case UNLIKELY:
+            // Makes movement away from MOVE_INCREMENTS unlikely
+            prob = Math.pow(Math.abs(variance) + 1, 2) + 2;
+            break;
+        case MODERATELY_LIKELY:
+            //    Makes movement away from MOVE_INCREMENTS moderately likely
+            prob = Math.abs(variance) + 2;
+            break;
+        case EVEN_CHANCE:
+            // Makes movement away from MOVE_INCREMENTS an even chance
+            prob = 1 + 1 + 1;
+            break;
+    }
 
 
-    var r = Math.floor(Math.random() * 3 * prob - 1);
+    var randomSpeedChange = Math.floor(Math.random() * prob) - 1;
 
     // Adjust by the square root of the current variance
-    var increment = Math.pow(Math.abs(variance), 0.5) + 0.5 | 0;
+    var adjustmentValue = Math.pow(Math.abs(variance), 0.5) + 0.5 | 0;
 
-    // Set the speed to above, equal or below the current speed
-    var change = (r < 0 ? -increment : (r > 0 ? increment : 0));
+	// Force a change in the increment
+	adjustmentValue = (adjustmentValue == 0 ? 1 : adjustmentValue);
+
+    // Set the speed to ab¡ove, equal or below the current speed
+    var change = (randomSpeedChange < 0 ? -adjustmentValue : (randomSpeedChange > 0 ? adjustmentValue : 0));
     // Change direction if the speed is already negative
     change = (variance > 0 ? -change : change);
-    console.log(change)
+
 
     // Add a multiplier to the change
 //    var multiplier = Math.ceil(Math.random() * 3);
     var multiplier = 1;
 
     tmpSpeed = this._speed + change * multiplier;
+
+//    if (Log.isAt(Log.DEBUG)) {
+//        console.log("r: " +randomSpeedChange);
+//        console.log("prob: " +prob);
+//        console.log("variance: " +variance);
+//        console.log("adjustmentValue: " +adjustmentValue);
+//        console.log("change: " +change);
+//    }
 
     if (tmpSpeed > 0)
         this._speed = tmpSpeed;
@@ -500,8 +576,9 @@ Agent.prototype.memorise = function(level) {
  */
 Agent.prototype.evaluateMove = function(level, options) {
     // TODO: Make these parameters of the level
-    var withNoRepeat = options["withNoRepeat"];
-    var withNoCollision = options["withNoCollision"];
+
+    var withNoRepeat = options ? options["withNoRepeat"] : false;
+    var withNoCollision = options ? options["withNoCollision"] : false;
 
     var position = this.findPosition(level, withNoRepeat, withNoCollision, level.getAllowOffscreenCycling());
 

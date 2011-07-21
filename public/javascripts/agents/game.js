@@ -138,10 +138,12 @@ FiercePlanet.processAgents = function() {
                     }
                     else {
                         // Hook for detecting 'active' resources
-                        FiercePlanet.processNeighbouringResources(agent);
+//                        FiercePlanet.processNeighbouringResources(agent);
+                        FiercePlanet.currentLevel.processNeighbouringResources(agent);
 
                         // Hook for detecting other agents
-                        FiercePlanet.processNeighbouringAgents(agent);
+//                        FiercePlanet.processNeighbouringAgents(agent);
+                        FiercePlanet.currentLevel.processNeighbouringAgents(agent);
                     }
                 }
             }
@@ -230,6 +232,8 @@ FiercePlanet.processNeighbouringResources = function(agent) {
  * TODO: Move to level
  */
 FiercePlanet.processNeighbouringAgents = function(agent) {
+    if (World.settings.godMode || !World.settings.predatorsVisible)
+        return;
     var x = agent.getX();
     var y = agent.getY();
     agent.setIsHit(false);
