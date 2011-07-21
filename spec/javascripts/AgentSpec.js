@@ -229,8 +229,10 @@ describe("agent-related classes", function() {
 
         describe("memories", function() {
             var level;
+
             beforeEach(function() {
                 level = new Level(1);
+                level.fillWithTiles();
                 // Add a cross path in the middle of the level
                 level.removeTiles(45, 1);
                 level.removeTiles(53, 4);
@@ -325,10 +327,90 @@ describe("agent-related classes", function() {
         });
 
         describe("finding positions", function() {
+            var level;
+
             beforeEach(function() {
+                level = new Level(1);
+                level.fillWithTiles();
+                // Add a cross path in the middle of the level
+                level.removeTiles(45, 1);
+                level.removeTiles(53, 4);
+                level.removeTiles(65, 1);
+
+                // Place the agent at a co-ordinate on the path
+                agent = new Agent(World.agentTypes[0], 3, 5);
             });
 
             it("should find a position", function() {
+                var position = agent.findPosition(level);
+                expect(position).toEqual([4, 5]);
+            });
+
+
+            describe("finding further positions", function() {
+                beforeEach(function() {
+                    agent.memorise(level);
+                    agent.evaluateMove(level);
+                });
+
+                it("should have a new position", function() {
+                    expect(agent.getPosition()).toEqual([4, 5]);
+                });
+
+                it("should find another new position, and not backtrack", function() {
+                    var position = agent.findPosition(level);
+                    expect(position).toEqual([5, 5]);
+                });
+
+                describe("a fork in the path", function() {
+                    beforeEach(function() {
+                        agent.memorise(level);
+                        agent.evaluateMove(level);
+                    });
+
+                    it("should have a new position", function() {
+                        expect(agent.getPosition()).toEqual([5, 5]);
+                    });
+
+                    it("should find another new position", function() {
+                        var position = agent.findPosition(level);
+                        expect(position).toNotEqual([4, 5]);
+                    });
+
+                    describe("backtracking", function() {
+                        var position;
+
+                        beforeEach(function() {
+                            agent.memorise(level);
+                            agent.evaluateMove(level);
+                            position = agent.getPosition();
+                        });
+
+                        it("should have a new position", function() {
+                            expect([[5,4], [6,5], [5,6]]).toContain(position);
+                        });
+
+                        it("should backtrack correctly", function() {
+                            var position = agent.findPosition(level);
+                            expect(position).toEqual([5, 5]);
+                        });
+                    });
+
+                    describe("being led by a resource", function() {
+                        var resource;
+
+                        beforeEach(function() {
+                            resource = new Resource(World.resourceTypes[0], 4, 4);
+                            level.addResource(resource);
+                        });
+
+                        it("should follow the resource", function() {
+                            agent.evaluateMove(level);
+                            position = agent.getPosition();
+                            expect(position).toEqual([5, 4]);
+                        });
+                    });
+                });
             });
         });
 

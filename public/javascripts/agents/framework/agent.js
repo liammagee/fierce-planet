@@ -465,6 +465,7 @@ Agent.prototype.memorise = function(level) {
         memory = new Memory(this._id, this._age, x, y);
         this._memoriesOfPlacesVisited[[x, y]] = memory;
     }
+
     if (this._memoriesOfPathsUntried[[x, y]] != undefined) {
         delete this._memoriesOfPathsUntried[[x, y]];
     }
@@ -824,6 +825,7 @@ Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, wi
                 bestCandidate = candidate;
             }
         }
+
         // Try any unvisited cells at this point
         if (bestCandidate == undefined) {
             // Try any unvisited cells at this point
@@ -835,13 +837,36 @@ Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, wi
                 }
             }
         }
+
+
+        // Now try the best candidate for this agent
         if (bestCandidate == undefined) {
             if (bestCandidateForThisAgent != undefined) {
                 bestCandidate = bestCandidateForThisAgent;
             }
-            else
-                bestCandidate = candidateCells[0];
+//            else {
+//                bestCandidate = candidateCells[0];
+//
+//            }
         }
+
+        // Now try the best candidate based
+        if (bestCandidate == undefined) {
+            // Try any unvisited cells at this point
+            for (var k = 0; k < candidateCells.length; k++) {
+                var resourceCandidate = candidateCells[k];
+                var neighbourResource = this.hasNeighbouringResources(level, resourceCandidate[0], resourceCandidate[1]);
+                if (neighbourResource != null) {
+                    bestCandidate = resourceCandidate;
+                    break;
+                }
+            }
+        }
+
+        if (bestCandidate == undefined) {
+            bestCandidate = candidateCells[0];
+        }
+
 
         // Now try the oldest candidate
         // TODO: Revisit this logic
@@ -858,14 +883,6 @@ Agent.prototype.findPosition = function(level, withNoRepeat, withNoCollision, wi
                     bestCandidate = candidate;
                 }
             }
-        }
-        */
-        // TODO: Revisit this logic
-        /*
-        var neighbour = this.hasNeighbouringResources(candidate[0], candidate[1]);
-        if (neighbour != null) {
-            bestCandidate = candidate;
-            break;
         }
         */
 
@@ -935,7 +952,7 @@ Agent.prototype.randomDirectionOrder = function() {
  */
 Agent.prototype.hasNeighbouringResources = function(level, x, y) {
     var resources = level.getResources();
-    for (var j = 0, len = resources.length; j < len.length; j++) {
+    for (var j = 0, len = resources.length; j < len; j++) {
         var resource = resources[j];
         var px = resource.getX();
         var py = resource.getY();

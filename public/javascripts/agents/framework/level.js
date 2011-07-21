@@ -644,7 +644,6 @@ Level.prototype.recoverResources = function () {
 Level.prototype.processNeighbouringResources = function(agent) {
     var x = agent.getX();
     var y = agent.getY();
-    var foundResources = [];
     for (var j = 0; j < this.getResources().length; j++) {
         var resource = this.getResources()[j];
         var rx = resource.getX();
@@ -661,10 +660,8 @@ Level.prototype.processNeighbouringResources = function(agent) {
                 resourceEffect,
                 World.settings.applyGeneralHealth, !this._noSpeedChange
             );
-//            FiercePlanet.drawResource(resource);
         }
     }
-    return foundResources;
 };
 
 
