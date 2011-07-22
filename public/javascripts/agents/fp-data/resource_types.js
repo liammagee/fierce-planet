@@ -23,6 +23,12 @@ FiercePlanet.LEGAL_SYSTEM_RESOURCE_TYPE = new ResourceType("Legal System", "lega
 FiercePlanet.DEMOCRACY_RESOURCE_TYPE = new ResourceType("Democracy", "democracy", "/images/icons/microphone.png", 25, 40, 250, 20);
 FiercePlanet.FESTIVAL_RESOURCE_TYPE = new ResourceType("Festival", "festival", "/images/icons/martini.png", 30, 50, 300, 25);
 
+
+// Additional resources - uncategorised
+FiercePlanet.AEROPLANE = new ResourceType("Travel", "travel", "/images/icons/aeroplane.png", 30, 50, 300, 25);
+FiercePlanet.TRAVEL_RESOURCE_TYPE = new ResourceType("Travel", "travel", "/images/icons/travel.png", 30, 50, 300, 25);
+
+
 //
 //// Economic resources
 //FiercePlanet.FARM_RESOURCE_TYPE = new ResourceType("Farm", "farm", "/images/icons/farm.png", 10, 20, 100, 20);

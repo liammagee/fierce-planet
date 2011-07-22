@@ -149,8 +149,12 @@ Devise.setup do |config|
     config.omniauth :facebook, "205901039456697", "65f0bc907d0b433343ef1e73b6cb8134"
   else
     # Name: Fierce Planet App
-    # Name: http://fierce-planet.herokuapp.com/
-    config.omniauth :facebook, "116518935106308", "bcd614b749c1296d417df6e6bfe7e407",
+    # URL: http://fierce-planet.herokuapp.com/
+#    config.omniauth :facebook, "116518935106308", "bcd614b749c1296d417df6e6bfe7e407",
+#        {:scope => 'email, offline_access', :client_options => {:ssl => {:ca_file => '/usr/lib/ssl/certs/ca-certificates.crt'}}}
+    # Name: Fierce Planet
+    # URL: http://www.fierce-planet.com/
+    config.omniauth :facebook, "246252042071174", "3bc17cba6e55dbe53cb3a0c754bc5097",
         {:scope => 'email, offline_access', :client_options => {:ssl => {:ca_file => '/usr/lib/ssl/certs/ca-certificates.crt'}}}
   end
   require 'openid/store/filesystem'

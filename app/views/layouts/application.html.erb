@@ -6,10 +6,9 @@
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
   <!-- STYLESHEET INCLUDES -->
+  <%= stylesheet_link_tag "styles" %>
   <% if users_browser == 'android' || users_browser == 'ipod' || users_browser == 'iphone'  %>
-      <%= stylesheet_link_tag "styles_android" %>
-  <% else %>
-      <%= stylesheet_link_tag "styles" %>
+      <%= stylesheet_link_tag "styles_mobile" %>
   <% end %>
   <%= stylesheet_link_tag "custom/jquery-ui-1.8.14.custom" %>
 
@@ -37,6 +36,21 @@
 
   <!-- Load FiercePlanet classes here -->
   <%= javascript_tag "var FiercePlanet = FiercePlanet || {};" -%>
+
+  <script>
+    // Test resizing for different devices
+      $(document).ready(function() {
+          // TODO: Test code for iframe (i.e. Facebook app version)
+          if (top != self) {
+              $('#wrapper').offset({left:-332, top: -65});
+              $('#controls').css({left:-62});
+              $('#gameworld').css({left:25});
+              $('#world').css({padding: 4});
+              $('#global-info-panel').css({left:518});
+              $('#swatch').css({left:518});
+          }
+      });
+  </script>
 
   <% if Rails.env.production? %>
       <%= javascript_include_tag "agents/fierce-planet.min" %>
@@ -111,22 +125,19 @@
 
 <script>
   // Test resizing for different devices
-$(document).ready(function() {
-// TODO: Test code for mobile version
-var ua = navigator.userAgent.toLowerCase();
-var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-if(isAndroid) {
-  // Do something!
-  World.settings.agentsCanCommunicate = false;
-  World.settings.scrollingImageVisible = false;
-}
+    $(document).ready(function() {
+        // TODO: Test code for mobile version
+        var ua = navigator.userAgent.toLowerCase();
+        var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+        if(isAndroid) {
+          // Do something!
+          World.settings.agentsCanCommunicate = false;
+          World.settings.scrollingImageVisible = false;
+        }
 
-// TODO: Test code for iframe (i.e. Facebook app version)
-    if (top != self) {
-        $('#wrapper').offset({left:-315});
-    }
-});
+    });
 </script>
+
 </head>
 <body>
 <div id="wrapper">

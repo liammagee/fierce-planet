@@ -17,7 +17,7 @@ body {
     background: url(../layout/backgound.jpg);
     background-repeat: no-repeat;
     background-position: right;
-    width: 1200px;
+    width: 1090px;
 }
 #content-pane {
 	position:relative;
@@ -33,6 +33,8 @@ body {
 #global-info-panel {
 	position:absolute;
 	padding-bottom: 20px;
+    left:510px;
+    width:170px;
 }
 #user-info {
 	clear:both;
@@ -56,6 +58,7 @@ body {
 #gameworld {
 	clear:both;
 	position:relative;
+    z-index: 1000;
 }
 #world {
 	position:absolute;
@@ -81,33 +84,28 @@ body {
 }
 #resourceLevels {
 	position:absolute;
-	left:510px;
 	top:270px;
-	width:170px;
 	font-size:14px;
 }
 #showResourceGallery {
 	position:absolute;
     text-align: right;
-	left:510px;
 	top:270px;
-	width:170px;
 	font-size:14px;
+    width: inherit;
 }
 #highscore{
 	position:absolute;
-	left:500px;
 	top:100px;
-	width: 180px;
+    width:inherit;
 	text-align:right;
 	color:#8FB0E0;
 	font-size:10px;
 }
 #score {
 	position:absolute;
-	left:510px;
+    width:inherit;
 	top:115px;
-	width: 170px;
 	font-size:20px;
 }
 #score-display{
@@ -123,37 +121,29 @@ body {
 #level {
 	color:#FFF;
 	position:absolute;
-	left:510px;
 	top:160px;
-	width: 180px;
 }
 #waves {
 	color:#FFF;
 	position:absolute;
-	left:510px;
 	top:180px;
-	width: 180px;
 }
 #saved {
 	color:#93C83E;
 	position:absolute;
-	left:510px;
 	top:200px;
-	width: 180px;
 }
 #expired {
 	color:#DE1F2A;
 	position:absolute;
-	left:510px;
 	top:220px;
-	width: 180px;
 }
 #expired-citizens {
 	color:#DE1F2A;
 	position:absolute;
-	left:510px;
 	top:220px;
-    width: 160px; height:23px;
+    width: 160px;
+    height:23px;
     float:left;
     background-repeat:repeat-x;
 }
@@ -189,7 +179,7 @@ body {
 	position:absolute;
 	left:510px;
 	top: 292px;
-    width:173px;
+    width:165px;
 	font-size:10px;
 }
 #level-editor {
@@ -399,7 +389,7 @@ li.over {
 .swatch-category, .inline-swatch-category, .gallery-category {
     border-radius:4px;
     margin-bottom:10px;
-    min-width:169px;
+    min-width:165px;
 }
 
 .swatch-instance, .inline-swatch-instance, .gallery-instance {

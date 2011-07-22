@@ -16,10 +16,14 @@ var FiercePlanet = FiercePlanet || {};
  */
 FiercePlanet.calculateWorldLeft = function () {
     var contentPane = $("#content-pane");
+    var wrapper = $("#wrapper");
     var world = $("#world");
+    var gameworld = $("#gameworld");
     var contentPaneX = contentPane.position().left;
+    var wrapperX = wrapper.position().left;
     var worldX = world.position().left;
-    var dialogX = contentPaneX + worldX;
+    var gameworldX = gameworld.position().left;
+    var dialogX = contentPaneX + wrapperX + worldX + gameworldX;
     return dialogX;
 };
 
@@ -29,10 +33,12 @@ FiercePlanet.calculateWorldLeft = function () {
  */
 FiercePlanet.calculateWorldTop = function () {
     var contentPane = $("#content-pane");
+    var wrapper = $("#wrapper");
     var world = $("#world");
     var contentPaneY = contentPane.position().top;
+    var wrapperY = wrapper.position().top;
     var worldY = world.position().top;
-    var dialogY = contentPaneY + worldY;
+    var dialogY = contentPaneY + wrapperY + worldY;
     return dialogY;
 };
 
