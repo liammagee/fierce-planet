@@ -42,6 +42,7 @@ function Level(id) {
     this._waveAgents = [];
     this._currentAgents = [];
     this._currentAgentsMap = {};
+    this._levelResources = [];
     this._resources = [];
     this._resourceCategoryCounts = this.resetResourceCategoryCounts();
 
@@ -474,8 +475,31 @@ Level.prototype.getResources = function() { return this._resources; };
  * 
  * @param resources
  */
+Level.prototype.resetResources = function() {
+    this._resources = [];
+    this._levelResources = this._levelResources || [];
+    for (var i in this._levelResources) {
+        this._resources.push(this._levelResources[i]);
+    }
+//    this._levelResources.forEach(function(resource) {
+//        this._resources.push(resource);
+//    });
+    this._resourceCategoryCounts = this.resetResourceCategoryCounts();
+};
+/**
+ *
+ * @param resources
+ */
 Level.prototype.setResources = function(resources) {
     this._resources = resources;
+    this._resourceCategoryCounts = this.resetResourceCategoryCounts();
+};
+/**
+ *
+ * @param resources
+ */
+Level.prototype.setLevelResources = function(levelResources) {
+    this._levelResources = levelResources;
     this._resourceCategoryCounts = this.resetResourceCategoryCounts();
 };
 /**
@@ -502,10 +526,10 @@ Level.prototype.removeResource = function(resource) {
 Level.prototype.resetResourceCategoryCounts = function() {
     var rcc = {};
     World.resourceCategories.forEach(function(resourceCategory) {
-        rcc[resourceCategory.getCode()] = 0;
+        rcc[resourceCategory._code] = 0;
     });
     this._resources.forEach(function(resource) {
-        rcc[resource.getCategory().getCode()] += 1;
+        rcc[resource._resourceCategory._code] += 1;
     });
     return rcc;
 };
@@ -599,7 +623,9 @@ Level.prototype.calculateSurroundingResourcesEffects = function (resource) {
             var ny = neighbour.getY();
             if (nx == x && ny == y)
                 continue;
-            if (Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
+//            if (Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
+            // Added global resource tension setting
+            if (World.settings.resourcesInTensionGlobally || Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
                 var neighbourCategory = neighbour.getCategory();
                 baseEffect *= resourceCategory.doEvaluateOtherCategoryImpact(neighbourCategory);
             }

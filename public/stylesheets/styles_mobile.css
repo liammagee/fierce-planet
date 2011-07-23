@@ -10,7 +10,7 @@ html {
 }
 #content-pane {
     left: 95px;
-    top: 0px;
+    top: -110px;
 	position:relative;
 	margin:0; padding:0;
 	width:800px;

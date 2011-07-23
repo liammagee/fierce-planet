@@ -27,7 +27,8 @@ ResourceCategory.prototype.setCode = function(code) { this._code = code; };
 ResourceCategory.prototype.getTypes = function() { return this._types; };
 ResourceCategory.prototype.setTypes = function(types) { this._types = types; };
 ResourceCategory.prototype.addType = function(type) {
-    this._types.push(type);
+    // To by-pass circular references, clone the type added to the collection
+    this._types.push(type.clone());
     type.setCategory(this);
 };
 ResourceCategory.prototype.setEvaluateOtherCategoryImpact = function(f) {this._evaluateOtherCategoryImpact = f;};
@@ -73,6 +74,10 @@ ResourceType.prototype.getPerAgentYield = function() { return this._perAgentYiel
 ResourceType.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; };
 ResourceType.prototype.getTotalYield = function() { return this._totalYield; };
 ResourceType.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; };
+ResourceType.prototype.clone = function() {
+    var clonedType = new ResourceType(this._name, this._code, this._image, this._cost, this._upgradeCost, this._perAgentYield, this._perAgentYield);
+    return clonedType;
+};
 
 
 /**
@@ -85,17 +90,17 @@ ResourceType.prototype.setTotalYield = function(totalYield) { this._totalYield =
  */
 function Resource(kind, x, y) {
     // Kind properties
-    this._resourceCategory = kind.getCategory();
-    this._color = kind.getCategory().getColor();
+    this._resourceCategory = kind._category;
+    this._color = kind._category._color;
     this._kind = kind;
-    this._resourceName = kind.getCode();
-    this._initialTotalYield = kind.getTotalYield();
-    this._perAgentYield = kind.getPerAgentYield();
-    this._cost = kind.getCost();
-    this._upgradeCost = kind.getUpgradeCost();
+    this._resourceName = kind._code;
+    this._initialTotalYield = kind._totalYield;
+    this._perAgentYield = kind._perAgentYield;
+    this._cost = kind._cost;
+    this._upgradeCost = kind._upgradeCost;
 
 
-    this._totalYield = kind.getTotalYield();
+    this._totalYield = kind._totalYield;
     this._upgradeLevel = 1;
     this.moveTo(x, y);
 }

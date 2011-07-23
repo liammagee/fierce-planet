@@ -64,8 +64,8 @@ FiercePlanet.newLevel = function() {
     FiercePlanet.levelCounter = 0;
     FiercePlanet.maxLevelMoves = 0;
     FiercePlanet.currentProfile.updateScore();
-    if (FiercePlanet.currentLevel != undefined)
-        FiercePlanet.currentLevel.setResources([]);
+//    if (FiercePlanet.currentLevel != undefined)
+//        FiercePlanet.currentLevel.setResources([]);
     FiercePlanet.currentNotice = null;
     if (FiercePlanet.audio != undefined) {
         FiercePlanet.audio.pause();
@@ -248,7 +248,7 @@ FiercePlanet._initialiseGame = function () {
     }
     FiercePlanet.currentWave = 1;
     FiercePlanet.currentLevel.setCurrentAgents([]);
-    FiercePlanet.currentLevel.setResources([]);
+    FiercePlanet.currentLevel.resetResources();
     if (FiercePlanet.currentLevel.getCatastrophe() != undefined)
         FiercePlanet.currentLevel.getCatastrophe()._struck = false;
 

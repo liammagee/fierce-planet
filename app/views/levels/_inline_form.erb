@@ -1,5 +1,6 @@
 <%= form_for @level, :method => :put, :remote => true do |f| %>
     <%= f.hidden_field :tiles %>
+    <%= f.hidden_field :resources %>
     <%= f.hidden_field :entry_points %>
     <%= f.hidden_field :exit_points %>
     <%= f.submit 'Save Level' %>
@@ -30,6 +31,7 @@
 
     function serializeLevel() {
         $('#level_tiles')[0].value = $.toJSON(FiercePlanet.currentLevel.getTiles());
+        $('#level_resources')[0].value = $.toJSON(FiercePlanet.currentLevel.getResources());
         $('#level_entry_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getEntryPoints());
         $('#level_exit_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getExitPoints());
     }

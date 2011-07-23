@@ -54,7 +54,7 @@ FiercePlanet.showDesignFeaturesDialog = function(e) {
  */
 FiercePlanet.setupLevelEditor = function() {
     $('#delete-upgrade').hide();
-    $('#swatch').hide();
+//    $('#swatch').hide();
     $('#level-editor').show();
 
     var canvas = $('#agentCanvas');

@@ -29,6 +29,22 @@ catch (err) {
     arr = FiercePlanet.currentLevel.fillWithTiles();
 }
 
+var jsonArray = '<%= raw @level.resources %>';
+arr = [];
+try {
+    arr = $.evalJSON(jsonArray);
+    arr.forEach(function(resource) {
+        resource.getCategory = Resource.prototype.getCategory;
+        resource.getX = Resource.prototype.getX;
+        resource.getY = Resource.prototype.getY;
+        resource._resourceCategory.getCode = ResourceCategory.prototype.getCode;
+    });
+    FiercePlanet.currentLevel.setLevelResources(arr);
+}
+catch (err) {
+    console.log(err);
+}
+
 jsonArray = '<%= raw @level.entry_points %>';
 arr = [];
 try {

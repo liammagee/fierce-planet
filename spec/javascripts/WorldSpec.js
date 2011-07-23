@@ -73,8 +73,10 @@ describe("world-related classes", function() {
 
             it("should have default settings", function() {
                 expect(World.settings.agentsCanCommunicate).toBeTruthy();
+                expect(World.settings.agentsHaveRandomInitialHealth).toBeFalsy();
                 expect(World.settings.resourcesUpgradeable).toBeFalsy();
                 expect(World.settings.resourcesInTension).toBeFalsy();
+                expect(World.settings.resourcesInTensionGlobally).toBeFalsy();
                 expect(World.settings.resourceBonus).toBeFalsy();
                 expect(World.settings.applyGeneralHealth).toBeFalsy();
                 expect(World.settings.ignoreResourceBalance).toBeFalsy();
@@ -83,10 +85,14 @@ describe("world-related classes", function() {
             it("should be possible to set property settings", function() {
                 World.settings.agentsCanCommunicate = false;
                 expect(World.settings.agentsCanCommunicate).toBeFalsy();
+                World.settings.agentsHaveRandomInitialHealth = true;
+                expect(World.settings.agentsHaveRandomInitialHealth).toBeTruthy();
                 World.settings.resourcesUpgradeable = true;
                 expect(World.settings.resourcesUpgradeable).toBeTruthy();
                 World.settings.resourcesInTension = true;
                 expect(World.settings.resourcesInTension).toBeTruthy();
+                World.settings.resourcesInTensionGlobally = true;
+                expect(World.settings.resourcesInTensionGlobally).toBeTruthy();
                 World.settings.resourceBonus = true;
                 expect(World.settings.resourceBonus).toBeTruthy();
                 World.settings.applyGeneralHealth = true;

@@ -502,6 +502,24 @@ describe("level-related classes", function() {
                 expect(Math.round(level.calculateResourceEffect(level.getResources()[2], false, true) * 1000) / 1000).toEqual(1);
             });
 
+            /** TODO: Needs implementation */
+            it("should have calculate the correct effect of remote resources on a resource, when resourcesInTensionGlobally is set", function() {
+                World.settings.resourcesInTensionGlobally = true;
+                var resource = level.getResources()[0];
+//                // Because the balance is out of proportion
+//                expect(Math.round(level.calculateResourceEffect(resource) * 1000) / 1000).toEqual(0.444);
+//                // Without resource mix
+//                expect(level.calculateResourceEffect(resource, true)).toEqual(1);
+//                // With resource mix
+//                expect(Math.round(level.calculateResourceEffect(resource, false) * 1000) / 1000).toEqual(0.444);
+//                // With resource tension
+//                expect(Math.round(level.calculateResourceEffect(resource, false, true) * 1000) / 1000).toEqual(0.889);
+//                // Test other resource tensions
+//                expect(Math.round(level.calculateResourceEffect(level.getResources()[1], false, true) * 1000) / 1000).toEqual(0.25);
+//                expect(Math.round(level.calculateResourceEffect(level.getResources()[2], false, true) * 1000) / 1000).toEqual(1);
+                World.settings.resourcesInTensionGlobally = false;
+            });
+
             it("should have 3 resources when a resource is removed", function() {
                 level.removeResource(level.getResources()[0]);
               expect(level.getResources().length).toEqual(3);
@@ -638,5 +656,35 @@ describe("level-related classes", function() {
         });
 
     });
+
+    describe("serialization", function() {
+        beforeEach(function() {
+
+        });
+
+        it("should be serializable to JSON", function() {
+            var json = $.toJSON(level);
+            expect(json).toBeDefined();
+        });
+
+
+        it("should be serializable to JSON with tiles", function() {
+            level.fillWithTiles();
+            var json = $.toJSON(level);
+            expect(json).toBeDefined();
+        });
+
+
+        it("should be serializable to JSON with resources", function() {
+            var resource = new Resource(World.resourceTypes[0], 0, 0);
+            level.setResources([resource]);
+            var json = $.toJSON(level);
+            expect(json).toBeDefined();
+        });
+
+
+
+    });
+
 
 });

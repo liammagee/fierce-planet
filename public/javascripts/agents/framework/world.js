@@ -19,20 +19,30 @@ var World = (function() {
             /** Can agents share memories of places visited? */
             agentsCanCommunicate: true,
 
+            /** Do agents have a random amount of initial health? */
+            agentsHaveRandomInitialHealth: false,
+
             /** Ignores the weighting of resources when calculating benefits */
             ignoreResourceBalance: false,
 
             /** Do all resources impact upon agents equivalently? */
             applyGeneralHealth: false,
 
-            /** Are resources in tension - does proximity of resources impact on their benefit */
+            /** Are resources in tension - does proximity of resources impact on their benefit?
+             *  TODO: Refactor
+              */
             resourcesInTension: false,
+
+            /** Are resources in tension - does proximity of resources impact on their benefit */
+            resourcesInTensionGlobally: false,
 
             /** Can resources be upgraded? (TODO: Semantics needs to be clear about what this means) */
             resourcesUpgradeable: false,
 
             /** Does a resource bonus apply, for using an even mix of resources? TODO: not yet implemented */
             resourceBonus: false,
+
+
 
             /** Serialise just the settings to JSON */
             toJSON: function toJSON() {
