@@ -295,7 +295,7 @@ Agent.prototype.adjustGeneralHealth = function(adjustment) {
  * @param resource
  */
 Agent.prototype.adjustHealthForResource = function(adjustment, resource) {
-    this.adjustHealthForResourceCategory(adjustment, resource._category);
+    this.adjustHealthForResourceCategory(adjustment, resource._resourceCategory);
 };
 /**
  * Adjusts health based on a given resource category.
@@ -315,7 +315,15 @@ Agent.prototype.adjustHealthForResourceCategory = function(adjustment, resourceC
  * @param resource
  */
 Agent.prototype.getHealthForResource = function(resource) {
-    var categoryCode = resource.getCategory().getCode();
+    return this.getHealthForResourceCategory(resource._resourceCategory)
+};
+/**
+ * Retrieves health for a given resource category.
+ *
+ * @param resource
+ */
+Agent.prototype.getHealthForResourceCategory = function(category) {
+    var categoryCode = category._code;
     var categoryHealth = this._healthCategoryStats[categoryCode];
     return categoryHealth;
 };

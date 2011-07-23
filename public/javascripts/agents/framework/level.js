@@ -428,9 +428,17 @@ Level.prototype.generateAgents = function(agentType, number) {
             var delay = parseInt(Math.random() * DEFAULT_SPEED * 5);
             agent.setDelay(delay);
             agent.setCanCommunicateWithOtherAgents(World.settings.agentsCanCommunicate);
+
+            // Reduce health of a random category
             if (World.settings.agentsHaveRandomInitialHealth) {
+                var categoryLength = World.resourceCategories.length;
+                var categoryToReduceIndex = Math.floor(Math.random() * categoryLength);
+                var categoryToReduce = World.resourceCategories[categoryToReduceIndex];
 
-
+                // Reduce by no more than 50%
+                var maxReduction = -50;
+                var amountToReduce = Math.ceil(Math.random() * maxReduction);
+                agent.adjustHealthForResourceCategory(amountToReduce, categoryToReduce);
             }
             agents.push(agent);
         }
@@ -593,7 +601,7 @@ Level.prototype.isPositionOccupiedByResource = function (x, y) {
  */
 Level.prototype.calculateResourceEffect = function (resource, ignoreResourceMix, resourcesInTension) {
         // Allow this calculation to be ignored
-        if (ignoreResourceMix || this._resources.length <= 1)
+        if (ignoreResourceMix || World.settings.ignoreResourceBalance || World.settings.applyGeneralHealth || this._resources.length <= 1)
             return 1;
 
         var code = resource.getCategory().getCode();
@@ -604,7 +612,7 @@ Level.prototype.calculateResourceEffect = function (resource, ignoreResourceMix,
         var effect = proportionOfIdeal * proportionOfIdeal;
 
         // Further adjustment based on surrounding resources
-        if (resourcesInTension) {
+        if (resourcesInTension || World.settings.resourcesInTension) {
             effect *= this.calculateSurroundingResourcesEffects(resource);
         }
         return effect;
@@ -679,11 +687,13 @@ Level.prototype.processNeighbouringResources = function(agent) {
         var rx = resource.getX();
         var ry = resource.getY();
         if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
-            var resourceEffect = this.calculateResourceEffect(
-                resource,
-                World.settings.ignoreResourceBalance || World.settings.applyGeneralHealth,
-                World.settings.resourcesInTension
-            );
+//            var resourceEffect = this.calculateResourceEffect(
+//                resource,
+//                World.settings.ignoreResourceBalance || World.settings.applyGeneralHealth,
+//                World.settings.resourcesInTension
+//            );
+            var resourceEffect = this.calculateResourceEffect(resource);
+            console.log(resourceEffect);
 
             resource.provideYield(
                 agent,

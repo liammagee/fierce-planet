@@ -51,7 +51,7 @@ describe("agent-related classes", function() {
                 var adjustment = -10;
 
                 beforeEach(function() {
-                    agent.adjustHealthForResource(adjustment, World.resourceCategories[0]);
+                    agent.adjustHealthForResourceCategory(adjustment, World.resourceCategories[0]);
                 });
 
                 it("should adjust health for just that category", function() {
@@ -66,7 +66,7 @@ describe("agent-related classes", function() {
                 });
 
                 it("should also return the correct result when health for a given resource is queried", function() {
-                    expect(agent.getHealthForResource(resource)).toEqual(INITIAL_HEALTH + adjustment);
+                    expect(agent.getHealthForResourceCategory(World.resourceCategories[0])).toEqual(INITIAL_HEALTH + adjustment);
                 });
             });
 

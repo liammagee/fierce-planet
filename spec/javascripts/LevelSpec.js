@@ -459,6 +459,10 @@ describe("level-related classes", function() {
 
         describe("handling a more complex resource mix", function() {
             beforeEach(function() {
+                World.settings.resourcesInTension = false;
+                World.settings.ignoreResourceBalance = false;
+                World.settings.applyGeneralHealth = false;
+
                 // Make the first type increase effects on other types
                 World.resourceCategories[0].setEvaluateOtherCategoryImpact(function(otherCategory) { return 2;});
                 // Make the second type decrease effects on other types
@@ -491,34 +495,37 @@ describe("level-related classes", function() {
                 var resource = level.getResources()[0];
                 // Because the balance is out of proportion
                 expect(Math.round(level.calculateResourceEffect(resource) * 1000) / 1000).toEqual(0.444);
-                // Without resource mix
+
+                // With ignoring resource mix
+                World.settings.ignoreResourceBalance = true;
                 expect(level.calculateResourceEffect(resource, true)).toEqual(1);
-                // With resource mix
+                expect(level.calculateResourceEffect(resource)).toEqual(1);
+
+                // Without ignoring resource mix
+                World.settings.ignoreResourceBalance = false;
                 expect(Math.round(level.calculateResourceEffect(resource, false) * 1000) / 1000).toEqual(0.444);
+
+                // With applying general health
+                World.settings.applyGeneralHealth = true;
+                expect(level.calculateResourceEffect(resource, true)).toEqual(1);
+                expect(level.calculateResourceEffect(resource)).toEqual(1);
+
+                // Without ignoring resource mix
+                World.settings.applyGeneralHealth = false;
+                expect(Math.round(level.calculateResourceEffect(resource, false) * 1000) / 1000).toEqual(0.444);
+
                 // With resource tension
+                World.settings.resourcesInTension = true;
                 expect(Math.round(level.calculateResourceEffect(resource, false, true) * 1000) / 1000).toEqual(0.889);
+                expect(Math.round(level.calculateResourceEffect(resource, false) * 1000) / 1000).toEqual(0.889);
+
                 // Test other resource tensions
                 expect(Math.round(level.calculateResourceEffect(level.getResources()[1], false, true) * 1000) / 1000).toEqual(0.25);
                 expect(Math.round(level.calculateResourceEffect(level.getResources()[2], false, true) * 1000) / 1000).toEqual(1);
+                expect(Math.round(level.calculateResourceEffect(level.getResources()[1], false) * 1000) / 1000).toEqual(0.25);
+                expect(Math.round(level.calculateResourceEffect(level.getResources()[2], false) * 1000) / 1000).toEqual(1);
             });
 
-            /** TODO: Needs implementation */
-            it("should have calculate the correct effect of remote resources on a resource, when resourcesInTensionGlobally is set", function() {
-                World.settings.resourcesInTensionGlobally = true;
-                var resource = level.getResources()[0];
-//                // Because the balance is out of proportion
-//                expect(Math.round(level.calculateResourceEffect(resource) * 1000) / 1000).toEqual(0.444);
-//                // Without resource mix
-//                expect(level.calculateResourceEffect(resource, true)).toEqual(1);
-//                // With resource mix
-//                expect(Math.round(level.calculateResourceEffect(resource, false) * 1000) / 1000).toEqual(0.444);
-//                // With resource tension
-//                expect(Math.round(level.calculateResourceEffect(resource, false, true) * 1000) / 1000).toEqual(0.889);
-//                // Test other resource tensions
-//                expect(Math.round(level.calculateResourceEffect(level.getResources()[1], false, true) * 1000) / 1000).toEqual(0.25);
-//                expect(Math.round(level.calculateResourceEffect(level.getResources()[2], false, true) * 1000) / 1000).toEqual(1);
-                World.settings.resourcesInTensionGlobally = false;
-            });
 
             it("should have 3 resources when a resource is removed", function() {
                 level.removeResource(level.getResources()[0]);
@@ -533,7 +540,40 @@ describe("level-related classes", function() {
               expect(level.getResourceCategoryCount("soc")).toEqual(1);
             });
 
+            afterEach(function() {
+                World.settings.resourcesInTension = false;
+                World.settings.ignoreResourceBalance = false;
+                World.settings.applyGeneralHealth = false;
+
+            });
+
         });
+
+        describe("handling impacts of all resources", function() {
+            beforeEach(function() {
+                World.settings.resourcesInTensionGlobally = true;
+                var neigbour1 = new Resource(World.resourceTypes[1], 1, 1);
+                var neigbour2 = new Resource(World.resourceTypes[2], 5, 5);
+                var neigbour3 = new Resource(World.resourceTypes[0], 9, 9);
+                level.addResource(neigbour1);
+                level.addResource(neigbour2);
+                level.addResource(neigbour3);
+            });
+
+            it("should have calculate the correct effect of remote resources on a resource, when resourcesInTensionGlobally is set", function() {
+                var resource = level.getResources()[0];
+                // With resource tension
+                expect(Math.round(level.calculateResourceEffect(resource, false, true) * 1000) / 1000).toEqual(3.556);
+                // Test other resource tensions
+                expect(Math.round(level.calculateResourceEffect(level.getResources()[1], false, true) * 1000) / 1000).toEqual(0.125);
+                expect(Math.round(level.calculateResourceEffect(level.getResources()[2], false, true) * 1000) / 1000).toEqual(1);
+            });
+
+            afterEach(function() {
+                World.settings.resourcesInTensionGlobally = false;
+            });
+        });
+
     });
 
 
@@ -578,6 +618,21 @@ describe("level-related classes", function() {
             it("should add a set of wave agent to the current agents", function() {
                 expect(level.getWaveAgents().length).toEqual(1);
                 expect(level.getCurrentAgents().length).toEqual(20);
+            });
+        });
+
+        describe("random initial health dilution", function() {
+            beforeEach(function() {
+                World.settings.agentsHaveRandomInitialHealth = true;
+                level.generateAgents(World.agentTypes[0], 10);
+            });
+
+            it("should have less than 100 health", function() {
+                expect(level.getCurrentAgents()[0].getHealth()).toBeLessThan(100);
+            });
+
+            afterEach(function() {
+                World.settings.agentsHaveRandomInitialHealth = false;
             });
         });
 

@@ -3,38 +3,38 @@
   <div id="settings-tabs">
 
   	<ul>
+        <li><a href="#user-interface">User interface</a></li>
         <li><a href="#game-settings">Game play</a></li>
-		<li><a href="#user-interface">User interface</a></li>
 		<li><a href="#experimental" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">Experimental</a></li>
-		<li><a href="#testing">Testing</a></li>
+		<li><a href="#testing" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">Testing</a></li>
 	</ul>
 
 
 
   <div id="game-settings">
     <div>
-      <input id="agentsCanCommunicate"  type="checkbox" checked="checked"/>
-      Allow agents to share their memories
-    </div>
-    <div>
-      <input id="agentsHaveRandomInitialHealth"  type="checkbox"/>
-      Agents have random initial health [NOT YET FUNCTIONAL]
-    </div>
-    <div>
       <input id="resourcesInTension"  type="checkbox"/>
       Resources affect neighbouring resources
     </div>
     <div>
+      <input id="resourcesInTensionGlobally"  type="checkbox"/>
+      Resources affect all other resources
+    </div>
+    <div>
       <input id="ignoreResourceBalance"  type="checkbox"/>
-      Ignore mix of resource categories
+      Resource balance has no effect
     </div>
     <div>
       <input id="applyGeneralHealth"  type="checkbox"/>
-      Ignore resource categories altogether
+      Resource categories have no effect
     </div>
     <div>
-      <input id="resourcesInTensionGlobally"  type="checkbox"/>
-      Resources affect all other resources
+      <input id="agentsCanCommunicate"  type="checkbox" checked="checked"/>
+       Agents share their memories
+    </div>
+    <div>
+      <input id="agentsHaveRandomInitialHealth"  type="checkbox"/>
+      Agents have random initial health
     </div>
 
     <div style="display:none">
