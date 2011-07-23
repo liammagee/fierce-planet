@@ -457,7 +457,6 @@ FiercePlanet.showResourceGallery = function() {
 
         purchasableItem.addEventListener('click', function(e) {
             var id = this.id;
-            console.log(id);
             var swatchId = id.split("-purchase")[0];
             var itemName = $('#' + id + '')[0].title;
             if ($.inArray(swatchId, FiercePlanet.currentProfile.capabilities) == -1) {

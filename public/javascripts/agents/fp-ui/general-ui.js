@@ -90,7 +90,9 @@ FiercePlanet.hookUpUIEventListeners = function() {
 FiercePlanet.bindGameMouseEvents = function() {
     var agentCanvas = $('#agentCanvas');
 
-    console.log('binding mouse events');
+    if (typeof console != "undefined")
+        console.log('Binding mouse events');
+
     agentCanvas.click(FiercePlanet.handleNoticeEvents);
     agentCanvas.click(FiercePlanet.processResourceCanvasClick);
     if (World.settings.allowInlinePanning) {

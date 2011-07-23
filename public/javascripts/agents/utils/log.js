@@ -48,7 +48,7 @@ var Log = (function() {
         },
 
         log: function log(message, atLevel) {
-            if (this.isAt(atLevel))
+            if (typeof console != "undefined" && this.isAt(atLevel))
                 console.log(message);
         }
 
