@@ -1,18 +1,14 @@
 <div id="global-info-panel">
-    <div id="resourceLevels">Resources: <span id="goodness-display">100</span> </div>
-    <a href="#" id="showResourceGallery" title="Resource Gallery">More...</a>
-
-    <div id="waves" > Waves: <span id="waves-display">1/20</span> </div>
-    <div id="score"> Score: <span id="score-display">&nbsp; &nbsp;500</span> </div>
-    <!--<div id="expired"> Expired: <span id="expired-display">0</span> </div>-->
-    <div id="expired-citizens">    </div>
-    <div id="saved"> Saved: <span id="saved-display">0</span> </div>
-    <div id="highscore">
-      <% link_to high_scores_profiles_path, :method => :get, :remote => true do %>
-          Highest Score: <span id="highest-score-display">0</span>
-      <% end %>
-    </div>
-
-    <!-- Unstyled properties -->
-    <div id="level"> Level: <span id="level-display">0</span> </div>
+  <div id="highscore">
+    <% link_to high_scores_profiles_path, :method => :get, :remote => true do %>
+        Highest Score: <span id="highest-score-display">0</span>
+    <% end %>
+  </div>
+  <div id="score"> Score: <span id="score-display">&nbsp; &nbsp;500</span> </div>
+  <div id="level"> Level: <span id="level-display">0</span> </div>
+  <div id="waves" > Waves: <span id="waves-display">1/20</span> </div>
+  <div id="expired-citizens">    </div>
+  <div id="saved"> Saved: <span id="saved-display">0</span> </div>
+  <div id="resourceLevels">Resources: <span id="goodness-display">100</span> </div>
+  <a href="#" id="showResourceGallery" title="Resource Gallery">(More)</a>
 </div>
