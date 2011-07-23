@@ -114,7 +114,9 @@ FiercePlanet.getAndRetrieveProperties = function() {
     for (var key in World.settings) {
         // Make sure we're only capturing numbers, strings, booleans (not objects, functions or undefineds)
         if (World.settings.hasOwnProperty(key) && $.inArray(typeof World.settings[key], ["number", "string", "boolean"]) > -1) {
-            $('#' + key)[0].checked = World.settings[key];
+            var option = $('#' + key)[0];
+            if (option)
+                option.checked = World.settings[key];
         }
     }
 };

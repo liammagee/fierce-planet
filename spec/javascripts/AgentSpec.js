@@ -51,8 +51,7 @@ describe("agent-related classes", function() {
                 var adjustment = -10;
 
                 beforeEach(function() {
-                    resource = new Resource(World.resourceTypes[0], 0, 0);
-                    agent.adjustHealthForResource(adjustment, resource);
+                    agent.adjustHealthForResource(adjustment, World.resourceCategories[0]);
                 });
 
                 it("should adjust health for just that category", function() {

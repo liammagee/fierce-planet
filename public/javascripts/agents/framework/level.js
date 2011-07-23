@@ -428,6 +428,10 @@ Level.prototype.generateAgents = function(agentType, number) {
             var delay = parseInt(Math.random() * DEFAULT_SPEED * 5);
             agent.setDelay(delay);
             agent.setCanCommunicateWithOtherAgents(World.settings.agentsCanCommunicate);
+            if (World.settings.agentsHaveRandomInitialHealth) {
+
+
+            }
             agents.push(agent);
         }
     }
