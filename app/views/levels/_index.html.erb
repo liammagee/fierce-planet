@@ -1,30 +1,46 @@
-<h3>Level Editor</h3>
+<div id="level-list-tabs">
+
+  <ul>
+    <li><a href="#level-list">Level editor</a></li>
+  </ul>
+
+  <div id="level-list">
+
+    <div>
+      <% link_to new_level_path, :remote => true do %>
+          <strong>Make a new level</strong>
+
+        <% end %>
+    </div>
 
 
-<% link_to new_level_path, :remote => true do %>
-    Make a new level
-<% end %>
+  <% if @levels and !@levels.empty? %>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th></th>
-    <th></th>
-  </tr>
+    <hr/>
+        <h3>Existing levels</h3>
 
-  <% @levels.each do |level| %>
-      <tr>
-        <td><%= level.name %></td>
-        <td>
-          <% link_to edit_level_path(level), :remote => true do %>
-            Edit
-            <% end %>
-        </td>
-        <td>
-          <% link_to level, :confirm => 'Are you sure?', :method => :delete, :remote => true do  %>
-            Delete
-          <% end %>
-        </td>
-      </tr>
+      <table>
+        <% @levels.each do |level| %>
+            <tr>
+              <td>
+                Edit
+                <% link_to edit_level_path(level), :remote => true do %>
+                    <strong><%= level.name %></strong>
+                <% end %>
+              </td>
+              <td>
+                (
+                <% link_to level, :confirm => 'Are you sure?', :method => :delete, :remote => true do %>
+                    <strong>Delete</strong>
+
+                <% end %>)
+              </td>
+            </tr>
+        <% end %>
+      </table>
   <% end %>
-</table>
+
+  </div>
+
+</div>
+

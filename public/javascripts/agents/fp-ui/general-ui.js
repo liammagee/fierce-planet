@@ -50,13 +50,13 @@ FiercePlanet.hookUpUIEventListeners = function() {
 
     // Level editor functions
     try {
-        $('#showLevelProperties').click(FiercePlanet.showLevelProperties);
-        $('#refreshTiles').click(FiercePlanet.refreshTiles);
-        $('#fillAll').click(FiercePlanet.fillAllTiles);
-        $('#undoAction').click(FiercePlanet.undoAction);
-        $('#cancelLevelEditor').click(FiercePlanet.cancelLevelEditor);
-        $('#clearEntryPoints').click(FiercePlanet.clearEntryPoints);
-        $('#clearExitPoints').click(FiercePlanet.clearExitPoints);
+        $('#show-level-properties').click(FiercePlanet.showLevelProperties);
+        $('#refresh-tiles').click(FiercePlanet.refreshTiles);
+        $('#fill-all').click(FiercePlanet.fillAllTiles);
+        $('#undo-action').click(FiercePlanet.undoAction);
+        $('#cancel-level-editor').click(FiercePlanet.cancelLevelEditor);
+        $('#clear-entry-points').click(FiercePlanet.clearEntryPoints);
+        $('#clear-exit-points').click(FiercePlanet.clearExitPoints);
     }
     catch (err){
         if (typeof console != "undefined")
@@ -388,7 +388,7 @@ FiercePlanet.levelInfo = function() {
     if (level.getIntroduction() != undefined) {
         levelHTML += level.getIntroduction();
     }
-    FiercePlanet.$newLevel.html(levelHTML).dialog('open');
+    FiercePlanet.newLevelDialog.html(levelHTML).dialog('open');
 };
 
 

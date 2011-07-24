@@ -1,24 +1,36 @@
+
+
 $('#notifications').html("<p>Creating a new level...</p>");
-if (FiercePlanet.$levelList != undefined)
-    FiercePlanet.$levelList.dialog('close');
+
+if (FiercePlanet.levelListDialog != undefined)
+    FiercePlanet.levelListDialog.dialog('close');
+
 $(".edit_level_properties").remove();
-FiercePlanet.$editProperties = $('<div></div>')
+
+
+
+FiercePlanet.editPropertiesDialog = $('<div></div>')
         .html("<%=  escape_javascript(render('levels/edit_properties', :locals => { :level => @level})) %>")
         .dialog({
+                    position: [FiercePlanet.calculateWorldLeft(), FiercePlanet.calculateWorldTop()],
+                    width: FiercePlanet.WORLD_WIDTH + 7,
+                    height: FiercePlanet.WORLD_HEIGHT + 7,
                     autoOpen: false,
                     modal: true,
                     title: 'Level Setup',
-                    width: 600,
                     buttons: {
                         "Save Level": function() {
                             $(".edit_level_properties").submit();
                             FiercePlanet.drawGame();
-                            $( this ).dialog( "close" );
+                            $(this).dialog("close");
                         },
                         "Cancel": function() {
                             $(this).dialog("close");
                         }
+                    },
+                    open: function() {
+                        $("#edit-properties-tabs").tabs();
                     }
 
                 });
-FiercePlanet.$editProperties.dialog('open');
+FiercePlanet.editPropertiesDialog.dialog('open');

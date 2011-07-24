@@ -10,47 +10,50 @@
 var FiercePlanet = FiercePlanet || {};
 
 
-
+/**
+ *
+ * @param e
+ */
 FiercePlanet.showDesignFeaturesDialog = function(e) {
-    $("#makeTile").click(function(e) {
+    $("#make-tile").click(function(e) {
         var tile = new Tile(DEFAULT_TILE_COLOR, FiercePlanet.currentX, FiercePlanet.currentY);
         FiercePlanet.currentLevel.addTile(tile);
-        FiercePlanet.$designFeatures.dialog('close');
+        FiercePlanet.designFeaturesDialog.dialog('close');
         FiercePlanet.drawGame();
     });
 
-    $("#addExitPoint").click(function(e) {
+    $("#add-exit-point").click(function(e) {
         FiercePlanet.currentLevel.addExitPoint(FiercePlanet.currentX, FiercePlanet.currentY);
-        FiercePlanet.$designFeatures.dialog('close');
+        FiercePlanet.designFeaturesDialog.dialog('close');
         FiercePlanet.drawGame();
     });
 
-    $("#addEntryPoint").click(function(e) {
+    $("#add-entry-point").click(function(e) {
         FiercePlanet.currentLevel.removeEntryPoint(0, 0);
         FiercePlanet.currentLevel.addEntryPoint(FiercePlanet.currentX, FiercePlanet.currentY);
-        FiercePlanet.$designFeatures.dialog('close');
+        FiercePlanet.designFeaturesDialog.dialog('close');
         FiercePlanet.drawGame();
     });
 
 
-    $("#removeEntryPoint").click(function(e) {
+    $("#remove-entry-point").click(function(e) {
         FiercePlanet.currentLevel.removeEntryPoint(FiercePlanet.currentX, FiercePlanet.currentY);
-        FiercePlanet.$designFeatures.dialog('close');
+        FiercePlanet.designFeaturesDialog.dialog('close');
         FiercePlanet.drawGame();
     });
 
-    $("#removeExitPoint").click(function(e) {
+    $("#remove-exit-point").click(function(e) {
         FiercePlanet.currentLevel.removeExitPoint(FiercePlanet.currentX, FiercePlanet.currentY);
-        FiercePlanet.$designFeatures.dialog('close');
+        FiercePlanet.designFeaturesDialog.dialog('close');
         FiercePlanet.drawGame();
     });
 
 
-    FiercePlanet.$designFeatures.dialog('open');
+    FiercePlanet.designFeaturesDialog.dialog('open');
 };
 
 /**
- *
+ * 
  */
 FiercePlanet.setupLevelEditor = function() {
     $('#delete-upgrade').hide();
@@ -148,7 +151,7 @@ FiercePlanet.undoAction = function() {
  *
  */
 FiercePlanet.showLevelProperties = function() {
-    FiercePlanet.$editProperties.dialog('open');
+    FiercePlanet.editPropertiesDialog.dialog('open');
 };
 
 /**

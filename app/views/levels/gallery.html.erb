@@ -1,27 +1,13 @@
 <div id="lg">
 
+  <% if @levels.length > 0 %>
+      <h3>Open a custom level:</h3>
 
-<% if @levels.length > 0 %>
-    <h3>Open a custom level:</h3>
-
-    <% @levels.each do |level| %>
-        <div>
-          <%= link_to level.name, level, :remote => true %>
-        </div>
-    <% end %>
-    <!--<table>-->
-      <!--<tr>-->
-        <!--<th>Name</th>-->
-        <!--<th></th>-->
-      <!--</tr>-->
-
-      <!--<% @levels.each do |level| %>-->
-          <!--<tr>-->
-            <!--<td><%= level.name %></td>-->
-            <!--<td><%= link_to 'Open', level, :remote => true %></td>-->
-          <!--</tr>-->
-      <!--<% end %>-->
-    <!--</table>-->
-<% end %>
+      <% @levels.each do |level| %>
+          <div>
+            <%= link_to level.name, level, :remote => true %>
+          </div>
+      <% end %>
+  <% end %>
 
 </div>

@@ -1,5 +1,3 @@
-
-
 // Instantiate the current level from the database
 <%=  render('levels/setup_level', :locals => { :level => @level}) %>
 
@@ -7,7 +5,7 @@
 $('#level-editor-form').html("<%=  escape_javascript(render('levels/inline_form', :locals => { :level => @level})) %>");
 
 // Set up the level properties dialog
-FiercePlanet.$editProperties.html("<%=  escape_javascript(render('levels/edit_properties', :locals => { :level => @level})) %>");
+FiercePlanet.editPropertiesDialog.html("<%=  escape_javascript(render('levels/edit_properties', :locals => { :level => @level})) %>");
 
 // Set the current level number and preset value
 FiercePlanet.currentLevelNumber = parseInt("<%= @level.id %>");
@@ -18,4 +16,5 @@ FiercePlanet.setupLevelEditor();
 
 
 // Close the level selection dialog
-FiercePlanet.$levelList.dialog('close');
+FiercePlanet.levelListDialog.dialog('close');
+

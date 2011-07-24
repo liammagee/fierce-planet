@@ -282,7 +282,11 @@ Level.prototype.assignCells = function() {
 // Entry point functions
 Level.prototype.getEntryPoints = function() { return this._entryPoints; };
 Level.prototype.setEntryPoints = function(entryPoints) {
-    entryPoints.forEach(function(ep) { this.addEntryPoint(ep); })
+    for (var i = 0; i < entryPoints.length; i++) {
+        var ep = entryPoints[i];
+        this.addEntryPoint(ep[0], ep[1]);
+    }
+//    entryPoints.forEach(function(ep) { this.addEntryPoint(ep[0], ep[1]); })
 };
 /**
  *
@@ -314,7 +318,11 @@ Level.prototype.getFirstEntryPoint = function() { return this._entryPoints[0]; }
 // Exit point functions
 Level.prototype.getExitPoints = function() { return this._exitPoints; };
 Level.prototype.setExitPoints = function(exitPoints) {
-    exitPoints.forEach(function(ep) { this.addExitPoint(ep); })
+    for (var i = 0; i < exitPoints.length; i++) {
+        var ep = exitPoints[i];
+        this.addExitPoint(ep[0], ep[1]);
+    }
+//    exitPoints.forEach(function(ep) { this.addExitPoint(ep[0], ep[1]); })
 };
 /**
  *

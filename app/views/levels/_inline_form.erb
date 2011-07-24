@@ -25,7 +25,8 @@
             try {
                 $.rails.handleRemote($('.edit_level'));
             }
-            catch(err){}
+            catch(err) {
+            }
         }
     }
 
@@ -35,8 +36,5 @@
         $('#level_entry_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getEntryPoints());
         $('#level_exit_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getExitPoints());
     }
-
-
-
 </script>
 

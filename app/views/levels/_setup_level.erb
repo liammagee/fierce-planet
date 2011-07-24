@@ -42,15 +42,18 @@ try {
     FiercePlanet.currentLevel.setLevelResources(arr);
 }
 catch (err) {
-    console.log(err);
+    if (window.console)
+        console.log(err);
 }
 
 jsonArray = '<%= raw @level.entry_points %>';
 arr = [];
 try {
-arr = $.evalJSON(jsonArray);
+    arr = $.evalJSON(jsonArray);
 }
 catch (err) {
+    if (window.console)
+        console.log(err);
 }
 FiercePlanet.currentLevel.setEntryPoints(arr);
 
@@ -60,5 +63,7 @@ try {
 arr = $.evalJSON(jsonArray);
 }
 catch (err) {
+    if (window.console)
+        console.log(err);
 }
 FiercePlanet.currentLevel.setExitPoints(arr);

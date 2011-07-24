@@ -1,27 +1,8 @@
 
+
 // Pause the game, if in play
 FiercePlanet.pauseGame();
 
-$('#notifications').html("<p>Showing levels...</p>");
-
-
-if (FiercePlanet.$levelList != undefined)
-    FiercePlanet.$levelList.dialog('close');
-
-FiercePlanet.$levelList = $('<div></div>')
-        .html("<%=  escape_javascript(render('levels/index', :locals => { :levels => @levels})) %>")
-        .dialog({
-                                              position: [FiercePlanet.calculateWorldLeft(), FiercePlanet.calculateWorldTop()],
-                                              width: 487,
-                                              height: 407,
-                    autoOpen: false,
-                    modal: true,
-                    title: 'Level Setup',
-                    buttons: {
-                        "Cancel": function() {
-                            $(this).dialog("close");
-                        }
-                    }
-
-                });
-FiercePlanet.$levelList.dialog('open');
+FiercePlanet.levelListDialog.dialog('close');
+FiercePlanet.levelListDialog.html("<%=  escape_javascript(render('levels/index', :locals => { :levels => @levels})) %>");
+FiercePlanet.levelListDialog.dialog('open');
