@@ -469,3 +469,18 @@ FiercePlanet.changeDifficulty = function () {
     var difficulty = $("input[@name=difficultyInput]:checked").val();
     FiercePlanet.levelOfDifficulty = FiercePlanet.checkInteger(difficulty);
 };
+
+/**
+ * Make full screen
+ */
+FiercePlanet.makeFullScreen = function () {
+    var sw = $("body").width();
+    var sh = $("body").height();
+
+    // Clear canvases
+    $('#content-pane').offset({left: 0, top: -110, width: sw, height: sh});
+    $('#map_canvas, #baseCanvas, #resourceCanvas, #scrollingCanvas, #noticeCanvas, #agentCanvas').css({left: 0, top: 0, width: sw, height: sh});
+    $('#controls').css({left: 0, top: 210, zIndex: 1000});
+
+    FiercePlanet.drawGame();
+};
