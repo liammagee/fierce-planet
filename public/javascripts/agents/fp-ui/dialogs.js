@@ -169,7 +169,7 @@ FiercePlanet.setupDialogs = function() {
             }
         });
 
-    FiercePlanet.resourceGalleryDialog = $('#resource-gallery')
+    FiercePlanet.resourceGalleryDialog = $('#resource-gallery-tabs')
         .dialog({
                                                         position: [dialogX, dialogY],
                                                         width: FiercePlanet.WORLD_WIDTH + 7,
@@ -186,7 +186,10 @@ FiercePlanet.setupDialogs = function() {
                 "Cancel": function() {
                     $( this ).dialog( "close" );
                 }
-            }
+            },
+                open: function() {
+                    $('#resource-gallery-tabs').tabs();
+                }
         });
 
     FiercePlanet.levelGalleryDialog = $('#level-gallery-dialog')
@@ -462,7 +465,7 @@ FiercePlanet.showResourceGallery = function() {
             purchasableItems.push(purchasableItem);
         }
         else {
-            $('#' + purchasableItem.id).css("border","1px solid white");
+//            $('#' + purchasableItem.id).css("border","1px solid white");
         }
     }
     for (var i = 0; i < purchasableItems.length; i++) {

@@ -285,6 +285,7 @@ FiercePlanet.initialiseAndLoadResources = function () {
         var galleryCategoryElement = $('#gallery-' + category.getCode());
         var galleryCategoryTitleHTML = '<div class="title">' + category.getName() + '</div>';
         galleryCategoryElement.append(galleryCategoryTitleHTML);
+        galleryCategoryElement.css('background', '#' + category.getColor());
 
         var categoryInstanceCounter = 0;
         for (var j = 0; j < category._types.length; j++) {
@@ -302,9 +303,13 @@ FiercePlanet.initialiseAndLoadResources = function () {
             }
 
             var galleryInstanceHTML =
-                    '<div class="swatch-instance purchase inactive" id="' + resourceType.getCode() + '-purchase" title="' + resourceType.getName() + '">' +
+                    '<div class="swatch-instance inactive purchase" id="' + resourceType.getCode() + '-purchase" title="' + resourceType.getName() + '">' +
                         '<img src="' + resourceType.getImage() + '" alt="">' +
                     '</div>';
+//            var galleryInstanceHTML =
+//                    '<div class="swatch-instance purchase inactive" id="' + resourceType.getCode() + '-purchase" title="' + resourceType.getName() + '">' +
+//                        '<img src="' + resourceType.getImage() + '" alt="">' +
+//                    '</div>';
             galleryCategoryElement.append(galleryInstanceHTML);
 
             // Increment the category instance
