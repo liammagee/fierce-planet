@@ -357,6 +357,13 @@ FiercePlanet.getCurrentPosition = function(e) {
     y -= (1 / FiercePlanet.zoomLevel);
     var posX = Math.floor(x / FiercePlanet.cellWidth);
     var posY = Math.floor(y / FiercePlanet.cellHeight);
+
+    // Adjust for full-screen mode
+    var sw = $("#baseCanvas").width();
+    var sh = $("#baseCanvas").height();
+    posX = Math.floor(posX / (sw / FiercePlanet.WORLD_WIDTH));
+    posY = Math.floor(posY / (sh / FiercePlanet.WORLD_HEIGHT));
+
     return {posX:posX, posY:posY};
 };
 
@@ -478,9 +485,16 @@ FiercePlanet.makeFullScreen = function () {
     var sh = $("body").height();
 
     // Clear canvases
-    $('#content-pane').offset({left: 0, top: -110, width: sw, height: sh});
+//    $('#content-pane').offset({left: 0, top: -110, width: sw, height: sh});
+    $('#content-pane').css({left: 0, top: -110, width: sw, height: sh});
     $('#map_canvas, #baseCanvas, #resourceCanvas, #scrollingCanvas, #noticeCanvas, #agentCanvas').css({left: 0, top: 0, width: sw, height: sh});
+//    $('#map_canvas').css({left: 0, top: 0, width: sw, height: sh});
+//    $('#baseCanvas, #resourceCanvas, #scrollingCanvas, #noticeCanvas, #agentCanvas').width(600);
+//    $('#baseCanvas').css({left: 0, top: 0, width: sw, height: sh});
+//    $('#baseCanvas').width(sw / 2);
     $('#controls').css({left: 0, top: 210, zIndex: 1000});
+    $('#swatch').css({left: sw - 160, top: sh - 400, zIndex: 1000});
 
     FiercePlanet.drawGame();
+    
 };

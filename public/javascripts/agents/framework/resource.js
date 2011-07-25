@@ -129,10 +129,10 @@ Resource.prototype.getX = function() { return this._x; };
 Resource.prototype.setX = function(x) { this._x = x; };
 Resource.prototype.getY = function() { return this._y; };
 Resource.prototype.setY = function(y) { this._y = y; };
-Resource.prototype.provideYield = function(agent, resourceEffect, applyGeneralHealth, adjustSpeedToYield) {
+Resource.prototype.provideYield = function(agent, resourceEffect, adjustSpeedToYield, applyGeneralHealth) {
     if (this._totalYield > this._perAgentYield) {
         var adjustment = 0;
-        if (applyGeneralHealth) {
+        if (applyGeneralHealth || World.settings.applyGeneralHealth) {
             // Don't be greedy - only yield a benefit if the agent needs it
             if (agent.getHealth() < 100) {
                 adjustment = this._perAgentYield * this._upgradeLevel * resourceEffect;

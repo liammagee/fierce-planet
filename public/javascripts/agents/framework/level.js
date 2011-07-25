@@ -695,14 +695,7 @@ Level.prototype.processNeighbouringResources = function(agent) {
         var rx = resource.getX();
         var ry = resource.getY();
         if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
-//            var resourceEffect = this.calculateResourceEffect(
-//                resource,
-//                World.settings.ignoreResourceBalance || World.settings.applyGeneralHealth,
-//                World.settings.resourcesInTension
-//            );
             var resourceEffect = this.calculateResourceEffect(resource);
-            console.log(resourceEffect);
-
             resource.provideYield(
                 agent,
                 resourceEffect,

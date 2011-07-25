@@ -105,12 +105,13 @@ FiercePlanet.drawTile = function(tile) {
 };
 
 /**
- *
+ * Draws the current level path
  */
 FiercePlanet.drawPath = function() {
     var canvas = $('#baseCanvas')[0];
     var ctx = canvas.getContext('2d');
     var pathTiles = FiercePlanet.currentLevel.getPath();
+
     for (var i = 0; i < pathTiles.length; i+= 1) {
         var pathTile = pathTiles[i];
         var xPos = pathTile[0];
@@ -130,6 +131,12 @@ FiercePlanet.drawPath = function() {
                 ctx.fillStyle = "#eee";
             }
             ctx.border = "1px #eee solid";
+//            console.log("p")
+//            console.log(i)
+//            console.log(x)
+//            console.log(y)
+//            console.log(FiercePlanet.cellWidth)
+//            console.log(FiercePlanet.cellHeight)
             ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
         }
         ctx.strokeStyle = "#ccc";
@@ -139,7 +146,7 @@ FiercePlanet.drawPath = function() {
 };
 
 /**
- *
+ * Draws the background image, if one exists
  */
 FiercePlanet.drawBackgroundImage = function() {
     if (FiercePlanet.currentLevel.getBackgroundImage() != undefined) {
@@ -150,7 +157,7 @@ FiercePlanet.drawBackgroundImage = function() {
 };
 
 /**
- *
+ * Callback method for Google Maps
  */
 FiercePlanet.handleApiReady = function() {
     var mapOptions = {
@@ -182,7 +189,7 @@ FiercePlanet.handleApiReady = function() {
 };
 
 /**
- *
+ * Draws a Google Map, if the level parameters exist
  */
 FiercePlanet.drawMap = function() {
     if (FiercePlanet.currentLevel.getMapOptions() != undefined && FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined) {
@@ -343,7 +350,7 @@ FiercePlanet.drawNotice = function(notice) {
 };
 
 /**
- *
+ * Calculates the text lines for notices displayed on the map
  * @param context
  * @param text
  * @param targetWidth
@@ -383,7 +390,7 @@ FiercePlanet.getTextLines = function(context, text, targetWidth) {
 };
 
 /**
- *
+ * Inserts an alpha value into a color string.
  * @param color
  * @param alphaLevel
  */
@@ -508,7 +515,7 @@ FiercePlanet.clearResource = function(resource) {
 };
 
 /**
- *
+ * Clears a canvas
  * @param canvasID
  */
 FiercePlanet.clearCanvas = function(canvasID) {
@@ -557,7 +564,13 @@ FiercePlanet.clearAgentGroup = function(agents) {
 };
 
 
-/* Dilutes (whitens) the colour of an element, given its strength (some value between 0 and 100) */
+/**
+ * Dilutes (whitens) the colour of an element, given its strength (some value between 0 and 100)
+ * @param rStrength
+ * @param gStrength
+ * @param bStrength
+ * @param colour
+ */
 FiercePlanet.diluteColour = function(rStrength, gStrength, bStrength, colour) {
     var charOffset = (colour.length == 3 ? 1 : 2);
     var multiplier = (charOffset == 1 ? 1 : 16);
@@ -581,7 +594,8 @@ FiercePlanet.diluteColour = function(rStrength, gStrength, bStrength, colour) {
 };
 
 /**
- *
+ * Returns the direction for a given agent - '0' for horizontal, '1' for vertical
+ * @param agent
  */
 FiercePlanet.getAgentDirection = function(agent) {
     var lastX = agent._lastMemory._x;
@@ -596,8 +610,12 @@ FiercePlanet.getAgentDirection = function(agent) {
     }
 };
 
+
 /**
- *
+ * Retrieves the drawing position for an agent
+ * 
+ * @param agent
+ * @param counter
  */
 FiercePlanet.getDrawingPosition = function(agent, counter) {
     var lastX = agent._lastMemory._x;

@@ -261,10 +261,14 @@ FiercePlanet._initialiseGame = function () {
     FiercePlanet.numAgents = FiercePlanet.currentLevel.getInitialAgentNumber();
     FiercePlanet.worldWidth = FiercePlanet.currentLevel.getWorldWidth();
     FiercePlanet.worldHeight = FiercePlanet.currentLevel.getWorldHeight();
-    FiercePlanet.cellWidth = FiercePlanet.WORLD_WIDTH / FiercePlanet.worldWidth;
-    FiercePlanet.cellHeight = FiercePlanet.WORLD_HEIGHT / FiercePlanet.worldHeight;
-    FiercePlanet.pieceWidth = FiercePlanet.cellWidth * 0.5;
-    FiercePlanet.pieceHeight = FiercePlanet.cellHeight * 0.5;
+    FiercePlanet.cellWidth = Math.round(FiercePlanet.WORLD_WIDTH / FiercePlanet.worldWidth);
+    FiercePlanet.cellHeight = Math.round(FiercePlanet.WORLD_HEIGHT / FiercePlanet.worldHeight);
+    FiercePlanet.pieceWidth = Math.round(FiercePlanet.cellWidth * 0.5);
+    FiercePlanet.pieceHeight = Math.round(FiercePlanet.cellHeight * 0.5);
+//    FiercePlanet.cellWidth = FiercePlanet.WORLD_WIDTH / FiercePlanet.worldWidth;
+//    FiercePlanet.cellHeight = FiercePlanet.WORLD_HEIGHT / FiercePlanet.worldHeight;
+//    FiercePlanet.pieceWidth = FiercePlanet.cellWidth * 0.5;
+//    FiercePlanet.pieceHeight = FiercePlanet.cellHeight * 0.5;
     FiercePlanet.scrollingImage.src = "/images/yellow-rain.png";
 
     // Set up level
@@ -290,8 +294,9 @@ FiercePlanet._finaliseGame = function() {
  * Starts the processing of agents
  */
 FiercePlanet._startAgents = function () {
+    FiercePlanet.startTime = new Date();
     if (typeof console != "undefined")
-        console.log("Starting agents...");
+        console.log("Starting agents at " + (FiercePlanet.startTime));
 
     clearInterval(FiercePlanet.agentTimerId);
     FiercePlanet.agentTimerId = setInterval("FiercePlanet.processAgents()", FiercePlanet.interval);
@@ -323,8 +328,9 @@ FiercePlanet._startAgents = function () {
  * Stops the processing of agents
  */
 FiercePlanet._stopAgents = function () {
+    FiercePlanet.stopTime = new Date();
     if (typeof console != "undefined")
-        console.log("Pausing agents...");
+        console.log("Pausing agents after " + (FiercePlanet.stopTime - FiercePlanet.startTime));
 
     // Make sure button is on play
     $('#playAgents').removeClass('playing');

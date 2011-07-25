@@ -104,7 +104,7 @@ FiercePlanet.generateStats = function() {
             "</tr>" +
             "<tr>" +
             "<td>Credits:</td>" +
-            "<td><span style='font-weight:bold'>" + FiercePlanet.currentProfile.credits + " [<a href='#' id='gotoResourceGallery'>(More)</a>]</span></td>" +
+            "<td><span style='font-weight:bold'>" + FiercePlanet.currentProfile.credits + " (<a href='#' id='gotoResourceGallery'>More</a>)</span></td>" +
             "</tr>" +
             "</table>";
     return stats;

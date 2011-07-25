@@ -4,4 +4,8 @@ class WorldController < ApplicationController
     flash[:notice] = "Opening Level 1..."
   end
 
+  def agent
+    
+  end
+
 end
