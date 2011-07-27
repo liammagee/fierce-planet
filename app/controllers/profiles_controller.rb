@@ -77,32 +77,6 @@ class ProfilesController < ApplicationController
     @profile = Profile.find(params[:id])
     @profile = @profile.from_json(params[:profile_object])
 
-#    saved_agent_count = params[:saved_agent_count]
-#    expired_agent_count = params[:expired_agent_count]
-#    resources_spent = params[:resources_spent]
-#    resources_in_store = params[:resources_in_store]
-#    resources = params[:resources]
-#    economic_resources = params[:economic_resources]
-#    environmental_resources = params[:environmental_resources]
-#    social_resources = params[:social_resources]
-#    credits = params[:credits]
-#    progress_towards_next_class = params[:progress_towards_next_class]
-#
-#    @profile.total_saved ||= 0
-#    @profile.total_saved += saved_agent_count.to_i
-#    @profile.total_expired ||= 0
-#    @profile.total_expired += expired_agent_count.to_i
-#    @profile.total_resources ||= 0
-#    @profile.total_resources += resources.to_i
-#    @profile.total_economic_resources ||= 0
-#    @profile.total_economic_resources += economic_resources.to_i
-#    @profile.total_environmental_resources ||= 0
-#    @profile.total_environmental_resources += environmental_resources.to_i
-#    @profile.total_social_resources ||= 0
-#    @profile.total_social_resources += social_resources.to_i
-#    @profile.credits ||= 0
-#    @profile.credits += credits.to_i
-#    @profile.progress_towards_next_class = progress_towards_next_class.to_i
 
     respond_to do |format|
       if @profile.save #update_attributes(params[:profile])

@@ -234,7 +234,7 @@ function AgentStickFigure(_x, _y, _figureWidth, _figureHeight) {
         context.closePath();
     };
 
-    this.defaultAction = this.runUpsideDown;
+    this.defaultAction = this.run;
 }
 
 /**
@@ -248,7 +248,7 @@ function AgentStickFigure(_x, _y, _figureWidth, _figureHeight) {
         if (pieceWidth < 8 || pieceHeight < 8) {
             var radius = (pieceWidth / 4);
 
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1.5;
             ctx.beginPath();
             ctx.arc(x + radius, y + radius, radius, 0, Math.PI * 2, false);
             ctx.closePath();
@@ -264,13 +264,17 @@ function AgentStickFigure(_x, _y, _figureWidth, _figureHeight) {
             var countdown = agent.getCountdownToMove();
             var frame = Math.floor((countdown / (speed + 1)) * frames);
 
-            var sf = new AgentStickFigure(x - (pieceWidth) / 2, y, pieceWidth, pieceHeight);
+            var sf = new AgentStickFigure(x, y, pieceWidth, pieceHeight);
+            if (speed > 5)
+                sf.defaultAction = sf.walk;
+            else
+                sf.defaultAction = sf.run;
             sf.defaultAction(frame, direction);
             sf.drawFigure(ctx);
 
 
             // Now draw the figure
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1.5;
             ctx.strokeStyle = "#" + newColor;
             ctx.lineCap = "round";
             ctx.stroke();

@@ -186,6 +186,20 @@ function Agent(agentType, x, y) {
     // Whether the agent is 'hit' by a conflicting agent
     this._isHit = false;
 
+    // IMPORTED ABM FEATURES - EXPERIMENTAL
+    /* Gender: UNSPECIFIED: 0, MALE: -1; FEMALE:1 */
+    this.gender = 0;
+    this.culture = null;
+    this.dateOfBirth = null;
+    this.dateOfDeath = null;
+    this.children = [];
+    this.parents = [];
+    this.currentPartner = [];
+    // Need alternative theories of mind
+    this.desires = [];
+    this.cultures = [];
+    this.capabilities = [];
+
 
     // TODO: Should be made private
 

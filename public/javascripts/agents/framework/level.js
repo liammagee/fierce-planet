@@ -514,6 +514,7 @@ Level.prototype.setResources = function(resources) {
     this._resources = resources;
     this._resourceCategoryCounts = this.resetResourceCategoryCounts();
 };
+
 /**
  *
  * @param resources
@@ -522,6 +523,8 @@ Level.prototype.setLevelResources = function(levelResources) {
     this._levelResources = levelResources;
     this._resourceCategoryCounts = this.resetResourceCategoryCounts();
 };
+
+
 /**
  *
  * @param resource
@@ -530,16 +533,33 @@ Level.prototype.addResource = function(resource) {
     this._resources.push(resource);
     this.incrementResourceCategoryCount(resource);
 };
+
 /**
  * 
  * @param resource
  */
 Level.prototype.removeResource = function(resource) {
     var index = this.getCurrentResourceIndex(resource);
-    if (index > -1)
+    if (index > -1) {
         this._resources.splice(index, 1);
-    this.decrementResourceCategoryCount(resource);
+        this.decrementResourceCategoryCount(resource);
+    }
 };
+
+
+/**
+ *
+ * @param resource
+ */
+Level.prototype.removeResourceByPosition = function(x, y) {
+    var index = this.getResourceIndexAtPosition(x, y);
+    if (index > -1) {
+        var resource = this._resources[index];
+        this._resources.splice(index, 1);
+        this.decrementResourceCategoryCount(resource);
+    }
+};
+
 /**
  * 
  */
@@ -595,6 +615,18 @@ Level.prototype.isPositionOccupiedByResource = function (x, y) {
             return true;
     }
     return false;
+};
+
+/**
+ * Find the current resource at a position
+ */
+Level.prototype.getResourceIndexAtPosition = function (x, y) {
+    for (var i = 0; i < this._resources.length; i++) {
+        var resource = this._resources[i];
+        if (resource.getX() == x && resource.getY() == y)
+            return i;
+    }
+    return -1;
 };
 
 
@@ -699,7 +731,7 @@ Level.prototype.processNeighbouringResources = function(agent) {
             resource.provideYield(
                 agent,
                 resourceEffect,
-                World.settings.applyGeneralHealth, !this._noSpeedChange
+                !this._noSpeedChange, World.settings.applyGeneralHealth
             );
         }
     }

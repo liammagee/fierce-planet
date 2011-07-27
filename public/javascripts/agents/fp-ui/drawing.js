@@ -7,7 +7,6 @@
  */
 
 
-
 var FiercePlanet = FiercePlanet || {};
 
 /**
@@ -23,16 +22,19 @@ FiercePlanet.drawGame = function() {
     FiercePlanet.clearCanvas('agentCanvas');
 
     // Draw basic elements
-    if ((FiercePlanet.currentLevel.getMapOptions() != undefined  && FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined)
-            || (FiercePlanet.currentLevel.getMapURL() != undefined && $.trim(FiercePlanet.currentLevel.getMapURL()).length > 0)) {
-        FiercePlanet.drawMap();
-        FiercePlanet.drawPath();
-    }
-    else {
-        FiercePlanet.drawTiles();
-        FiercePlanet.drawBackgroundImage();
-        FiercePlanet.drawPath();
-    }
+//    if ((FiercePlanet.currentLevel.getMapOptions() != undefined && FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined)
+//            || (FiercePlanet.currentLevel.getMapURL() != undefined && $.trim(FiercePlanet.currentLevel.getMapURL()).length > 0)) {
+//        FiercePlanet.drawMap();
+//        FiercePlanet.drawPath();
+//    }
+//    else {
+//        FiercePlanet.drawTiles();
+//        FiercePlanet.drawBackgroundImage();
+//        FiercePlanet.drawPath();
+//    }
+    FiercePlanet.drawMap();
+    FiercePlanet.drawPath();
+
     FiercePlanet.drawEntryPoints();
     FiercePlanet.drawExitPoints();
     FiercePlanet.drawResources();
@@ -53,15 +55,17 @@ FiercePlanet.drawCanvases = function() {
     FiercePlanet.clearCanvas('agentCanvas');
 
     // Draw basic elements
-    if ((FiercePlanet.currentLevel.getMapOptions() != undefined  && FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined)
-            || (FiercePlanet.currentLevel.getMapURL() != undefined && $.trim(FiercePlanet.currentLevel.getMapURL()).length > 0)) {
-        FiercePlanet.drawPath();
-    }
-    else {
-        FiercePlanet.drawTiles();
-        FiercePlanet.drawBackgroundImage();
-        FiercePlanet.drawPath();
-    }
+//    if ((FiercePlanet.currentLevel.getMapOptions() != undefined && FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined)
+//            || (FiercePlanet.currentLevel.getMapURL() != undefined && $.trim(FiercePlanet.currentLevel.getMapURL()).length > 0)) {
+//        FiercePlanet.drawPath();
+//    }
+//    else {
+//        FiercePlanet.drawTiles();
+//        FiercePlanet.drawBackgroundImage();
+//        FiercePlanet.drawPath();
+//    }
+    FiercePlanet.drawPath();
+
     FiercePlanet.drawEntryPoints();
     FiercePlanet.drawExitPoints();
     FiercePlanet.drawResources();
@@ -73,7 +77,7 @@ FiercePlanet.drawCanvases = function() {
  */
 FiercePlanet.drawTiles = function() {
     var tiles = FiercePlanet.currentLevel.getTiles();
-    for (var i = 0; i < tiles.length; i+= 1) {
+    for (var i = 0; i < tiles.length; i += 1) {
         if (tiles[i] != undefined)
             FiercePlanet.drawTile(tiles[i]);
     }
@@ -112,7 +116,7 @@ FiercePlanet.drawPath = function() {
     var ctx = canvas.getContext('2d');
     var pathTiles = FiercePlanet.currentLevel.getPath();
 
-    for (var i = 0; i < pathTiles.length; i+= 1) {
+    for (var i = 0; i < pathTiles.length; i += 1) {
         var pathTile = pathTiles[i];
         var xPos = pathTile[0];
         var yPos = pathTile[1];
@@ -159,29 +163,21 @@ FiercePlanet.drawBackgroundImage = function() {
 /**
  * Callback method for Google Maps
  */
-FiercePlanet.handleApiReady = function() {
-    var mapOptions = {
-      center: new google.maps.LatLng(47.5153, 19.0782),
-        mapTypeId: google.maps.MapTypeId.SATELLITE,
-      disableDefaultUI: true,
-      zoom: 18,
-        tilt: 45
-    };
+FiercePlanet.drawMap = function() {
+//    if (FiercePlanet.googleMap == undefined)
     if (FiercePlanet.currentLevel != undefined) {
-        if (FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined)
-            mapOptions['center'] = new google.maps.LatLng(FiercePlanet.currentLevel.getMapOptions()['latitude'], FiercePlanet.currentLevel.getMapOptions()['longitude']);
-        if (FiercePlanet.currentLevel.getMapOptions()['zoom'] != undefined)
-            mapOptions['zoom'] = parseInt(FiercePlanet.currentLevel.getMapOptions()['zoom']);
-        if (FiercePlanet.currentLevel.getMapOptions()['tilt'] != undefined)
-            mapOptions['tilt'] = parseInt(FiercePlanet.currentLevel.getMapOptions()['tilt']);
+        var mapOptions = GoogleMapUtils.defaultOptions();
+        $.extend(mapOptions, FiercePlanet.currentLevel.getMapOptions());
 
         // Handle built-in zoom
         if (FiercePlanet.zoomLevel > 1)
             mapOptions['zoom'] = mapOptions['zoom'] + Math.log(FiercePlanet.zoomLevel) / Math.log(1.5);
 
-        FiercePlanet.googleMap = new google.maps.Map($("#map_canvas")[0], mapOptions);
-        if (FiercePlanet.currentLevel.getMapOptions()['tilt'] != undefined && FiercePlanet.currentLevel.getMapOptions()['tilt'] != 'no' )
-            FiercePlanet.googleMap.setTilt(45);
+        FiercePlanet.googleMap = GoogleMapUtils.createMap(mapOptions);
+
+        FiercePlanet.mapOptions = mapOptions;
+//        if (FiercePlanet.currentLevel.getMapOptions()['tilt'] != undefined && FiercePlanet.currentLevel.getMapOptions()['tilt'] != 'no')
+//            FiercePlanet.googleMap.setTilt(45);
     }
     else {
         FiercePlanet.googleMap = new google.maps.Map($("#map_canvas")[0], mapOptions);
@@ -191,17 +187,19 @@ FiercePlanet.handleApiReady = function() {
 /**
  * Draws a Google Map, if the level parameters exist
  */
-FiercePlanet.drawMap = function() {
-    if (FiercePlanet.currentLevel.getMapOptions() != undefined && FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined) {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=FiercePlanet.handleApiReady";
-        document.body.appendChild(script);
+FiercePlanet.drawMap_old = function() {
+    if (FiercePlanet.currentLevel.getMapOptions() != undefined &&
+            FiercePlanet.currentLevel.getMapOptions()['latitude'] != undefined && FiercePlanet.currentLevel.getMapOptions()['longitude'] != undefined) {
+//        var script = document.createElement("script");
+//        script.type = "text/javascript";
+//        script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=FiercePlanet.handleApiReady";
+//        document.body.appendChild(script);
     }
     else if (FiercePlanet.currentLevel.getMapURL() != undefined) {
         $("#map_canvas").prepend('<img src="' + FiercePlanet.currentLevel.getMapURL() + '"/>').css('image-orientation: 135deg');
     }
 };
+
 
 /**
  * Draws exit points on the map
@@ -343,7 +341,7 @@ FiercePlanet.drawNotice = function(notice) {
         // Draw the text lines
         var lines = FiercePlanet.getTextLines(ctx, text, width - 20);
         ctx.fillStyle = foregroundColor;
-        for (var i  = 0; i < lines.length; i++) {
+        for (var i = 0; i < lines.length; i++) {
             ctx.fillText(lines[i], x + 10, y + (20 * (i + 1)));
         }
     }
@@ -415,7 +413,7 @@ FiercePlanet.insertAlpha = function(color, alphaLevel) {
  * Draw all of the resources
  */
 FiercePlanet.drawResources = function() {
-    for (var i = 0; i < FiercePlanet.currentLevel._resources.length; i+= 1) {
+    for (var i = 0; i < FiercePlanet.currentLevel._resources.length; i += 1) {
         FiercePlanet.drawResource(FiercePlanet.currentLevel._resources[i]);
     }
 };
@@ -433,7 +431,7 @@ FiercePlanet.drawResource = function(resource) {
     var y = resource._y * FiercePlanet.cellHeight;
     var s = (resource._totalYield / resource._initialTotalYield) * 100;
     var c = resource._color;
-    
+
     // Clear and fill the resource tile with a white background
     ctx.clearRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
     ctx.fillStyle = "#fff";
@@ -613,7 +611,7 @@ FiercePlanet.getAgentDirection = function(agent) {
 
 /**
  * Retrieves the drawing position for an agent
- * 
+ *
  * @param agent
  * @param counter
  */
@@ -784,7 +782,7 @@ FiercePlanet.drawScrollingLayer = function() {
             }
         }
 
-        if ((FiercePlanet.scrollingImageX + FiercePlanet.scrollingImageOffset) < (480 - FiercePlanet.scrollingImageOffset)){
+        if ((FiercePlanet.scrollingImageX + FiercePlanet.scrollingImageOffset) < (480 - FiercePlanet.scrollingImageOffset)) {
             FiercePlanet.scrollingImageX += FiercePlanet.scrollingImageOffset;
         }
         else {
@@ -906,7 +904,7 @@ FiercePlanet.panByDrag = function(offsetX, offsetY) {
     for (var i = 0; i < canvases.length; i++) {
         var canvas = canvases[i];
         var ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width,canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.translate(offsetX, offsetY);
     }
     FiercePlanet.panTopOffset += offsetY * FiercePlanet.zoomLevel;
@@ -1021,7 +1019,9 @@ FiercePlanet.drawThumbnail = function() {
     imageCanvas.getContext('2d').drawImage(agentCanvas, 0, 0);
     var imageData = imageCanvas.toDataURL();
     $.post('/levels/' + FiercePlanet.currentLevel.getId() + '/save_thumbnail',
-        {thumbnail: imageData},
-        function(data) {alert('data posted')}
-    );
+    {thumbnail: imageData},
+            function(data) {
+                alert('data posted')
+            }
+            );
 }

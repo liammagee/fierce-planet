@@ -14,7 +14,7 @@ var FiercePlanet = FiercePlanet || {};
 /**
  * @constant The cost of making a move
  */
-FiercePlanet.MOVE_HEALTH_COST = -2;
+FiercePlanet.MOVE_HEALTH_COST = -3;
 /**
  * @constant The resource bonus for saving a single agent
  */

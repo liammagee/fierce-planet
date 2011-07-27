@@ -48,6 +48,12 @@ FiercePlanet.showDesignFeaturesDialog = function(e) {
         FiercePlanet.drawGame();
     });
 
+    $("#remove-resource").click(function(e) {
+        FiercePlanet.currentLevel.removeResourceByPosition(FiercePlanet.currentX, FiercePlanet.currentY);
+        FiercePlanet.designFeaturesDialog.dialog('close');
+        FiercePlanet.drawGame();
+    });
+
 
     FiercePlanet.designFeaturesDialog.dialog('open');
 };
@@ -96,7 +102,7 @@ FiercePlanet.handleEditorMouseMove = function(e) {
         FiercePlanet.isMouseMoving = true;
         var __ret = FiercePlanet.getCurrentPosition(e);
         FiercePlanet.currentLevel.removeTile(__ret.posX, __ret.posY);
-        FiercePlanet.drawGame();
+        FiercePlanet.drawCanvases();
     }
     return false;
 };
@@ -130,6 +136,7 @@ FiercePlanet.handleEditorMouseUp = function(e) {
  */
 FiercePlanet.cancelLevelEditor = function() {
     FiercePlanet.inDesignMode = false;
+    FiercePlanet.closeMap();
     var canvas = $('#agentCanvas');
     canvas.unbind('mousedown', FiercePlanet.handleEditorMouseDown);
     canvas.unbind('mousemove', FiercePlanet.handleEditorMouseMove);
@@ -173,7 +180,7 @@ FiercePlanet.fillAllTiles = function() {
 };
 
 /**
- *
+ * Clears all entry points from the level
  */
 FiercePlanet.clearEntryPoints = function() {
     FiercePlanet.currentLevel.resetEntryPoints();
@@ -181,9 +188,68 @@ FiercePlanet.clearEntryPoints = function() {
 };
 
 /**
- *
+ * Clears all exit points from the level
  */
 FiercePlanet.clearExitPoints = function() {
     FiercePlanet.currentLevel.resetExitPoints();
     FiercePlanet.drawGame();
+};
+
+/**
+ * Allows the map to be editable
+ */
+FiercePlanet.editMap = function() {
+    $('#map_canvas').css({zIndex: 1000});
+    var mapOptions = GoogleMapUtils.defaultOptions();
+    $.extend(mapOptions, FiercePlanet.currentLevel.getMapOptions());
+    $.extend(mapOptions, {
+            disableDefaultUI: false,
+            mapTypeControl: true,
+            overviewMapControl: true,
+            panControl: true,
+            rotateControl: true,
+            scaleControl: true,
+            streetViewControl: true,
+            zoomControl: true
+        });
+    FiercePlanet.googleMap = GoogleMapUtils.createMap(mapOptions);
+    FiercePlanet.drawCanvases();
+};
+
+/**
+ * Allows the map to be editable
+ */
+FiercePlanet.saveMap = function() {
+    var center = FiercePlanet.googleMap.getCenter();
+    var tilt = FiercePlanet.googleMap.getTilt();
+    var zoom = FiercePlanet.googleMap.getZoom();
+    var mapTypeId = FiercePlanet.googleMap.getMapTypeId();
+    var mapOptions = {
+        center: center,
+        tilt: tilt,
+        zoom: zoom,
+        mapTypeId: mapTypeId
+    };
+    FiercePlanet.currentLevel.setMapOptions(mapOptions);
+};
+
+/**
+ * Allows the map to be editable
+ */
+FiercePlanet.closeMap = function() {
+    var mapOptions = GoogleMapUtils.defaultOptions();
+    $.extend(mapOptions, FiercePlanet.currentLevel.getMapOptions());
+    $.extend(mapOptions, {
+        disableDefaultUI: true,
+        mapTypeControl: false,
+        overviewMapControl: false,
+        panControl: false,
+        rotateControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        zoomControl: false
+        });
+    FiercePlanet.googleMap = GoogleMapUtils.createMap(mapOptions);
+    $('#map_canvas').css({zIndex: 1});
+    FiercePlanet.drawCanvases();
 };

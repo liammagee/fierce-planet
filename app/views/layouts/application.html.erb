@@ -29,7 +29,9 @@
   <%= javascript_include_tag "jquery.json-2.2.min.js" %>
   <%= javascript_include_tag "jquery.mousewheel.3.0.2/jquery.mousewheel.min.js" %>
   <%= javascript_include_tag "jquery.zoom.js" %>
-
+    <script type="text/javascript"
+        src="http://maps.googleapis.com/maps/api/js?sensor=true">
+    </script>
 
   <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? -%>
   <%= javascript_include_tag "rails" %>
@@ -81,12 +83,14 @@
       <%= javascript_include_tag "agents/fp-ui/general-ui" %>
       <%= javascript_include_tag "agents/fp-ui/profile-ui" %>
       <%= javascript_include_tag "agents/fp-ui/resource-ui" %>
+
       <%= javascript_include_tag "agents/editor" %>
       <%= javascript_include_tag "agents/lifecycle" %>
       <%= javascript_include_tag "agents/params" %>
       <%= javascript_include_tag "agents/recording" %>
       <%= javascript_include_tag "agents/utils" %>
       <%= javascript_include_tag "agents/utils/log" %>
+      <%= javascript_include_tag "agents/utils/google-map" %>
       <%= javascript_include_tag "agents/game" %>
 
       <!-- Last to load - has strong dependencies on all other classes -->
@@ -96,6 +100,17 @@
 
 
   <!-- CONDITIONAL AND UTILITY BLOCKS -->
+
+  <!-- Set the resource type namespace here -->
+  <% if params[:id] %>
+      <script>
+          $(document).ready(function() {
+              <%=  render('levels/setup_level', :locals => { :level => @level}) %>
+              FiercePlanet.newLevel();
+          });
+
+      </script>
+  <% end %>
 
   <!-- Set the resource type namespace here -->
   <% if params[:rs] %>

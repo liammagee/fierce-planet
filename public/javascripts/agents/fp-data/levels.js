@@ -167,7 +167,7 @@ PresetLevels.level3.setConclusion(
 );
 PresetLevels.level3.setTip(new Notice("The levels get progressively larger, requiring more planning as to where you allocate resources. Aim to place resources at regular intervals along the path."));
 PresetLevels.level3.setSoundSrc("http://db.tt/7KPJ8Xi");
-PresetLevels.level3.setCatastrophe(new Catastrophe(TBL.ENV_CATEGORY, 1000 + (Math.random() * 1000), 250, 0.4, new Notice("A tsumani will soon hit the city - some of its resources will be depleted.", undefined, undefined, 500, 250, undefined, undefined, TBL.ENV_CATEGORY.getColor(), "000000")));
+PresetLevels.level3.setCatastrophe(new Catastrophe(TBL.ENV_CATEGORY, 1000 + (Math.random() * 1000), 250, 0.8, new Notice("A tsumani will soon hit the city - some of its resources will be depleted.", undefined, undefined, 500, 250, undefined, undefined, TBL.ENV_CATEGORY.getColor(), "000000")));
 
 
 PresetLevels.level3.setup = function() {
@@ -221,7 +221,7 @@ PresetLevels.level4.setWorldHeight(14);
 PresetLevels.level4.setInitialAgentNumber(1);
 PresetLevels.level4.setWaveNumber(10);
 PresetLevels.level4.setExpiryLimit(10);
-PresetLevels.level4.setInitialResourceStore(150);
+PresetLevels.level4.setInitialResourceStore(180);
 PresetLevels.level4.setName("Level 4: Spiral of Doom");
 PresetLevels.level4.setIntroduction(
         "<p>The only way out is via the long and winding road...</p>"
@@ -296,7 +296,7 @@ PresetLevels.level5.setWorldHeight(15);
 PresetLevels.level5.setInitialAgentNumber(1);
 PresetLevels.level5.setWaveNumber(10);
 PresetLevels.level5.setExpiryLimit(10);
-PresetLevels.level5.setInitialResourceStore(180);
+PresetLevels.level5.setInitialResourceStore(200);
 PresetLevels.level5.setName("Level 5: A-mazing Grace");
 PresetLevels.level5.setIntroduction(
         "<p>The citizens are hopeful that the promised land lies not too far ahead. Or does it?</p>"
@@ -396,7 +396,7 @@ PresetLevels.level6.setInitialAgentNumber(1);
 PresetLevels.level6.setWaveNumber(10);
 PresetLevels.level6.setExpiryLimit(10);
 PresetLevels.level6.setAllowOffscreenCycling(true);
-PresetLevels.level6.setInitialResourceStore(250);
+PresetLevels.level6.setInitialResourceStore(350);
 PresetLevels.level6.setName("Level 6: Dire Straits");
 PresetLevels.level6.setIntroduction(
         "<p>This level looks well resourced &mdash; but there are troubling signs ahead for the economy. your citizens are going to need all the help they can get... </p>");
@@ -405,7 +405,7 @@ PresetLevels.level6.setTip(new Notice("Clicking on an existing resource allows y
 PresetLevels.level6.setConclusion("Back in surplus! Your citizens were able to pull through. Can they continue to work together through the challenges that lie ahead?");
 PresetLevels.level6.setSoundSrc("http://db.tt/gre8MPS");
 //PresetLevels.level6.setCatastrophe(new Catastrophe(TBL.ECO_CATEGORY, 100 + (Math.random() * 100), 300, 0, new Notice("The city is suffering a financial crisis - all services will be temporarily discontinued...", undefined, undefined, 500, 250, undefined, undefined, TBL.ECO_CATEGORY.getColor())));
-PresetLevels.level6.setCatastrophe(new Catastrophe(TBL.ECO_CATEGORY, 500 + (Math.random() * 500), 250, 0.5, new Notice("The city is suffering a financial crisis - many services will be temporarily discontinued...", undefined, undefined, 500, 250, undefined, undefined, TBL.ECO_CATEGORY.getColor())));
+PresetLevels.level6.setCatastrophe(new Catastrophe(TBL.ECO_CATEGORY, 500 + (Math.random() * 500), 250, 0.75, new Notice("The city is suffering a financial crisis - many services will be temporarily discontinued...", undefined, undefined, 500, 250, undefined, undefined, TBL.ECO_CATEGORY.getColor())));
 
 PresetLevels.level6.setup = function() {
     this.fillWithTiles();
@@ -444,7 +444,7 @@ PresetLevels.level7.setInitialAgentNumber(1);
 PresetLevels.level7.setWaveNumber(10);
 PresetLevels.level7.setExpiryLimit(10);
 PresetLevels.level7.setAllowResourcesOnPath(true);
-PresetLevels.level7.setInitialResourceStore(150);
+PresetLevels.level7.setInitialResourceStore(200);
 PresetLevels.level7.setName("Level 7: Like, Totally Random...");
 PresetLevels.level7.setIntroduction(
         "<p>Ahead lies a vast and empty expanse. Your citizens are understandably nervous. Left unaided, they will try not to backtrack, but could find themselves hopelessly lost.</p>");
@@ -491,7 +491,7 @@ PresetLevels.level8.setWorldHeight(18);
 PresetLevels.level8.setInitialAgentNumber(1);
 PresetLevels.level8.setWaveNumber(10);
 PresetLevels.level8.setExpiryLimit(10);
-PresetLevels.level8.setInitialResourceStore(200);
+PresetLevels.level8.setInitialResourceStore(300);
 PresetLevels.level8.setName("Level 8: A Fork (or Two) in the Road");
 PresetLevels.level8.setIntroduction(
         "<p>Life for the citizens of Fierce Planet is never simple. They are now faced with difficult dilemmas about which way to turn.</p>");
@@ -589,6 +589,7 @@ PresetLevels.level9.setWorldHeight(19);
 PresetLevels.level9.setInitialAgentNumber(1);
 PresetLevels.level9.setWaveNumber(10);
 PresetLevels.level9.setExpiryLimit(10);
+PresetLevels.level9.setInitialResourceStore(280);
 PresetLevels.level9.setName("Level 9: Cascades");
 PresetLevels.level9.setIntroduction(
         "<p>Time is running out. But the citizens of Fierce Planet still need some rest and relaxation. Doesn't a trip to the beach sound like a good idea?</p>");
@@ -664,14 +665,14 @@ PresetLevels.level10.setWorldHeight(20);
 PresetLevels.level10.setInitialAgentNumber(1);
 PresetLevels.level10.setWaveNumber(5);
 PresetLevels.level10.setExpiryLimit(1);
-PresetLevels.level10.setInitialResourceStore(250);
+PresetLevels.level10.setInitialResourceStore(500);
 PresetLevels.level10.setName("Level 10: Fields of Ma(i)ze");
 PresetLevels.level10.setIntroduction(
         "<p>Pastures of plenty and a new sustainable future lie in store for the citizens of Fierce Planet. </p>" +
         "<p>With few remaining resources, they are starting to fight among themselves. Can they withstand a revolution from within?</p>");
 PresetLevels.level10.setTip(new Notice("Remember to resource dead end paths, or your citizens will fade away, dazed and confused..."));
 PresetLevels.level10.setSoundSrc("http://db.tt/DIi4CW0");
-PresetLevels.level10.setCatastrophe(new Catastrophe(TBL.SOC_CATEGORY, 500 + (Math.random() * 100), 250, 0.5, new Notice("Oh no! A revolution is coming...", undefined, undefined, 500, 250, undefined, undefined, TBL.SOC_CATEGORY.getColor())));
+PresetLevels.level10.setCatastrophe(new Catastrophe(TBL.SOC_CATEGORY, 500 + (Math.random() * 100), 250, 0.6, new Notice("Oh no! A revolution is coming...", undefined, undefined, 500, 250, undefined, undefined, TBL.SOC_CATEGORY.getColor())));
 
 PresetLevels.level10.setup = function() {
     this.fillWithTiles();
@@ -829,83 +830,44 @@ PresetLevels.level11.teardown = function() {
     FiercePlanet.refreshSwatch();
 };
 
-/* Images and attributions */
-PresetLevels.level1.setImage("http://www.publicdomainpictures.net/pictures/9000/nahled/skyline-21851282194754CYcK.jpg");
-PresetLevels.level1.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=8647&picture=skyline">Skyline</a> by Bobby Mikul');
-PresetLevels.level2.setImage("http://www.publicdomainpictures.net/pictures/2000/nahled/1-1229187022pNP6.jpg");
-PresetLevels.level2.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=1580&picture=city-at-night">City At Night</a> by Petr Kratochvil');
-PresetLevels.level3.setImage("http://www.publicdomainpictures.net/pictures/7000/nahled/2504-127160623953YH.jpg");
-PresetLevels.level3.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=6310&picture=city-skyline">City Skyline</a> by Samantha DeWitt');
-PresetLevels.level4.setImage("http://www.publicdomainpictures.net/pictures/9000/nahled/warsaw-city-centre-20851282410093J8WZ.jpg");
-PresetLevels.level4.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=8701&picture=warsaw-city-centre">Warsaw City Centre</a> by Yana Ray');
-PresetLevels.level5.setImage("http://www.publicdomainpictures.net/pictures/6000/nahled/2178-1267099526uOOY.jpg");
-PresetLevels.level5.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=5606&picture=forbidden-city-wall">Forbidden City Wall</a> by Scott Meltzer');
-PresetLevels.level6.setImage("http://www.publicdomainpictures.net/pictures/11000/nahled/city-pollution-2961292115826L7C.jpg");
-PresetLevels.level6.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=10751&picture=city-pollution">City Pollution</a> by Peter Griffin');
-PresetLevels.level7.setImage("http://www.publicdomainpictures.net/pictures/4000/nahled/1453-1252053885sFox.jpg");
-PresetLevels.level7.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=3948&picture=ocean-city">Ocean City</a> by Shari Weinsheimer');
-PresetLevels.level8.setImage("http://www.publicdomainpictures.net/pictures/7000/nahled/2185-1271351380pptO.jpg");
-PresetLevels.level8.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=6265&picture=shadow">Shadow</a> by Bobby Mikul');
-PresetLevels.level9.setImage("http://www.publicdomainpictures.net/pictures/8000/nahled/sailboats-218512787662477CFj.jpg");
-PresetLevels.level9.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=7605&picture=sailboats">Sailboats</a> by Bobby Mikul');
-//PresetLevels.level11.setImage("/images/levels/level10.jpg");
-PresetLevels.level10.setImage("http://www.publicdomainpictures.net/pictures/11000/nahled/night-in-the-city-21851292200793awk.jpg");
-PresetLevels.level10.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=10783&picture=night-in-the-city">Night In The City</a> by Bobby Mikul');
-PresetLevels.level11.setImage("/images/levels/level11.gif");
-PresetLevels.level11.setImageAttribution("Sir John Tenniel, 1865");
-//PresetLevels.level11.setImage("http://upload.wikimedia.org/wikipedia/commons/9/99/Alice_in_Wonderland.jpg");
-//PresetLevels.level11.setImage("http://t0.gstatic.com/images?q=tbn:ANd9GcT_dsHdkI4uRfrjvVd2CZBbtrX2Up1np27S4oETSzxeD1h0TUiN");
-//PresetLevels.level11.setImage("http://t2.gstatic.com/images?q=tbn:ANd9GcRJsW0lGi3QHOlpoHYZdX0qJTogecq6SqVYxnAGaG4A7YejhBNlDA");
-//PresetLevels.level11.setImage("http://images2.wikia.nocookie.net/__cb20100312124723/aliceinwonderland/images/2/21/AliceAnime.jpg");
-
-
-/* Alternatives from DeviantArt  - NB. Permission required before making live !*/
-//PresetLevels.level1.setImage("http://fc01.deviantart.net/fs47/f/2009/208/0/e/0e1104dde79e3ff96918b1efc02b8505.jpg");
-//PresetLevels.level1.setImage("http://fc00.deviantart.net/fs71/i/2011/034/6/6/nuclear_winter__apocalypse_by_nuclearsyndrom-d38q2ak.jpg");
-//PresetLevels.level1.setImage("http://fc06.deviantart.net/fs70/i/2011/141/8/4/post_apocalypse_new_york_city_by_sad_cat-d3gv7j8.jpg");
 
 // Checked and authorised
 PresetLevels.level1.setImage("/images/levels/level-1-art.jpg");
 PresetLevels.level1.setImageAttribution('<a tabindex="-1" target="_blank" href="http://nuclearsyndrom.deviantart.com/"><em>Nuclear Winter</em></a>. Kindly reproduced courtesy of NuclearSyndrom.');
+PresetLevels.level2.setImage("/images/levels/level-2-art.jpg");
+PresetLevels.level2.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.slv.vic.gov.au/pictoria/b/2/8/doc/b28555.shtml"><em>Canvas Town, between Princess Bridge and South Melbourne in 1850\'s</em></a>. De Gruchy & Leigh, 1850-1860.');
 PresetLevels.level3.setImage("/images/levels/level-3-art.jpg");
 PresetLevels.level3.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.mynameisyakub.com"><em>The Apocalypse</em></a>. Kindly reproduced courtesy of Yakub.');
-PresetLevels.level7.setImage("http://www.publicdomainpictures.net/pictures/7000/nahled/2504-127160623953YH.jpg");
-PresetLevels.level7.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=6310&picture=city-skyline">City Skyline</a> by Samantha DeWitt');
+PresetLevels.level4.setImage("/images/levels/level-4-art.jpg");
+PresetLevels.level4.setImageAttribution('<a tabindex="-1" target="_blank" href="http://en.wikipedia.org/wiki/File:Brueghel-tower-of-babel.jpg"><em>The Tower of Babel</em></a>. Pieter Bruegel the Elder, 1563.');
+PresetLevels.level5.setImage("/images/levels/level-5-art.jpg");
+PresetLevels.level5.setImageAttribution('<a tabindex="-1" target="_blank" href="http://http://en.wikipedia.org/wiki/File:Dore_London.jpg"><em>Over London–by Rail from London: A Pilgrimage</em></a>. Gustave Doré, 1870.');
+PresetLevels.level6.setImage("/images/levels/level-6-art.jpg");
+PresetLevels.level6.setImageAttribution('<a tabindex="-1" target="_blank" href="http://entertainment.howstuffworks.com/arts/artwork/claude-monet-paintings-1900-19082.htm"><em>Waterloo Bridge</em></a>. Claude Monet, 1900.');
+PresetLevels.level7.setImage("/images/levels/level-7-art.jpg");
+PresetLevels.level7.setImageAttribution('<a tabindex="-1" target="_blank" href="http://en.wikipedia.org/wiki/File:Ballarat_1853-54_von_guerard.jpg"><em>Ballarat 1853-54</em></a>. Eugene von Guerard, 1884.');
+PresetLevels.level8.setImage("/images/levels/level-8-art.jpg");
+PresetLevels.level8.setImageAttribution('<a tabindex="-1" target="_blank" href="http://en.wikipedia.org/wiki/File:Gustave_Caillebotte_-_Jour_de_pluie_%C3%A0_Paris.jpg"><em>A Rainy Day in Paris</em></a>. Gustave Caillebotte, 1877.');
 PresetLevels.level9.setImage("/images/levels/level-9-art.jpg");
-PresetLevels.level9.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=3948&picture=ocean-city">Ocean City</a> by Shari Weinsheimer');
+PresetLevels.level9.setImageAttribution('<a tabindex="-1" target="_blank" href="http://en.wikipedia.org/wiki/File:Renoir16.jpg"><em>Children on the Beach of Guernesey</em></a>. Pierre-Auguste Renoir, 1883.');
 PresetLevels.level10.setImage("/images/levels/level-10-art.jpg");
 PresetLevels.level10.setImageAttribution('<a tabindex="-1" target="_blank" href="http://nuclearsyndrom.deviantart.com/"><em>Nuclear Summer</em></a>. Kindly reproduced courtesy of NuclearSyndrom.');
-PresetLevels.level11.setImage("/images/levels/level11.gif");
-PresetLevels.level11.setImageAttribution("Sir John Tenniel, 1865");
+PresetLevels.level11.setImage("/images/levels/level-11-art.jpg");
+PresetLevels.level11.setImageAttribution('<a tabindex="-1" target="_blank" href="http://nuclearsyndrom.deviantart.com/"><em>Mad Tea Party</em></a>. Sir John Tenniel, 1865.');
 
 
-//PresetLevels.level2.setImage("http://fc02.deviantart.net/fs22/f/2007/314/f/3/Apocalypse_in_Rome_by_UltimateGemini82.jpg");
-//PresetLevels.level2.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=1580&picture=city-at-night">City At Night</a> by Petr Kratochvil');
-////PresetLevels.level3.setImage("http://th04.deviantart.net/fs6/PRE/i/2005/071/b/6/Term_1__Art_Major_by_ya3.jpghttp://th04.deviantart.net/fs6/PRE/i/2005/071/b/6/Term_1__Art_Major_by_ya3.jpg");
-//PresetLevels.level4.setImage("http://fc07.deviantart.net/fs70/i/2010/226/c/8/Dead_City_by_JacobCharlesDietz.jpg");
-//PresetLevels.level4.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=8701&picture=warsaw-city-centre">Warsaw City Centre</a> by Yana Ray');
-//PresetLevels.level5.setImage("http://fc04.deviantart.net/fs71/f/2010/328/c/f/apocalypse_by_sethpda-d33hvxo.jpg");
-//PresetLevels.level5.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=5606&picture=forbidden-city-wall">Forbidden City Wall</a> by Scott Meltzer');
-//PresetLevels.level6.setImage("http://fc04.deviantart.net/fs13/i/2007/014/2/c/Apocalypse_City_by_Toothless_Wonder.jpg");
-//PresetLevels.level6.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=10751&picture=city-pollution">City Pollution</a> by Peter Griffin');
-//PresetLevels.level7.setImage("http://fc06.deviantart.net/fs9/i/2006/146/1/f/Apocalypse_by_Sadir89.jpg");
-//PresetLevels.level7.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=3948&picture=ocean-city">Ocean City</a> by Shari Weinsheimer');
-//PresetLevels.level8.setImage("http://fc06.deviantart.net/fs70/f/2010/342/c/5/c5f1fadc7c4da828df728dc273407537-d10qofi.jpg");
-//PresetLevels.level8.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=6265&picture=shadow">Shadow</a> by Bobby Mikul');
-//PresetLevels.level9.setImage("http://fc04.deviantart.net/fs42/i/2009/064/7/f/Apocalypse_by_jonny_rawkus.jpg");
-//PresetLevels.level9.setImageAttribution('<a tabindex="-1" target="_blank" href="http://www.publicdomainpictures.net/view-image.php?image=7605&picture=sailboats">Sailboats</a> by Bobby Mikul');
 
 
 
 /* Google Map links */
-PresetLevels.level1.setMapOptions({latitude: 47.5153, longitude: 19.0782, zoom: 18}); // Rome: 47.5153, 19.0782
-PresetLevels.level2.setMapOptions({latitude: 37.390296, longitude: -5.954579, zoom: 18}); // Seville: 37.390296,-5.954579
-PresetLevels.level3.setMapOptions({latitude: 45.433607, longitude: 12.338124, zoom: 18}); // Venice: 45.433607,12.338124
-PresetLevels.level4.setMapOptions({latitude: -33.909092, longitude: 18.406061, zoom: 18}); // Cape Town: -33.909092,18.406061
-PresetLevels.level5.setMapOptions({latitude: -33.434969, longitude: -70.655254}); // Santiago: -33.434969,-70.655254
-PresetLevels.level6.setMapOptions({latitude: 47.487229, longitude: 19.07513}); // Budapest: 47.487229,19.07513
-PresetLevels.level7.setMapOptions({latitude: 30.006533, longitude: -90.158792}); // New Orleans: 30.006533,-90.158792
-PresetLevels.level8.setMapOptions({latitude: 33.441393, longitude: -112.077407}); // Phoenix, Arizona: 33.441393,-112.077407
-PresetLevels.level9.setMapOptions({latitude: 21.283355, longitude: -157.837787}); // Honululu: 21.283355,-157.837787
-PresetLevels.level10.setMapOptions({latitude: 30.265452, longitude: -97.744524, zoom: 18}); // Austin, Texas: 30.265452,-97.744524
-PresetLevels.level11.setMapOptions({latitude: 51, longitude: 73, zoom: 2}); // The World
+PresetLevels.level1.setMapOptions({mapTypeId: 'mars_infrared', center: new google.maps.LatLng(-80.73270997231712, 85.09268911182834), zoom: 3, tilt: 0}); // Budapest: 47.5153, 19.0782
+PresetLevels.level2.setMapOptions({mapTypeId: google.maps.MapTypeId.SATELLITE, center: new google.maps.LatLng(37.390296, -5.954579), zoom: 18, tilt: 45}); // Seville: 37.390296,-5.954579
+PresetLevels.level3.setMapOptions({mapTypeId: google.maps.MapTypeId.SATELLITE, center: new google.maps.LatLng(45.433607, 12.338124), zoom: 18, tilt: 45}); // Venice: 45.433607,12.338124
+PresetLevels.level4.setMapOptions({mapTypeId: google.maps.MapTypeId.SATELLITE, center: new google.maps.LatLng(41.890384354793554, 12.49228627979709), zoom: 19, tilt: 45}); // Rome, Colosseum: 41.890384354793554, 12.49228627979709
+PresetLevels.level5.setMapOptions({mapTypeId: google.maps.MapTypeId.SATELLITE, center: new google.maps.LatLng(-33.434969, -70.655254), zoom: 18, tilt: 45}); // Santiago: -33.434969,-70.655254
+PresetLevels.level6.setMapOptions({mapTypeId: google.maps.MapTypeId.SATELLITE, center: new google.maps.LatLng(47.487229, 19.07513), zoom: 18, tilt: 45}); // Budapest: 47.487229,19.07513
+PresetLevels.level7.setMapOptions({mapTypeId: google.maps.MapTypeId.SATELLITE, center: new google.maps.LatLng(30.006533, -90.158792), zoom: 18, tilt: 45}); // New Orleans: 30.006533,-90.158792
+PresetLevels.level8.setMapOptions({mapTypeId: google.maps.MapTypeId.SATELLITE, center: new google.maps.LatLng(33.441393, -112.077407), zoom: 18, tilt: 45}); // Phoenix, Arizona: 33.441393,-112.077407
+PresetLevels.level9.setMapOptions({mapTypeId: google.maps.MapTypeId.SATELLITE, center: new google.maps.LatLng(21.283355, -157.837787), zoom: 18, tilt: 45}); // Honululu: 21.283355,-157.837787
+PresetLevels.level10.setMapOptions({mapTypeId: google.maps.MapTypeId.SATELLITE, center: new google.maps.LatLng(30.265452, -97.744524), zoom: 18, tilt: 45}); // Austin, Texas: 30.265452,-97.744524
+PresetLevels.level11.setMapOptions({mapTypeId: google.maps.MapTypeId.SATELLITE, center: new google.maps.LatLng(51, 73), zoom: 2}); // The World

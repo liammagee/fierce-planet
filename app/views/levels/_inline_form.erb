@@ -3,6 +3,12 @@
     <%= f.hidden_field :resources %>
     <%= f.hidden_field :entry_points %>
     <%= f.hidden_field :exit_points %>
+    <%= f.hidden_field :google_map_type_id %>
+    <%= f.hidden_field :google_map_lat %>
+    <%= f.hidden_field :google_map_long %>
+    <%= f.hidden_field :google_map_tilt %>
+    <%= f.hidden_field :google_map_zoom %>
+    <%= f.hidden_field :json_blob %>
     <%= f.submit 'Save Level' %>
 <% end %>
 <script>
@@ -35,6 +41,12 @@
         $('#level_resources')[0].value = $.toJSON(FiercePlanet.currentLevel.getResources());
         $('#level_entry_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getEntryPoints());
         $('#level_exit_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getExitPoints());
+        $('#level_google_map_type_id')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions()['mapTypeId']);
+        $('#level_google_map_lat')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions().center.Na);
+        $('#level_google_map_long')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions().center.Oa);
+        $('#level_google_map_zoom')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions()['zoom']);
+        $('#level_google_map_tilt')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions()['tilt']);
+        $('#level_json_blob')[0].value = $.toJSON(FiercePlanet.currentLevel);
     }
 </script>
 

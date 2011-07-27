@@ -6,7 +6,8 @@
   </ul>
 
 
-  <%= form_for @level, :remote => true, :html => {:class => "edit_level_properties", :id => "edit_level_properties_" + @level.id.to_s} do |f| %>
+  <%= form_for @level, :remote => true, :html => { :class => "edit_level_properties", :id => "edit_level_properties_" + @level.id.to_s} do |f| %>
+      <%= f.hidden_field :json_blob %>
       <% if @level.errors.any? %>
           <div id="error_explanation">
             <h2><%= pluralize(@level.errors.count, "error") %> prohibited this level from being saved:</h2>
@@ -20,6 +21,15 @@
       <% end %>
 
       <div id="core-fields">
+        <div class="field">
+          <%= f.label :id %>: <%=	 @level.id %>
+        </div>
+        <div class="field">
+          URL:
+          <br/>
+          <input type="text" value="http://www.fierce-planet.com/?id=<%=	 @level.id %>">
+          <a target="_blank" href="/?id=<%=	 @level.id %>" style="font-size:0.9em">(Open in new window)</a>
+        </div>
         <div class="field">
           <%= f.label :name %>
           <br/>
@@ -69,11 +79,23 @@
       <div id="google-fields">
         <p>
           Note: you can include a Google Map as the background image.
-          See the <a href="http://code.google.com/apis/maps/documentation/staticmaps/"> Google Maps documentation</a>
-          for more information.
         </p>
 
         <div>Google Map Fields</div>
+        <div class="field">
+          <%= f.label :google_map_type_id, "Map Type" %>
+          <%= f.select :google_map_lat, {
+                  'SATELLITE'=> 'satellite',
+                  'ROADMAP' => 'roadmap',
+                  'HYBRID' => 'hybrid' ,
+                  'TERRAIN'  => 'terrain',
+                  'SKY' => 'sky' ,
+                  'MARS - VISIBLE' => 'mars_visible' ,
+                  'MARS - INFRARED' => 'mars_infrared',
+                  'MARS - ELEVATION' => 'mars_elevation' ,
+                  'MOON'  => 'moon'
+          } %>
+        </div>
         <div class="field">
           <%= f.label :google_map_lat, "Latitude" %>
           <%= f.text_field :google_map_lat, {:size => 10} %>

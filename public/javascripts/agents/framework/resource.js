@@ -154,10 +154,14 @@ Resource.prototype.provideYield = function(agent, resourceEffect, adjustSpeedToY
                 // This lowers the impact of resources on agents' speed - but need delay for 'followers' to get resources of their own.
 //                    agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));
 
-                // Old way - yields are constant
-                this._totalYield -= this._perAgentYield;
-//                New way - yields decreases reflect upgrade and actual yield to the agent - but too hard
-//                this._totalYield -= rawAdjustment;
+                if (World.settings.resourcesDiminishAtFixedRate) {
+                    // Yields decreases reflect upgrade and actual yield to the agent - VERY HARD
+                    this._totalYield -= rawAdjustment;
+                }
+                else {
+                    // Yields are pegged to actual benefits supplied to agents
+                    this._totalYield -= this._perAgentYield;
+                }
             }
         }
     }

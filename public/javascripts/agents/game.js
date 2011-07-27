@@ -126,9 +126,9 @@ FiercePlanet.processAgents = function() {
 
                 // TODO: should be in-lined?
                 if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE || agent.getType() == AgentTypes.RIVAL_AGENT_TYPE) {
-                    if (!World.settings.godMode)
+//                    if (!World.settings.godMode)
                         agent.adjustGeneralHealth(FiercePlanet.MOVE_HEALTH_COST);
-                    if (agent.getHealth() <= 0) {
+                    if (agent.getHealth() <= 0 && !World.settings.godMode) {
                         nullifiedAgents.push(i);
                         FiercePlanet.nullifiedAgents.push(agent);
                         FiercePlanet.drawExpiredAgent(agent);

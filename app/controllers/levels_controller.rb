@@ -5,7 +5,7 @@ class LevelsController < ApplicationController
   # GET /levels
   # GET /levels.xml
   def index
-    @levels = Level.all
+    @levels = Level.find_all_by_user_id(current_user.id)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -44,6 +44,7 @@ class LevelsController < ApplicationController
   # GET /levels/new.xml
   def new
     @level = Level.new
+    @level.user = current_user
     @level.world_width = 11
     @level.world_height = 11
     @level.initial_agent_number = 1
@@ -73,6 +74,7 @@ class LevelsController < ApplicationController
   # POST /levels.xml
   def create
     @level = Level.new(params[:level])
+    @level.user = current_user
 
     respond_to do |format|
       if @level.save

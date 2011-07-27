@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110722161753) do
+ActiveRecord::Schema.define(:version => 20110727061109) do
 
   create_table "capabilities", :force => true do |t|
     t.integer  "capability_type"
@@ -66,6 +66,10 @@ ActiveRecord::Schema.define(:version => 20110722161753) do
     t.string   "google_map_long"
     t.string   "google_map_lat"
     t.text     "resources"
+    t.text     "google_map_options"
+    t.text     "json_blob"
+    t.string   "google_map_type_id"
+    t.integer  "user_id"
   end
 
   create_table "profile_capabilities", :force => true do |t|

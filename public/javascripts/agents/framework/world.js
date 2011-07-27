@@ -29,12 +29,15 @@ var World = (function() {
             applyGeneralHealth: false,
 
             /** Are resources in tension - does proximity of resources impact on their benefit?
-             *  TODO: Refactor
+             *  TODO: Refactor name
               */
             resourcesInTension: false,
 
             /** Are resources in tension - does proximity of resources impact on their benefit */
             resourcesInTensionGlobally: false,
+
+            /** Irrespective of agent yields, resources diminish at fixed rates */
+            resourcesDiminishAtFixedRate: false,
 
             /** Can resources be upgraded? (TODO: Semantics needs to be clear about what this means) */
             resourcesUpgradeable: false,

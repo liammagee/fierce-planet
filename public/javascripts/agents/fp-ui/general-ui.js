@@ -57,6 +57,10 @@ FiercePlanet.hookUpUIEventListeners = function() {
         $('#cancel-level-editor').click(FiercePlanet.cancelLevelEditor);
         $('#clear-entry-points').click(FiercePlanet.clearEntryPoints);
         $('#clear-exit-points').click(FiercePlanet.clearExitPoints);
+
+        $('#edit-map').click(FiercePlanet.editMap);
+        $('#save-map').click(FiercePlanet.saveMap);
+        $('#close-map').click(FiercePlanet.closeMap);
     }
     catch (err){
         if (typeof console != "undefined")

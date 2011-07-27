@@ -42,4 +42,5 @@ gem 'oa-openid', :require => 'omniauth/openid'
 group :development, :test do
 #   gem 'webrat'
    gem "jasmine"
+   gem "launchy"
 end

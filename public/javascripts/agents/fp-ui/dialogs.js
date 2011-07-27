@@ -254,6 +254,7 @@ FiercePlanet.setupDialogs = function() {
     var dfHeight = FiercePlanet.WORLD_HEIGHT * 3 / 4;
     var dfX = dialogX + ((FiercePlanet.WORLD_WIDTH - dfWidth) / 2);
     var dfY = dialogY + ((FiercePlanet.WORLD_HEIGHT - dfHeight) / 2);
+    
     FiercePlanet.designFeaturesDialog = $('#level-features')
         .dialog({
            position: [dfX, dfY],
@@ -416,7 +417,7 @@ FiercePlanet.showResourceGallery = function() {
 
     $('#current-profile-class')[0].innerHTML = FiercePlanet.currentProfile.profile_class;
     $('#current-credits')[0].innerHTML = FiercePlanet.currentProfile.credits;
-    $('#current-capabilities')[0].innerHTML = FiercePlanet.currentProfile.capabilities.join(",");
+    $('#current-capabilities')[0].innerHTML = FiercePlanet.currentProfile.capabilities.join(", ");
 
     var accessibleCapabilities = [];
     var purchasableItems = [];

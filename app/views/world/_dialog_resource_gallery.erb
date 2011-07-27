@@ -1,12 +1,21 @@
 <div id="resource-gallery-tabs" style="display: none;">
   <ul>
     <li><a href="#gallery-item-list">Gallery</a></li>
-    <li><a href="#resource-gallery">Status</a></li>
+    <!--<li><a href="#resource-gallery" >Create</a></li>-->
   </ul>
 
 
   <div id="gallery-item-list" style="min-height:300px">
 
+
+    <div id="gallery-item-panel">
+      <div><em>Click on a resource to purchase:</em></div>
+
+      <!-- This list is generated -->
+      <div id="gallery-items">
+      </div>
+
+    </div>
     <div id="gallery-stats">
       <div>
         Current class: <span id="current-profile-class"><%= current_user.profile.profile_class if current_user %></span>
@@ -15,18 +24,11 @@
         Credits: <span id="current-credits"><%= current_user.profile.credits if current_user %></span>
       </div>
       <div>
-        Current capabilities: <span id="current-capabilities"><%= current_user.profile.capabilities if current_user %></span>
+        Current capabilities:
       </div>
+      <div id="current-capabilities"><%= current_user.profile.capabilities.split(',').join(', ') if current_user %></div>
     </div>
 
-    <div>
-      <div><em>Click on a resource to purchase:</em></div>
-
-      <!-- This list is generated -->
-      <div id="gallery-items">
-      </div>
-
-    </div>
 
   </div>
   <div id="resource-gallery">

@@ -333,8 +333,14 @@ background-position: -101px -101px;
 	border-radius:4px;
 }
 #gallery-stats {
-    float: right;
-    width: 150px;
+    position:absolute;
+    left: 240px;
+    width: 200px;
+}
+#gallery-item-panel {
+    position:absolute;
+    left: 20px;
+    width: 180px;
 }
 #gallery-items > div  {
     margin-top: 4px;
