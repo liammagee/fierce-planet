@@ -1,7 +1,6 @@
 require 'fileutils'
 require 'rubygems'
 require 'open-uri'
-require 'launchy'
 
 namespace :fp do
 
@@ -27,11 +26,13 @@ namespace :fp do
 
     desc 'Launches Fierce Planet in the default browser - requires Launchy gem'
     task :launch do
+      require 'launchy'
       Launchy.open("http://localhost:3001/")
     end
 
     desc 'Launches Fierce Planet in the default browser - requires Launchy gem'
     task :launch_static do
+      require 'launchy'
       Launchy.open("http://localhost:3001/scrap/fp.html")
     end
 end
