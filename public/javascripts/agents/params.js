@@ -10,11 +10,21 @@
 
 var FiercePlanet = FiercePlanet || {};
 
-// Game variable constants
+// Game parameters
+
 /**
- * @constant The cost of making a move
+ * @constant The time to wait before starting the first wave
  */
-FiercePlanet.MOVE_HEALTH_COST = -3;
+FiercePlanet.NEW_LEVEL_DELAY = 3000;
+/**
+ * @constant The time to wait between waves
+ */
+FiercePlanet.NEW_WAVE_DELAY = 200;
+
+FiercePlanet.resourceRecoveryCycle = 5;
+FiercePlanet.interval = 20;
+
+
 /**
  * @constant The resource bonus for saving a single agent
  */
@@ -24,23 +34,11 @@ FiercePlanet.SAVE_SCORE = 10;
  */
 FiercePlanet.STARTING_STORE = 100;
 /**
- * @constant The default rate of resource recovery
- */
-FiercePlanet.DEFAULT_RESOURCE_RECOVERY = 2;
-/**
  * @constant The credit bonus accruing from surviving a level
  */
 FiercePlanet.WAVE_GOODNESS_BONUS = 5;
 
-// Timer constants
-/**
- * @constant The time to wait before starting the first wave
- */
-FiercePlanet.NEW_LEVEL_DELAY = 3000;
-/**
- * @constant The time to wait between waves
- */
-FiercePlanet.NEW_WAVE_DELAY = 200;
+
 
 
 // Difficulty constants
@@ -103,8 +101,6 @@ FiercePlanet.maxWaveMoves = 0;
 FiercePlanet.maxLevelMoves = 0;
 
 FiercePlanet.levelOfDifficulty = FiercePlanet.MEDIUM_DIFFICULTY;
-FiercePlanet.resourceRecoveryCycle = 5;
-FiercePlanet.interval = 20;
 
 FiercePlanet.levelDelayCounter = 0;
 FiercePlanet.waveDelayCounter = 0;
@@ -149,6 +145,7 @@ FiercePlanet.currentY = null;
 
 // Dialogs
 // TODO: Create separate namespace
+
 // Main game dialogs
 FiercePlanet.gameOverDialog = null;
 FiercePlanet.completeLevelDialog = null;

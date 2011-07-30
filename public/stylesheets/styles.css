@@ -73,11 +73,13 @@ body {
 }
 #notifications {
 	font-size:24px;
-	top:65px;
+	top:517px;
 	left:0px;
 	position:absolute;
 	width: 480px;
-	padding: 10px;
+	padding: 7px;
+	background: #1F62C1;
+    border-radius:4px;
 }
 #level-name {
 	font-size:18px;
@@ -433,6 +435,10 @@ li.over {
     float: left;
     padding: 3px;
 }
+.swatch-draggable {
+    z-index: 1000;
+}
+
 /* Resource swatch styles */
 /*#swatch_economic {*/
 	/*background:#44ABE0;*/
@@ -478,3 +484,10 @@ li.over {
         .doc li {
             list-style: circle;
         }
+
+.slider-container {
+    /*float: left;*/
+}
+#cost-per-move {
+    margin: 10px;
+}

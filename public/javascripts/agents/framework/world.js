@@ -10,17 +10,41 @@
 /**
  * World Singleton class definition
  */
-var World = (function() {
-    var world = {
+var World = {};
 
-        /** World settings */
-        settings: {
+initWorld = (function() {
+
+    this.settings = {
+
+
+            /** CONSTANTS */
+
+            /**
+             * @constant The cost of making a move
+             */
+            DEFAULT_AGENT_COST_PER_MOVE: -3,
+
+            /**
+             * @constant The default rate of resource recovery
+             */
+            DEFAULT_RESOURCE_RECOVERY_RATE: 2,
+
+            /** VARIABLES */
 
             /** Can agents share memories of places visited? */
             agentsCanCommunicate: true,
 
             /** Do agents have a random amount of initial health? */
             agentsHaveRandomInitialHealth: false,
+
+            /** Can agents adjust their speed? */
+            agentsCanAdjustSpeed: true,
+
+            /** Can agents adjust their wander? */
+            agentsCanAdjustWander: true,
+
+            /** Cost to agent for every move */
+            agentCostPerMove: 0,
 
             /** Ignores the weighting of resources when calculating benefits */
             ignoreResourceBalance: false,
@@ -44,6 +68,9 @@ var World = (function() {
 
             /** Does a resource bonus apply, for using an even mix of resources? TODO: not yet implemented */
             resourceBonus: false,
+
+            /** Cost to agent for every move */
+            rateOfResourceRecovery: 0,
 
 
 
@@ -78,57 +105,59 @@ var World = (function() {
                 if (localStorage)
                     localStorage.worldSettings = this.toJSON();
             }
+        };
 
+        this.resourceTypeNamespace = {};
 
-        },
+        this.resourceCategories = [];
 
-        resourceTypeNamespace: {},
+        this.resourceTypes = [];
 
-        resourceCategories: [],
+        this.agentTypes = [];
 
-        resourceTypes: [],
-
-        agentTypes: [],
-
-        registerResourceCategories: function registerResourceCategories(rcs) {
+        this.registerResourceCategories = function(rcs) {
             this.resourceCategories = rcs;
             if (this.agentTypes)
                 this.updateRegisteredAgentTypes();
-        },
+        };
 
-        registerResourceTypes: function registerResourceTypes(rts) {
+        this.registerResourceTypes = function (rts) {
             this.resourceTypes = rts;
-        },
+        };
 
-        registerAgentTypes: function registerAgentTypes(agt) {
+        this.registerAgentTypes = function (agt) {
             this.agentTypes = agt;
-        },
+        };
 
-        updateRegisteredAgentTypes: function updateRegisteredAgentTypes() {
+        this.updateRegisteredAgentTypes = function() {
             for (var i in this.agentTypes) {
                 this.agentTypes[i].setHealthCategories(this.resourceCategories);
             }
-        },
+        };
 
-        resolveResourceType: function resolveResourceType(code) {
+        this.resolveResourceType  = function(code) {
             for (var i in this.resourceTypes) {
                 var resourceType = this.resourceTypes[i];
                 if (resourceType._code == code)
                     return resourceType;
             }
             return undefined;
-        },
+        };
 
 
         // State variables
-        currentLevel: null,
+        this.currentLevel = null;
 
-        currentWave: null,
+        this.currentWave = null;
 
-        currentResource: null
+        this.currentResource = null;
 
 
-    };
 
-    return world;
-})();
+    // Initialise necessary values here
+    this.settings.agentCostPerMove = this.settings.DEFAULT_AGENT_COST_PER_MOVE;
+    this.settings.rateOfResourceRecovery = this.settings.DEFAULT_RESOURCE_RECOVERY_RATE;
+
+});
+
+initWorld.apply(World);

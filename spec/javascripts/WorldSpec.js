@@ -66,6 +66,7 @@ describe("world-related classes", function() {
             });
         });
 
+
         describe("storing and retrieving setting properties", function() {
 
             beforeEach(function() {
@@ -74,12 +75,17 @@ describe("world-related classes", function() {
             it("should have default settings", function() {
                 expect(World.settings.agentsCanCommunicate).toBeTruthy();
                 expect(World.settings.agentsHaveRandomInitialHealth).toBeFalsy();
+                expect(World.settings.agentsCanAdjustSpeed).toBeTruthy();
+                expect(World.settings.agentsCanAdjustWander).toBeTruthy();
+                expect(World.settings.agentCostPerMove).toEqual(World.settings.DEFAULT_AGENT_COST_PER_MOVE);
+
                 expect(World.settings.resourcesUpgradeable).toBeFalsy();
                 expect(World.settings.resourcesInTension).toBeFalsy();
                 expect(World.settings.resourcesInTensionGlobally).toBeFalsy();
                 expect(World.settings.resourceBonus).toBeFalsy();
                 expect(World.settings.applyGeneralHealth).toBeFalsy();
                 expect(World.settings.ignoreResourceBalance).toBeFalsy();
+                expect(World.settings.rateOfResourceRecovery).toEqual(World.settings.DEFAULT_RESOURCE_RECOVERY_RATE);
             });
 
             it("should be possible to set property settings", function() {
@@ -99,6 +105,11 @@ describe("world-related classes", function() {
                 expect(World.settings.applyGeneralHealth).toBeTruthy();
                 World.settings.ignoreResourceBalance = true;
                 expect(World.settings.ignoreResourceBalance).toBeTruthy();
+
+                World.settings.agentCostPerMove = -4;
+                expect(World.settings.agentCostPerMove).toNotEqual(World.settings.DEFAULT_AGENT_COST_PER_MOVE);
+                World.settings.rateOfResourceRecovery = 3;
+                expect(World.settings.rateOfResourceRecovery).toNotEqual(World.settings.DEFAULT_RESOURCE_RECOVERY_RATE);
             });
 
             it("should be possible to store arbitrary properties", function() {
@@ -107,6 +118,21 @@ describe("world-related classes", function() {
                 expect(World.settings.someArbitraryProperty).toBeTruthy();
                 World.settings.someArbitraryProperty = false;
                 expect(World.settings.someArbitraryProperty).toBeFalsy();
+            });
+
+            describe("reset property values", function() {
+                beforeEach(function() {
+                    World.settings.agentsCanCommunicate = false;
+                });
+
+                it("should have a new value", function() {
+                    expect(World.settings.agentsCanCommunicate).toBeFalsy();
+                });
+
+                it("should have a new value", function() {
+                    initWorld.apply(World);
+                    expect(World.settings.agentsCanCommunicate).toBeTruthy();
+                });
             });
 
 
@@ -170,6 +196,7 @@ describe("world-related classes", function() {
                     expect(World.settings.agentsCanCommunicate).toBeFalsy();
                 });
             });
+
         });
     });
 

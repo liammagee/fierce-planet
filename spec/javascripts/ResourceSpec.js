@@ -38,7 +38,7 @@ describe("resource-related classes", function() {
             });
 
             it("should not yield anything to an agent in full health", function() {
-                resource.provideYield(agent, 10, false, false);
+                resource.provideYield(agent, 10, false);
                 expect(resource.getTotalYield()).toEqual(100);
                 expect(agent.getHealth()).toEqual(100);
                 expect(agent.getHealthForResource(resource)).toEqual(100);
@@ -46,7 +46,7 @@ describe("resource-related classes", function() {
 
             it("should yield health for this resource category", function() {
                 agent.adjustGeneralHealth(-90);
-                resource.provideYield(agent, 1, false, false);
+                resource.provideYield(agent, 1, false);
                 expect(resource.getTotalYield()).toEqual(80);
                 expect(agent.getHealth() + 0.5 | 0).toEqual(30);
                 expect(agent.getHealthForResource(resource)).toEqual(70);
@@ -54,7 +54,7 @@ describe("resource-related classes", function() {
 
             it("should yield less health for this resource category with a smaller resource effect", function() {
                 agent.adjustGeneralHealth(-90);
-                resource.provideYield(agent, 0.5, false, false);
+                resource.provideYield(agent, 0.5, false);
                 expect(resource.getTotalYield()).toEqual(80);
                 expect(agent.getHealth() + 0.5 | 0).toEqual(20);
                 expect(agent.getHealthForResource(resource)).toEqual(40);

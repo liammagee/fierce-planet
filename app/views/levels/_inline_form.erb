@@ -29,7 +29,7 @@
         if (FiercePlanet.inDesignMode) {
             serializeLevel();
             try {
-                $.rails.handleRemote($('.edit_level'));
+//                $.rails.handleRemote($('.edit_level'));
             }
             catch(err) {
             }
@@ -42,8 +42,10 @@
         $('#level_entry_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getEntryPoints());
         $('#level_exit_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getExitPoints());
         $('#level_google_map_type_id')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions()['mapTypeId']);
-        $('#level_google_map_lat')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions().center.Na);
-        $('#level_google_map_long')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions().center.Oa);
+        if (FiercePlanet.currentLevel.getMapOptions().center.lat())
+            $('#level_google_map_lat')[0].value = FiercePlanet.currentLevel.getMapOptions().center.lat();
+        if (FiercePlanet.currentLevel.getMapOptions().center.lng())
+            $('#level_google_map_long')[0].value = FiercePlanet.currentLevel.getMapOptions().center.lng();
         $('#level_google_map_zoom')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions()['zoom']);
         $('#level_google_map_tilt')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions()['tilt']);
         $('#level_json_blob')[0].value = $.toJSON(FiercePlanet.currentLevel);

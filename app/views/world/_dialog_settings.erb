@@ -4,109 +4,102 @@
 
   	<ul>
         <li><a href="#user-interface">User interface</a></li>
-        <li><a href="#game-settings">Game play</a></li>
-		<li><a href="#experimental" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">Experimental</a></li>
+        <li><a href="#agent-settings">Agent</a></li>
+        <li><a href="#resource-settings">Resource</a></li>
 		<li><a href="#testing" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">Testing</a></li>
 	</ul>
 
+    <div id="user-interface">
+      <div>
+        <input id="noticesVisible"  type="checkbox" checked="checked"/>
+        <label for="noticesVisible">Show in-game notices</label>
+      </div>
+      <div>
+        <input id="statusBarVisible"  type="checkbox" checked="checked"/>
+        <label for="statusBarVisible">Show status bar</label>
+      </div>
+      <div>
+        <input id="scrollingImageVisible"  type="checkbox" checked="checked"/>
+        <label for="scrollingImageVisible">Show scrolling image</label>
+      </div>
+      <div>
+        <input id="catastrophesVisible"  type="checkbox" checked="checked"/>
+        <label for="catastrophesVisible">Show catastrophes</label>
+      </div>
+      <div>
+        <input id="disableKeyboardShortcuts"  type="checkbox"/>
+        <label for="disableKeyboardShortcuts">Disable keyboard shortcuts</label>
+      </div>
+      <div>
+        <input id="soundsPlayable"  type="checkbox"/>
+        <label for="soundsPlayable">Play sounds</label>
+      </div>
+      <div>
+        <input id="useInlineResourceSwatch"  type="checkbox" />
+        <label for="useInlineResourceSwatch">Show inline resource pop-up</label>
+      </div>
+      <div>
+        <input id="allowInlinePanning"  type="checkbox" />
+        <label for="allowInlinePanning">Allow inline panning</label>
+      </div>
+      <div>
+        <input id="agentTracing"  type="checkbox"/> Show agent movement
+      </div>
+      <div>
+        <input id="invisiblePath"  type="checkbox"/> Make path invisible
+      </div>
+    </div>
 
-
-  <div id="game-settings">
-    <div>
-      <input id="resourcesInTension"  type="checkbox"/>
-      Resources affect neighbouring resources
-    </div>
-    <div>
-      <input id="resourcesInTensionGlobally"  type="checkbox"/>
-      Resources affect all other resources
-    </div>
-    <div>
-      <input id="ignoreResourceBalance"  type="checkbox"/>
-      Resource balance has no effect
-    </div>
-    <div>
-      <input id="applyGeneralHealth"  type="checkbox"/>
-      Resource categories have no effect
-    </div>
-    <div>
-      <input id="resourcesDiminishAtFixedRates"  type="checkbox"/>
-      Resources diminish at fixed rates
-    </div>
+  <div id="agent-settings">
     <div>
       <input id="agentsCanCommunicate"  type="checkbox" checked="checked"/>
-       Agents share their memories
+      <label for="agentsCanCommunicate">Agents share their memories</label>
     </div>
     <div>
       <input id="agentsHaveRandomInitialHealth"  type="checkbox"/>
-      Agents have random initial health
+      <label for="agentsHaveRandomInitialHealth">Agents have random initial health</label>
     </div>
-
-    <div style="display:none">
-      <input id="resourceBonus"  type="checkbox"/>
-      Resource mix bonus [NOT YET FUNCTIONAL]
+    <div>
+      <input id="agentsCanAdjustSpeed"  type="checkbox"/>
+      <label for="agentsCanAdjustSpeed">Agents can change their speed</label>
     </div>
-    <div style="display:none">
-      <input id="resourcesUpgradeable"  type="checkbox"/>
-      Resources can be upgraded [NOT YET FUNCTIONAL]
+    <div>
+      <input id="agentsCanAdjustWander"  type="checkbox"/>
+      <label for="agentsCanAdjustWander">Agents can wander</label>
+    </div>
+    <div>
+      Health cost per move: <span id="agentCostPerMoveDisplay"></span>
+      <br/>
+      <div class="slider-component" id="agentCostPerMove"></div>
     </div>
   </div>
 
-
-
-  <div id="user-interface">
+  <div id="resource-settings">
     <div>
-      <input id="noticesVisible"  type="checkbox" checked="checked"/> Show notices
+      <input id="resourcesInTension"  type="checkbox"/>
+      <label for="resourcesInTension">Resources affect neighbouring resources</label>
     </div>
     <div>
-      <input id="scrollingImageVisible"  type="checkbox" checked="checked"/>
-      Show scrolling image
+      <input id="resourcesInTensionGlobally"  type="checkbox"/>
+      <label for="resourcesInTensionGlobally">Resources affect all other resources</label>
     </div>
     <div>
-      <input id="catastrophesVisible"  type="checkbox" checked="checked"/>
-      Show catastrophes
+      <input id="ignoreResourceBalance"  type="checkbox"/>
+      <label for="ignoreResourceBalance">Resource balance has no effect</label>
     </div>
     <div>
-      <input id="disableKeyboardShortcuts"  type="checkbox"/> Disable keyboard shortcuts
+      <input id="applyGeneralHealth"  type="checkbox"/>
+      <label for="applyGeneralHealth">Resource categories have no effect</label>
     </div>
     <div>
-      <input id="soundsPlayable"  type="checkbox"/> Play sounds
+      <input id="resourcesDiminishAtFixedRates"  type="checkbox"/>
+      <label for="resourcesDiminishAtFixedRates">Resources diminish at fixed rates</label>
     </div>
     <div>
-      <input id="useInlineResourceSwatch"  type="checkbox" />
-      Show inline resource pop-up
+      Rate of resource recovery: <span id="rateOfResourceRecoveryDisplay"></span>
+      <br/>
+      <div class="slider-component" id="rateOfResourceRecovery"></div>
     </div>
-    <div>
-      <input id="allowInlinePanning"  type="checkbox" />
-      Allow inline panning
-    </div>
-    <div>
-      <input id="agentTracing"  type="checkbox"/> Show agent movement
-    </div>
-    <div>
-      <input id="invisiblePath"  type="checkbox"/> Make path invisible
-    </div>
-  </div>
-
-
-
-
-  <div id="experimental" style="display: <%= (current_user.try(:admin?)) ? 'block' : 'none' %>">
-        <h4>Experimental options</h4>
-        <div>
-          <input id="rivalsVisible"  type="checkbox"/> Show rivals
-        </div>
-        <div>
-          <input id="predatorsVisible"  type="checkbox"/> Show predators
-        </div>
-        <div>
-          <input id="tilesMutable"  type="checkbox"/> Allow tiles to be added
-        </div>
-        <div>
-          <input id="tilesRemovable"  type="checkbox"/> Allow tiles to be removed
-        </div>
-        <div>
-          <input id="backgroundIconsVisible"  type="checkbox"/> Show background icons
-        </div>
   </div>
 
   <div id="testing">
@@ -115,6 +108,21 @@
     </div>
     <div>
       <input id="godMode"  type="checkbox"/> Play in 'god' mode
+    </div>
+    <div>
+      <input id="rivalsVisible"  type="checkbox"/> Show rivals
+    </div>
+    <div>
+      <input id="predatorsVisible"  type="checkbox"/> Show predators
+    </div>
+    <div>
+      <input id="tilesMutable"  type="checkbox"/> Allow tiles to be added
+    </div>
+    <div>
+      <input id="tilesRemovable"  type="checkbox"/> Allow tiles to be removed
+    </div>
+    <div>
+      <input id="backgroundIconsVisible"  type="checkbox"/> Show background icons
     </div>
   </div>
 

@@ -71,6 +71,7 @@ FiercePlanet.bindVariables = function() {
  */
 FiercePlanet.initialiseWorldSettings = function() {
     World.settings.noticesVisible = World.settings.noticesVisible || true;
+    World.settings.statusBarVisible = World.settings.statusBarVisible || true;
     World.settings.scrollingImageVisible = World.settings.scrollingImageVisible || true;
     World.settings.catastrophesVisible = World.settings.catastrophesVisible || true;
     World.settings.disableKeyboardShortcuts = World.settings.disableKeyboardShortcuts || true;
@@ -108,16 +109,23 @@ FiercePlanet.zeroFill = function ( number, width ){
  * Gets all properties from local storage, and sets them on the settings dialog.
  */
 FiercePlanet.getAndRetrieveProperties = function() {
-    // Retrieve properties
-    World.settings.load();
 
     // Get the settings from the World object
     for (var key in World.settings) {
         // Make sure we're only capturing numbers, strings, booleans (not objects, functions or undefineds)
         if (World.settings.hasOwnProperty(key) && $.inArray(typeof World.settings[key], ["number", "string", "boolean"]) > -1) {
-            var option = $('#' + key)[0];
-            if (option)
-                option.checked = World.settings[key];
+            var option = $('#' + key);
+            if (option && option.length > 0) {
+                // Using a checkbox?
+                if (option[0].type == "checkbox") {
+                    option[0].checked = World.settings[key];
+                }
+                // Using a slider?
+                else if (option.attr("class") && option.attr("class").indexOf("slider-component") > -1) {
+                    option.slider("value", World.settings[key]);
+                    $('#' + key + "Display")[0].innerHTML = World.settings[key];
+                }
+            }
         }
     }
 };
@@ -129,11 +137,22 @@ FiercePlanet.getAndRetrieveProperties = function() {
 FiercePlanet.setAndStoreProperties = function() {
 
     // Set the settings on the World object
+
+    // Add checkbox values
     var inputs = $('#settings-dialog input[type="checkbox"]');
     for (var key in inputs) {
         var inputID = inputs[key].id;
         World.settings[inputID] = inputs[key].checked;
     }
+
+    // Add slider values
+    inputs = $('#settings-dialog .slider-component');
+    for (key in inputs) {
+        inputID = inputs[key].id;
+        World.settings[inputID] = $("#" + inputID).slider("value");
+    }
+
+
 
     // Store all settings
     World.settings.store();

@@ -129,15 +129,15 @@ Resource.prototype.getX = function() { return this._x; };
 Resource.prototype.setX = function(x) { this._x = x; };
 Resource.prototype.getY = function() { return this._y; };
 Resource.prototype.setY = function(y) { this._y = y; };
-Resource.prototype.provideYield = function(agent, resourceEffect, adjustSpeedToYield, applyGeneralHealth) {
+Resource.prototype.provideYield = function(agent, resourceEffect, adjustSpeedToYield) {
     if (this._totalYield > this._perAgentYield) {
         var adjustment = 0;
-        if (applyGeneralHealth || World.settings.applyGeneralHealth) {
+        if (World.settings.applyGeneralHealth) {
             // Don't be greedy - only yield a benefit if the agent needs it
             if (agent.getHealth() < 100) {
                 adjustment = this._perAgentYield * this._upgradeLevel * resourceEffect;
                 agent.adjustGeneralHealth(adjustment);
-                if (adjustSpeedToYield)
+                if (adjustSpeedToYield && World.settings.agentsCanAdjustSpeed)
                     agent.setSpeed(this._perAgentYield);
                 // This lowers the impact of resources on agents' speed - but need delay for 'followers' to get resources of their own.
 //                    agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));
@@ -149,7 +149,7 @@ Resource.prototype.provideYield = function(agent, resourceEffect, adjustSpeedToY
                 var rawAdjustment = this._perAgentYield * this._upgradeLevel * World.resourceCategories.length;
                 adjustment = rawAdjustment * resourceEffect;
                 agent.adjustHealthForResource(adjustment, this);
-                if (adjustSpeedToYield)
+                if (adjustSpeedToYield && World.settings.agentsCanAdjustSpeed)
                     agent.setSpeed(this._perAgentYield);
                 // This lowers the impact of resources on agents' speed - but need delay for 'followers' to get resources of their own.
 //                    agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));

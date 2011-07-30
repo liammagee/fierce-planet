@@ -728,11 +728,7 @@ Level.prototype.processNeighbouringResources = function(agent) {
         var ry = resource.getY();
         if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
             var resourceEffect = this.calculateResourceEffect(resource);
-            resource.provideYield(
-                agent,
-                resourceEffect,
-                !this._noSpeedChange, World.settings.applyGeneralHealth
-            );
+            resource.provideYield(agent, resourceEffect, !this._noSpeedChange);
         }
     }
 };

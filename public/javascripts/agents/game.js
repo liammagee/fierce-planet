@@ -115,9 +115,9 @@ FiercePlanet.processAgents = function() {
 
                 if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE) {
                     agent.resetCountdownToMove();
-                    if (!FiercePlanet.currentLevel.getNoSpeedChange())
+                    if (!FiercePlanet.currentLevel.getNoSpeedChange() && World.settings.agentsCanAdjustSpeed)
                         agent.adjustSpeed();
-                    if (!FiercePlanet.currentLevel.getNoWander())
+                    if (!FiercePlanet.currentLevel.getNoWander() && World.settings.agentsCanAdjustWander)
                         agent.adjustWander(FiercePlanet.cellWidth, FiercePlanet.pieceWidth);
                 }
 
@@ -127,7 +127,7 @@ FiercePlanet.processAgents = function() {
                 // TODO: should be in-lined?
                 if (agent.getType() == AgentTypes.CITIZEN_AGENT_TYPE || agent.getType() == AgentTypes.RIVAL_AGENT_TYPE) {
 //                    if (!World.settings.godMode)
-                        agent.adjustGeneralHealth(FiercePlanet.MOVE_HEALTH_COST);
+                        agent.adjustGeneralHealth(World.settings.agentCostPerMove);
                     if (agent.getHealth() <= 0 && !World.settings.godMode) {
                         nullifiedAgents.push(i);
                         FiercePlanet.nullifiedAgents.push(agent);

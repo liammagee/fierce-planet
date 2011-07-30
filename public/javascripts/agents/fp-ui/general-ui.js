@@ -329,11 +329,11 @@ FiercePlanet.handleNoticeEvents = function(e) {
 FiercePlanet.getWorldCoordinates = function(e) {
     var x;
     var y;
-    if (e.offsetX || e.offsetX == 0) { // Firefox, IE9, Chrome, Safari
+    if (e.offsetX || e.offsetX == 0) { // IE9, Chrome, Safari
         x = e.offsetX;
         y = e.offsetY;
     }
-    else if (e.layerX || e.layerX == 0) { // Opera
+    else if (e.layerX || e.layerX == 0) { // Firefox, Opera
         x = e.layerX;
         y = e.layerY;
     }
@@ -349,6 +349,15 @@ FiercePlanet.getCurrentPosition = function(e) {
     var __ret = FiercePlanet.getWorldCoordinates(e);
     var x = __ret.x;
     var y = __ret.y;
+    return FiercePlanet.getCurrentPositionByCoordinates(x, y);
+};
+
+
+/**
+ * Gets the current position of a mouse click
+ * @param e
+ */
+FiercePlanet.getCurrentPositionByCoordinates = function(x, y) {
     x -= FiercePlanet.panLeftOffset;
     y -= FiercePlanet.panTopOffset;
     x /= FiercePlanet.zoomLevel;
@@ -388,13 +397,13 @@ FiercePlanet.notify = function(notice) {
 FiercePlanet.levelInfo = function() {
     var levelHTML = "";
     var level = FiercePlanet.currentLevel;
-    if (level.getName() != undefined) {
-        levelHTML += "<h3>" + level.getName() + "</h3>";
-    }
     if (level.getImage() != undefined) {
         levelHTML += '<img src="' + level.getImage() + '" alt="City Image" width="460" height="140">';
         if (level.getImageAttribution())
             levelHTML += '<div style="font-size: 0.8em; text-align: right">' + level.getImageAttribution() + '</div>';
+    }
+    if (level.getName() != undefined) {
+        levelHTML += "<h3>" + level.getName() + "</h3>";
     }
     if (level.getIntroduction() != undefined) {
         levelHTML += level.getIntroduction();

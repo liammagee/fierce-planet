@@ -156,7 +156,7 @@ PresetLevels.level3.setWorldHeight(13);
 PresetLevels.level3.setInitialAgentNumber(1);
 PresetLevels.level3.setWaveNumber(10);
 PresetLevels.level3.setExpiryLimit(10);
-PresetLevels.level3.setInitialResourceStore(100);
+PresetLevels.level3.setInitialResourceStore(150);
 PresetLevels.level3.setName("Level 3: Waves of Uncertainty");
 PresetLevels.level3.setIntroduction(
         "<p>The rebuilding of Fierce Planet is proceeding well... but how can you plan for a random act of nature??!!! </p>"

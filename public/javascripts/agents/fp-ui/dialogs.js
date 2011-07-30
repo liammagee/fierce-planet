@@ -222,9 +222,18 @@ FiercePlanet.setupDialogs = function() {
             modal: true,
             title: 'Settings',
             buttons: {
-                "Save Settings": function() {
+                "Save": function() {
                     FiercePlanet.setAndStoreProperties();
                     $( this ).dialog( "close" );
+                },
+                "Reset": function() {
+                    var namespace = World.resourceTypeNamespace;
+                    initWorld.apply(World);
+                    FiercePlanet.initialiseWorldSettings();
+                    World.resourceTypeNamespace = namespace;
+                    if (World.resourceTypeNamespace.doSetup)
+                        World.resourceTypeNamespace.doSetup();
+                    FiercePlanet.getAndRetrieveProperties();
                 },
                 "Cancel": function() {
                     $( this ).dialog( "close" );
@@ -234,6 +243,22 @@ FiercePlanet.setupDialogs = function() {
                 $("#settings-tabs").tabs();
               }
         });
+
+    // Add setting specific controls here
+    $("#agentCostPerMove").slider({ value: World.settings.agentCostPerMove, min: -10, max: -1, step: 1, animate: "normal",
+            slide: function( event, ui ) {
+                $("#agentCostPerMoveDisplay")[0].innerHTML = ( ui.value);
+          }
+    });
+    $("#rateOfResourceRecovery").slider({ value: World.settings.rateOfResourceRecovery, min: 1, max: 10, step: 1, animate: "normal",
+            slide: function( event, ui ) {
+                $("#rateOfResourceRecoveryDisplay")[0].innerHTML = ( ui.value);
+          }
+    });
+    $( "#agentCostPerMoveDisplay" )[0].innerHTML = ( World.settings.agentCostPerMove );
+    $( "#rateOfResourceRecoveryDisplay" )[0].innerHTML = (  World.settings.rateOfResourceRecovery );
+
+    
 
     FiercePlanet.statsDialog = $('<div></div>')
         .dialog({
@@ -537,7 +562,7 @@ FiercePlanet.showCredits = function() {
     
     FiercePlanet.$genericDialog = $('<div></div>')
         .html(
-            "<div class='credits'>Development Director</div>" +
+            "<div class='   credits'>Development Director</div>" +
             "<div>Liam Magee</div>" +
             "<div class='credits'>Art &amp; Design</div>" +
             "<div>Steven Harris</div>" +
@@ -546,7 +571,7 @@ FiercePlanet.showCredits = function() {
             "<div>Jakki Mann</div>" +
             "<div class='credits'>Images and Sounds</div>" +
             "<div><a href='http://www.publicdomainpictures.net'>Public Domain Pictures</a></div>" +
-            "<div><a href='http://freesound.org'>thefreesoundproject</a></div>" +
+                "<div><a href='http://freesound.org'>thefreesoundproject</a></div>" +
             "<div><a href='http://opengameart.org'>OpenGameArt.org</a></div>"
             )
         .dialog({

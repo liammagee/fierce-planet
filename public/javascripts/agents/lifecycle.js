@@ -21,7 +21,8 @@ FiercePlanet.loadGame = function() {
     // Initialise World settings
     FiercePlanet.initialiseWorldSettings();
 
-
+    // Retrieve properties
+    World.settings.load();
 
     // Set up dialogs
     FiercePlanet.setupDialogs();
@@ -78,6 +79,7 @@ FiercePlanet.newLevel = function() {
 
     FiercePlanet.levelInfo();
     FiercePlanet.currentNotice = FiercePlanet.currentLevel.getTip();
+    $("#notifications").toggle(World.settings.statusBarVisible);
     FiercePlanet.notify("Starting level " + FiercePlanet.currentLevel.getId() + "...");
 
 };
@@ -200,6 +202,7 @@ FiercePlanet.slowDown = function() {
         FiercePlanet.interval += 1;
     else if (FiercePlanet.interval < 100)
         FiercePlanet.interval += 10;
+    FiercePlanet.notify("Now playing at: " + Math.round(1000 / FiercePlanet.interval) + " frames per second.");
     if (FiercePlanet.inPlay)
         FiercePlanet._startAgents();
 };
@@ -213,6 +216,7 @@ FiercePlanet.speedUp = function() {
         FiercePlanet.interval -= 10;
     else if (FiercePlanet.interval > 1)
         FiercePlanet.interval -= 1;
+    FiercePlanet.notify("Now playing at: " + Math.round(1000 / FiercePlanet.interval) + " frames per second.");
     if (FiercePlanet.inPlay)
         FiercePlanet._startAgents();
 };
@@ -256,7 +260,7 @@ FiercePlanet._initialiseGame = function () {
     FiercePlanet.currentProfile.resetCurrentStats();
 
 
-    FiercePlanet.resourceRecoveryCycle = Math.pow(FiercePlanet.DEFAULT_RESOURCE_RECOVERY, FiercePlanet.levelOfDifficulty - 1);
+    FiercePlanet.resourceRecoveryCycle = Math.pow(World.settings.rateOfResourceRecovery, FiercePlanet.levelOfDifficulty - 1);
 
     FiercePlanet.numAgents = FiercePlanet.currentLevel.getInitialAgentNumber();
     FiercePlanet.worldWidth = FiercePlanet.currentLevel.getWorldWidth();

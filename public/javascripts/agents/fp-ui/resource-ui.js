@@ -15,43 +15,36 @@ var FiercePlanet = FiercePlanet || {};
  * Handle various resource-related interactions
  */
 FiercePlanet.setupResourceInteraction = function () {
-        var links = $('.swatch-instance'), el = null;
+    var agentCanvas = $('#agentCanvas');
+        var links = $('.swatch-draggable'), el = null;
         for (var i = 0; i < links.length; i++) {
             el = links[i];
             if (el.id && $.inArray(el.id, FiercePlanet.currentProfile.capabilities) != -1) {
-                FiercePlanet.makeResourceActive(el);
+                $('#' + el.id).draggable({
+//                    appendTo: agentCanvas,
+//                    containment: agentCanvas,
+//                    grid: [FiercePlanet.cellWidth, FiercePlanet.cellHeight],
+                    cursor: "pointer",
+                    helper: "clone",
+                    start: function(event, ui) {
+                        FiercePlanet.currentResourceId = this.id;
+                    }
+                });
+                $('#' + el.id).click(function() {
+                    FiercePlanet.currentResourceId = this.id;
+                });
             }
         }
+    agentCanvas.droppable({
+        drop: function( event, ui ) {
+            var position = $(this).offset();
+            var x = event.pageX - position.left;
+            var y = event.pageY - position.top;
+            var currentPosition = FiercePlanet.getCurrentPositionByCoordinates(x,y);
+            FiercePlanet.dropItem(currentPosition.posX, currentPosition.posY);
+        }
+    });
 
-        var resourceCanvas = $('#agentCanvas')[0];
-
-
-
-        resourceCanvas.addEventListener('dragstart', function (e) {
-            if (e.preventDefault) e.preventDefault(); // allows us to drop
-            this.className = 'over';
-            e.dataTransfer.dropEffect = 'copy';
-            return false;
-          }, false);
-        resourceCanvas.addEventListener('dragover', function (e) {
-            if (e.preventDefault) e.preventDefault(); // allows us to drop
-            this.className = 'over';
-            e.dataTransfer.dropEffect = 'copy';
-            return false;
-          }, false);
-        resourceCanvas.addEventListener('dragenter', function (e) {
-            this.className = 'over';
-            return false;
-          }, false);
-        resourceCanvas.addEventListener('dragleave', function (e) {
-            this.className = '';
-          }, false);
-        resourceCanvas.addEventListener('drop', function (e) {
-            if (e.stopPropagation) e.stopPropagation(); // stops the browser from redirecting...why???
-            this.className = '';
-            FiercePlanet.dropItem(e);
-            return false;
-          }, false);
     };
 
 
@@ -88,7 +81,7 @@ FiercePlanet.processResourceCanvasClick = function(e) {
             FiercePlanet.drawCanvases();
         }
         else if (!foundResource && FiercePlanet.currentResourceId != null) {
-            FiercePlanet.dropItem(e);
+            FiercePlanet.dropItem(posX, posY);
         }
         else {
             FiercePlanet.currentLevel.removeTile(posX, posY);
@@ -97,7 +90,7 @@ FiercePlanet.processResourceCanvasClick = function(e) {
     }
     else if (!foundResource) {
         if (FiercePlanet.currentResourceId != null) {
-            FiercePlanet.dropItem(e);
+            FiercePlanet.dropItem(posX, posY);
         }
         else if (World.settings.useInlineResourceSwatch) {
             FiercePlanet.showInlineResourcePanel(e);
@@ -160,7 +153,7 @@ FiercePlanet.showInlineResourcePanel = function(e) {
                     return;
 
                 FiercePlanet.currentResourceId = this.id;
-                FiercePlanet.dropItem(e);
+                FiercePlanet.dropItem(posX, posY);
                 FiercePlanet.currentResourceId = null;
                 FiercePlanet.inlineResourcePanel.dialog('close');
             }, false);
@@ -170,26 +163,9 @@ FiercePlanet.showInlineResourcePanel = function(e) {
     FiercePlanet.inlineResourcePanel.dialog('open');
 };
 
-/**
- *
- * @param el
- */
-FiercePlanet.makeResourceActive = function (el) {
-    el.setAttribute('draggable', 'true');
-    el.addEventListener('dragstart', function (e) {
-        e.dataTransfer.effectAllowed = 'copy'; // only dropEffect='copy' will be dropable
-        e.dataTransfer.setData('Text', this.id); // required otherwise doesn't work
-        FiercePlanet.currentResourceId = this.id;
-    }, false);
-    el.addEventListener('click', function (e) {
-        FiercePlanet.currentResourceId = this.id;
-    }, false);
-}
-
 
 /**
  * Delete the current resource
- *
  */
 FiercePlanet.deleteCurrentResource = function () {
         var foundResource = FiercePlanet.currentLevel.getCurrentResourceIndex(FiercePlanet.currentResource);
@@ -225,39 +201,43 @@ FiercePlanet.upgradeCurrentResource = function () {
  * 'Drops' a selected resource on the tile
  * @param e
  */
-FiercePlanet.dropItem = function(e) {
-        var __ret = FiercePlanet.getCurrentPosition(e);
-        var posX = __ret.posX;
-        var posY = __ret.posY;
-        if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
-            return;
-        if (FiercePlanet.currentLevel.isPositionOccupiedByResource(posX, posY))
-            return;
+FiercePlanet.dropItem = function(posX, posY) {
+//    FiercePlanet.e = e;
+//    var __ret = FiercePlanet.getCurrentPosition(e);
+//    var posX = __ret.posX;
+//    var posY = __ret.posY;
+    if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
+        return;
+    if (FiercePlanet.currentLevel.isPositionOccupiedByResource(posX, posY))
+        return;
 
-        var resourceCode = FiercePlanet.currentResourceId;
-        if (e.dataTransfer)
-            resourceCode = e.dataTransfer.getData('Text');
+    var resourceCode = FiercePlanet.currentResourceId;
+//    if (e.dataTransfer)
+//        resourceCode = e.dataTransfer.getData('Text');
 
-        var resourceType = World.resolveResourceType(resourceCode);
-        var resource = new Resource(resourceType, posX, posY);
+    var resourceType = World.resolveResourceType(resourceCode);
+    var resource = new Resource(resourceType, posX, posY);
 
-        if (FiercePlanet.currentProfile.current_level_resources_in_store < resource.getCost()) {
-            FiercePlanet.currentNotice = new Notice('Not enough resources for now - save some more agents!');
-            return;
-        }
-        else {
-            var resourceCategory = resource.getCategory().getCode();
-            FiercePlanet.currentProfile.spendResource(resource);
-            FiercePlanet.currentLevel.addResource(resource);
+    if (FiercePlanet.currentProfile.current_level_resources_in_store < resource.getCost()) {
+        FiercePlanet.currentNotice = new Notice('Not enough resources for now - save some more agents!');
+        return;
+    }
+    else {
+        var resourceCategory = resource.getCategory().getCode();
+        FiercePlanet.currentProfile.spendResource(resource);
+        FiercePlanet.currentLevel.addResource(resource);
 
-            FiercePlanet.drawResource(resource);
-            FiercePlanet.drawResourcesInStore();
+        FiercePlanet.drawResource(resource);
+        FiercePlanet.drawResourcesInStore();
 
-            FiercePlanet.eventTarget.fire(new Event("resource", resource, "added", FiercePlanet.gameCounter, FiercePlanet.currentLevel));
-        }
-        if (World.settings.useInlineResourceSwatch)
-            FiercePlanet.currentResourceId = null;
-    };
+        FiercePlanet.eventTarget.fire(new Event("resource", resource, "added", FiercePlanet.gameCounter, FiercePlanet.currentLevel));
+    }
+    if (World.settings.useInlineResourceSwatch)
+        FiercePlanet.currentResourceId = null;
+
+    // Make sure Firefox does not follow links
+    return false;
+};
 
 
 /**
@@ -291,12 +271,14 @@ FiercePlanet.initialiseAndLoadResources = function () {
             var resourceType = category._types[j];
 
             var swatchInstanceHTML =
-                    '<div class="swatch-instance" id="' + resourceType.getCode() + '" title="' + resourceType.getName() + '">' +
-                    '<img src="' + resourceType.getImage() + '" alt="">' +
-                            '<div>' + resourceType.getCost() + '</div>' +
-                    '</div>';
+                '<div class="swatch-instance" title="' + resourceType.getName() + '">' +
+                    '<div class="swatch-draggable" id="' + resourceType.getCode() + '"><img src="' + resourceType.getImage() + '" alt=""></div>' +
+                    '<div>' + resourceType.getCost() + '</div>' +
+                '</div>'
+                    ;
             swatchCategoryElement.append(swatchInstanceHTML);
             var swatchInstanceElement = $('#' + resourceType.getCode());
+//            swatchInstanceElement.css({'background': '#' + category.getColor()});
             if (categoryInstanceCounter > 0) {
                 swatchInstanceElement.addClass('inactive');
             }
