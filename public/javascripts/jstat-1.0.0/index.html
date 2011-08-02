@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>jStat test page</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="css/jquery.aristo.css" />
+        <script type="text/javascript" src="js/jquery-1.4.4.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui-1.8.9.min.js"></script>
+        <script type="text/javascript" src="js/jquery.flot.min.js"></script>
+        <script type="text/javascript" src="js/jstat-0.1.0.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var distribution = new NormalDistribution(0,1);
+                var plot = new DistributionPlot('plot', distribution);
+            });
+        </script>
+    </head>
+    <body>
+        <div id="plot" style="width:600px; height: 600px;"></div>
+    </body>
+</html>

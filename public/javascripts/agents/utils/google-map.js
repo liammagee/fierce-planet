@@ -6,9 +6,16 @@
  */
 
 
+/**
+ * @namespace Contains google map utility functions
+ */
 var GoogleMapUtils = GoogleMapUtils || {};
 
 
+
+(function() {
+
+}).apply(FiercePlanet.ResourceUI);
 (function() {
 
     var mapTypes = {};

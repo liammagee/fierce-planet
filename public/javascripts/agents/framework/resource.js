@@ -12,27 +12,19 @@
  * @param name
  */
 function ResourceCategory(name, code, color) {
-    this._name = name;
-    this._code = code;
-    this._color = color;
-    this._types = [];
-    this._evaluateOtherCategoryImpact = function(otherCategory) { return 1.0; };
+    this.name = name;
+    this.code = code;
+    this.color = color;
+    this.types = [];
+    this.evaluateOtherCategoryImpact = function(otherCategory) { return 1.0; };
 }
-ResourceCategory.prototype.getColor = function() { return this._color; };
-ResourceCategory.prototype.setColor = function(color) { this._color = color; };
-ResourceCategory.prototype.getName = function() { return this._name; };
-ResourceCategory.prototype.setName = function(name) { this._name = name; };
-ResourceCategory.prototype.getCode = function() { return this._code; };
-ResourceCategory.prototype.setCode = function(code) { this._code = code; };
-ResourceCategory.prototype.getTypes = function() { return this._types; };
-ResourceCategory.prototype.setTypes = function(types) { this._types = types; };
 ResourceCategory.prototype.addType = function(type) {
     // To by-pass circular references, clone the type added to the collection
-    this._types.push(type.clone());
-    type.setCategory(this);
+    this.types.push(type.clone());
+    type.category = this;
 };
-ResourceCategory.prototype.setEvaluateOtherCategoryImpact = function(f) {this._evaluateOtherCategoryImpact = f;};
-ResourceCategory.prototype.doEvaluateOtherCategoryImpact = function(otherCategory) {return this._evaluateOtherCategoryImpact(otherCategory); };
+ResourceCategory.prototype.setEvaluateOtherCategoryImpact = function(f) {this.evaluateOtherCategoryImpact = f;};
+ResourceCategory.prototype.doEvaluateOtherCategoryImpact = function(otherCategory) {return this.evaluateOtherCategoryImpact(otherCategory); };
 
 
 
@@ -50,33 +42,26 @@ ResourceCategory.prototype.doEvaluateOtherCategoryImpact = function(otherCategor
  * @param perAgentYield
  */
 function ResourceType(name, code, image, cost, upgradeCost, totalYield, perAgentYield) {
-    this._name = name;
-    this._code = code;
-    this._image = image;
-    this._cost = cost;
-    this._upgradeCost = upgradeCost;
-    this._totalYield = totalYield;
-    this._perAgentYield = perAgentYield;
+    this.name = name;
+    this.code = code;
+    this.image = image;
+    this.cost = cost;
+    this.upgradeCost = upgradeCost;
+    this.totalYield = totalYield;
+    this.perAgentYield = perAgentYield;
 }
-ResourceType.prototype.getName = function() { return this._name; };
-ResourceType.prototype.setName = function(name) { this._name = name; };
-ResourceType.prototype.getCode = function() { return this._code; };
-ResourceType.prototype.setCode = function(code) { this._code = code; };
-ResourceType.prototype.getImage = function() { return this._image; };
-ResourceType.prototype.setImage = function(image) { this._image = image; };
-ResourceType.prototype.getCategory = function() { return this._category; };
-ResourceType.prototype.setCategory = function(category) { this._category = category;};
-ResourceType.prototype.getCost = function() { return this._cost; };
-ResourceType.prototype.setCost = function(cost) { this._cost = cost; };
-ResourceType.prototype.getUpgradeCost = function() { return this._upgradeCost; };
-ResourceType.prototype.setUpgradeCost = function(upgradeCost) { this._upgradeCost = upgradeCost; };
-ResourceType.prototype.getPerAgentYield = function() { return this._perAgentYield; };
-ResourceType.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; };
-ResourceType.prototype.getTotalYield = function() { return this._totalYield; };
-ResourceType.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; };
+/**
+ * Returns clone of this resource type
+ */
 ResourceType.prototype.clone = function() {
-    var clonedType = new ResourceType(this._name, this._code, this._image, this._cost, this._upgradeCost, this._perAgentYield, this._perAgentYield);
-    return clonedType;
+    return new ResourceType(
+            this.name,
+            this.code,
+            this.image,
+            this.cost,
+            this.upgradeCost,
+            this.totalYield,
+            this.perAgentYield);
 };
 
 
@@ -84,83 +69,64 @@ ResourceType.prototype.clone = function() {
  * Resource class definition
  *
  * @constructor
- * @param kind
+ * @param type
  * @param x
  * @param y
  */
-function Resource(kind, x, y) {
+function Resource(type, x, y) {
     // Kind properties
-    this._resourceCategory = kind._category;
-    this._color = kind._category._color;
-    this._kind = kind;
-    this._resourceName = kind._code;
-    this._initialTotalYield = kind._totalYield;
-    this._perAgentYield = kind._perAgentYield;
-    this._cost = kind._cost;
-    this._upgradeCost = kind._upgradeCost;
+    this.category = type.category;
+    this.color = type.category.color;
+    this.kind = type;
+    this.resourceName = type.code;
+    this.initialTotalYield = type.totalYield;
+    this.perAgentYield = type.perAgentYield;
+    this.cost = type.cost;
+    this.upgradeCost = type.upgradeCost;
 
-
-    this._totalYield = kind._totalYield;
-    this._upgradeLevel = 1;
+    this.totalYield = type.totalYield;
+    this.upgradeLevel = 1;
     this.moveTo(x, y);
 }
-// Kind properties
-Resource.prototype.getName = function() { return this._resourceName; };
-Resource.prototype.getCategory = function() { return this._resourceCategory;};
-Resource.prototype.getType = function() { return this._kind;};
-Resource.prototype.getColor = function() { return this._color;};
-Resource.prototype.getCost = function() { return this._cost; };
-Resource.prototype.setCost = function(cost) { this._cost = cost; };
-Resource.prototype.getUpgradeCost = function() { return this._upgradeCost; };
-Resource.prototype.setUpgradeCost = function(upgradeCost) { this._upgradeCost = upgradeCost; };
-Resource.prototype.getInitialTotalYield = function() { return this._initialTotalYield; };
-Resource.prototype.setInitialTotalYield = function(initialTotalYield) { this._initialTotalYield = initialTotalYield; this._totalYield = initialTotalYield; };
-Resource.prototype.getPerAgentYield = function() { return this._perAgentYield; };
-Resource.prototype.setPerAgentYield = function(perAgentYield) { this._perAgentYield = perAgentYield; };
-
-Resource.prototype.getUpgradeLevel = function() { return this._upgradeLevel; };
-Resource.prototype.setUpgradeLevel = function(upgradeLevel) { this._upgradeLevel = upgradeLevel; };
-Resource.prototype.getTotalYield = function() { return this._totalYield; };
-Resource.prototype.setTotalYield = function(totalYield) { this._totalYield = totalYield; };
-Resource.prototype.incrementTotalYield = function(totalYield) { this._totalYield++; };
-Resource.prototype.getPosition = function() { return [this._x, this._y]; };
-Resource.prototype.moveTo = function(x, y) { this._x =x; this._y = y; };
-Resource.prototype.getX = function() { return this._x; };
-Resource.prototype.setX = function(x) { this._x = x; };
-Resource.prototype.getY = function() { return this._y; };
-Resource.prototype.setY = function(y) { this._y = y; };
+Resource.prototype.setInitialTotalYield = function(initialTotalYield) { 
+    this.initialTotalYield = initialTotalYield; 
+    this.totalYield = initialTotalYield; 
+};
+Resource.prototype.incrementTotalYield = function(totalYield) { this.totalYield++; };
+Resource.prototype.getPosition = function() { return [this.x, this.y]; };
+Resource.prototype.moveTo = function(x, y) { this.x =x; this.y = y; };
 Resource.prototype.provideYield = function(agent, resourceEffect, adjustSpeedToYield) {
-    if (this._totalYield > this._perAgentYield) {
+    if (this.totalYield > this.perAgentYield) {
         var adjustment = 0;
         if (World.settings.applyGeneralHealth) {
             // Don't be greedy - only yield a benefit if the agent needs it
-            if (agent.getHealth() < 100) {
-                adjustment = this._perAgentYield * this._upgradeLevel * resourceEffect;
+            if (agent.health < 100) {
+                adjustment = this.perAgentYield * this.upgradeLevel * resourceEffect;
                 agent.adjustGeneralHealth(adjustment);
                 if (adjustSpeedToYield && World.settings.agentsCanAdjustSpeed)
-                    agent.setSpeed(this._perAgentYield);
+                    agent.speed = (this.perAgentYield);
                 // This lowers the impact of resources on agents' speed - but need delay for 'followers' to get resources of their own.
-//                    agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));
-                this._totalYield -= this._perAgentYield;
+//                    agent.setSpeed(Math.floor(Math.pow(this.perAgentYield, 0.5)));
+                this.totalYield -= this.perAgentYield;
             }
         }
         else {
             if (agent.getHealthForResource(this) < 100) {
-                var rawAdjustment = this._perAgentYield * this._upgradeLevel * World.resourceCategories.length;
+                var rawAdjustment = this.perAgentYield * this.upgradeLevel * World.resourceCategories.length;
                 adjustment = rawAdjustment * resourceEffect;
                 agent.adjustHealthForResource(adjustment, this);
                 if (adjustSpeedToYield && World.settings.agentsCanAdjustSpeed)
-                    agent.setSpeed(this._perAgentYield);
+                    agent.speed = (this.perAgentYield);
                 // This lowers the impact of resources on agents' speed - but need delay for 'followers' to get resources of their own.
-//                    agent.setSpeed(Math.floor(Math.pow(this._perAgentYield, 0.5)));
+//                    agent.setSpeed(Math.floor(Math.pow(this.perAgentYield, 0.5)));
 
                 if (World.settings.resourcesDiminishAtFixedRate) {
                     // Yields decreases reflect upgrade and actual yield to the agent - VERY HARD
-                    this._totalYield -= rawAdjustment;
+                    this.totalYield -= rawAdjustment;
                 }
                 else {
                     // Yields are pegged to actual benefits supplied to agents
-                    this._totalYield -= this._perAgentYield;
+                    this.totalYield -= this.perAgentYield;
                 }
             }
         }

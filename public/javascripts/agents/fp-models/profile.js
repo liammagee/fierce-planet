@@ -95,12 +95,12 @@ Profile.prototype.resetCurrentStats = function(initialStore) {
     this.current_level_saved = 0;
     this.current_level_expired = 0;
 
-    this.current_level_resources_in_store = FiercePlanet.currentLevel.getInitialResourceStore() || FiercePlanet.STARTING_STORE;
+    this.current_level_resources_in_store = FiercePlanet.currentLevel.initialResourceStore || FiercePlanet.STARTING_STORE;
     this.current_level_resources_spent = 0;
     this.current_level_resources_spent_by_category = {};
     for (var i = 0; i < World.resourceCategories.length; i++) {
         var category = World.resourceCategories[i];
-        this.current_level_resources_spent_by_category[category.getCode()] = 0;
+        this.current_level_resources_spent_by_category[category.code] = 0;
     }
 };
 
@@ -120,7 +120,7 @@ Profile.prototype.initialiseResourceStore = function(initialStore) {
 Profile.prototype.compileProfileStats = function(currentLevel) {
     // Update level data
     this.current_level = currentLevel._id || this.current_level;
-    this.current_level_is_preset = currentLevel._isPresetLevel || this.current_level_is_preset;
+    this.current_level_is_preset = currentLevel.isPresetLevel || this.current_level_is_preset;
 
     // Update level data
 
@@ -220,9 +220,9 @@ Profile.prototype.processSavedAgent = function(currentWave) {
  * Updates statistics based on a spent resource
  */
 Profile.prototype.spendResource = function(resource) {
-    var resourceCategory = resource.getCategory().getCode();
-    this.current_level_resources_in_store -= resource.getCost();
-    this.current_level_resources_spent += resource.getCost();
+    var resourceCategory = resource.category.code;
+    this.current_level_resources_in_store -= resource.cost;
+    this.current_level_resources_spent += resource.cost;
     this.current_level_resources_spent_by_category[resourceCategory] += 1;
 };
 

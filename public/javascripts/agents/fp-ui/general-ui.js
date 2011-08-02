@@ -12,6 +12,15 @@ var FiercePlanet = FiercePlanet || {};
 
 
 /**
+ * @namespace Contains generic UI functions
+ */
+FiercePlanet.GeneralUI = FiercePlanet.GeneralUI || {};
+
+(function() {
+
+}).apply(FiercePlanet.GeneralUI);
+
+/**
  * Adds a series of event listeners to UI elements
  */
 FiercePlanet.hookUpUIEventListeners = function() {
@@ -25,42 +34,42 @@ FiercePlanet.hookUpUIEventListeners = function() {
     $('#speedUp').click(FiercePlanet.speedUp);
     $('#newGame').click(FiercePlanet.newGame);
     $('#restartLevel').click(FiercePlanet.restartLevel);
-    $('#showResourceGallery').click(FiercePlanet.showResourceGallery);
+    $('#showResourceGallery').click(FiercePlanet.Dialogs.showResourceGallery);
 
     // Pan/zoomFunctions
-    $('#panUp').click(function() { FiercePlanet.pan(0);});
-    $('#panDown').click(function() { FiercePlanet.pan(1);});
-    $('#panLeft').click(function() { FiercePlanet.pan(2);});
-    $('#panRight').click(function() { FiercePlanet.pan(3);});
-    $('#panReset').click(function() { FiercePlanet.pan(4);});
-    $('#zoomIn').click(function() { FiercePlanet.zoom(1);});
-    $('#zoomOut').click(function() { FiercePlanet.zoom(-1);});
-    $('#zoomReset').click(function() { FiercePlanet.zoom(0);});
+    $('#panUp').click(function() { FiercePlanet.Drawing.pan(0);});
+    $('#panDown').click(function() { FiercePlanet.Drawing.pan(1);});
+    $('#panLeft').click(function() { FiercePlanet.Drawing.pan(2);});
+    $('#panRight').click(function() { FiercePlanet.Drawing.pan(3);});
+    $('#panReset').click(function() { FiercePlanet.Drawing.pan(4);});
+    $('#zoomIn').click(function() { FiercePlanet.Drawing.zoom(1);});
+    $('#zoomOut').click(function() { FiercePlanet.Drawing.zoom(-1);});
+    $('#zoomReset').click(function() { FiercePlanet.Drawing.zoom(0);});
 
-    $('#settings').click(FiercePlanet.showSettings);
-    $('#credits').click(FiercePlanet.showCredits);
-    $('#openLevelGallery').click(FiercePlanet.showLevelGallery);
+    $('#settings').click(FiercePlanet.Dialogs.showSettings);
+    $('#credits').click(FiercePlanet.Dialogs.showCredits);
+    $('#openLevelGallery').click(FiercePlanet.Dialogs.showLevelGallery);
 
     // Admin functions
     $('#debug').click(FiercePlanet.processAgents);
-    $('#replay').click(FiercePlanet.replayWorld);
+    $('#replay').click(FiercePlanet.Recording.replayWorld);
     $('#script-editor').click(FiercePlanet.openConsole);
     $('#story-board').click(FiercePlanet.showStoryboard);
 
 
     // Level editor functions
     try {
-        $('#show-level-properties').click(FiercePlanet.showLevelProperties);
-        $('#refresh-tiles').click(FiercePlanet.refreshTiles);
-        $('#fill-all').click(FiercePlanet.fillAllTiles);
-        $('#undo-action').click(FiercePlanet.undoAction);
-        $('#cancel-level-editor').click(FiercePlanet.cancelLevelEditor);
-        $('#clear-entry-points').click(FiercePlanet.clearEntryPoints);
-        $('#clear-exit-points').click(FiercePlanet.clearExitPoints);
+        $('#show-level-properties').click(FiercePlanet.Editor.showLevelProperties);
+        $('#refresh-tiles').click(FiercePlanet.Editor.refreshTiles);
+        $('#fill-all').click(FiercePlanet.Editor.fillAllTiles);
+        $('#undo-action').click(FiercePlanet.Editor.undoAction);
+        $('#cancel-level-editor').click(FiercePlanet.Editor.cancelLevelEditor);
+        $('#clear-entry-points').click(FiercePlanet.Editor.clearEntryPoints);
+        $('#clear-exit-points').click(FiercePlanet.Editor.clearExitPoints);
 
-        $('#edit-map').click(FiercePlanet.editMap);
-        $('#save-map').click(FiercePlanet.saveMap);
-        $('#close-map').click(FiercePlanet.closeMap);
+        $('#edit-map').click(FiercePlanet.Editor.editMap);
+        $('#save-map').click(FiercePlanet.Editor.saveMap);
+        $('#close-map').click(FiercePlanet.Editor.closeMap);
     }
     catch (err){
         if (typeof console != "undefined")
@@ -105,7 +114,7 @@ FiercePlanet.bindGameMouseEvents = function() {
         agentCanvas.mouseup(FiercePlanet.registerMouseUp);
     }
     agentCanvas.mousewheel(function(event, delta) {
-        FiercePlanet.zoom(delta);
+        FiercePlanet.Drawing.zoom(delta);
         event.preventDefault();
         return false; // prevent default
     });
@@ -124,7 +133,7 @@ FiercePlanet.unbindGameMouseEvents = function() {
     agentCanvas.unbind('mousemove', FiercePlanet.registerMouseMove);
     agentCanvas.unbind('mouseup', FiercePlanet.registerMouseUp);
     agentCanvas.mousewheel(function(event, delta) {
-        FiercePlanet.zoom(delta);
+        FiercePlanet.Drawing.zoom(delta);
         event.preventDefault();
         return false; // prevent default
     });
@@ -173,7 +182,7 @@ FiercePlanet.doMove = function(e) {
         var offsetX = ex - FiercePlanet.currentX;
         var offsetY = ey - FiercePlanet.currentY;
 
-        FiercePlanet.panByDrag(offsetX, offsetY);
+        FiercePlanet.Drawing.panByDrag(offsetX, offsetY);
         FiercePlanet.currentX = ex;
         FiercePlanet.currentY = ey;
     }
@@ -206,29 +215,29 @@ FiercePlanet.handleKeyboardShortcuts = function(e) {
     switch (e.which) {
         // +, -, 0: Zoom functions
         case 107:
-            FiercePlanet.zoom(1);
+            FiercePlanet.Drawing.zoom(1);
             break;
         case 109:
-            FiercePlanet.zoom(-1);
+            FiercePlanet.Drawing.zoom(-1);
             break;
         case 96:
-            FiercePlanet.zoom(0);
+            FiercePlanet.Drawing.zoom(0);
             break;
         // Arrow buttons, 'h': Pan functions
         case 37:
-            FiercePlanet.pan(2);
+            FiercePlanet.Drawing.pan(2);
             break;
         case 38:
-            FiercePlanet.pan(0);
+            FiercePlanet.Drawing.pan(0);
             break;
         case 39:
-            FiercePlanet.pan(3);
+            FiercePlanet.Drawing.pan(3);
             break;
         case 40:
-            FiercePlanet.pan(1);
+            FiercePlanet.Drawing.pan(1);
             break;
         case 72:
-            FiercePlanet.pan(4);
+            FiercePlanet.Drawing.pan(4);
             break;
         // 'p': Play/pause game
         case 80:
@@ -297,14 +306,14 @@ FiercePlanet.addButtonEffects = function(e) {
 FiercePlanet.handleNoticeEvents = function(e) {
     if (FiercePlanet.currentNotice != null) {
         var notice = FiercePlanet.currentNotice;
-        var s = notice._start;
-        var d = notice._duration;
+        var s = notice.start;
+        var d = notice.duration;
         if (s > FiercePlanet.levelCounter || (s + d) < FiercePlanet.levelCounter)
             return;
-        var x = notice._x;
-        var y = notice._y;
-        var w = notice._width;
-        var h = notice._height;
+        var x = notice.x;
+        var y = notice.y;
+        var w = notice.width;
+        var h = notice.height;
         var ex;
         var ey;
         if (e.offsetX || e.offsetX == 0) { // Opera
@@ -317,13 +326,13 @@ FiercePlanet.handleNoticeEvents = function(e) {
         }
         if (ex >= x && ex <= x + w && ey >= y && ey <= y + h) {
             FiercePlanet.currentNotice = undefined;
-            FiercePlanet.clearCanvas('noticeCanvas');
+            FiercePlanet.Drawing.clearCanvas('noticeCanvas');
         }
     }
 };
 
 /**
- *
+ * Get current world coordinates
  * @param e
  */
 FiercePlanet.getWorldCoordinates = function(e) {
@@ -397,18 +406,18 @@ FiercePlanet.notify = function(notice) {
 FiercePlanet.levelInfo = function() {
     var levelHTML = "";
     var level = FiercePlanet.currentLevel;
-    if (level.getImage() != undefined) {
-        levelHTML += '<img src="' + level.getImage() + '" alt="City Image" width="460" height="140">';
-        if (level.getImageAttribution())
-            levelHTML += '<div style="font-size: 0.8em; text-align: right">' + level.getImageAttribution() + '</div>';
+    if (level.image != undefined) {
+        levelHTML += '<img src="' + level.image + '" alt="City Image" width="460" height="140">';
+        if (level.imageAttribution)
+            levelHTML += '<div style="font-size: 0.8em; text-align: right">' + level.imageAttribution + '</div>';
     }
-    if (level.getName() != undefined) {
-        levelHTML += "<h3>" + level.getName() + "</h3>";
+    if (level.name != undefined) {
+        levelHTML += "<h3>" + level.name + "</h3>";
     }
-    if (level.getIntroduction() != undefined) {
-        levelHTML += level.getIntroduction();
+    if (level.introduction != undefined) {
+        levelHTML += level.introduction;
     }
-    FiercePlanet.newLevelDialog.html(levelHTML).dialog('open');
+    FiercePlanet.Dialogs.newLevelDialog.html(levelHTML).dialog('open');
 };
 
 
@@ -432,7 +441,19 @@ FiercePlanet.refreshSwatch = function() {
         try {
             var el = $('#' + capability);
             el.removeClass("inactive");
-            FiercePlanet.makeResourceActive(el[0]);
+            $('#' + el.id).draggable({
+//                    appendTo: agentCanvas,
+//                    containment: agentCanvas,
+//                    grid: [FiercePlanet.cellWidth, FiercePlanet.cellHeight],
+                cursor: "pointer",
+                helper: "clone",
+                start: function(event, ui) {
+                    FiercePlanet.currentResourceId = this.id;
+                }
+            });
+            $('#' + el.id).click(function() {
+                FiercePlanet.currentResourceId = this.id;
+            });
         }
         catch (err) {
         }

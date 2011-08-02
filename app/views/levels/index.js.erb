@@ -3,6 +3,6 @@
 // Pause the game, if in play
 FiercePlanet.pauseGame();
 
-FiercePlanet.levelListDialog.dialog('close');
-FiercePlanet.levelListDialog.html("<%=  escape_javascript(render('levels/index', :locals => { :levels => @levels})) %>");
-FiercePlanet.levelListDialog.dialog('open');
+FiercePlanet.Dialogs.levelListDialog.dialog('close');
+FiercePlanet.Dialogs.levelListDialog.html("<%=  escape_javascript(render('levels/index', :locals => { :levels => @levels})) %>");
+FiercePlanet.Dialogs.levelListDialog.dialog('open');

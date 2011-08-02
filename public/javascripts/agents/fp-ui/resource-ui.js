@@ -12,6 +12,16 @@ var FiercePlanet = FiercePlanet || {};
 
 
 /**
+ * @namespace Contains resource UI functions
+ */
+FiercePlanet.ResourceUI = FiercePlanet.ResourceUI || {};
+
+(function() {
+
+}).apply(FiercePlanet.ResourceUI);
+
+
+/**
  * Handle various resource-related interactions
  */
 FiercePlanet.setupResourceInteraction = function () {
@@ -62,10 +72,10 @@ FiercePlanet.processResourceCanvasClick = function(e) {
     var posX = __ret.posX;
     var posY = __ret.posY;
     var foundResource = false;
-    for (var i = 0; i < FiercePlanet.currentLevel.getResources().length; i++) {
-        var p = FiercePlanet.currentLevel.getResources()[i];
-        if (p.getX() == posX && p.getY() == posY) {
-            FiercePlanet.currentResource = p;
+    for (var i = 0; i < FiercePlanet.currentLevel.resources.length; i++) {
+        var resource = FiercePlanet.currentLevel.resources[i];
+        if (resource.x == posX && resource.y == posY) {
+            FiercePlanet.currentResource = resource;
             if (confirm("Are you sure you want to delete this resource?")) {
                 FiercePlanet.deleteCurrentResource();
             }
@@ -78,14 +88,14 @@ FiercePlanet.processResourceCanvasClick = function(e) {
     if (World.settings.tilesMutable) {
         if (currentTile == undefined) {
             FiercePlanet.currentLevel.addTile(new Tile(DEFAULT_TILE_COLOR, posX, posY));
-            FiercePlanet.drawCanvases();
+            FiercePlanet.Drawing.drawCanvases();
         }
         else if (!foundResource && FiercePlanet.currentResourceId != null) {
             FiercePlanet.dropItem(posX, posY);
         }
         else {
             FiercePlanet.currentLevel.removeTile(posX, posY);
-            FiercePlanet.drawCanvases();
+            FiercePlanet.Drawing.drawCanvases();
         }
     }
     else if (!foundResource) {
@@ -107,7 +117,7 @@ FiercePlanet.showInlineResourcePanel = function(e) {
     var __ret = FiercePlanet.getCurrentPosition(e);
     var posX = __ret.posX;
     var posY = __ret.posY;
-    if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
+    if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.allowResourcesOnPath)
         return;
     if (FiercePlanet.currentLevel.isPositionOccupiedByResource(posX, posY))
         return;
@@ -147,7 +157,7 @@ FiercePlanet.showInlineResourcePanel = function(e) {
                 var __ret = FiercePlanet.getCurrentPosition(e);
                 var posX = __ret.posX;
                 var posY = __ret.posY;
-                if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
+                if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.allowResourcesOnPath)
                     return;
                 if (FiercePlanet.currentLevel.isPositionOccupiedByResource(posX, posY))
                     return;
@@ -172,10 +182,10 @@ FiercePlanet.deleteCurrentResource = function () {
         if (foundResource > -1) {
             FiercePlanet.currentProfile.current_level_resources_in_store += 5;
             FiercePlanet.currentProfile.current_level_resources_spent -= 5;
-//            FiercePlanet.currentLevel.getResources().splice(foundResource, 1);
+//            FiercePlanet.currentLevel.resources.splice(foundResource, 1);
             FiercePlanet.currentLevel.removeResource(FiercePlanet.currentResource);
-            FiercePlanet.drawResourcesInStore();
-            FiercePlanet.clearResource(FiercePlanet.currentResource);
+            FiercePlanet.Drawing.drawResourcesInStore();
+            FiercePlanet.Drawing.clearResource(FiercePlanet.currentResource);
         }
     };
 
@@ -186,27 +196,24 @@ FiercePlanet.deleteCurrentResource = function () {
 FiercePlanet.upgradeCurrentResource = function () {
         var foundResource = FiercePlanet.currentLevel.getCurrentResourceIndex(FiercePlanet.currentResource);
         if (foundResource > -1) {
-            var p = FiercePlanet.currentLevel.getResources()[foundResource];
-            if (p.getUpgradeLevel() <= 4 && FiercePlanet.currentProfile.current_level_resources_in_store >= p.getUpgradeCost()) {
-                FiercePlanet.currentProfile.current_level_resources_in_store -= p.getUpgradeCost();
-                FiercePlanet.currentProfile.current_level_resources_spent += p.getUpgradeCost();
-                p.setUpgradeLevel(p.getUpgradeLevel() + 1);
-                FiercePlanet.drawResource(p);
-                FiercePlanet.drawResourcesInStore();
+            var resource = FiercePlanet.currentLevel.resources[foundResource];
+            if (resource.upgradeLevel <= 4 && FiercePlanet.currentProfile.current_level_resources_in_store >= resource.upgradeCost) {
+                FiercePlanet.currentProfile.current_level_resources_in_store -= resource.upgradeCost;
+                FiercePlanet.currentProfile.current_level_resources_spent += resource.upgradeCost;
+                resource.upgradeLevel = resource.upgradeLevel + 1;
+                FiercePlanet.Drawing.drawResource(resource);
+                FiercePlanet.Drawing.drawResourcesInStore();
             }
         }
     };
 
 /**
  * 'Drops' a selected resource on the tile
- * @param e
+ * @param posX - the x coordinate to drop the resource on
+ * @param posY - the y coordinate to drop the resource on
  */
 FiercePlanet.dropItem = function(posX, posY) {
-//    FiercePlanet.e = e;
-//    var __ret = FiercePlanet.getCurrentPosition(e);
-//    var posX = __ret.posX;
-//    var posY = __ret.posY;
-    if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.getAllowResourcesOnPath())
+    if (FiercePlanet.currentLevel.getCell(posX, posY) == undefined && ! FiercePlanet.currentLevel.allowResourcesOnPath)
         return;
     if (FiercePlanet.currentLevel.isPositionOccupiedByResource(posX, posY))
         return;
@@ -218,17 +225,16 @@ FiercePlanet.dropItem = function(posX, posY) {
     var resourceType = World.resolveResourceType(resourceCode);
     var resource = new Resource(resourceType, posX, posY);
 
-    if (FiercePlanet.currentProfile.current_level_resources_in_store < resource.getCost()) {
+    if (FiercePlanet.currentProfile.current_level_resources_in_store < resource.cost) {
         FiercePlanet.currentNotice = new Notice('Not enough resources for now - save some more agents!');
         return;
     }
     else {
-        var resourceCategory = resource.getCategory().getCode();
         FiercePlanet.currentProfile.spendResource(resource);
         FiercePlanet.currentLevel.addResource(resource);
 
-        FiercePlanet.drawResource(resource);
-        FiercePlanet.drawResourcesInStore();
+        FiercePlanet.Drawing.drawResource(resource);
+        FiercePlanet.Drawing.drawResourcesInStore();
 
         FiercePlanet.eventTarget.fire(new Event("resource", resource, "added", FiercePlanet.gameCounter, FiercePlanet.currentLevel));
     }
@@ -251,45 +257,45 @@ FiercePlanet.initialiseAndLoadResources = function () {
         var category = World.resourceCategories[i];
 
         // Add to swatch
-        var swatchCategoryHTML = '<div class="swatch-category" id="' + category.getCode() + '"></div>';
+        var swatchCategoryHTML = '<div class="swatch-category" id="' + category.code + '"></div>';
         $('#swatch').append(swatchCategoryHTML);
-        var swatchCategoryElement = $('#' + category.getCode());
-        var swatchCategoryTitleHTML = '<div class="title">' + category.getName() + '</div>';
+        var swatchCategoryElement = $('#' + category.code);
+        var swatchCategoryTitleHTML = '<div class="title">' + category.name + '</div>';
         swatchCategoryElement.append(swatchCategoryTitleHTML);
-        swatchCategoryElement.css('background', '#' + category.getColor());
+        swatchCategoryElement.css('background', '#' + category.color);
 
         // Add to gallery
-        var galleryCategoryHTML = '<div class="gallery-category" id="gallery-' + category.getCode() + '"></div>';
+        var galleryCategoryHTML = '<div class="gallery-category" id="gallery-' + category.code + '"></div>';
         $('#gallery-items').append(galleryCategoryHTML);
-        var galleryCategoryElement = $('#gallery-' + category.getCode());
-        var galleryCategoryTitleHTML = '<div class="title">' + category.getName() + '</div>';
+        var galleryCategoryElement = $('#gallery-' + category.code);
+        var galleryCategoryTitleHTML = '<div class="title">' + category.name + '</div>';
         galleryCategoryElement.append(galleryCategoryTitleHTML);
-        galleryCategoryElement.css('background', '#' + category.getColor());
+        galleryCategoryElement.css('background', '#' + category.color);
 
         var categoryInstanceCounter = 0;
-        for (var j = 0; j < category._types.length; j++) {
-            var resourceType = category._types[j];
+        for (var j = 0; j < category.types.length; j++) {
+            var resourceType = category.types[j];
 
             var swatchInstanceHTML =
-                '<div class="swatch-instance" title="' + resourceType.getName() + '">' +
-                    '<div class="swatch-draggable" id="' + resourceType.getCode() + '"><img src="' + resourceType.getImage() + '" alt=""></div>' +
-                    '<div>' + resourceType.getCost() + '</div>' +
+                '<div class="swatch-instance" title="' + resourceType.name + '">' +
+                    '<div class="swatch-draggable" id="' + resourceType.code + '"><img src="' + resourceType.image + '" alt=""></div>' +
+                    '<div>' + resourceType.cost + '</div>' +
                 '</div>'
                     ;
             swatchCategoryElement.append(swatchInstanceHTML);
-            var swatchInstanceElement = $('#' + resourceType.getCode());
-//            swatchInstanceElement.css({'background': '#' + category.getColor()});
+            var swatchInstanceElement = $('#' + resourceType.code);
+//            swatchInstanceElement.css({'background': '#' + CATEGORY.color});
             if (categoryInstanceCounter > 0) {
                 swatchInstanceElement.addClass('inactive');
             }
 
             var galleryInstanceHTML =
-                    '<div class="swatch-instance inactive purchase" id="' + resourceType.getCode() + '-purchase" title="' + resourceType.getName() + '">' +
-                        '<img src="' + resourceType.getImage() + '" alt="">' +
+                    '<div class="swatch-instance inactive purchase" id="' + resourceType.code + '-purchase" title="' + resourceType.name + '">' +
+                        '<img src="' + resourceType.image + '" alt="">' +
                     '</div>';
 //            var galleryInstanceHTML =
-//                    '<div class="swatch-instance purchase inactive" id="' + resourceType.getCode() + '-purchase" title="' + resourceType.getName() + '">' +
-//                        '<img src="' + resourceType.getImage() + '" alt="">' +
+//                    '<div class="swatch-instance purchase inactive" id="' + resourceType.code + '-purchase" title="' + resourceType.name + '">' +
+//                        '<img src="' + resourceType.image + '" alt="">' +
 //                    '</div>';
             galleryCategoryElement.append(galleryInstanceHTML);
 

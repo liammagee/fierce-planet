@@ -1,5 +1,5 @@
 // Close the level selection dialog
-FiercePlanet.levelListDialog.dialog('close');
+FiercePlanet.Dialogs.levelListDialog.dialog('close');
 
 // Add a notification
 $('#notifications').html("<p><%= @level.name %> successfully created.</p>");
@@ -11,11 +11,12 @@ $('#notifications').html("<p><%= @level.name %> successfully created.</p>");
 $('#level-editor-form').html("<%=  escape_javascript(render('levels/inline_form', :locals => { :level => @level})) %>");
 
 // Set up the level properties dialog
-FiercePlanet.editPropertiesDialog.html("<%=  escape_javascript(render('levels/edit_properties', :locals => { :level => @level})) %>");
+$(".edit_level_properties").remove();
+FiercePlanet.Dialogs.editPropertiesDialog.html("<%=  escape_javascript(render('levels/edit_properties', :locals => { :level => @level})) %>");
 
 // Set the current level number and preset value
 FiercePlanet.currentLevelNumber = parseInt("<%= @level.id %>");
 FiercePlanet.currentLevelPreset = false;
 
 // Finally, construct the level editor
-FiercePlanet.setupLevelEditor();
+FiercePlanet.Editor.setupLevelEditor();

@@ -7,34 +7,34 @@ describe("level-related classes", function() {
   });
 
     it("should have a series of default values", function() {
-        expect(level.getWorldWidth()).toEqual(10);
-        expect(level.getWorldHeight()).toEqual(10);
-        expect(level.getWaveNumber()).toEqual(10);
-        expect(level.getExpiryLimit()).toEqual(20);
-        expect(level.getInitialResourceStore()).toEqual(100);
-        expect(level.getAllowOffscreenCycling()).toBeFalsy();
-        expect(level.getAllowResourcesOnPath()).toBeFalsy();
-        expect(level.getNoWander()).toBeFalsy();
-        expect(level.getNoSpeedChange()).toBeFalsy();
+        expect(level.worldWidth).toEqual(10);
+        expect(level.worldHeight).toEqual(10);
+        expect(level.waveNumber).toEqual(10);
+        expect(level.expiryLimit).toEqual(20);
+        expect(level.initialResourceStore).toEqual(100);
+        expect(level.allowOffscreenCycling).toBeFalsy();
+        expect(level.allowResourcesOnPath).toBeFalsy();
+        expect(level.noWander).toBeFalsy();
+        expect(level.noSpeedChange).toBeFalsy();
         
-        expect(level.getTiles()).toEqual([]);
-        expect(level.getLevelAgents()).toEqual([]);
-        expect(level.getWaveAgents()).toEqual([]);
-        expect(level.getCurrentAgents()).toEqual([]);
-        expect(level.getCells()).toEqual([]);
-        expect(level.getResources()).toEqual([]);
-        expect(level.getResourceCategoryCounts()).toEqual({'eco': 0, 'env': 0, 'soc': 0 });
+        expect(level.tiles).toEqual([]);
+        expect(level.levelAgents).toEqual([]);
+        expect(level.waveAgents).toEqual([]);
+        expect(level.currentAgents).toEqual([]);
+        expect(level.cells).toEqual([]);
+        expect(level.resources).toEqual([]);
+        expect(level.resourceCategoryCounts).toEqual({'eco': 0, 'env': 0, 'soc': 0 });
 
-        expect(level.getTip()).toBeNull();
-        expect(level.getIntroduction()).toEqual("Welcome to level 1.");
-        expect(level.getConclusion()).toEqual("Congratulations! You have completed level 1.");
-        expect(level.getCatastrophe()).toBeNull();
+        expect(level.tip).toBeNull();
+        expect(level.introduction).toEqual("Welcome to level 1.");
+        expect(level.conclusion).toEqual("Congratulations! You have completed level 1.");
+        expect(level.catastrophe).toBeNull();
 
-        expect(level.getMapOptions()).toBeNull();
-        expect(level.getMapURL()).toBeNull();
-        expect(level.getImage()).toBeNull();
-        expect(level.getImageAttribution()).toBeNull();
-        expect(level.getSoundSrc()).toBeNull();
+        expect(level.mapOptions).toBeNull();
+        expect(level.mapURL).toBeNull();
+        expect(level.image).toBeNull();
+        expect(level.imageAttribution).toBeNull();
+        expect(level.soundSrc).toBeNull();
     });
 
     describe("handling tiles, cells, entry and exit points", function() {
@@ -46,17 +46,17 @@ describe("level-related classes", function() {
             });
 
             it("should have 100 tiles", function() {
-                expect(level.getTiles().length).toEqual(100);
+                expect(level.tiles.length).toEqual(100);
             });
 
             it("should have a cell at various co-ordinates between [0, 0] and [9, 9]", function() {
-                for (var i = 0; i < level.getWorldWidth(); i++) {
-                    for (var j = 0; j < level.getWorldHeight(); j++) {
+                for (var i = 0; i < level.worldWidth; i++) {
+                    for (var j = 0; j < level.worldHeight; j++) {
                         expect(level.getCell(i, j)).toBeDefined();
                     }
                 }
                 expect(level.getCell(-1, -1)).toBeUndefined();
-                expect(level.getCell(level.getWorldWidth(), level.getWorldHeight())).toBeUndefined();
+                expect(level.getCell(level.worldWidth, level.worldHeight)).toBeUndefined();
             });
 
             it("should have surrounding tiles", function() {
@@ -69,16 +69,16 @@ describe("level-related classes", function() {
             });
 
             it("should be possible to set the entire tile collection", function() {
-                var tiles = level.getTiles();
+                var tiles = level.tiles;
                 // At co-ordinate [0, 9]
                 tiles.splice(0, 1);
                 level.setTiles(tiles);
-                expect(level.getTiles().length).toEqual(99);
+                expect(level.tiles.length).toEqual(99);
                 expect(level.getCell(0, 0)).toBeUndefined();
 
                 tiles.splice(9, 1);
                 level.setTiles(tiles);
-                expect(level.getTiles().length).toEqual(98);
+                expect(level.tiles.length).toEqual(98);
                 expect(level.getCell(0, 1)).toBeUndefined();
             });
 
@@ -88,7 +88,7 @@ describe("level-related classes", function() {
                 });
 
                 it("should have same number of tiles, but tile at this co-ordinate should be undefined", function() {
-                    expect(level.getTiles().length).toEqual(100);
+                    expect(level.tiles.length).toEqual(100);
                     expect(level.getTile(5, 5)).toBeUndefined();
                 });
 
@@ -108,7 +108,7 @@ describe("level-related classes", function() {
                     });
 
                     it("should have 1 move tile", function() {
-                        expect(level.getTiles().length).toEqual(100);
+                        expect(level.tiles.length).toEqual(100);
                         expect(level.getTile(5, 5)).toBeDefined();
                     });
 
@@ -123,7 +123,7 @@ describe("level-related classes", function() {
                     });
 
                     it("should have 1 move tile", function() {
-                        expect(level.getTiles().length).toEqual(100);
+                        expect(level.tiles.length).toEqual(100);
                         expect(level.getTile(5, 5)).toBeDefined();
                     });
 
@@ -139,7 +139,7 @@ describe("level-related classes", function() {
                 });
 
                 it("should have same number of tiles, but tile at this co-ordinate should be undefined", function() {
-                    expect(level.getTiles().length).toEqual(100);
+                    expect(level.tiles.length).toEqual(100);
                     expect(level.getTile(0, 0)).toBeUndefined();
                     expect(level.getTile(5, 5)).toBeUndefined();
                     expect(level.getTile(9, 9)).toBeUndefined();
@@ -165,7 +165,7 @@ describe("level-related classes", function() {
                 });
 
                 it("should have same number of tiles, but tiles at relevant co-ordinates should be undefined", function() {
-                    expect(level.getTiles().length).toEqual(100);
+                    expect(level.tiles.length).toEqual(100);
                     expect(level.getTile(0, 0)).toBeDefined();
                     expect(level.getTile(0, 2)).toBeUndefined();
                     expect(level.getTile(9, 4)).toBeUndefined();
@@ -192,7 +192,7 @@ describe("level-related classes", function() {
                     });
 
                     it("should have 1 move tile", function() {
-                        expect(level.getTiles().length).toEqual(100);
+                        expect(level.tiles.length).toEqual(100);
                         expect(level.getTile(0, 2)).toBeDefined();
                     });
 
@@ -216,8 +216,8 @@ describe("level-related classes", function() {
             });
 
             it("should have an entry point", function() {
-                expect(level.getEntryPoints().length).toEqual(1);
-                expect(level.getEntryPoints()[0]).toEqual([0, 0]);
+                expect(level.entryPoints.length).toEqual(1);
+                expect(level.entryPoints[0]).toEqual([0, 0]);
                 expect(level.getFirstEntryPoint()).toEqual([0, 0]);
             });
 
@@ -227,8 +227,8 @@ describe("level-related classes", function() {
                 });
 
                 it("should have no entry points", function() {
-                    expect(level.getEntryPoints().length).toEqual(0);
-                    expect(level.getEntryPoints()[0]).toBeUndefined();
+                    expect(level.entryPoints.length).toEqual(0);
+                    expect(level.entryPoints[0]).toBeUndefined();
                     expect(level.getFirstEntryPoint()).toBeUndefined();
                 });
             });
@@ -239,8 +239,8 @@ describe("level-related classes", function() {
                 });
 
                 it("should have just one entry point", function() {
-                    expect(level.getEntryPoints().length).toEqual(1);
-                    expect(level.getEntryPoints()[0]).toEqual([0, 0]);
+                    expect(level.entryPoints.length).toEqual(1);
+                    expect(level.entryPoints[0]).toEqual([0, 0]);
                     expect(level.getFirstEntryPoint()).toEqual([0, 0]);
                 });
             });
@@ -251,8 +251,8 @@ describe("level-related classes", function() {
                 });
 
                 it("should have just one entry point", function() {
-                    expect(level.getEntryPoints().length).toEqual(1);
-                    expect(level.getEntryPoints()[0]).toEqual([0, 0]);
+                    expect(level.entryPoints.length).toEqual(1);
+                    expect(level.entryPoints[0]).toEqual([0, 0]);
                     expect(level.getFirstEntryPoint()).toEqual([0, 0]);
                 });
             });
@@ -263,9 +263,9 @@ describe("level-related classes", function() {
                 });
 
                 it("should have two entry points", function() {
-                    expect(level.getEntryPoints().length).toEqual(2);
-                    expect(level.getEntryPoints()[0]).toEqual([0, 0]);
-                    expect(level.getEntryPoints()[1]).toEqual([9, 9]);
+                    expect(level.entryPoints.length).toEqual(2);
+                    expect(level.entryPoints[0]).toEqual([0, 0]);
+                    expect(level.entryPoints[1]).toEqual([9, 9]);
                     expect(level.getFirstEntryPoint()).toEqual([0, 0]);
                 });
             });
@@ -277,8 +277,8 @@ describe("level-related classes", function() {
                 });
 
                 it("should have just one entry point", function() {
-                    expect(level.getEntryPoints().length).toEqual(1);
-                    expect(level.getEntryPoints()[0]).toEqual([0, 0]);
+                    expect(level.entryPoints.length).toEqual(1);
+                    expect(level.entryPoints[0]).toEqual([0, 0]);
                     expect(level.getFirstEntryPoint()).toEqual([0, 0]);
                 });
             });
@@ -296,8 +296,8 @@ describe("level-related classes", function() {
             });
 
             it("should have an exit point", function() {
-                expect(level.getExitPoints().length).toEqual(1);
-                expect(level.getExitPoints()[0]).toEqual([9, 9]);
+                expect(level.exitPoints.length).toEqual(1);
+                expect(level.exitPoints[0]).toEqual([9, 9]);
             });
 
             describe("removing exit points", function() {
@@ -306,8 +306,8 @@ describe("level-related classes", function() {
                 });
 
                 it("should have no exit points", function() {
-                    expect(level.getExitPoints().length).toEqual(0);
-                    expect(level.getExitPoints()[0]).toBeUndefined();
+                    expect(level.exitPoints.length).toEqual(0);
+                    expect(level.exitPoints[0]).toBeUndefined();
                 });
             });
 
@@ -317,8 +317,8 @@ describe("level-related classes", function() {
                 });
 
                 it("should have just one exit point", function() {
-                    expect(level.getExitPoints().length).toEqual(1);
-                    expect(level.getExitPoints()[0]).toEqual([9, 9]);
+                    expect(level.exitPoints.length).toEqual(1);
+                    expect(level.exitPoints[0]).toEqual([9, 9]);
                 });
             });
 
@@ -328,8 +328,8 @@ describe("level-related classes", function() {
                 });
 
                 it("should have no exit points", function() {
-                    expect(level.getExitPoints().length).toEqual(0);
-                    expect(level.getExitPoints()[0]).toBeUndefined();
+                    expect(level.exitPoints.length).toEqual(0);
+                    expect(level.exitPoints[0]).toBeUndefined();
                 });
             });
 
@@ -339,9 +339,9 @@ describe("level-related classes", function() {
                 });
 
                 it("should have two exit points", function() {
-                    expect(level.getExitPoints().length).toEqual(2);
-                    expect(level.getExitPoints()[0]).toEqual([9, 9]);
-                    expect(level.getExitPoints()[1]).toEqual([5, 5]);
+                    expect(level.exitPoints.length).toEqual(2);
+                    expect(level.exitPoints[0]).toEqual([9, 9]);
+                    expect(level.exitPoints[1]).toEqual([5, 5]);
                 });
             });
 
@@ -352,8 +352,8 @@ describe("level-related classes", function() {
                 });
 
                 it("should have just one exit point", function() {
-                    expect(level.getExitPoints().length).toEqual(1);
-                    expect(level.getExitPoints()[0]).toEqual([9, 9]);
+                    expect(level.exitPoints.length).toEqual(1);
+                    expect(level.exitPoints[0]).toEqual([9, 9]);
                 });
             });
 
@@ -370,7 +370,7 @@ describe("level-related classes", function() {
         });
 
         it("should have 1 resource", function() {
-          expect(level.getResources().length).toEqual(1);
+          expect(level.resources.length).toEqual(1);
         });
 
         it("should have the correct resource category counts", function() {
@@ -398,25 +398,25 @@ describe("level-related classes", function() {
 
 
         it("should be able to reset resource yields", function() {
-            var resource = level.getResources()[0];
-            expect(resource.getInitialTotalYield()).toEqual(100);
-            resource.setTotalYield(50);
-            expect(resource.getTotalYield()).toEqual(50);
+            var resource = level.resources[0];
+            expect(resource.initialTotalYield).toEqual(100);
+            resource.totalYield = (50);
+            expect(resource.totalYield).toEqual(50);
             level.resetResourceYields();
-            expect(resource.getTotalYield()).toEqual(100);
+            expect(resource.totalYield).toEqual(100);
         });
 
         it("should be able to increment resource yields", function() {
-            var resource = level.getResources()[0];
-            expect(resource.getInitialTotalYield()).toEqual(100);
-            resource.setTotalYield(99);
-            expect(resource.getTotalYield()).toEqual(99);
+            var resource = level.resources[0];
+            expect(resource.initialTotalYield).toEqual(100);
+            resource.totalYield = (99);
+            expect(resource.totalYield).toEqual(99);
             level.recoverResources();
-            expect(resource.getTotalYield()).toEqual(100);
+            expect(resource.totalYield).toEqual(100);
 
             // Make sure recovery stops at 100
             level.recoverResources();
-            expect(resource.getTotalYield()).toEqual(100);
+            expect(resource.totalYield).toEqual(100);
         });
 
 
@@ -427,7 +427,7 @@ describe("level-related classes", function() {
             });
 
             it("should have 2 resource", function() {
-              expect(level.getResources().length).toEqual(2);
+              expect(level.resources.length).toEqual(2);
             });
 
             it("should have the correct resource category counts", function() {
@@ -443,7 +443,7 @@ describe("level-related classes", function() {
             });
 
             it("should have calculate the correct effect", function() {
-                var resource = level.getResources()[0];
+                var resource = level.resources[0];
                 expect(level.calculateResourceEffect(resource)).toEqual(1);
                 // Without resource mix
                 expect(level.calculateResourceEffect(resource, true)).toEqual(1);
@@ -476,7 +476,7 @@ describe("level-related classes", function() {
             });
 
             it("should have 4 resources", function() {
-              expect(level.getResources().length).toEqual(4);
+              expect(level.resources.length).toEqual(4);
             });
 
             it("should have the correct resource category counts", function() {
@@ -492,7 +492,7 @@ describe("level-related classes", function() {
             });
 
             it("should have calculate the correct effect of neighbours on a resource", function() {
-                var resource = level.getResources()[0];
+                var resource = level.resources[0];
                 // Because the balance is out of proportion
                 expect(Math.round(level.calculateResourceEffect(resource) * 1000) / 1000).toEqual(0.444);
 
@@ -520,21 +520,21 @@ describe("level-related classes", function() {
                 expect(Math.round(level.calculateResourceEffect(resource, false) * 1000) / 1000).toEqual(0.889);
 
                 // Test other resource tensions
-                expect(Math.round(level.calculateResourceEffect(level.getResources()[1], false, true) * 1000) / 1000).toEqual(0.25);
-                expect(Math.round(level.calculateResourceEffect(level.getResources()[2], false, true) * 1000) / 1000).toEqual(1);
-                expect(Math.round(level.calculateResourceEffect(level.getResources()[1], false) * 1000) / 1000).toEqual(0.25);
-                expect(Math.round(level.calculateResourceEffect(level.getResources()[2], false) * 1000) / 1000).toEqual(1);
+                expect(Math.round(level.calculateResourceEffect(level.resources[1], false, true) * 1000) / 1000).toEqual(0.25);
+                expect(Math.round(level.calculateResourceEffect(level.resources[2], false, true) * 1000) / 1000).toEqual(1);
+                expect(Math.round(level.calculateResourceEffect(level.resources[1], false) * 1000) / 1000).toEqual(0.25);
+                expect(Math.round(level.calculateResourceEffect(level.resources[2], false) * 1000) / 1000).toEqual(1);
             });
 
 
             it("should have 3 resources when a resource is removed", function() {
-                level.removeResource(level.getResources()[0]);
-              expect(level.getResources().length).toEqual(3);
+                level.removeResource(level.resources[0]);
+              expect(level.resources.length).toEqual(3);
             });
 
 
             it("should have the correct resource category counts when a resource is removed", function() {
-                level.removeResource(level.getResources()[0]);
+                level.removeResource(level.resources[0]);
               expect(level.getResourceCategoryCount("eco")).toEqual(1);
               expect(level.getResourceCategoryCount("env")).toEqual(1);
               expect(level.getResourceCategoryCount("soc")).toEqual(1);
@@ -561,12 +561,12 @@ describe("level-related classes", function() {
             });
 
             it("should have calculate the correct effect of remote resources on a resource, when resourcesInTensionGlobally is set", function() {
-                var resource = level.getResources()[0];
+                var resource = level.resources[0];
                 // With resource tension
                 expect(Math.round(level.calculateResourceEffect(resource, false, true) * 1000) / 1000).toEqual(3.556);
                 // Test other resource tensions
-                expect(Math.round(level.calculateResourceEffect(level.getResources()[1], false, true) * 1000) / 1000).toEqual(0.125);
-                expect(Math.round(level.calculateResourceEffect(level.getResources()[2], false, true) * 1000) / 1000).toEqual(1);
+                expect(Math.round(level.calculateResourceEffect(level.resources[1], false, true) * 1000) / 1000).toEqual(0.125);
+                expect(Math.round(level.calculateResourceEffect(level.resources[2], false, true) * 1000) / 1000).toEqual(1);
             });
 
             afterEach(function() {
@@ -584,12 +584,12 @@ describe("level-related classes", function() {
         });
 
         it("should generate a set of standard agents at the entry point", function() {
-            expect(level.getCurrentAgents().length).toEqual(10);
+            expect(level.currentAgents.length).toEqual(10);
         });
 
         it("should retrieve an agent by an ID", function() {
-            var agent = level.getCurrentAgents()[0];
-            expect(level.getAgentByID(agent.getID())).toEqual(agent);
+            var agent = level.currentAgents[0];
+            expect(level.getAgentByID(agent.id)).toEqual(agent);
         });
 
         it("should calculate the correct number of total saveable agents", function() {
@@ -604,8 +604,8 @@ describe("level-related classes", function() {
             });
 
             it("should add a level agent to the current agents", function() {
-                expect(level.getLevelAgents().length).toEqual(1);
-                expect(level.getCurrentAgents().length).toEqual(11);
+                expect(level.levelAgents.length).toEqual(1);
+                expect(level.currentAgents.length).toEqual(11);
             });
         });
 
@@ -616,8 +616,8 @@ describe("level-related classes", function() {
             });
 
             it("should add a set of wave agent to the current agents", function() {
-                expect(level.getWaveAgents().length).toEqual(1);
-                expect(level.getCurrentAgents().length).toEqual(20);
+                expect(level.waveAgents.length).toEqual(1);
+                expect(level.currentAgents.length).toEqual(20);
             });
         });
 
@@ -628,7 +628,7 @@ describe("level-related classes", function() {
             });
 
             it("should have less than 100 health", function() {
-                expect(level.getCurrentAgents()[0].getHealth()).toBeLessThan(100);
+                expect(level.currentAgents[0].health).toBeLessThan(100);
             });
 
             afterEach(function() {
@@ -643,7 +643,7 @@ describe("level-related classes", function() {
 
             it("should generate 2 x the number of agents", function() {
                 level.generateAgents(World.agentTypes[0], 10);
-                expect(level.getCurrentAgents().length).toEqual(20);
+                expect(level.currentAgents.length).toEqual(20);
             });
 
             describe("handling level agents", function() {
@@ -653,8 +653,8 @@ describe("level-related classes", function() {
 
                 it("should add only one level agent to the current agents", function() {
                     level.generateAgents(World.agentTypes[0], 10);
-                    expect(level.getLevelAgents().length).toEqual(1);
-                    expect(level.getCurrentAgents().length).toEqual(21);
+                    expect(level.levelAgents.length).toEqual(1);
+                    expect(level.currentAgents.length).toEqual(21);
                 });
             });
 
@@ -665,8 +665,8 @@ describe("level-related classes", function() {
 
                 it("should add only one set of wave agent to the current agents", function() {
                     level.generateAgents(World.agentTypes[0], 10);
-                    expect(level.getWaveAgents().length).toEqual(1);
-                    expect(level.getCurrentAgents().length).toEqual(30);
+                    expect(level.waveAgents.length).toEqual(1);
+                    expect(level.currentAgents.length).toEqual(30);
                 });
             });
         });
@@ -678,8 +678,8 @@ describe("level-related classes", function() {
             beforeEach(function() {
                 level.generateAgents(World.agentTypes[0], 10);
                 level.addResource(new Resource(World.resourceTypes[0], 1, 1));
-                agent = level.getCurrentAgents()[0];
-                resource = level.getResources()[0];
+                agent = level.currentAgents[0];
+                resource = level.resources[0];
                 agent.adjustGeneralHealth(-90);
             });
 
@@ -687,7 +687,7 @@ describe("level-related classes", function() {
                 level.processNeighbouringResources(agent);
 
                 expect(agent.getHealthForResource(resource)).toEqual(70);
-                expect(resource.getTotalYield()).toEqual(80);
+                expect(resource.totalYield).toEqual(80);
             });
         });
 
@@ -696,17 +696,17 @@ describe("level-related classes", function() {
 
             beforeEach(function() {
                 World.settings.predatorsVisible = true;
-                World.agentTypes[0].setHitable(true);
-                World.agentTypes[1].setCanHit(true);
+                World.agentTypes[0].isHitable = (true);
+                World.agentTypes[1].canHit = (true);
                 hittingAgent = new Agent(World.agentTypes[1], 0, 0);
                 level.addLevelAgent(hittingAgent);
                 level.generateAgents(World.agentTypes[0], 10);
-                hitAgent = level.getCurrentAgents()[0];
+                hitAgent = level.currentAgents[0];
             });
 
-            it("should get a benefit from a neighbouring resource", function() {
+            it("should be hit by a neighbouring agent", function() {
                 level.processNeighbouringAgents(hitAgent);
-                expect(hitAgent.getIsHit()).toBeTruthy();
+                expect(hitAgent.isHit).toBeTruthy();
             });
         });
 

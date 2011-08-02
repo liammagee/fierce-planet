@@ -2,7 +2,7 @@
 
 $('#notifications').html("<p>Opening level <%= @level.name %>...</p>");
 
-FiercePlanet.levelGalleryDialog.dialog('close');
+FiercePlanet.Dialogs.levelGalleryDialog.dialog('close');
 
 <%=  render('levels/setup_level', :locals => { :level => @level}) %>
 

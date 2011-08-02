@@ -2,9 +2,9 @@
 FiercePlanet.pauseGame();
 
 // Construct and show the level gallery
-var dialogX = FiercePlanet.calculateWorldLeft();
-var dialogY = FiercePlanet.calculateWorldTop();
-FiercePlanet.$highScores = $('<div></div>')
+var dialogX = FiercePlanet.Dialogs.calculateWorldLeft();
+var dialogY = FiercePlanet.Dialogs.calculateWorldTop();
+FiercePlanet.Dialogs.highScores = $('<div></div>')
         .html("<%=  escape_javascript(render('profiles/high_scores', :locals => { :profiles => @profiles})) %>")
         .dialog({
                    position: [dialogX, dialogY],
@@ -22,5 +22,5 @@ FiercePlanet.$highScores = $('<div></div>')
                     close: function(ev, ui) { $(this).remove(); },
 
                 });
-FiercePlanet.$highScores.dialog('open');
+FiercePlanet.Dialogs.highScores.dialog('open');
 

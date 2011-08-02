@@ -12,6 +12,9 @@
  */
 var World = {};
 
+/**
+ * @constructor
+ */
 initWorld = (function() {
 
     this.settings = {
@@ -131,14 +134,14 @@ initWorld = (function() {
 
         this.updateRegisteredAgentTypes = function() {
             for (var i in this.agentTypes) {
-                this.agentTypes[i].setHealthCategories(this.resourceCategories);
+                this.agentTypes[i].healthCategories = this.resourceCategories;
             }
         };
 
         this.resolveResourceType  = function(code) {
             for (var i in this.resourceTypes) {
                 var resourceType = this.resourceTypes[i];
-                if (resourceType._code == code)
+                if (resourceType.code == code)
                     return resourceType;
             }
             return undefined;

@@ -13,122 +13,85 @@
  * @param id
  */
 function Level(id) {
-    this._id = id;
-    this._isPresetLevel = false;
-    this._name = id;
-    this._entryPoints = [];
-    this._exitPoints = [];
+    this.id = id;
+    this.isPresetLevel = false;
+    this.name = id;
+    this.entryPoints = [];
+    this.exitPoints = [];
 
     // Dimensions
-    this._worldWidth = 10;
-    this._worldHeight = 10;
+    this.worldWidth = 10;
+    this.worldHeight = 10;
 
     // Parameters
-    this._initialAgentNumber = 1;
-    this._waveNumber = 10;
-    this._expiryLimit = 20;
-    this._initialResourceStore = 100;
-    this._allowOffscreenCycling = false;
-    this._allowResouresOnPath = false;
-    this._customLevel = false;
-    this._noWander = false;
-    this._noSpeedChange = false;
+    this.initialAgentNumber = 1;
+    this.waveNumber = 10;
+    this.expiryLimit = 20;
+    this.initialResourceStore = 100;
+    this.allowOffscreenCycling = false;
+    this.allowResourcesOnPath = false;
+    this.customLevel = false;
+    this.noWander = false;
+    this.noSpeedChange = false;
 
 
     // Current level state
-    this._tiles = [];
-    this._tileMap = [];
-    this._levelAgents = [];
-    this._waveAgents = [];
-    this._currentAgents = [];
-    this._currentAgentsMap = {};
-    this._levelResources = [];
-    this._resources = [];
-    this._resourceCategoryCounts = this.resetResourceCategoryCounts();
+    this.tiles = [];
+    this.tileMap = [];
+    this.levelAgents = [];
+    this.waveAgents = [];
+    this.currentAgents = [];
+    this.currentAgentsMap = {};
+    this.levelResources = [];
+    this.resources = [];
+    this.resourceCategoryCounts = this.resetResourceCategoryCounts();
 
     /** Object for storing tiles, resources and other level entities for co-ordinate based look-up */
-    this._cells = {};
+    this.cells = {};
 
 
     // User interface elements
-    this._tip = null;
-    this._introduction = "Welcome to level " + this._id + ".";
-    this._conclusion = "Congratulations! You have completed level " + this._id + ".";
-    this._catastrophe = null;
+    this.tip = null;
+    this.introduction = "Welcome to level " + this.id + ".";
+    this.conclusion = "Congratulations! You have completed level " + this.id + ".";
+    this.catastrophe = null;
 
 
     // Google map, image and sound options
-    this._mapOptions = null;
-    this._mapURL = null;
-    this._image = null;
-    this._imageAttribution = null;
-    this._soundSrc = null;
+    this.mapOptions = null;
+    this.mapURL = null;
+    this.image = null;
+    this.imageAttribution = null;
+    this.soundSrc = null;
 
 }
-Level.prototype.getId = function() { return this._id; };
-Level.prototype.setId = function(id) { this._id = id; };
-Level.prototype.isPresetLevel = function() { return this._isPresetLevel; };
-Level.prototype.setPresetLevel = function(isPresetLevel) { this._isPresetLevel = isPresetLevel; };
-Level.prototype.getName = function() { return this._name; };
-Level.prototype.setName = function(name) { this._name = name; };
-Level.prototype.getInitialAgentNumber = function() { return this._initialAgentNumber; };
-Level.prototype.setInitialAgentNumber = function(initialAgentNumber) { this._initialAgentNumber = initialAgentNumber; };
-Level.prototype.getInitialResourceStore = function() { return this._initialResourceStore; };
-Level.prototype.setInitialResourceStore = function(initialResourceStore) { this._initialResourceStore = initialResourceStore; };
-Level.prototype.getWorldWidth = function() { return this._worldWidth; };
-Level.prototype.setWorldWidth = function(worldWidth) { this._worldWidth = worldWidth; };
-Level.prototype.getWorldHeight = function() { return this._worldHeight; };
-Level.prototype.setWorldHeight = function(worldHeight) { this._worldHeight = worldHeight; };
-Level.prototype.getWaveNumber = function() { return this._waveNumber; };
-Level.prototype.setWaveNumber = function(waveNumber) { this._waveNumber = waveNumber; };
-Level.prototype.getExpiryLimit = function() { return this._expiryLimit; };
-Level.prototype.setExpiryLimit = function(expiryLimit) { this._expiryLimit = expiryLimit; };
-Level.prototype.getAllowOffscreenCycling = function() { return this._allowOffscreenCycling; };
-Level.prototype.setAllowOffscreenCycling = function(allowOffscreenCycling) { this._allowOffscreenCycling = allowOffscreenCycling; };
-Level.prototype.getAllowResourcesOnPath = function() { return this._allowResouresOnPath; };
-Level.prototype.setAllowResourcesOnPath = function(allowResourcesOnPath) { this._allowResouresOnPath = allowResourcesOnPath; };
-Level.prototype.getNoWander = function() { return this._noWander; };
-Level.prototype.setNoWander = function(noWander) { this._noWander = noWander; };
-Level.prototype.getNoSpeedChange = function() { return this._noSpeedChange; };
-Level.prototype.setNoSpeedChange = function(noSpeedChange) { this._noSpeedChange = noSpeedChange; };
-Level.prototype.getIntroduction = function() { return this._introduction; };
-Level.prototype.setIntroduction = function(introduction) { this._introduction = introduction; };
-Level.prototype.getConclusion = function() { return this._conclusion; };
-Level.prototype.setConclusion = function(conclusion) { this._conclusion = conclusion; };
-Level.prototype.getTip = function() { return this._tip; };
-Level.prototype.setTip = function(tip) { this._tip = tip; };
-Level.prototype.getImage = function() { return this._image; };
-Level.prototype.setImage = function(image) { this._image = image; };
-Level.prototype.getImageAttribution = function() { return this._imageAttribution; };
-Level.prototype.setImageAttribution = function(imageAttribution) { this._imageAttribution = imageAttribution; };
-Level.prototype.getSoundSrc = function() { return this._soundSrc; };
-Level.prototype.setSoundSrc = function(soundSrc) { this._soundSrc = soundSrc; };
-Level.prototype.getMapOptions = function() { return this._mapOptions; };
-Level.prototype.setMapOptions = function(mapOptions) { this._mapOptions = mapOptions; };
-Level.prototype.getMapURL = function() { return this._mapURL; };
-Level.prototype.setMapURL = function(mapURL) { this._mapURL = mapURL; };
-Level.prototype.getBackgroundImage = function() { return this._backgroundImage; };
-Level.prototype.setBackgroundImage = function(backgroundImage) { this._backgroundImage = backgroundImage; };
-Level.prototype.isCustomLevel = function() { return this._customLevel; };
-Level.prototype.setCustomLevel = function(customLevel) { this._customLevel = customLevel; };
-Level.prototype.getCatastrophe = function() { return this._catastrophe; };
-Level.prototype.setCatastrophe = function(catastrophe) { this._catastrophe = catastrophe; };
+
 
 // Tile functions
+/**
+ * Gets a tile at the given co-ordinate
+ * @param x
+ * @param y
+ */
 Level.prototype.getTile = function(x, y) {
-    var tilePosition = y * this.getWorldWidth() + x;
-    return this._tiles[tilePosition];
+    var tilePosition = y * this.worldWidth + x;
+    return this.tiles[tilePosition];
 };
+/**
+ * Gets tiles surrounding a given co-ordinate
+ * @param x
+ * @param y
+ */
 Level.prototype.getSurroundingTiles = function(x, y) {
     var surroundingTiles = [];
 
     if (x > 0)
         surroundingTiles.push(this.getTile(x - 1, y));
-    if (x < this._worldWidth - 1)
+    if (x < this.worldWidth - 1)
         surroundingTiles.push(this.getTile(x + 1, y));
     if (y > 0)
         surroundingTiles.push(this.getTile(x, y - 1));
-    if (y < this._worldHeight - 1)
+    if (y < this.worldHeight - 1)
         surroundingTiles.push(this.getTile(x, y + 1));
 
     return surroundingTiles;
@@ -136,13 +99,13 @@ Level.prototype.getSurroundingTiles = function(x, y) {
 /**
  *
  */
-Level.prototype.getTiles = function() { return this._tiles; };
+Level.prototype.getTiles = function() { return this.tiles; };
 /**
  * 
  * @param tiles
  */
 Level.prototype.setTiles = function(tiles) {
-    this._tiles = tiles;
+    this.tiles = tiles;
     this.assignCells();
 };
 /**
@@ -150,13 +113,13 @@ Level.prototype.setTiles = function(tiles) {
  * @param tile
  */
 Level.prototype.addTile = function(tile) {
-    var position = tile._y * this._worldWidth + tile._x;
-    if (this._tiles[tile._y * this._worldWidth + tile._x] != null)
+    var position = tile.y * this.worldWidth + tile.x;
+    if (this.tiles[position] != null)
         throw new Error("Tile is already occupied!");
-    this._tiles[tile._y * this._worldWidth + tile._x] = tile;
-    this.removeEntryPoint(tile._x, tile._y);
-    this.removeExitPoint(tile._x, tile._y);
-    this.addCell(tile._x, tile._y, tile);
+    this.tiles[position] = tile;
+    this.removeEntryPoint(tile.x, tile.y);
+    this.removeExitPoint(tile.x, tile.y);
+    this.addCell(tile.x, tile.y, tile);
 };
 /**
  *
@@ -172,10 +135,10 @@ Level.prototype.addDefaultTile = function(x, y) {
  * @param y
  */
 Level.prototype.removeTile = function(x, y) {
-    var tilePosition = y * this.getWorldWidth() + x;
-    this._tiles[tilePosition] = undefined;
+    var tilePosition = y * this.worldWidth + x;
+    this.tiles[tilePosition] = undefined;
     // This fails when trying to add back tile at this co-ordinate
-//    this._tiles.splice(tilePosition, 1);
+//    this.tiles.splice(tilePosition, 1);
     this.annulCell(x, y);
 };
 
@@ -183,12 +146,12 @@ Level.prototype.removeTile = function(x, y) {
  *
  */
 Level.prototype.fillWithTiles = function() {
-    this._tiles = [];
-    for (var i = 0; i < this._worldHeight; i++) {
-        for (var j = 0; j < this._worldWidth; j++) {
+    this.tiles = [];
+    for (var i = 0; i < this.worldHeight; i++) {
+        for (var j = 0; j < this.worldWidth; j++) {
             var tile = new Tile(DEFAULT_TILE_COLOR, j, i);
-            this._tiles.push(tile);
-            this.addCell(tile._x, tile._y, tile);
+            this.tiles.push(tile);
+            this.addCell(tile.x, tile.y, tile);
         }
     }
 };
@@ -197,12 +160,12 @@ Level.prototype.fillWithTiles = function() {
  *
  */
 Level.prototype.removeAllTiles = function() {
-//    this._tiles = [];
-//    this._cells = {};
-    for (var i = 0; i < this.getWorldWidth(); i++) {
-        for (var j = 0; j < this.getWorldHeight(); j++) {
-            var tilePosition = j * this.getWorldWidth() + i;
-            this._tiles[tilePosition] = undefined;
+//    this.tiles = [];
+//    this.cells = {};
+    for (var i = 0; i < this.worldWidth; i++) {
+        for (var j = 0; j < this.worldHeight; j++) {
+            var tilePosition = j * this.worldWidth + i;
+            this.tiles[tilePosition] = undefined;
             this.annulCell(i, j);
         }
     }
@@ -214,10 +177,10 @@ Level.prototype.removeAllTiles = function() {
  */
 Level.prototype.removeTiles = function(start, number) {
     for (var i = start; i < start + number; i++) {
-        if (i >= 0 && i < this._tiles.length) {
-            var tile = this._tiles[i];
-            this._tiles[i] = undefined;
-            this.annulCell(tile._x, tile._y);
+        if (i >= 0 && i < this.tiles.length) {
+            var tile = this.tiles[i];
+            this.tiles[i] = undefined;
+            this.annulCell(tile.x, tile.y);
         }
     }
 };
@@ -227,10 +190,10 @@ Level.prototype.removeTiles = function(start, number) {
  */
 Level.prototype.getPath = function() {
     var pathCells = [];
-    for (var i = 0; i < this._worldHeight; i++) {
-        for (var j = 0; j < this._worldWidth; j++) {
-            var tilePosition = i * this._worldWidth + j;
-            if (this._tiles[tilePosition] == undefined)
+    for (var i = 0; i < this.worldHeight; i++) {
+        for (var j = 0; j < this.worldWidth; j++) {
+            var tilePosition = i * this.worldWidth + j;
+            if (this.tiles[tilePosition] == undefined)
                 pathCells.push([j, i]);
         }
 
@@ -242,52 +205,46 @@ Level.prototype.getPath = function() {
 /**
  *
  */
-Level.prototype.getCells = function() { return this._cells; };
+Level.prototype.getCells = function() { return this.cells; };
 /**
  * 
  * @param x
  * @param y
  */
-Level.prototype.getCell = function(x, y) { return this._cells[[x, y]]; };
+Level.prototype.getCell = function(x, y) {
+    return this.cells[[x, y]];
+};
 /**
  *
  * @param cells
  */
-Level.prototype.setCells = function(cells) { this._cells = cells; };
+Level.prototype.setCells = function(cells) { this.cells = cells; };
 /**
  * 
  * @param x
  * @param y
  * @param value
  */
-Level.prototype.addCell = function(x, y, value) {this._cells[[x, y]] = value;};
+Level.prototype.addCell = function(x, y, value) {this.cells[[x, y]] = value;};
 /**
  *
  * @param x
  * @param y
  */
-Level.prototype.annulCell = function(x, y) { this._cells[[x, y]] = undefined; };
+Level.prototype.annulCell = function(x, y) { this.cells[[x, y]] = undefined; };
 /**
  *
  */
 Level.prototype.assignCells = function() {
-    this._cells = [];
-    for (var i = 0; i < this._tiles.length; i++) {
-        var tile = this._tiles[i];
+    this.cells = [];
+    for (var i = 0; i < this.tiles.length; i++) {
+        var tile = this.tiles[i];
         if (tile != undefined)
-            this.addCell(tile._x, tile._y, tile);
+            this.addCell(tile.x, tile.y, tile);
     }
 };
 
 // Entry point functions
-Level.prototype.getEntryPoints = function() { return this._entryPoints; };
-Level.prototype.setEntryPoints = function(entryPoints) {
-    for (var i = 0; i < entryPoints.length; i++) {
-        var ep = entryPoints[i];
-        this.addEntryPoint(ep[0], ep[1]);
-    }
-//    entryPoints.forEach(function(ep) { this.addEntryPoint(ep[0], ep[1]); })
-};
 /**
  *
  * @param x
@@ -295,43 +252,46 @@ Level.prototype.setEntryPoints = function(entryPoints) {
  */
 Level.prototype.addEntryPoint = function(x, y) {
     if (!this.isEntryOrExitPoint(x, y))
-        this._entryPoints.push([x, y]);
+        this.entryPoints.push([x, y]);
 };
 
+/**
+ * Resets the entry point collection, leaving only one entry point at co-ordinate (0. 0)
+ */
 Level.prototype.resetEntryPoints = function() {
-    this._entryPoints = [];
+    this.entryPoints = [];
     this.addEntryPoint(0, 0);
 };
+/**
+ * Removes an entry point at the given co-ordinate
+ * @param x
+ * @param y
+ */
 Level.prototype.removeEntryPoint = function(x, y) {
     var position = -1;
-    for (var i = 0; i < this._entryPoints.length; i++) {
-        var point = this._entryPoints[i];
+    for (var i = 0; i < this.entryPoints.length; i++) {
+        var point = this.entryPoints[i];
         if (point[0] == x && point[1] == y)
             position = i;
     }
     if (position > -1) {
-        this._entryPoints.splice(position, 1);
+        this.entryPoints.splice(position, 1);
     }
 };
-Level.prototype.getFirstEntryPoint = function() { return this._entryPoints[0]; };
+/**
+ * Gets the first entry point
+ */
+Level.prototype.getFirstEntryPoint = function() { return this.entryPoints[0]; };
 
 // Exit point functions
-Level.prototype.getExitPoints = function() { return this._exitPoints; };
-Level.prototype.setExitPoints = function(exitPoints) {
-    for (var i = 0; i < exitPoints.length; i++) {
-        var ep = exitPoints[i];
-        this.addExitPoint(ep[0], ep[1]);
-    }
-//    exitPoints.forEach(function(ep) { this.addExitPoint(ep[0], ep[1]); })
-};
 /**
  *
  * @param x
  * @param y
  */
 Level.prototype.isExitPoint = function(x, y) {
-    for (var i = 0; i < this._exitPoints.length; i++) {
-        var point = this._exitPoints[i];
+    for (var i = 0; i < this.exitPoints.length; i++) {
+        var point = this.exitPoints[i];
         if (point[0] == x && point[1]== y) {
             return true;
         }
@@ -345,21 +305,21 @@ Level.prototype.isExitPoint = function(x, y) {
  */
 Level.prototype.addExitPoint = function(x, y) {
     var found = false;
-    for (var i = 0; i < this._exitPoints.length; i++) {
-        var point = this._exitPoints[i];
+    for (var i = 0; i < this.exitPoints.length; i++) {
+        var point = this.exitPoints[i];
         if (point[0] == x && point[1]== y) {
             found = true;
             break;
         }
     }
     if (!found)
-        this._exitPoints.push([x, y]);
+        this.exitPoints.push([x, y]);
 };
 /**
  *
  */
 Level.prototype.resetExitPoints = function() {
-    this._exitPoints = [];
+    this.exitPoints = [];
 };
 /**
  *
@@ -368,13 +328,13 @@ Level.prototype.resetExitPoints = function() {
  */
 Level.prototype.removeExitPoint = function(x, y) {
     var position = -1;
-    for (var i = 0; i < this._exitPoints.length; i++) {
-        var point = this._exitPoints[i];
+    for (var i = 0; i < this.exitPoints.length; i++) {
+        var point = this.exitPoints[i];
         if (point[0] == x && point[1] == y)
             position = i;
     }
     if (position > -1) {
-        this._exitPoints.splice(position, 1);
+        this.exitPoints.splice(position, 1);
     }
 };
 
@@ -384,14 +344,14 @@ Level.prototype.removeExitPoint = function(x, y) {
  * @param y
  */
 Level.prototype.isEntryOrExitPoint = function(x, y) {
-    for (var i in this._entryPoints) {
-        var point = this._entryPoints[i];
+    for (var i in this.entryPoints) {
+        var point = this.entryPoints[i];
         if (point[0] == x && point[1]== y) {
             return true;
         }
     }
-    for (var i in this._exitPoints) {
-        var point = this._exitPoints[i];
+    for (var i in this.exitPoints) {
+        var point = this.exitPoints[i];
         if (point[0] == x && point[1]== y) {
             return true;
         }
@@ -401,21 +361,31 @@ Level.prototype.isEntryOrExitPoint = function(x, y) {
 
 
 // Agent functions
-Level.prototype.getLevelAgents = function() { return this._levelAgents; };
-Level.prototype.setLevelAgents = function(levelAgents) { this._levelAgents = levelAgents; };
-Level.prototype.addLevelAgent = function(agent) { this._levelAgents.push(agent); };
-Level.prototype.getWaveAgents = function() { return this._waveAgents; };
-Level.prototype.setWaveAgents = function(waveAgents) { this._waveAgents = waveAgents; };
-Level.prototype.addWaveAgent = function(agent) { this._waveAgents.push(agent); };
-Level.prototype.getCurrentAgents = function() { return this._currentAgents; };
+
+/**
+ * Adds an agent to the level agent collection
+ * @param agent
+ */
+Level.prototype.addLevelAgent = function(agent) { this.levelAgents.push(agent); };
+
+/**
+ * Adds an agent to the wave agent collection
+  * @param agent
+ */
+Level.prototype.addWaveAgent = function(agent) { this.waveAgents.push(agent); };
+
+/**
+ * Sets the current agent collection, and adds agents to a map
+ * @param currentAgents
+ */
 Level.prototype.setCurrentAgents = function(currentAgents) {
-    this._currentAgents = currentAgents;
-    for (var i in this._currentAgents) {
-        var agent = this._currentAgents[i];
-        this._currentAgentsMap[agent._id] = agent;
+    this.currentAgents = currentAgents;
+    for (var i in this.currentAgents) {
+        var agent = this.currentAgents[i];
+        this.currentAgentsMap[agent.id] = agent;
     }
 };
-Level.prototype.getAgentByID = function(agentID) { return this._currentAgentsMap[agentID]; };
+Level.prototype.getAgentByID = function(agentID) { return this.currentAgentsMap[agentID]; };
 /**
  *
  * @param agentType
@@ -423,8 +393,8 @@ Level.prototype.getAgentByID = function(agentID) { return this._currentAgentsMap
  */
 Level.prototype.generateAgents = function(agentType, number) {
     var agents = [];
-    for (var j = 0; j < this._entryPoints.length; j++) {
-        var point = this._entryPoints[j];
+    for (var j = 0; j < this.entryPoints.length; j++) {
+        var point = this.entryPoints[j];
         var x = point[0];
         var y = point[1];
         for (var i = 0; i < number; i ++) {
@@ -433,9 +403,8 @@ Level.prototype.generateAgents = function(agentType, number) {
             var colorScheme = (colorSeed == 0 ? "000" : (colorSeed == 1 ? "0f0" : "00f"));
             // TODO: Make this option configurable
 //            agent.setColor(colorScheme);
-            var delay = parseInt(Math.random() * DEFAULT_SPEED * 5);
-            agent.setDelay(delay);
-            agent.setCanCommunicateWithOtherAgents(World.settings.agentsCanCommunicate);
+            agent.delay = parseInt(Math.random() * DEFAULT_SPEED * 5);
+            agent.canCommunicateWithOtherAgents = (World.settings.agentsCanCommunicate);
 
             // Reduce health of a random category
             if (World.settings.agentsHaveRandomInitialHealth) {
@@ -452,7 +421,7 @@ Level.prototype.generateAgents = function(agentType, number) {
         }
     }
     $.merge(agents, this.generateWaveAgents(number));
-    $.merge(agents, this.getLevelAgents());
+    $.merge(agents, this.levelAgents);
 
     this.setCurrentAgents(agents);
 };
@@ -463,9 +432,9 @@ Level.prototype.generateAgents = function(agentType, number) {
 Level.prototype.generateWaveAgents = function(numAgents) {
     var newAgents = [];
     for (var j = 0; j < numAgents; j++) {
-        for (var i = 0; i < this._waveAgents.length; i++) {
-            var waveAgent = this._waveAgents[i];
-            newAgents.push(new Agent(waveAgent.getType(), waveAgent.getX(), waveAgent.getY()));
+        for (var i = 0; i < this.waveAgents.length; i++) {
+            var waveAgent = this.waveAgents[i];
+            newAgents.push(new Agent(waveAgent.agentType, waveAgent.x, waveAgent.y));
         }
     }
     return newAgents;
@@ -475,12 +444,12 @@ Level.prototype.generateWaveAgents = function(numAgents) {
  * Indicates total number of agents saveable on this level
  */
 Level.prototype.getTotalSaveableAgents = function () {
-    var firstWave = this._initialAgentNumber;
-    var lastWave = this._waveNumber + this._initialAgentNumber -1;
+    var firstWave = this.initialAgentNumber;
+    var lastWave = this.waveNumber + this.initialAgentNumber -1;
     var minor = (firstWave * (firstWave - 1)) / 2;
     var major = (lastWave * (lastWave + 1)) / 2;
     var saveablePerEntryPoint = major - minor;
-    var totalSaveable = saveablePerEntryPoint * this._entryPoints.length;
+    var totalSaveable = saveablePerEntryPoint * this.entryPoints.length;
     return totalSaveable;
 };
 
@@ -490,29 +459,29 @@ Level.prototype.getTotalSaveableAgents = function () {
 /**
  *
  */
-Level.prototype.getResources = function() { return this._resources; };
+Level.prototype.getResources = function() { return this.resources; };
 /**
  * 
  * @param resources
  */
 Level.prototype.resetResources = function() {
-    this._resources = [];
-    this._levelResources = this._levelResources || [];
-    for (var i in this._levelResources) {
-        this._resources.push(this._levelResources[i]);
+    this.resources = [];
+    this.levelResources = this.levelResources || [];
+    for (var i in this.levelResources) {
+        this.resources.push(this.levelResources[i]);
     }
-//    this._levelResources.forEach(function(resource) {
-//        this._resources.push(resource);
+//    this.levelResources.forEach(function(resource) {
+//        this.resources.push(resource);
 //    });
-    this._resourceCategoryCounts = this.resetResourceCategoryCounts();
+    this.resourceCategoryCounts = this.resetResourceCategoryCounts();
 };
 /**
  *
  * @param resources
  */
 Level.prototype.setResources = function(resources) {
-    this._resources = resources;
-    this._resourceCategoryCounts = this.resetResourceCategoryCounts();
+    this.resources = resources;
+    this.resourceCategoryCounts = this.resetResourceCategoryCounts();
 };
 
 /**
@@ -520,8 +489,8 @@ Level.prototype.setResources = function(resources) {
  * @param resources
  */
 Level.prototype.setLevelResources = function(levelResources) {
-    this._levelResources = levelResources;
-    this._resourceCategoryCounts = this.resetResourceCategoryCounts();
+    this.levelResources = levelResources;
+    this.resourceCategoryCounts = this.resetResourceCategoryCounts();
 };
 
 
@@ -530,7 +499,7 @@ Level.prototype.setLevelResources = function(levelResources) {
  * @param resource
  */
 Level.prototype.addResource = function(resource) {
-    this._resources.push(resource);
+    this.resources.push(resource);
     this.incrementResourceCategoryCount(resource);
 };
 
@@ -541,7 +510,7 @@ Level.prototype.addResource = function(resource) {
 Level.prototype.removeResource = function(resource) {
     var index = this.getCurrentResourceIndex(resource);
     if (index > -1) {
-        this._resources.splice(index, 1);
+        this.resources.splice(index, 1);
         this.decrementResourceCategoryCount(resource);
     }
 };
@@ -554,8 +523,8 @@ Level.prototype.removeResource = function(resource) {
 Level.prototype.removeResourceByPosition = function(x, y) {
     var index = this.getResourceIndexAtPosition(x, y);
     if (index > -1) {
-        var resource = this._resources[index];
-        this._resources.splice(index, 1);
+        var resource = this.resources[index];
+        this.resources.splice(index, 1);
         this.decrementResourceCategoryCount(resource);
     }
 };
@@ -566,10 +535,10 @@ Level.prototype.removeResourceByPosition = function(x, y) {
 Level.prototype.resetResourceCategoryCounts = function() {
     var rcc = {};
     World.resourceCategories.forEach(function(resourceCategory) {
-        rcc[resourceCategory._code] = 0;
+        rcc[resourceCategory.code] = 0;
     });
-    this._resources.forEach(function(resource) {
-        rcc[resource._resourceCategory._code] += 1;
+    this.resources.forEach(function(resource) {
+        rcc[resource.category.code] += 1;
     });
     return rcc;
 };
@@ -578,27 +547,42 @@ Level.prototype.resetResourceCategoryCounts = function() {
  * @param resource
  */
 Level.prototype.incrementResourceCategoryCount = function(resource) {
-    this._resourceCategoryCounts[resource.getCategory().getCode()] += 1;
+    this.resourceCategoryCounts[resource.category.code] += 1;
 };
+/**
+ * Decrements the resource category count
+ * @param resource
+ */
 Level.prototype.decrementResourceCategoryCount = function(resource) {
-    this._resourceCategoryCounts[resource.getCategory().getCode()] -= 1;
+    this.resourceCategoryCounts[resource.category.code] -= 1;
 };
+/**
+ * Gets the recource category count collection
+ */
 Level.prototype.getResourceCategoryCounts = function() {
-    return this._resourceCategoryCounts;
+    return this.resourceCategoryCounts;
 };
+/**
+ * Counts the resources of a given resource category
+ * @param code
+ */
 Level.prototype.getResourceCategoryCount = function(code) {
-    return this._resourceCategoryCounts[code];
+    return this.resourceCategoryCounts[code];
 };
+/**
+ * Gets the proportion of resources with the given resource category code
+ * @param code
+ */
 Level.prototype.getResourceCategoryProportion = function(code) {
-    return this.getResourceCategoryCount(code) / this._resources.length;
+    return this.getResourceCategoryCount(code) / this.resources.length;
 };
 
 /**
  * Find the current resource index
  */
 Level.prototype.getCurrentResourceIndex = function (resource) {
-    for (var i = 0; i < this._resources.length; i++) {
-        var tmp = this._resources[i];
+    for (var i = 0; i < this.resources.length; i++) {
+        var tmp = this.resources[i];
         if (tmp == resource) {
             return i;
         }
@@ -609,9 +593,9 @@ Level.prototype.getCurrentResourceIndex = function (resource) {
  * Find the current resource index
  */
 Level.prototype.isPositionOccupiedByResource = function (x, y) {
-    for (var i = 0; i < this._resources.length; i++) {
-        var resource = this._resources[i];
-        if (resource.getX() == x && resource.getY() == y)
+    for (var i = 0; i < this.resources.length; i++) {
+        var resource = this.resources[i];
+        if (resource.x == x && resource.y == y)
             return true;
     }
     return false;
@@ -621,9 +605,9 @@ Level.prototype.isPositionOccupiedByResource = function (x, y) {
  * Find the current resource at a position
  */
 Level.prototype.getResourceIndexAtPosition = function (x, y) {
-    for (var i = 0; i < this._resources.length; i++) {
-        var resource = this._resources[i];
-        if (resource.getX() == x && resource.getY() == y)
+    for (var i = 0; i < this.resources.length; i++) {
+        var resource = this.resources[i];
+        if (resource.x == x && resource.y == y)
             return i;
     }
     return -1;
@@ -641,11 +625,11 @@ Level.prototype.getResourceIndexAtPosition = function (x, y) {
  */
 Level.prototype.calculateResourceEffect = function (resource, ignoreResourceMix, resourcesInTension) {
         // Allow this calculation to be ignored
-        if (ignoreResourceMix || World.settings.ignoreResourceBalance || World.settings.applyGeneralHealth || this._resources.length <= 1)
+        if (ignoreResourceMix || World.settings.ignoreResourceBalance || World.settings.applyGeneralHealth || this.resources.length <= 1)
             return 1;
 
-        var code = resource.getCategory().getCode();
-        var totalResources = this._resources.length;
+        var code = resource.category.code;
+        var totalResources = this.resources.length;
         var resourceCategoryCount = this.getResourceCategoryCount(code);
         var resourceTypeProportion = (resourceCategoryCount / totalResources) * totalResources;
         var proportionOfIdeal = (resourceTypeProportion <= 1) ? resourceTypeProportion : ((totalResources - resourceTypeProportion) / (totalResources - 1));
@@ -665,20 +649,20 @@ Level.prototype.calculateResourceEffect = function (resource, ignoreResourceMix,
  * @returns   The effect to apply
  */
 Level.prototype.calculateSurroundingResourcesEffects = function (resource) {
-        var x = resource.getX();
-        var y = resource.getY();
-        var resourceCategory = resource.getCategory();
+        var x = resource.x;
+        var y = resource.y;
+        var resourceCategory = resource.category;
         var baseEffect = 1;
-        for (var i in this._resources) {
-            var neighbour = this._resources[i];
-            var nx = neighbour.getX();
-            var ny = neighbour.getY();
+        for (var i in this.resources) {
+            var neighbour = this.resources[i];
+            var nx = neighbour.x;
+            var ny = neighbour.y;
             if (nx == x && ny == y)
                 continue;
 //            if (Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
             // Added global resource tension setting
             if (World.settings.resourcesInTensionGlobally || Math.abs(nx - x) <= 1 && Math.abs(ny - y) <= 1) {
-                var neighbourCategory = neighbour.getCategory();
+                var neighbourCategory = neighbour.category;
                 baseEffect *= resourceCategory.doEvaluateOtherCategoryImpact(neighbourCategory);
             }
         }
@@ -689,8 +673,8 @@ Level.prototype.calculateSurroundingResourcesEffects = function (resource) {
  * Resets all resource yields to their original values
  */
 Level.prototype.resetResourceYields = function () {
-    this._resources.forEach(function(resource) {
-        resource.setTotalYield(resource.getInitialTotalYield());
+    this.resources.forEach(function(resource) {
+        resource.totalYield = resource.initialTotalYield;
     });
 };
 
@@ -702,10 +686,9 @@ Level.prototype.resetResourceYields = function () {
  */
 Level.prototype.recoverResources = function () {
     var recoveredResources = [];
-    this._resources.forEach(function(resource) {
-        if (resource.getTotalYield() < resource.getInitialTotalYield()) {
+    this.resources.forEach(function(resource) {
+        if (resource.totalYield < resource.initialTotalYield) {
             /* Overly generous... */
-//          resource.setTotalYield(p.getTotalYield() + p.getPerAgentYield());
             resource.incrementTotalYield();
             recoveredResources.push(resource);
         }
@@ -720,15 +703,15 @@ Level.prototype.recoverResources = function () {
  * TODO: Add tests
  */
 Level.prototype.processNeighbouringResources = function(agent) {
-    var x = agent.getX();
-    var y = agent.getY();
-    for (var j = 0; j < this.getResources().length; j++) {
-        var resource = this.getResources()[j];
-        var rx = resource.getX();
-        var ry = resource.getY();
+    var x = agent.x;
+    var y = agent.y;
+    for (var j = 0; j < this.resources.length; j++) {
+        var resource = this.resources[j];
+        var rx = resource.x;
+        var ry = resource.y;
         if (Math.abs(rx - x) <= 1 && Math.abs(ry - y) <= 1) {
             var resourceEffect = this.calculateResourceEffect(resource);
-            resource.provideYield(agent, resourceEffect, !this._noSpeedChange);
+            resource.provideYield(agent, resourceEffect, !this.noSpeedChange);
         }
     }
 };
@@ -743,24 +726,34 @@ Level.prototype.processNeighbouringAgents = function(agent) {
     if (World.settings.godMode || !World.settings.predatorsVisible)
         return;
 
-    var x = agent.getX();
-    var y = agent.getY();
-    agent.setIsHit(false);
-    var agents = this.getCurrentAgents();
+    var x = agent.x;
+    var y = agent.y;
+    agent.isHit = (false);
+    var agents = this.currentAgents;
     for (var j = 0; j < agents.length; j++) {
         var a = agents[j];
-        var ax = a.getX();
-        var ay = a.getY();
+        var ax = a.x;
+        var ay = a.y;
         if (Math.abs(ax - x) <= 1 && Math.abs(ay - y) <= 1) {
-            if (!World.settings.godMode && World.settings.predatorsVisible && agent.getType().isHitable() && a.getType().canHit()) {
-                agent.setIsHit(true);
+            if (!World.settings.godMode && World.settings.predatorsVisible && agent.agentType.isHitable && a.agentType.canHit) {
+                agent.isHit = true;
             }
         }
     }
-    if (agent.getIsHit())
+    if (agent.isHit)
         agent.adjustGeneralHealth(-10);
 };
 
+/**
+ * Makes a level from a JSON object
+ */
+Level.makeLevelFromJSONObject = function(newLevel, prototype) {
+    for (var key in prototype) {
+        if (typeof(prototype[key]) == "function") {
+            newLevel[key] = prototype[key];
+        }
+    }
+};
 
 
 

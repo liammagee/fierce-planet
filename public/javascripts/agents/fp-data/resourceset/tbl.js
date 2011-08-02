@@ -17,7 +17,7 @@ TBL.ECO_CATEGORY = new ResourceCategory("Economic", "eco", "44ABE0");
 TBL.ENV_CATEGORY = new ResourceCategory("Environmental", "env", "ABBB2A");
 TBL.SOC_CATEGORY = new ResourceCategory("Social", "soc", "DE1F2A");
 TBL.ECO_CATEGORY.setEvaluateOtherCategoryImpact(function(otherCategory) {
-    var neighbourCategoryCode = otherCategory.getCode();
+    var neighbourCategoryCode = otherCategory.code;
     var baseEffect = 1.0;
     if (neighbourCategoryCode == "eco") {
         baseEffect *= 1.0;
@@ -31,7 +31,7 @@ TBL.ECO_CATEGORY.setEvaluateOtherCategoryImpact(function(otherCategory) {
     return baseEffect;
 });
 TBL.ENV_CATEGORY.setEvaluateOtherCategoryImpact(function(otherCategory) {
-    var neighbourCategoryCode = otherCategory.getCode();
+    var neighbourCategoryCode = otherCategory.code;
     var baseEffect = 1.0;
     if (neighbourCategoryCode == "eco") {
         baseEffect *= 0.25;
@@ -45,7 +45,7 @@ TBL.ENV_CATEGORY.setEvaluateOtherCategoryImpact(function(otherCategory) {
     return baseEffect;
 });
 TBL.SOC_CATEGORY.setEvaluateOtherCategoryImpact(function(otherCategory) {
-    var neighbourCategoryCode = otherCategory.getCode();
+    var neighbourCategoryCode = otherCategory.code;
     var baseEffect = 1.0;
     if (neighbourCategoryCode == "eco") {
         baseEffect *= 0.5;

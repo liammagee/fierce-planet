@@ -9,26 +9,39 @@ catch (err) {
 }
 */
 
-FiercePlanet.currentLevel = new Level(<%= @level.id %>);
-FiercePlanet.currentLevel.setName("<%= @level.name %>");
-FiercePlanet.currentLevel.setWorldWidth(<%= @level.world_width %>);
-FiercePlanet.currentLevel.setWorldHeight(<%= @level.world_height %>);
-FiercePlanet.currentLevel.setIntroduction("<%= @level.notice %>");
-FiercePlanet.currentLevel.setInitialAgentNumber(<%= @level.initial_agent_number %>);
-FiercePlanet.currentLevel.setWaveNumber(<%= @level.wave_number %>);
-FiercePlanet.currentLevel.setExpiryLimit(<%= @level.expiry_limit %>);
-FiercePlanet.currentLevel.setAllowOffscreenCycling(<%= @level.allow_offscreen_cycling %>);
-FiercePlanet.currentLevel.setAllowResourcesOnPath(<%= @level.allow_patches_on_path %>);
-FiercePlanet.currentLevel.setMapURL("<%= @level.image_src %>");
-FiercePlanet.currentLevel.setMapOptions({
-<% if @level.google_map_lat and @level.google_map_long and !@level.google_map_lat.empty? and !@level.google_map_long.empty? %>
-    <%= raw 'center: new google.maps.LatLng(' + @level.google_map_lat + ',' + @level.google_map_long + '),'%>
-<% end %>
-<%= raw 'mapTypeId: ' + @level.google_map_type_id + ',' unless @level.google_map_type_id.nil? or @level.google_map_type_id.empty? %>
-<%= raw 'tilt: ' + @level.google_map_tilt + ',' unless @level.google_map_tilt.nil? or @level.google_map_tilt.empty? %>
-<%= raw 'zoom: ' + @level.google_map_zoom + '' unless @level.google_map_zoom.nil? or @level.google_map_zoom.empty? %>
+json_a = '<%= raw @level.json_blob %>';
+json = '<%= raw @level.json_blob %>';
+tmpLevel = $.evalJSON(json)
+Level.makeLevelFromJSONObject(tmpLevel, Level.prototype);
+for (var i in tmpLevel.resources) {
+    Level.makeLevelFromJSONObject(tmpLevel.resources[i], Resource.prototype);
+}
+tmpLevel.levelResources = tmpLevel.resources;
+FiercePlanet.currentLevel = tmpLevel;
+FiercePlanet.currentLevel.mapOptions = ({
+    <% if @level.google_map_lat and @level.google_map_long and !@level.google_map_lat.empty? and !@level.google_map_long.empty? %>
+        <%= raw 'center: new google.maps.LatLng(' + @level.google_map_lat + ',' + @level.google_map_long + '),'%>
+    <% end %>
+    <%= raw 'mapTypeId: ' + @level.google_map_type_id + ',' unless @level.google_map_type_id.nil? or @level.google_map_type_id.empty? %>
+    <%= raw 'tilt: ' + @level.google_map_tilt + ',' unless @level.google_map_tilt.nil? or @level.google_map_tilt.empty? %>
+    <%= raw 'zoom: ' + @level.google_map_zoom + '' unless @level.google_map_zoom.nil? or @level.google_map_zoom.empty? %>
 });
-FiercePlanet.currentLevel.setCustomLevel(true);
+
+
+/*
+FiercePlanet.currentLevel = new Level(<%= @level.id %>);
+FiercePlanet.currentLevel.name = ("<%= @level.name %>");
+FiercePlanet.currentLevel.worldWidth = (<%= @level.world_width %>);
+FiercePlanet.currentLevel.worldHeight = (<%= @level.world_height %>);
+FiercePlanet.currentLevel.introduction = ("<%= @level.notice %>");
+FiercePlanet.currentLevel.initialAgentNumber = (<%= @level.initial_agent_number %>);
+FiercePlanet.currentLevel.waveNumber = (<%= @level.wave_number %>);
+FiercePlanet.currentLevel.expiryLimit = (<%= @level.expiry_limit %>);
+FiercePlanet.currentLevel.allowOffscreenCycling = (<%= @level.allow_offscreen_cycling %>);
+FiercePlanet.currentLevel.allowResourcesOnPath = (<%= @level.allow_patches_on_path %>);
+FiercePlanet.currentLevel.mapURL = ("<%= @level.image_src %>");
+
+FiercePlanet.currentLevel.isCustomLevel = true;
 FiercePlanet.currentLevel.setupLevel = function() {};
 FiercePlanet.currentLevelNumber = <%= @level.id %>;
 FiercePlanet.currentLevelPreset = false;
@@ -47,14 +60,10 @@ arr = [];
 try {
     arr = $.evalJSON(jsonArray);
     arr.forEach(function(resource) {
-        resource.getCategory = Resource.prototype.getCategory;
-        resource.getX = Resource.prototype.getX;
-        resource.getY = Resource.prototype.getY;
         resource.provideYield = Resource.prototype.provideYield;
         resource.getTotalYield = Resource.prototype.getTotalYield;
         resource.getInitialTotalYield = Resource.prototype.getInitialTotalYield;
         resource.incrementTotalYield = Resource.prototype.incrementTotalYield;
-        resource._resourceCategory.getCode = ResourceCategory.prototype.getCode;
     });
     FiercePlanet.currentLevel.setLevelResources(arr);
 }
@@ -84,4 +93,5 @@ catch (err) {
         console.log(err);
 }
 FiercePlanet.currentLevel.setExitPoints(arr);
+*/
 

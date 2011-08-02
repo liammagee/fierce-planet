@@ -10,6 +10,15 @@
 
 var FiercePlanet = FiercePlanet || {};
 
+/**
+ * @namespace Contains utility functions
+ */
+FiercePlanet.Utils = FiercePlanet.Utils || {};
+
+(function() {
+
+}).apply(FiercePlanet.Utils);
+
 
 /**
  * Always send the authenticity_token with ajax
@@ -79,7 +88,10 @@ FiercePlanet.initialiseWorldSettings = function() {
     World.settings.useInlineResourceSwatch = World.settings.useInlineResourceSwatch || false;
     World.settings.allowInlinePanning = World.settings.allowInlinePanning || false;
     World.settings.agentTracing = World.settings.agentTracing || false;
-    World.settings.invisiblePath = World.settings.invisiblePath || false;
+    World.settings.hidePath = World.settings.hidePath || false;
+    World.settings.hidePathBorder = World.settings.hidePathBorder || false;
+    World.settings.showGraph = World.settings.showGraph || false;
+
     World.settings.rivalsVisible = World.settings.rivalsVisible || false;
     World.settings.predatorsVisible = World.settings.predatorsVisible || false;
     World.settings.tilesMutable = World.settings.tilesMutable || false;
@@ -157,6 +169,23 @@ FiercePlanet.setAndStoreProperties = function() {
     // Store all settings
     World.settings.store();
 
+    FiercePlanet.processSettings();
+
+    FiercePlanet.restartLevel();
+};
+
+
+/**
+ * Processes settings
+ */
+FiercePlanet.processSettings = function() {
+    // Handle setting specific settings
+    if (World.settings.showGraph) {
+        FiercePlanet.Drawing.drawGraph();
+    }
+    else {
+        FiercePlanet.Drawing.clearGraph();
+    }
 
     if (World.settings.disableKeyboardShortcuts)
         $(document).unbind('keydown');
@@ -173,6 +202,23 @@ FiercePlanet.setAndStoreProperties = function() {
     else
         $('#upgrade-option').css('display', 'none');
 
-
-    FiercePlanet.restartLevel();
+    if (World.settings.makeSquare) {
+//        $('#world').height($('#world').width());
+        $('#world').height(480);
+        $('#map_canvas').height(480);
+        $('canvas').height(480);
+        $('canvas').width(480);
+        $('#notifications').css('top', '597px');
+        $('#level-editor').css('top', '580px');
+//        FiercePlanet.WORLD_HEIGHT = 480;
+    }
+    else {
+        $('#world').height(400);
+        $('#map_canvas').height(400);
+        $('canvas').height(400);
+        $('canvas').width(480);
+        $('#notifications').css('top', '517px');
+        $('#level-editor').css('top', '500px');
+        FiercePlanet.WORLD_HEIGHT = 400;
+    }   
 };

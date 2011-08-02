@@ -12,9 +12,9 @@
     var socResourceType = new ResourceType("Clinic", "clinic", "", 10, 20, 100, 5);
 
     // Assign categories to types
-    ecoResourceType.setCategory(ecoResourceCategory);
-    envResourceType.setCategory(envResourceCategory);
-    socResourceType.setCategory(socResourceCategory);
+    ecoResourceType.category = (ecoResourceCategory);
+    envResourceType.category = (envResourceCategory);
+    socResourceType.category = (socResourceCategory);
 
     var resourceCategories = [ecoResourceCategory, envResourceCategory, socResourceCategory];
     var resourceTypes = [ecoResourceType, envResourceType, socResourceType];

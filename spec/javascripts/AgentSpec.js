@@ -9,21 +9,21 @@ describe("agent-related classes", function() {
 
     describe("an agent", function() {
         it("should have a type", function() {
-          expect(agent.getType()).toEqual(World.agentTypes[0]);
+          expect(agent.agentType).toEqual(World.agentTypes[0]);
         });
 
         it("should have a unique id", function() {
-          expect(agent.getID()).toNotEqual((new Agent(World.agentTypes[0], 0, 0).getID()));
+          expect(agent.id).toNotEqual((new Agent(World.agentTypes[0], 0, 0).id));
         });
 
         describe("health functions", function() {
             it("should have 3 health statistics, all set to 100 by default", function() {
-                var healthStats = agent.getHealthStatistics();
+                var healthStats = agent.healthCategoryStats;
 
                 expect(healthStats.length).toEqual(3);
-                expect(healthStats[World.resourceCategories[0].getCode()]).toEqual(INITIAL_HEALTH);
-                expect(healthStats[World.resourceCategories[1].getCode()]).toEqual(INITIAL_HEALTH);
-                expect(healthStats[World.resourceCategories[2].getCode()]).toEqual(INITIAL_HEALTH);
+                expect(healthStats[World.resourceCategories[0].code]).toEqual(INITIAL_HEALTH);
+                expect(healthStats[World.resourceCategories[1].code]).toEqual(INITIAL_HEALTH);
+                expect(healthStats[World.resourceCategories[2].code]).toEqual(INITIAL_HEALTH);
             });
 
             describe("when general health is adjusted", function() {
@@ -34,15 +34,15 @@ describe("agent-related classes", function() {
                 });
 
                 it("should adjust general health (obviously)", function() {
-                    expect(agent.getHealth()).toEqual(INITIAL_HEALTH + adjustment);
+                    expect(agent.health).toEqual(INITIAL_HEALTH + adjustment);
                 });
 
                 it("should also adjust specific health statistics", function() {
-                    var healthStats = agent.getHealthStatistics();
+                    var healthStats = agent.healthCategoryStats;
 
-                    expect(healthStats[World.resourceCategories[0].getCode()]).toEqual(INITIAL_HEALTH + adjustment);
-                    expect(healthStats[World.resourceCategories[1].getCode()]).toEqual(INITIAL_HEALTH + adjustment);
-                    expect(healthStats[World.resourceCategories[2].getCode()]).toEqual(INITIAL_HEALTH + adjustment);
+                    expect(healthStats[World.resourceCategories[0].code]).toEqual(INITIAL_HEALTH + adjustment);
+                    expect(healthStats[World.resourceCategories[1].code]).toEqual(INITIAL_HEALTH + adjustment);
+                    expect(healthStats[World.resourceCategories[2].code]).toEqual(INITIAL_HEALTH + adjustment);
                 });
             });
 
@@ -55,14 +55,14 @@ describe("agent-related classes", function() {
                 });
 
                 it("should adjust health for just that category", function() {
-                    var healthStats = agent.getHealthStatistics();
-                    expect(healthStats[World.resourceCategories[0].getCode()]).toEqual(INITIAL_HEALTH + adjustment);
-                    expect(healthStats[World.resourceCategories[1].getCode()]).toEqual(INITIAL_HEALTH);
-                    expect(healthStats[World.resourceCategories[2].getCode()]).toEqual(INITIAL_HEALTH);
+                    var healthStats = agent.healthCategoryStats;
+                    expect(healthStats[World.resourceCategories[0].code]).toEqual(INITIAL_HEALTH + adjustment);
+                    expect(healthStats[World.resourceCategories[1].code]).toEqual(INITIAL_HEALTH);
+                    expect(healthStats[World.resourceCategories[2].code]).toEqual(INITIAL_HEALTH);
                 });
 
                 it("should also adjust general health by a third of that amount (when there are three resource categories)", function() {
-                    expect(agent.getHealth()).toEqual(INITIAL_HEALTH + (adjustment / World.resourceCategories.length));
+                    expect(agent.health).toEqual(INITIAL_HEALTH + (adjustment / World.resourceCategories.length));
                 });
 
                 it("should also return the correct result when health for a given resource is queried", function() {
@@ -106,7 +106,7 @@ describe("agent-related classes", function() {
 
 
             it("should have a default speed", function() {
-                expect(agent.getSpeed()).toEqual(5);
+                expect(agent.speed).toEqual(5);
             });
 
 
@@ -114,18 +114,18 @@ describe("agent-related classes", function() {
                 Log.level = Log.DEBUG;
                 agent.adjustSpeed();
 
-                expect(agent.getSpeed()).toBeLessThan(7);
-                expect(agent.getSpeed()).toBeGreaterThan(3);
+                expect(agent.speed).toBeLessThan(7);
+                expect(agent.speed).toBeGreaterThan(3);
                 Log.level = Log.WARN;
             });
 
 
 
             it("should change speed when the current speed deviates from the default", function() {
-                agent.setSpeed(100);
+                agent.speed = (100);
                 agent.adjustSpeed();
 
-                expect(agent.getSpeed()).toBeLessThan(100);
+                expect(agent.speed).toBeLessThan(100);
             });
 
             function calculateSpeeds(iterations) {
@@ -135,15 +135,15 @@ describe("agent-related classes", function() {
                 var notCurrent = 0;
                 var areCurrent = 0;
 
-                var currentSpeed = agent.getSpeed();
+                var currentSpeed = agent.speed;
                 for (var i =0 ; i < iterations; i++) {
                     agent.adjustSpeed();
-                    aggregateSpeeds += agent.getSpeed();
-                    if (agent.getSpeed() > currentSpeed) {
+                    aggregateSpeeds += agent.speed;
+                    if (agent.speed > currentSpeed) {
                         notCurrent++;
                         aboveCurrent++;
                     }
-                    else if (agent.getSpeed() < currentSpeed) {
+                    else if (agent.speed < currentSpeed) {
                         notCurrent++;
                         belowCurrent++;
                     }
@@ -151,7 +151,7 @@ describe("agent-related classes", function() {
                         areCurrent++;
                     }
                     // Reset agent's speed
-                    agent.setSpeed(currentSpeed);
+                    agent.speed = (currentSpeed);
                 }
 
                 var averageSpeed = Math.round(aggregateSpeeds / iterations);
@@ -175,7 +175,7 @@ describe("agent-related classes", function() {
             });
 
             it("should change speed by average quantities when the current speed deviates from the default", function() {
-                agent.setSpeed(100);
+                agent.speed = (100);
                 var speeds = calculateSpeeds(1000);
                 expect(speeds.averageSpeed).toBeLessThan(100);
                 expect(speeds.averageSpeed).toBeGreaterThan(5);
@@ -208,18 +208,18 @@ describe("agent-related classes", function() {
                 });
 
                 it("should have a default speed", function() {
-                    expect(agent.getSpeed()).toEqual(5);
+                    expect(agent.speed).toEqual(5);
                 });
 
                 it("should have a new speed when it meets a resource", function() {
                     level.processNeighbouringResources(agent);
-                    expect(agent.getSpeed()).toEqual(20);
+                    expect(agent.speed).toEqual(20);
                 });
 
                 it("should not have a new speed when it meets a resource and has full health", function() {
                     agent.adjustGeneralHealth(100);
                     level.processNeighbouringResources(agent);
-                    expect(agent.getSpeed()).toEqual(5);
+                    expect(agent.speed).toEqual(5);
                 });
             });
         });
@@ -242,15 +242,15 @@ describe("agent-related classes", function() {
             });
 
             it("should have a memory", function() {
-                expect(agent.getMemories()[[4, 5]]).toEqual(agent.getLastMemory());
-                expect(agent.getLastMemory()).toBeDefined();
-                expect(agent.getLastMemory().getAgentID()).toEqual(agent.getID());
-                expect(agent.getLastMemory().getX()).toEqual(4);
-                expect(agent.getLastMemory().getY()).toEqual(5);
-                expect(agent.getLastMemory().getAge()).toEqual(0);
-                expect(agent.getLastMemory().getMostRecentVisit()).toEqual(0);
-                expect(agent.getLastMemory().getVisits()).toEqual(1);
-                expect(agent.getLastMemory().getDistanceFromLastUntriedPath()).toEqual(-1);
+                expect(agent.memoriesOfPlacesVisited[[4, 5]]).toEqual(agent.lastMemory);
+                expect(agent.lastMemory).toBeDefined();
+                expect(agent.lastMemory.agentID).toEqual(agent.id);
+                expect(agent.lastMemory.x).toEqual(4);
+                expect(agent.lastMemory.y).toEqual(5);
+                expect(agent.lastMemory.age).toEqual(0);
+                expect(agent.lastMemory.mostRecentVisit).toEqual(0);
+                expect(agent.lastMemory.visits).toEqual(1);
+                expect(agent.lastMemory.distanceFromLastUntriedPath).toEqual(-1);
             });
 
             describe("explicit movement", function() {
@@ -259,15 +259,15 @@ describe("agent-related classes", function() {
                 });
 
                 it("should still have the last memory", function() {
-                    expect(agent.getMemories()[[4, 5]]).toEqual(agent.getLastMemory());
-                    expect(agent.getLastMemory()).toBeDefined();
-                    expect(agent.getLastMemory().getAgentID()).toEqual(agent.getID());
-                    expect(agent.getLastMemory().getX()).toEqual(4);
-                    expect(agent.getLastMemory().getY()).toEqual(5);
-                    expect(agent.getLastMemory().getAge()).toEqual(0);
-                    expect(agent.getLastMemory().getMostRecentVisit()).toEqual(0);
-                    expect(agent.getLastMemory().getVisits()).toEqual(1);
-                    expect(agent.getLastMemory().getDistanceFromLastUntriedPath()).toEqual(-1);
+                    expect(agent.memoriesOfPlacesVisited[[4, 5]]).toEqual(agent.lastMemory);
+                    expect(agent.lastMemory).toBeDefined();
+                    expect(agent.lastMemory.agentID).toEqual(agent.id);
+                    expect(agent.lastMemory.x).toEqual(4);
+                    expect(agent.lastMemory.y).toEqual(5);
+                    expect(agent.lastMemory.age).toEqual(0);
+                    expect(agent.lastMemory.mostRecentVisit).toEqual(0);
+                    expect(agent.lastMemory.visits).toEqual(1);
+                    expect(agent.lastMemory.distanceFromLastUntriedPath).toEqual(-1);
                 });
 
                 describe("adding new memory", function() {
@@ -276,15 +276,15 @@ describe("agent-related classes", function() {
                     });
 
                     it("should have a new last memory", function() {
-                        expect(agent.getMemories()[[4, 6]]).toEqual(agent.getLastMemory());
-                        expect(agent.getLastMemory()).toBeDefined();
-                        expect(agent.getLastMemory().getAgentID()).toEqual(agent.getID());
-                        expect(agent.getLastMemory().getX()).toEqual(4);
-                        expect(agent.getLastMemory().getY()).toEqual(6);
-                        expect(agent.getLastMemory().getAge()).toEqual(1);
-                        expect(agent.getLastMemory().getMostRecentVisit()).toEqual(1);
-                        expect(agent.getLastMemory().getVisits()).toEqual(1);
-                        expect(agent.getLastMemory().getDistanceFromLastUntriedPath()).toEqual(-1);
+                        expect(agent.memoriesOfPlacesVisited[[4, 6]]).toEqual(agent.lastMemory);
+                        expect(agent.lastMemory).toBeDefined();
+                        expect(agent.lastMemory.agentID).toEqual(agent.id);
+                        expect(agent.lastMemory.x).toEqual(4);
+                        expect(agent.lastMemory.y).toEqual(6);
+                        expect(agent.lastMemory.age).toEqual(1);
+                        expect(agent.lastMemory.mostRecentVisit).toEqual(1);
+                        expect(agent.lastMemory.visits).toEqual(1);
+                        expect(agent.lastMemory.distanceFromLastUntriedPath).toEqual(-1);
                     });
 
                     describe("going back to previous position", function() {
@@ -294,13 +294,13 @@ describe("agent-related classes", function() {
                         });
 
                         it("should have a new last memory", function() {
-                            expect(agent.getMemories()[[4, 5]]).toEqual(agent.getLastMemory());
-                            expect(agent.getLastMemory().getX()).toEqual(4);
-                            expect(agent.getLastMemory().getY()).toEqual(5);
-                            expect(agent.getLastMemory().getAge()).toEqual(0);
-                            expect(agent.getLastMemory().getMostRecentVisit()).toEqual(2);
-                            expect(agent.getLastMemory().getVisits()).toEqual(2);
-                            expect(agent.getLastMemory().getDistanceFromLastUntriedPath()).toEqual(1);
+                            expect(agent.memoriesOfPlacesVisited[[4, 5]]).toEqual(agent.lastMemory);
+                            expect(agent.lastMemory.x).toEqual(4);
+                            expect(agent.lastMemory.y).toEqual(5);
+                            expect(agent.lastMemory.age).toEqual(0);
+                            expect(agent.lastMemory.mostRecentVisit).toEqual(2);
+                            expect(agent.lastMemory.visits).toEqual(2);
+                            expect(agent.lastMemory.distanceFromLastUntriedPath).toEqual(1);
                         });
 
                         describe("returning to first position", function() {
@@ -310,13 +310,13 @@ describe("agent-related classes", function() {
                             });
 
                             it("should have a new last memory", function() {
-                                expect(agent.getMemories()[[4, 6]]).toEqual(agent.getLastMemory());
-                                expect(agent.getLastMemory().getX()).toEqual(4);
-                                expect(agent.getLastMemory().getY()).toEqual(6);
-                                expect(agent.getLastMemory().getAge()).toEqual(1);
-                                expect(agent.getLastMemory().getMostRecentVisit()).toEqual(3);
-                                expect(agent.getLastMemory().getVisits()).toEqual(2);
-                                expect(agent.getLastMemory().getDistanceFromLastUntriedPath()).toEqual(1);
+                                expect(agent.memoriesOfPlacesVisited[[4, 6]]).toEqual(agent.lastMemory);
+                                expect(agent.lastMemory.x).toEqual(4);
+                                expect(agent.lastMemory.y).toEqual(6);
+                                expect(agent.lastMemory.age).toEqual(1);
+                                expect(agent.lastMemory.mostRecentVisit).toEqual(3);
+                                expect(agent.lastMemory.visits).toEqual(2);
+                                expect(agent.lastMemory.distanceFromLastUntriedPath).toEqual(1);
                             });
                         });
                     });

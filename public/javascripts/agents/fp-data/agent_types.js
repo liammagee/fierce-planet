@@ -18,8 +18,8 @@ var AgentTypes = function() {};
  * @param x - the leftmost x co-ordinate for drawing the figure
  * @param y - the topmost y co-ordinate for drawing the figure
  */
-function AgentStickFigure(_x, _y, _figureWidth, _figureHeight) {
-    var x = _x, y = _y, figureWidth = _figureWidth, figureHeight = _figureHeight;
+function AgentStickFigure(x, _y, _figureWidth, _figureHeight) {
+    var x = x, y = _y, figureWidth = _figureWidth, figureHeight = _figureHeight;
     var wholeBodyLength = (figureHeight * 1);
     var headRadius = (wholeBodyLength / 8) + 0.5 | 0;
     var bodyLength = (wholeBodyLength / 3) + 0.5 | 0;
@@ -242,8 +242,8 @@ function AgentStickFigure(_x, _y, _figureWidth, _figureHeight) {
  */
 (function() {
     AgentTypes.CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000", World.resourceCategories);
-    AgentTypes.CITIZEN_AGENT_TYPE.setHitable(true);
-    AgentTypes.CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, pieceHeight, newColor, counter, direction) {
+    AgentTypes.CITIZEN_AGENT_TYPE.isHitable = (true);
+    AgentTypes.CITIZEN_AGENT_TYPE.drawFunction = (function(ctx, agent, x, y, pieceWidth, pieceHeight, newColor, counter, direction) {
 
         if (pieceWidth < 8 || pieceHeight < 8) {
             var radius = (pieceWidth / 4);
@@ -260,8 +260,8 @@ function AgentStickFigure(_x, _y, _figureWidth, _figureHeight) {
         else {
             // Define agent elements here
             var frames = 3;
-            var speed = agent.getSpeed();
-            var countdown = agent.getCountdownToMove();
+            var speed = agent.speed;
+            var countdown = agent.countdownToMove;
             var frame = Math.floor((countdown / (speed + 1)) * frames);
 
             var sf = new AgentStickFigure(x, y, pieceWidth, pieceHeight);
@@ -402,8 +402,8 @@ function AgentStickFigure(_x, _y, _figureWidth, _figureHeight) {
     };
 
     AgentTypes.PREDATOR_AGENT_TYPE = new AgentType("Predator", "fbe53b", World.resourceCategories);
-    AgentTypes.PREDATOR_AGENT_TYPE.setCanHit(true);
-    AgentTypes.PREDATOR_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
+    AgentTypes.PREDATOR_AGENT_TYPE.canHit = (true);
+    AgentTypes.PREDATOR_AGENT_TYPE.drawFunction = (function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
         var radius = (pieceWidth / 4);
         var bodyLength = (pieceWidth / 2);
 
@@ -426,7 +426,7 @@ function AgentStickFigure(_x, _y, _figureWidth, _figureHeight) {
     });
 
     AgentTypes.RIVAL_AGENT_TYPE = new AgentType("Rival", "3be5fb", World.resourceCategories);
-    AgentTypes.RIVAL_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
+    AgentTypes.RIVAL_AGENT_TYPE.drawFunction = (function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
         var radius = (pieceWidth / 4);
         var bodyLength = (pieceWidth / 2);
 
@@ -478,7 +478,7 @@ function AgentStickFigure(_x, _y, _figureWidth, _figureHeight) {
 
 FiercePlanet.registerDefaultAgentTypes = function() {
     AgentTypes.CITIZEN_AGENT_TYPE = new AgentType("Citizen", "000", World.resourceCategories);
-    AgentTypes.CITIZEN_AGENT_TYPE.setDrawFunction(function(ctx, agent, x, y, pieceWidth, pieceHeight, newColor, counter, direction) {
+    AgentTypes.CITIZEN_AGENT_TYPE.drawFunction = (function(ctx, agent, x, y, pieceWidth, pieceHeight, newColor, counter, direction) {
         if (pieceWidth < 8 || pieceHeight < 8) {
             var radius = (pieceWidth / 4);
 
@@ -557,7 +557,7 @@ FiercePlanet.registerDefaultAgentTypes = function() {
     });
 
     AgentTypes.PREDATOR_AGENT_TYPE = new AgentType("Predator", "fbe53b", World.resourceCategories);
-    AgentTypes.PREDATOR_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
+    AgentTypes.PREDATOR_AGENT_TYPE.drawFunction = (function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
         var radius = (pieceWidth / 4);
         var bodyLength = (pieceWidth / 2);
 
@@ -580,7 +580,7 @@ FiercePlanet.registerDefaultAgentTypes = function() {
     });
 
     AgentTypes.RIVAL_AGENT_TYPE = new AgentType("Rival", "3be5fb", World.resourceCategories);
-    AgentTypes.RIVAL_AGENT_TYPE.setDrawFunction(function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
+    AgentTypes.RIVAL_AGENT_TYPE.drawFunction = (function(ctx, agent, intX, intY, pieceWidth, pieceHeight, newColor, counter, direction) {
         var radius = (pieceWidth / 4);
         var bodyLength = (pieceWidth / 2);
 

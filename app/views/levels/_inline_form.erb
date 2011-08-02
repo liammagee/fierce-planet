@@ -37,17 +37,17 @@
     }
 
     function serializeLevel() {
-        $('#level_tiles')[0].value = $.toJSON(FiercePlanet.currentLevel.getTiles());
-        $('#level_resources')[0].value = $.toJSON(FiercePlanet.currentLevel.getResources());
-        $('#level_entry_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getEntryPoints());
-        $('#level_exit_points')[0].value = $.toJSON(FiercePlanet.currentLevel.getExitPoints());
-        $('#level_google_map_type_id')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions()['mapTypeId']);
-        if (FiercePlanet.currentLevel.getMapOptions().center.lat())
-            $('#level_google_map_lat')[0].value = FiercePlanet.currentLevel.getMapOptions().center.lat();
-        if (FiercePlanet.currentLevel.getMapOptions().center.lng())
-            $('#level_google_map_long')[0].value = FiercePlanet.currentLevel.getMapOptions().center.lng();
-        $('#level_google_map_zoom')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions()['zoom']);
-        $('#level_google_map_tilt')[0].value = $.toJSON(FiercePlanet.currentLevel.getMapOptions()['tilt']);
+        $('#level_tiles')[0].value = $.toJSON(FiercePlanet.currentLevel.tiles);
+        $('#level_resources')[0].value = $.toJSON(FiercePlanet.currentLevel.resources);
+        $('#level_entry_points')[0].value = $.toJSON(FiercePlanet.currentLevel.entryPoints);
+        $('#level_exit_points')[0].value = $.toJSON(FiercePlanet.currentLevel.exitPoints);
+        $('#level_google_map_type_id')[0].value = $.toJSON(FiercePlanet.currentLevel.mapOptions['mapTypeId']);
+        if (FiercePlanet.currentLevel.mapOptions.center.lat())
+            $('#level_google_map_lat')[0].value = FiercePlanet.currentLevel.mapOptions.center.lat();
+        if (FiercePlanet.currentLevel.mapOptions.center.lng())
+            $('#level_google_map_long')[0].value = FiercePlanet.currentLevel.mapOptions.center.lng();
+        $('#level_google_map_zoom')[0].value = $.toJSON(FiercePlanet.currentLevel.mapOptions['zoom']);
+        $('#level_google_map_tilt')[0].value = $.toJSON(FiercePlanet.currentLevel.mapOptions['tilt']);
         $('#level_json_blob')[0].value = $.toJSON(FiercePlanet.currentLevel);
     }
 </script>

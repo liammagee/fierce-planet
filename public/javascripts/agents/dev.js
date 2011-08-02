@@ -11,6 +11,14 @@
 var FiercePlanet = FiercePlanet || {};
 
 
+/**
+ * @namespace Contains development functions
+ */
+FiercePlanet.Dev = FiercePlanet.Dev || {};
+
+(function() {
+
+}).apply(FiercePlanet.Dev);
 
 /**
  * Opens a console for executing JavaScript
@@ -75,32 +83,32 @@ FiercePlanet.showStoryboard = function() {
  */
 FiercePlanet.buildStoryboardForLevel = function(level) {
     var levelStoryboard = '';
-    if (level.getName())
-        levelStoryboard += '<h3>' + level.getName() + '</h3>';
-    levelStoryboard += '<div>Level ID: ' + level.getId() + '</div>';
-    levelStoryboard += '<div>Initial number of agents: ' + level.getInitialAgentNumber() + '</div>';
-    levelStoryboard += '<div>Number of waves: ' + level.getWaveNumber() + '</div>';
-    levelStoryboard += '<div>Expiry limit: ' + level.getExpiryLimit() + '</div>';
-    levelStoryboard += '<div>Initial resource store: ' + level.getInitialResourceStore() + '</div>';
-    if (level.getImage()) {
+    if (level.name)
+        levelStoryboard += '<h3>' + level.name + '</h3>';
+    levelStoryboard += '<div>Level ID: ' + level.id + '</div>';
+    levelStoryboard += '<div>Initial number of agents: ' + level.initialAgentNumber + '</div>';
+    levelStoryboard += '<div>Number of waves: ' + level.waveNumber + '</div>';
+    levelStoryboard += '<div>Expiry limit: ' + level.expiryLimit + '</div>';
+    levelStoryboard += '<div>Initial resource store: ' + level.initialResourceStore + '</div>';
+    if (level.image) {
         levelStoryboard += '<h4>Level Image</h4>';
-        levelStoryboard += '<img src="' + level.getImage() + '" alt="City Image" width="460" height="140">';
+        levelStoryboard += '<img src="' + level.image + '" alt="City Image" width="460" height="140">';
     }
-    if (level.getIntroduction()) {
+    if (level.introduction) {
         levelStoryboard += '<h4>Introduction</h4>';
-        levelStoryboard += level.getIntroduction();
+        levelStoryboard += level.introduction;
     }
-    if (level.getTip()) {
+    if (level.tip) {
         levelStoryboard += '<h4>Tip</h4>';
-        levelStoryboard += level.getTip()._text;
+        levelStoryboard += level.tip.text;
     }
-    if (level.getCatastrophe()) {
+    if (level.catastrophe) {
         levelStoryboard += '<h4>Catastrohe</h4>';
-        levelStoryboard += level.getCatastrophe()._notice._text;
+        levelStoryboard += level.catastrophe.notice.text;
     }
-    if (level.getConclusion()) {
+    if (level.conclusion) {
         levelStoryboard += '<h4>Conclusion</h4>';
-        levelStoryboard += level.getConclusion();
+        levelStoryboard += level.conclusion;
     }
     levelStoryboard += '<hr/>';
 

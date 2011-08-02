@@ -13,6 +13,16 @@ var FiercePlanet = FiercePlanet || {};
 
 
 /**
+ * @namespace Contains profile UI functions
+ */
+FiercePlanet.ProfileUI = FiercePlanet.ProfileUI || {};
+
+(function() {
+
+}).apply(FiercePlanet.ProfileUI);
+
+
+/**
  * Loads available settings from local storage
  */
 FiercePlanet.loadSettingsFromStorage = function () {
@@ -31,7 +41,7 @@ FiercePlanet.loadSettingsFromStorage = function () {
  */
 FiercePlanet.storeData = function() {
     localStorage.currentLevelNumber = FiercePlanet.currentLevelNumber;
-    localStorage.currentLevelPreset = FiercePlanet.currentLevel.isPresetLevel();
+    localStorage.currentLevelPreset = FiercePlanet.currentLevel.isPresetLevel;
     localStorage.currentProfile = $.toJSON(FiercePlanet.currentProfile);
 };
 
@@ -40,7 +50,7 @@ FiercePlanet.storeData = function() {
  * Compiles statistics for this level
  */
 FiercePlanet.serializeProfile = function() {
-    var resourceCount = FiercePlanet.currentLevel.getResources().length;
+    var resourceCount = FiercePlanet.currentLevel.resources.length;
     var profileProxy = {};
     profileProxy = FiercePlanet.currentProfile;
     var stats = {
@@ -56,7 +66,7 @@ FiercePlanet.generateStats = function() {
     var stats = "<table>" +
             "<tr>" +
             "<td>Level:</td>" +
-            "<td>" + FiercePlanet.currentLevel.getId() + "</td>" +
+            "<td>" + FiercePlanet.currentLevel.id + "</td>" +
             "</tr>" +
             "<tr>" +
             "<td>Waves survived:</td>" +

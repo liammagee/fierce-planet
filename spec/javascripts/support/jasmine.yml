@@ -14,14 +14,19 @@ src_files:
   - public/javascripts/jquery.min.js
   - public/javascripts/jasmine-jquery-1.2.0.js
   - public/javascripts/jquery.json-2.2.min.js
+  - public/javascripts/jquery.json-2.2.min.js
+  - public/javascripts/jstat-1.0.0/js/jstat-0.1.0.min.js
+  - public/javascripts/sylvester/sylvester.js
   - public/javascripts/Player.js
   - public/javascripts/Song.js
   - public/javascripts/agents/utils/log.js
   - public/javascripts/agents/framework/resource.js
   - public/javascripts/agents/framework/agent.js
+  - public/javascripts/agents/framework/culture.js
   - public/javascripts/agents/framework/world.js
   - public/javascripts/agents/framework/level.js
   - public/javascripts/agents/framework/tile.js
+  - public/javascripts/agents/framework/terrain.js
 
 # stylesheets
 #

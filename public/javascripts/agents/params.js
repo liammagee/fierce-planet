@@ -143,21 +143,4 @@ FiercePlanet.currentX = null;
 FiercePlanet.currentY = null;
 
 
-// Dialogs
-// TODO: Create separate namespace
-
-// Main game dialogs
-FiercePlanet.gameOverDialog = null;
-FiercePlanet.completeLevelDialog = null;
-FiercePlanet.completeGameDialog = null;
-FiercePlanet.upgradeDeleteDialog = null;
-FiercePlanet.resourceGalleryDialog = null;
-FiercePlanet.newLevelDialog = null;
-FiercePlanet.settingsDialog = null;
-FiercePlanet.$genericDialog = null;
-FiercePlanet.$highScores = null;
-
-// Level editor dialogs
-FiercePlanet.designFeaturesDialog = null;
-FiercePlanet.editPropertiesDialog = null;
 
