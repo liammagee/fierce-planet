@@ -3,12 +3,14 @@
 FiercePlanet._stopAgents();
 
 // Construct and show the level gallery
-FiercePlanet.$genericDialog = $('<div></div>')
+var dialogX = FiercePlanet.Dialogs.calculateWorldLeft();
+var dialogY = FiercePlanet.Dialogs.calculateWorldTop();
+FiercePlanet.genericDialog = $('<div></div>')
         .html("<%=  escape_javascript(render('profiles/form', :locals => { :levels => @levels})) %>")
         .dialog({
-                                              position: [FiercePlanet.calculateWorldLeft(), 110],
-                                              width: 487,
-                                              height: 407,
+                 position: [dialogX, dialogY],
+                 width: FiercePlanet.WORLD_WIDTH + 7,
+                 height: FiercePlanet.WORLD_HEIGHT + 7,
                     autoOpen: false,
                     modal: true,
                     title: 'Profile',
@@ -22,4 +24,4 @@ FiercePlanet.$genericDialog = $('<div></div>')
                     }
 
                 });
-FiercePlanet.$genericDialog.dialog('open');
+FiercePlanet.genericDialog.dialog('open');

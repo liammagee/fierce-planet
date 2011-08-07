@@ -108,7 +108,7 @@ FiercePlanet.Editor = FiercePlanet.Editor || {};
         if (e.preventDefault) e.preventDefault(); // allows us to drop
         if (FiercePlanet.isMouseDown) {
             FiercePlanet.isMouseMoving = true;
-            var __ret = FiercePlanet.getCurrentPosition(e);
+            var __ret = FiercePlanet.GeneralUI.getCurrentPosition(e);
             FiercePlanet.currentLevel.removeTile(__ret.posX, __ret.posY);
             FiercePlanet.Drawing.drawCanvases();
         }
@@ -121,7 +121,7 @@ FiercePlanet.Editor = FiercePlanet.Editor || {};
      */
     this.handleEditorMouseUp = function(e) {
         if (e.preventDefault) e.preventDefault(); // allows us to drop
-        var __ret = FiercePlanet.getCurrentPosition(e);
+        var __ret = FiercePlanet.GeneralUI.getCurrentPosition(e);
         FiercePlanet.currentX = __ret.posX;
         FiercePlanet.currentY = __ret.posY;
 
@@ -149,7 +149,7 @@ FiercePlanet.Editor = FiercePlanet.Editor || {};
         canvas.unbind('mousedown', FiercePlanet.Editor.handleEditorMouseDown);
         canvas.unbind('mousemove', FiercePlanet.Editor.handleEditorMouseMove);
         canvas.unbind('mouseup', FiercePlanet.Editor.handleEditorMouseUp);
-        FiercePlanet.bindGameMouseEvents();
+        FiercePlanet.GeneralUI.bindGameMouseEvents();
         $('#level-editor').hide();
         $('#swatch').show();
     };

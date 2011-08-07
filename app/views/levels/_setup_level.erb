@@ -11,7 +11,10 @@ catch (err) {
 
 json_a = '<%= raw @level.json_blob %>';
 json = '<%= raw @level.json_blob %>';
+console.log('got here');
+console.log(json);
 tmpLevel = $.evalJSON(json)
+console.log('got here 2');
 Level.makeLevelFromJSONObject(tmpLevel, Level.prototype);
 for (var i in tmpLevel.resources) {
     Level.makeLevelFromJSONObject(tmpLevel.resources[i], Resource.prototype);

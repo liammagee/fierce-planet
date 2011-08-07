@@ -96,6 +96,7 @@
       <%= javascript_include_tag "agents/utils" %>
       <%= javascript_include_tag "agents/utils/log" %>
       <%= javascript_include_tag "agents/utils/google-map" %>
+      <%= javascript_include_tag "agents/utils/isometric" %>
       <%= javascript_include_tag "agents/game" %>
 
       <!-- Last to load - has strong dependencies on all other classes -->
@@ -136,7 +137,7 @@
           Profile.makeProfile(FiercePlanet.currentProfile);
 
           $(document).ready(function() {
-              FiercePlanet.refreshSwatch();
+              FiercePlanet.GeneralUI.refreshSwatch();
           });
 
       </script>

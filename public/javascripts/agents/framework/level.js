@@ -34,6 +34,9 @@ function Level(id) {
     this.noWander = false;
     this.noSpeedChange = false;
 
+    // Rendering options
+    this.isometric = false;
+
 
     // Current level state
     this.tiles = [];
@@ -756,4 +759,5 @@ Level.makeLevelFromJSONObject = function(newLevel, prototype) {
 };
 
 
-
+if (typeof(exports) != "undefined")
+    exports.Level = Level;

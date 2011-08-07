@@ -20,7 +20,7 @@ var $fp = $fp || FiercePlanet;
 $(document).ready(function() {
     FiercePlanet.loadGame();
 
-    FiercePlanet.bindVariables();
+    FiercePlanet.Utils.bindVariables();
 
 });
 
@@ -171,7 +171,7 @@ FiercePlanet.processAgents = function() {
             FiercePlanet.completeWave();
             FiercePlanet.newWave();
         }
-        else if (FiercePlanet.currentLevelNumber < PresetLevels.MAX_DEFAULT_LEVELS) {
+        else if (FiercePlanet.currentLevelNumber < FiercePlanet.PresetLevels.MAX_DEFAULT_LEVELS) {
             FiercePlanet.completeLevel();
             FiercePlanet.levelDelayCounter = 0;
         }

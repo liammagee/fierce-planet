@@ -2,7 +2,7 @@
 FiercePlanet._stopAgents();
 
 // Construct and show the level gallery
-FiercePlanet.$genericDialog = $('<div></div>')
+FiercePlanet.genericDialog = $('<div></div>')
         .html("<%=  escape_javascript(render('feedbacks/edit', :locals => { :levels => @levels})) %>")
         .dialog({
                                               position: [FiercePlanet.calculateWorldLeft(), 110],
@@ -19,4 +19,4 @@ FiercePlanet.$genericDialog = $('<div></div>')
                     }
 
                 });
-FiercePlanet.$genericDialog.dialog('open');
+FiercePlanet.genericDialog.dialog('open');

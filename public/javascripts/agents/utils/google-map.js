@@ -21,6 +21,46 @@ var GoogleMapUtils = GoogleMapUtils || {};
     var mapTypes = {};
 
     // set up the map types
+
+    // Externally sourced - relatively low res
+    /*
+    mapTypes['nighttime'] = {
+      getTileUrl: function(coord, zoom) {
+        return getHorizontallyRepeatingTileUrl(coord, zoom, function(coord, zoom) {
+          var bound = Math.pow(2, zoom);
+          return "http://www.cc.gatech.edu/~pesti/night/t-n/" +
+                  + zoom + "/" + coord.x + "-" + coord.y + '.jpeg';
+        });
+      },
+      tileSize: new google.maps.Size(256, 256),
+      isPng: false,
+      maxZoom: 6,
+      minZoom: 0,
+      radius: 1738000,
+      name: 'Earth at Night',
+      credit: 'Image Credit: NASA/USGS'
+    };
+
+    // set up the map types
+    mapTypes['europa'] = {
+      getTileUrl: function(coord, zoom) {
+        return getHorizontallyRepeatingTileUrl(coord, zoom, function(coord, zoom) {
+          var bound = Math.pow(2, zoom);
+          return "http://www.cc.gatech.edu/~pesti/europa/t-e2/" +
+                 + zoom + "/" + coord.x + "-" + coord.y + '.jpeg';
+        });
+      },
+      tileSize: new google.maps.Size(256, 256),
+      isPng: false,
+      maxZoom: 6,
+      minZoom: 0,
+      radius: 1738000,
+      name: 'Europa - the Icy Moon of Jupiter',
+      credit: 'Image Credit: NASA/USGS'
+    };
+    */
+
+    // set up the map types
     mapTypes['moon'] = {
       getTileUrl: function(coord, zoom) {
         return getHorizontallyRepeatingTileUrl(coord, zoom, function(coord, zoom) {

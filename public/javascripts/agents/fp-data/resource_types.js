@@ -1,3 +1,11 @@
+/*!
+ * Fierce Planet - Resource types
+ *
+ * Copyright (C) 2011 Liam Magee
+ * MIT Licensed
+ */
+
+var FiercePlanet = FiercePlanet || {};
 
 
 // Economic resources

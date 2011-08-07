@@ -54,8 +54,10 @@
         <div><strong>Level 10:</strong><br/> Fields of Ma(i)ze</div>
       </div>
       <div id="levelSelect11" class="thumbnail"><img src="/images/levels/level-thumbnail-11.png" alt="">
-
         <div><strong>Level 11:</strong><br/> It's a Mad World</div>
+      </div>
+      <div id="levelSelect12" class="thumbnail"><img src="/images/levels/level-thumbnail-11.png" alt="">
+        <div><strong>Level 12:</strong><br/> It's a Mad World</div>
       </div>
     </div>
     
@@ -115,12 +117,12 @@
 <script>
 // Add event handlers when dialog is loaded
 $(document).ready(function() {
-    $('.thumbnail').click(FiercePlanet.changePresetLevelDirectly);
-    FiercePlanet.highlightGalleryItem(FiercePlanet.currentLevelNumber);
+    $('.thumbnail').click(FiercePlanet.GeneralUI.changePresetLevelDirectly);
+    FiercePlanet.GeneralUI.highlightGalleryItem(FiercePlanet.currentLevelNumber);
 //    $('#levelInput').change(FiercePlanet.changePresetLevel);
 
     $('#difficulty-input-' + FiercePlanet.levelOfDifficulty).attr('checked', 'checked');
-    $(".difficultyInput").click(FiercePlanet.changeDifficulty);
+    $(".difficultyInput").click(FiercePlanet.GeneralUI.changeDifficulty);
 //    $('#difficultyInput').change(FiercePlanet.changeDifficulty);
 });
 

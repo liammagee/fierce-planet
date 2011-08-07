@@ -6,8 +6,8 @@
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
   <!-- STYLESHEET INCLUDES -->
-  <link href="/stylesheets/styles.css?1311602967" media="screen" rel="stylesheet" type="text/css" />
-  <link href="/stylesheets/custom/jquery-ui-1.8.14.custom.css?1311428602" media="screen" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/styles.css?1312209396" media="screen" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/custom/jquery-ui-1.8.14.custom.css?1311939360" media="screen" rel="stylesheet" type="text/css" />
 
   
   <!-- JAVASCRIPT INCLUDES -->
@@ -15,17 +15,21 @@
       <!-- For localhost -->
       <!--<script src="https://www.google.com/jsapi?key=ABQIAAAARoOs6ILY9Ci-wjXDl46j4xTJQa0g3IQ9GZqIMmInSLzwtGDKaBT5Gl1FUC-xR0F8NySH1hgQiauZJw" type="text/javascript"></script>-->
   <!-- TODO: Can the custom UI be further optimised? -->
-  <script src="/javascripts/jquery-1.6.2.js?1310253599" type="text/javascript"></script>
+  <script src="/javascripts/jquery-1.6.2.js?1312112787" type="text/javascript"></script>
   <script src="/javascripts/jquery-ui-1.8.14.custom.min.js?1310705337" type="text/javascript"></script>
   <script src="/javascripts/jquery.json-2.2.min.js?1300883562" type="text/javascript"></script>
   <script src="/javascripts/jquery.mousewheel.3.0.2/jquery.mousewheel.min.js?1307620826" type="text/javascript"></script>
   <script src="/javascripts/jquery.zoom.js?1307882804" type="text/javascript"></script>
-    
-
+  <script src="/javascripts/sylvester/sylvester.js?1312111748" type="text/javascript"></script>
+  <script src="/javascripts/jstat-1.0.0/js/jquery.flot.min.js?1312104617" type="text/javascript"></script>
+  <script src="/javascripts/jstat-1.0.0/js/jstat-0.1.0.min.js?1312104617" type="text/javascript"></script>
+    <script type="text/javascript"
+        src="http://maps.googleapis.com/maps/api/js?sensor=true">
+    </script>
 
   <script type="text/javascript">
 //<![CDATA[
-var AUTH_TOKEN = "xb7BD2KvbNPoCF0+6haJasw2Z2DJxDmaVcOtanzRXd4=";
+var AUTH_TOKEN = "3gMYaVyrj6Bk7v20RRERf101P9NVhxikY/D7CdhFZQY=";
 //]]>
 </script>  <script src="/javascripts/rails.js?1309682881" type="text/javascript"></script>
 
@@ -51,48 +55,51 @@ var FiercePlanet = FiercePlanet || {};
 
   </script>
 
-      <script src="/javascripts/agents/framework/world.js?1311603500" type="text/javascript"></script>
-      <script src="/javascripts/agents/framework/agent.js?1311687554" type="text/javascript"></script>
-      <script src="/javascripts/agents/framework/catastrophe.js?1310135569" type="text/javascript"></script>
-      <script src="/javascripts/agents/framework/level.js?1311604505" type="text/javascript"></script>
-      <script src="/javascripts/agents/framework/resource.js?1311603664" type="text/javascript"></script>
-      <script src="/javascripts/agents/framework/tile.js?1310512870" type="text/javascript"></script>
+      <script src="/javascripts/agents/framework/world.js?1312283734" type="text/javascript"></script>
+      <script src="/javascripts/agents/framework/agent.js?1312285592" type="text/javascript"></script>
+      <script src="/javascripts/agents/framework/catastrophe.js?1312280463" type="text/javascript"></script>
+      <script src="/javascripts/agents/framework/culture.js?1312103942" type="text/javascript"></script>
+      <script src="/javascripts/agents/framework/level.js?1312295810" type="text/javascript"></script>
+      <script src="/javascripts/agents/framework/resource.js?1312285115" type="text/javascript"></script>
+      <script src="/javascripts/agents/framework/species.js?1312155450" type="text/javascript"></script>
+      <script src="/javascripts/agents/framework/terrain.js?1312155440" type="text/javascript"></script>
+      <script src="/javascripts/agents/framework/tile.js?1312120751" type="text/javascript"></script>
 
-      <script src="/javascripts/agents/fp-models/profile.js?1310253599" type="text/javascript"></script>
-      <script src="/javascripts/agents/fp-models/profile_class.js?1309127828" type="text/javascript"></script>
-      <script src="/javascripts/agents/fp-models/settings.js?1310037091" type="text/javascript"></script>
-      <script src="/javascripts/agents/fp-models/notice.js?1309127389" type="text/javascript"></script>
-      <script src="/javascripts/agents/fp-models/event.js?1310269870" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-models/profile.js?1312117027" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-models/profile_class.js?1312113863" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-models/notice.js?1312113863" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-models/event.js?1312324878" type="text/javascript"></script>
 
-      <script src="/javascripts/agents/fp-data/resource_types.js?1311427898" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-data/resource_types.js?1312112189" type="text/javascript"></script>
       <!-- Change this to load other resource categories -->
-      <script src="/javascripts/agents/fp-data/resourceset/tbl.js?1310559269" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-data/resourceset/tbl.js?1312112189" type="text/javascript"></script>
       <script src="/javascripts/agents/fp-data/resourceset/cos.js?1310255747" type="text/javascript"></script>
       <script src="/javascripts/agents/fp-data/player_classes.js?1309127785" type="text/javascript"></script>
-      <script src="/javascripts/agents/fp-data/agent_types.js?1311684605" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-data/agent_types.js?1312285089" type="text/javascript"></script>
 
-      <script src="/javascripts/agents/fp-ui/dialogs.js?1311603238" type="text/javascript"></script>
-      <script src="/javascripts/agents/fp-ui/drawing.js?1311690453" type="text/javascript"></script>
-      <script src="/javascripts/agents/fp-ui/general-ui.js?1311556389" type="text/javascript"></script>
-      <script src="/javascripts/agents/utils/google-maps-planetary-maptypes.js?1311693072" type="text/javascript"></script>
-      <script src="/javascripts/agents/fp-ui/profile-ui.js?1311554111" type="text/javascript"></script>
-      <script src="/javascripts/agents/fp-ui/resource-ui.js?1311604033" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-ui/dialogs.js?1312326456" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-ui/drawing.js?1312324654" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-ui/general-ui.js?1312326556" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-ui/profile-ui.js?1312325469" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-ui/resource-ui.js?1312326156" type="text/javascript"></script>
 
-      <script src="/javascripts/agents/editor.js?1311511725" type="text/javascript"></script>
-      <script src="/javascripts/agents/lifecycle.js?1311596924" type="text/javascript"></script>
-      <script src="/javascripts/agents/params.js?1311605596" type="text/javascript"></script>
-      <script src="/javascripts/agents/recording.js?1309127138" type="text/javascript"></script>
-      <script src="/javascripts/agents/utils.js?1311429403" type="text/javascript"></script>
+      <script src="/javascripts/agents/editor.js?1312326292" type="text/javascript"></script>
+      <script src="/javascripts/agents/lifecycle.js?1312326481" type="text/javascript"></script>
+      <script src="/javascripts/agents/params.js?1312294262" type="text/javascript"></script>
+      <script src="/javascripts/agents/recording.js?1312283376" type="text/javascript"></script>
+      <script src="/javascripts/agents/utils.js?1312326292" type="text/javascript"></script>
       <script src="/javascripts/agents/utils/log.js?1311429349" type="text/javascript"></script>
-      <script src="/javascripts/agents/utils/google-map.js" type="text/javascript"></script>
-      <script src="/javascripts/agents/game.js?1311554476" type="text/javascript"></script>
+      <script src="/javascripts/agents/utils/google-map.js?1312298764" type="text/javascript"></script>
+      <script src="/javascripts/agents/game.js?1312325102" type="text/javascript"></script>
 
       <!-- Last to load - has strong dependencies on all other classes -->
-      <script src="/javascripts/agents/fp-data/levels.js?1311689254" type="text/javascript"></script>
-      <script src="/javascripts/agents/dev.js?1309823234" type="text/javascript"></script>
+      <script src="/javascripts/agents/fp-data/levels.js?1312326456" type="text/javascript"></script>
+      <script src="/javascripts/agents/dev.js?1312325102" type="text/javascript"></script>
 
 
   <!-- CONDITIONAL AND UTILITY BLOCKS -->
+
+  <!-- Set the resource type namespace here -->
 
   <!-- Set the resource type namespace here -->
 
@@ -101,14 +108,10 @@ var FiercePlanet = FiercePlanet || {};
   <!-- If a user is logged in, set their properties here -->
 
   <meta name="csrf-param" content="authenticity_token"/>
-<meta name="csrf-token" content="xb7BD2KvbNPoCF0+6haJasw2Z2DJxDmaVcOtanzRXd4="/>
+<meta name="csrf-token" content="3gMYaVyrj6Bk7v20RRERf101P9NVhxikY/D7CdhFZQY="/>
 
 
-<script src="http://maps.google.com/maps/api/js?sensor=false&callback=FiercePlanet.handleApiReady" type="text/javascript"></script>
 <script>
-    $(document).ready(function() {
-        loadPlanets();
-    });
   // Test resizing for different devices
     $(document).ready(function() {
         // TODO: Test code for mobile version
@@ -145,7 +148,7 @@ var FiercePlanet = FiercePlanet || {};
         <div id="gameworld">
           <div id="world">
             <canvas id="imageCanvas" width="480" height="400" style="z-index: 0;">This text is displayed if your browser does not support HTML5 Canvas.</canvas>
-              <div id="map_canvas" width="480" height="400" style="z-index: 1000; border: 0"></div>
+              <div id="map_canvas" width="480" height="400" style="z-index: 1; border: 0"></div>
             <canvas class="scrollable-canvas" id="baseCanvas" width="480" height="400" style="z-index: 2;"></canvas>
             <canvas class="scrollable-canvas" id="resourceCanvas" width="480" height="400" style="z-index: 3;"></canvas>
             <canvas id="scrollingCanvas" width="480" height="400" style="z-index: 4;"></canvas>
@@ -155,7 +158,10 @@ var FiercePlanet = FiercePlanet || {};
         </div>
 
 
- 
+
+        <div id="world-graph" style="display:none"></div>
+
+
 
         <!-- Should always be visible -->
         
@@ -170,24 +176,24 @@ var FiercePlanet = FiercePlanet || {};
         <!-- Should always be visible -->
         <!-- Should always be visible -->
 <div id="controls">
-    <div id="playAgents" class="playing"><span class="hide">Play</span></div>
-    <div id="slowDown"><span class="hide">Slower</span></div>
-    <div id="speedUp"><span class="hide">Faster</span></div>
-    <div id="newGame"><span class="hide">New</span></div>
-    <div id="restartLevel"><span class="hide">Restart</span></div>
+    <div id="playAgents" class="playing" title="Play"><span class="hide">Play</span></div>
+    <div id="slowDown" title="Slower"><span class="hide">Slower</span></div>
+    <div id="speedUp" title="Faster"><span class="hide">Faster</span></div>
+    <div id="newGame" title="New"><span class="hide">New</span></div>
+    <div id="restartLevel" title="Restart"><span class="hide">Restart</span></div>
 
     <div class="divide"></div>
 
-    <div id="panUp"><span class="hide">pan Up</span></div>
-    <div id="panLeft"><span class="hide">pan Left</span></div>
-    <div id="panReset"><span class="hide">pan Reset</span></div>
-    <div id="panRight"><span class="hide">pan Right</span></div>
-    <div id="panDown"><span class="hide">pan Down</span></div>
+    <div id="panUp" title="Pan Up"><span class="hide">pan Up</span></div>
+    <div id="panLeft" title="Pan Left"><span class="hide">pan Left</span></div>
+    <div id="panReset" title="Pan Reset"><span class="hide">pan Reset</span></div>
+    <div id="panRight" title="Pan Right"><span class="hide">pan Right</span></div>
+    <div id="panDown" title="Pan Down"><span class="hide">pan Down</span></div>
 
   <div class="divide"></div>
-    <div id="zoomOut"><span class="hide">zoom Out</span></div>
-    <div id="zoomReset"><span class="hide">zoom Reset</span></div>
-    <div id="zoomIn"><span class="hide">zoom In</span></div>
+    <div id="zoomOut" title="Zoom Out"><span class="hide">zoom Out</span></div>
+    <div id="zoomReset" title="Zoom Reset"><span class="hide">zoom Reset</span></div>
+    <div id="zoomIn" title="Zoom In"><span class="hide">zoom In</span></div>
   <div class="divide"></div>
 
     <a href="#" id="tutorial">Tutorial</a>
@@ -203,7 +209,7 @@ var FiercePlanet = FiercePlanet || {};
       </div>
 </div>
 
-<div id="notifications" style="display: none">
+<div id="notifications">
   <p>Opening Level 1...</p>
 </div>
 
@@ -221,11 +227,12 @@ var FiercePlanet = FiercePlanet || {};
         
 
 <div id="level-features" style="display: none;">
+  <div><a href="#" id="make-tile">Add Tile</a></div>
+  <div><a href="#" id="remove-resource">Remove Resource</a></div>
   <div><a href="#" id="add-entry-point">Add Entry Point</a></div>
   <div><a href="#" id="remove-entry-point">Delete Entry Point</a></div>
   <div><a href="#" id="add-exit-point">Add Exit Point</a></div>
   <div><a href="#" id="remove-exit-point">Delete Exit Point</a></div>
-  <div><a href="#" id="make-tile">Add Tile</a></div>
 </div>
 
 <div id="level-editor" style="display: none;">
@@ -239,7 +246,11 @@ var FiercePlanet = FiercePlanet || {};
   <div><a href="#" id="undo-action">Undo (last action only)</a></div>
   <div><a href="#" id="cancel-level-editor">Close Editor</a></div>
   <div id="level-editor-form"></div>
-  
+
+  <div><a href="#" id="edit-map">Edit map</a></div>
+  <div><a href="#" id="save-map">Save map</a></div>
+  <div><a href="#" id="close-map">Close map</a></div>
+
 </div>
 
     <!-- Dialog boxes - should only be visible when explicitly invoked -->
@@ -412,12 +423,12 @@ var FiercePlanet = FiercePlanet || {};
 <script>
 // Add event handlers when dialog is loaded
 $(document).ready(function() {
-    $('.thumbnail').click(FiercePlanet.changePresetLevelDirectly);
-    FiercePlanet.highlightGalleryItem(FiercePlanet.currentLevelNumber);
+    $('.thumbnail').click(FiercePlanet.GeneralUI.changePresetLevelDirectly);
+    FiercePlanet.GeneralUI.highlightGalleryItem(FiercePlanet.currentLevelNumber);
 //    $('#levelInput').change(FiercePlanet.changePresetLevel);
 
     $('#difficulty-input-' + FiercePlanet.levelOfDifficulty).attr('checked', 'checked');
-    $(".difficultyInput").click(FiercePlanet.changeDifficulty);
+    $(".difficultyInput").click(FiercePlanet.GeneralUI.changeDifficulty);
 //    $('#difficultyInput').change(FiercePlanet.changeDifficulty);
 });
 
@@ -429,117 +440,155 @@ $(document).ready(function() {
 
   	<ul>
         <li><a href="#user-interface">User interface</a></li>
-        <li><a href="#game-settings">Game play</a></li>
-		<li><a href="#experimental" style="display: none">Experimental</a></li>
+        <li><a href="#agent-settings">Agent</a></li>
+        <li><a href="#resource-settings">Resource</a></li>
 		<li><a href="#testing" style="display: none">Testing</a></li>
 	</ul>
 
+    <div id="user-interface">
+      <div>
+        <input id="noticesVisible"  type="checkbox" checked="checked"/>
+        <label for="noticesVisible">Show in-game notices</label>
+      </div>
+      <div>
+        <input id="statusBarVisible"  type="checkbox" checked="checked"/>
+        <label for="statusBarVisible">Show status bar</label>
+      </div>
+      <div>
+        <input id="scrollingImageVisible"  type="checkbox" checked="checked"/>
+        <label for="scrollingImageVisible">Show scrolling image</label>
+      </div>
+      <div>
+        <input id="catastrophesVisible"  type="checkbox" checked="checked"/>
+        <label for="catastrophesVisible">Show catastrophes</label>
+      </div>
+      <div>
+        <input id="disableKeyboardShortcuts"  type="checkbox"/>
+        <label for="disableKeyboardShortcuts">Disable keyboard shortcuts</label>
+      </div>
+      <div>
+        <input id="soundsPlayable"  type="checkbox"/>
+        <label for="soundsPlayable">Play sounds</label>
+      </div>
+      <div>
+        <input id="useInlineResourceSwatch"  type="checkbox" />
+        <label for="useInlineResourceSwatch">Show inline resource pop-up</label>
+      </div>
+      <div>
+        <input id="allowInlinePanning"  type="checkbox" />
+        <label for="allowInlinePanning">Allow inline panning</label>
+      </div>
+      <div>
+        <input id="agentTracing"  type="checkbox"/>
+        <label for="agentTracing">Show agent movement</label>
 
+      </div>
+      <div>
+        <input id="hidePath"  type="checkbox"/>
+        <label for="hidePath">Hide path</label>
+      </div>
+      <div>
+        <input id="hidePathBorder"  type="checkbox"/>
+        <label for="hidePathBorder">Hide path border</label>
+      </div>
+      <div>
+        <input id="showGraph"  type="checkbox"/>
+        <label for="showGraph">Show graph</label>
+      </div>
+      <div>
+        <input id="makeSquare"  type="checkbox"/>
+        <label for="makeSquare">Make world square</label>
+      </div>
+    </div>
 
-  <div id="game-settings">
-    <div>
-      <input id="resourcesInTension"  type="checkbox"/>
-      Resources affect neighbouring resources
-    </div>
-    <div>
-      <input id="resourcesInTensionGlobally"  type="checkbox"/>
-      Resources affect all other resources
-    </div>
-    <div>
-      <input id="ignoreResourceBalance"  type="checkbox"/>
-      Resource balance has no effect
-    </div>
-    <div>
-      <input id="applyGeneralHealth"  type="checkbox"/>
-      Resource categories have no effect
-    </div>
-    <div>
-      <input id="resourcesDiminishAtFixedRates"  type="checkbox"/>
-      Resources diminish at fixed rates
-    </div>
+  <div id="agent-settings">
     <div>
       <input id="agentsCanCommunicate"  type="checkbox" checked="checked"/>
-       Agents share their memories
+      <label for="agentsCanCommunicate">Agents share their memories</label>
     </div>
     <div>
       <input id="agentsHaveRandomInitialHealth"  type="checkbox"/>
-      Agents have random initial health
+      <label for="agentsHaveRandomInitialHealth">Agents have random initial health</label>
     </div>
-
-    <div style="display:none">
-      <input id="resourceBonus"  type="checkbox"/>
-      Resource mix bonus [NOT YET FUNCTIONAL]
+    <div>
+      <input id="agentsCanAdjustSpeed"  type="checkbox"/>
+      <label for="agentsCanAdjustSpeed">Agents can change their speed</label>
     </div>
-    <div style="display:none">
-      <input id="resourcesUpgradeable"  type="checkbox"/>
-      Resources can be upgraded [NOT YET FUNCTIONAL]
+    <div>
+      <input id="agentsCanAdjustWander"  type="checkbox"/>
+      <label for="agentsCanAdjustWander">Agents can wander</label>
+    </div>
+    <div>
+      Health cost per move: <span id="agentCostPerMoveDisplay"></span>
+      <br/>
+      <div class="slider-component" id="agentCostPerMove"></div>
     </div>
   </div>
 
-
-
-  <div id="user-interface">
+  <div id="resource-settings">
     <div>
-      <input id="noticesVisible"  type="checkbox" checked="checked"/> Show notices
+      <input id="resourcesInTension"  type="checkbox"/>
+      <label for="resourcesInTension">Resources affect neighbouring resources</label>
     </div>
     <div>
-      <input id="scrollingImageVisible"  type="checkbox" checked="checked"/>
-      Show scrolling image
+      <input id="resourcesInTensionGlobally"  type="checkbox"/>
+      <label for="resourcesInTensionGlobally">Resources affect all other resources</label>
     </div>
     <div>
-      <input id="catastrophesVisible"  type="checkbox" checked="checked"/>
-      Show catastrophes
+      <input id="ignoreResourceBalance"  type="checkbox"/>
+      <label for="ignoreResourceBalance">Resource balance has no effect</label>
     </div>
     <div>
-      <input id="disableKeyboardShortcuts"  type="checkbox"/> Disable keyboard shortcuts
+      <input id="applyGeneralHealth"  type="checkbox"/>
+      <label for="applyGeneralHealth">Resource categories have no effect</label>
     </div>
     <div>
-      <input id="soundsPlayable"  type="checkbox"/> Play sounds
+      <input id="resourcesDiminishAtFixedRates"  type="checkbox"/>
+      <label for="resourcesDiminishAtFixedRates">Resources diminish at fixed rates</label>
     </div>
     <div>
-      <input id="useInlineResourceSwatch"  type="checkbox" />
-      Show inline resource pop-up
+      Rate of resource recovery: <span id="rateOfResourceRecoveryDisplay"></span>
+      <br/>
+      <div class="slider-component" id="rateOfResourceRecovery"></div>
     </div>
-    <div>
-      <input id="allowInlinePanning"  type="checkbox" />
-      Allow inline panning
-    </div>
-    <div>
-      <input id="agentTracing"  type="checkbox"/> Show agent movement
-    </div>
-    <div>
-      <input id="invisiblePath"  type="checkbox"/> Make path invisible
-    </div>
-  </div>
-
-
-
-
-  <div id="experimental" style="display: none">
-        <h4>Experimental options</h4>
-        <div>
-          <input id="rivalsVisible"  type="checkbox"/> Show rivals
-        </div>
-        <div>
-          <input id="predatorsVisible"  type="checkbox"/> Show predators
-        </div>
-        <div>
-          <input id="tilesMutable"  type="checkbox"/> Allow tiles to be added
-        </div>
-        <div>
-          <input id="tilesRemovable"  type="checkbox"/> Allow tiles to be removed
-        </div>
-        <div>
-          <input id="backgroundIconsVisible"  type="checkbox"/> Show background icons
-        </div>
   </div>
 
   <div id="testing">
     <div>
-      <input id="recording"  type="checkbox"/> Record game
+      <input id="recording"  type="checkbox"/>
+      <label for="recording">Record game</label>
     </div>
     <div>
-      <input id="godMode"  type="checkbox"/> Play in 'god' mode
+      <input id="godMode"  type="checkbox"/>
+      <label for="godMode">Play in 'god' mode</label>
+    </div>
+    <div>
+      <input id="showHealthReductionInGodMode"  type="checkbox"/>
+      <label for="showHealthReductionInGodMode">Show health reduction in 'god' mode</label>
+    </div>
+    <div>
+      <input id="rivalsVisible"  type="checkbox"/>
+      <label for="rivalsVisible">Show rivals</label>
+    </div>
+    <div>
+      <input id="predatorsVisible"  type="checkbox"/>
+      <label for="predatorsVisible">Show predators</label>
+    </div>
+    <div>
+      <input id="tilesMutable"  type="checkbox"/>
+      <label for="tilesMutable">Allow tiles to be added</label>
+    </div>
+    <div>
+      <input id="tilesRemovable"  type="checkbox"/>
+      <label for="tilesRemovable">Allow tiles to be removed</label>
+    </div>
+    <div>
+      <input id="skewTiles"  type="checkbox"/>
+      <label for="skewTiles">Skew level tiles</label>
+    </div>
+    <div>
+      <input id="backgroundIconsVisible"  type="checkbox"/>
+      <label for="backgroundIconsVisible">Show background icons</label>
     </div>
   </div>
 

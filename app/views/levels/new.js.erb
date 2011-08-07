@@ -9,7 +9,7 @@ $(".edit_level_properties").remove();
 FiercePlanet.Dialogs.editPropertiesDialog = $('<div></div>')
         .html("<%=  escape_javascript(render('levels/edit_properties', :locals => { :level => @level})) %>")
         .dialog({
-                    position: [FiercePlanet.calculateWorldLeft(), FiercePlanet.calculateWorldTop()],
+                    position: [FiercePlanet.Dialogs.calculateWorldLeft(), FiercePlanet.Dialogs.calculateWorldTop()],
                     width: FiercePlanet.WORLD_WIDTH + 7,
                     height: FiercePlanet.WORLD_HEIGHT + 7,
                     autoOpen: false,

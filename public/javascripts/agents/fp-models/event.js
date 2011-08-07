@@ -5,6 +5,7 @@
  * MIT Licensed
  */
 
+var FiercePlanet = FiercePlanet || {};
 
 /**
  * Possible events:
@@ -96,41 +97,55 @@ EventTarget.prototype = {
     }
 };
 
+
+
+
 /**
- *
+ * @namespace Contains event functions
  */
-FiercePlanet.hookUpCustomEventListeners = function() {
+FiercePlanet.Event = FiercePlanet.Event || {};
 
-    // Add logging event listeners
-    FiercePlanet.eventTarget.addListener("game", function(e) {
-        if (typeof console != "undefined")
-           console.log("Game event " + e._event + " logged at:" + e._time);
-    });
+(function() {
 
-    // Add notice event listeners
-//    FiercePlanet.eventTarget.addListener("game", function(e) {
-//        if (e._event == "newWave" && e._time == 0) {
-//            FiercePlanet.currentNotice = e._levelContext.getTip();
-//        }
-//    });
+    /**
+     * Hooks up custom events
+     */
+    this.hookUpCustomEventListeners = function() {
 
-    // Add resource listener
-    FiercePlanet.eventTarget.addListener("resource", function(e) {
-        var resource = e.source;
-        var level = e.levelContext;
-        if (level.id == 1) {
-            var resourceCategory = resource.category;
-            var resourceCategoryName = resourceCategory.name;
-            var resourceCategoryColor = resourceCategory.color;
-            var resourceCategoryCode = resourceCategory.code;
-            var categoryCount = FiercePlanet.currentLevel.getResourceCategoryCount(resourceCategoryCode);
-            if (categoryCount == 1) {
-                FiercePlanet.currentNotice = new Notice("Well done! You've added your first " + resourceCategoryName + " resource!");
-                FiercePlanet.currentNotice.height = 80;
-                FiercePlanet.currentNotice.foregroundColor = 'rgba(0, 0, 0)';
-                FiercePlanet.currentNotice.backgroundColor = resourceCategoryColor;
+        // Add logging event listeners
+        FiercePlanet.eventTarget.addListener("game", function(e) {
+            if (typeof console != "undefined")
+               console.log("Game event " + e.event + " logged at:" + e.time);
+        });
+
+        // Add notice event listeners
+    //    FiercePlanet.eventTarget.addListener("game", function(e) {
+    //        if (e._event == "newWave" && e._time == 0) {
+    //            FiercePlanet.currentNotice = e._levelContext.getTip();
+    //        }
+    //    });
+
+        // Add resource listener
+        FiercePlanet.eventTarget.addListener("resource", function(e) {
+            var resource = e.source;
+            var level = e.levelContext;
+            if (level.id == 1) {
+                var resourceCategory = resource.category;
+                var resourceCategoryName = resourceCategory.name;
+                var resourceCategoryColor = resourceCategory.color;
+                var resourceCategoryCode = resourceCategory.code;
+                var categoryCount = FiercePlanet.currentLevel.getResourceCategoryCount(resourceCategoryCode);
+                if (categoryCount == 1) {
+                    FiercePlanet.currentNotice = new Notice("Well done! You've added your first " + resourceCategoryName + " resource!");
+                    FiercePlanet.currentNotice.height = 80;
+                    FiercePlanet.currentNotice.foregroundColor = 'rgba(0, 0, 0)';
+                    FiercePlanet.currentNotice.backgroundColor = resourceCategoryColor;
+                }
             }
-        }
-    });
+        });
 
-};
+    };
+
+}).apply(FiercePlanet.Event);
+
+

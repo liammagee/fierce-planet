@@ -43,7 +43,8 @@ FiercePlanet.Drawing = FiercePlanet.Drawing || {};
 //        FiercePlanet.drawBackgroundImage();
 //        FiercePlanet.drawPath();
 //    }
-        this.drawMap();
+//        if (World.settings.drawMap)
+            this.drawMap();
         this.drawPath();
 
         this.drawEntryPoints();
@@ -126,48 +127,57 @@ FiercePlanet.Drawing = FiercePlanet.Drawing || {};
     this.drawPath = function() {
         var canvas = $('#baseCanvas')[0];
         var ctx = canvas.getContext('2d');
+//        this.clearCanvas('baseCanvas');
+//        ctx.clearRect(0, 0, FiercePlanet.WORLD_WIDTH, FiercePlanet.WORLD_HEIGHT );
         var pathTiles = FiercePlanet.currentLevel.getPath();
-    
+
+        var midTileX = (FiercePlanet.worldWidth - 1) / 2;
+        var midTileY = (FiercePlanet.worldHeight - 1) / 2;
+
         for (var i = 0; i < pathTiles.length; i += 1) {
             var pathTile = pathTiles[i];
             var xPos = pathTile[0];
             var yPos = pathTile[1];
             var x = xPos * FiercePlanet.cellWidth;
             var y = yPos * FiercePlanet.cellHeight;
-    
-            ctx.save();
-            if (World.settings.skewTiles) {
-                var angle = -45 * Math.PI / 180;
-                var sx = 0.2;
-                var sy = 0.2;
-                ctx.translate(x, y);
-                ctx.rotate(angle);
-                ctx.transform(1, sy, sx, 1, 0, 0);
-                x = 0;
-                y = 0;
-            }
-    
-            ctx.clearRect(x + 1, y + 1, FiercePlanet.cellWidth - 1, FiercePlanet.cellHeight - 1);
-    
+
+//            ctx.clearRect(x + 1, y + 1, FiercePlanet.cellWidth - 1, FiercePlanet.cellHeight - 1);
+
             if (!World.settings.hidePath) {
-                if (yPos == 0 || FiercePlanet.currentLevel.getTile(xPos, yPos - 1) != undefined) {
-                    var my_gradient = ctx.createLinearGradient(x, y, x, y + FiercePlanet.cellHeight / 4);
-                    my_gradient.addColorStop(0, "#ccc");
-                    my_gradient.addColorStop(1, "#eee");
-                    ctx.fillStyle = my_gradient;
+                ctx.fillStyle = "#eee";
+
+                if ((World.settings.skewTiles || FiercePlanet.currentLevel.isometric)) {
+                    var newOrigin = Isometric.doIsometricOffset(xPos, yPos);
+                    var originXp = newOrigin.x + FiercePlanet.cellWidth / 2;
+                    var originYp = newOrigin.y + FiercePlanet.cellHeight;
+                    Isometric.draw3DTile(ctx, [originXp, originYp], FiercePlanet.cellHeight);
+
+                    ctx.fillStyle = "#fff";
+                    ctx.fill();
+                    if (!World.settings.hidePathBorder) {
+                        ctx.strokeStyle = "#ccc";
+                        ctx.stroke();
+                    }
                 }
                 else {
-                    ctx.fillStyle = "#eee";
+                    if (yPos == 0 || FiercePlanet.currentLevel.getTile(xPos, yPos - 1) != undefined) {
+                        var my_gradient = ctx.createLinearGradient(x, y, x, y + FiercePlanet.cellHeight / 4);
+                        my_gradient.addColorStop(0, "#ccc");
+                        my_gradient.addColorStop(1, "#eee");
+                        ctx.fillStyle = my_gradient;
+                    }
+                    else {
+                        ctx.fillStyle = "#eee";
+                    }
+                    ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
+                    if (!World.settings.hidePathBorder) {
+                        ctx.border = "1px #eee solid";
+                        ctx.strokeStyle = "#ccc";
+                        ctx.strokeRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
+                    }
                 }
-                ctx.border = "1px #eee solid";
-                ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
             }
     
-            if (!World.settings.hidePathBorder) {
-                ctx.strokeStyle = "#ccc";
-                ctx.strokeRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
-            }
-            ctx.restore();
         }
     };
     
@@ -216,11 +226,17 @@ FiercePlanet.Drawing = FiercePlanet.Drawing || {};
     
         for (var i = 0; i < FiercePlanet.currentLevel.exitPoints.length; i++) {
             var point = FiercePlanet.currentLevel.exitPoints[i];
-            var x = point[0] * FiercePlanet.cellWidth + FiercePlanet.cellWidth / 2;
-            var y = point[1] * FiercePlanet.cellHeight + FiercePlanet.cellHeight / 2;
+            var xPos = point[0];
+            var yPos = point[1];
+            var x = xPos * FiercePlanet.cellWidth + FiercePlanet.cellWidth / 2;
+            var y = yPos * FiercePlanet.cellHeight + FiercePlanet.cellHeight / 2;
+            if ((World.settings.skewTiles || FiercePlanet.currentLevel.isometric)) {
+                var newOrigin = Isometric.doIsometricOffset(point[0], point[1]);
+                x = newOrigin.x + FiercePlanet.cellWidth / 2;
+                y = newOrigin.y + FiercePlanet.cellWidth / 2;
+            }
             var width = (FiercePlanet.pieceWidth / 2);
-            var height = (FiercePlanet.pieceHeight / 2);
-    
+
             // Draw circle
             ctx.beginPath();
             ctx.arc(x, y, width, 0, Math.PI * 2, false);
@@ -253,11 +269,18 @@ FiercePlanet.Drawing = FiercePlanet.Drawing || {};
     
         for (var i = 0; i < FiercePlanet.currentLevel.entryPoints.length; i++) {
             var point = FiercePlanet.currentLevel.entryPoints[i];
-            var x = point[0] * FiercePlanet.cellWidth + FiercePlanet.cellWidth / 2;
-            var y = point[1] * FiercePlanet.cellHeight + FiercePlanet.cellHeight / 2;
+            var xPos = point[0];
+            var yPos = point[1];
+            var x = xPos * FiercePlanet.cellWidth + FiercePlanet.cellWidth / 2;
+            var y = yPos * FiercePlanet.cellHeight + FiercePlanet.cellHeight / 2;
+            if ((World.settings.skewTiles || FiercePlanet.currentLevel.isometric)) {
+                var newOrigin = Isometric.doIsometricOffset(point[0], point[1]);
+                x = newOrigin.x + FiercePlanet.cellWidth / 2;
+                y = newOrigin.y + FiercePlanet.cellWidth / 2;
+            }
             var width = (FiercePlanet.pieceWidth / 2);
-            var height = (FiercePlanet.pieceHeight / 2);
-    
+
+
             // Draw circle
             ctx.beginPath();
             ctx.arc(x, y, width, 0, Math.PI * 2, false);
@@ -437,84 +460,109 @@ FiercePlanet.Drawing = FiercePlanet.Drawing || {};
         var y = resource.y * FiercePlanet.cellHeight;
         var s = (resource.totalYield / resource.initialTotalYield) * 100;
         var c = resource.color;
-    
-        ctx.save();
-        if (World.settings.skewTiles) {
-            var angle = -45 * Math.PI / 180;
-            var sx = 0.2;
-            var sy = 0.2;
-            ctx.translate(x, y);
-            ctx.rotate(angle);
-            ctx.transform(1, sy, sx, 1, 0, 0);
-            x = 0;
-            y = 0;
-        }
-    
-        // Clear and fill the resource tile with a white background
-        ctx.clearRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
-    
         // Determine drawing colours and offsets
         var newColor = this.diluteColour(s, s, s, c);
-        var yOffset = (((FiercePlanet.cellHeight) * (1.0 - (s / 100))) / 1.2) | 0;
-    
+
         // Create a gradient to fill the cell from the bottom up
+        var yOffset = (((FiercePlanet.cellHeight) * (1.0 - (s / 100))) / 1.2) | 0;
         var resourceGradient = ctx.createLinearGradient(x, y + yOffset, x, y + FiercePlanet.cellHeight);
         resourceGradient.addColorStop(0, "#fff");
         resourceGradient.addColorStop(0.5, "#" + c);
         resourceGradient.addColorStop(1, "#" + c);
-    
-        ctx.fillStyle = resourceGradient;
-        ctx.strokeStyle = "#333";
-    
-        // Straight drawing
-    //    ctx.fillStyle = "#" + newColor;
-    //    ctx.strokeStyle = "#333";
-    
-    
-        // Fill whole square
-    //    ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
-        // Fill smaller square
-    //    ctx.fillRect(100, 100, 200, 200);
-        ctx.fillRect(x, y + yOffset, FiercePlanet.cellWidth, (FiercePlanet.cellHeight - yOffset));
-    
-    
-        // Add upgrade border?
-        switch (resource.upgradeLevel) {
-            case 1:
-                break;
-            case 2:
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = "#666";
-                ctx.strokeRect(x + 4, y + 4, FiercePlanet.cellWidth - 8, FiercePlanet.cellHeight - 8);
-                break;
-            case 3:
-                ctx.lineWidth = 4;
-                ctx.strokeStyle = "#666";
-                ctx.strokeRect(x + 6, y + 6, FiercePlanet.cellWidth - 12, FiercePlanet.cellHeight - 12);
-                break;
-            case 4:
-                ctx.fillStyle = "#666";
-                ctx.fillRect(x + 8, y + 8, FiercePlanet.cellWidth - 16, FiercePlanet.cellHeight - 16);
-                break;
+
+        if ((World.settings.skewTiles || FiercePlanet.currentLevel.isometric)) {
+            var tileOffset = Isometric.offsets3DPoint([FiercePlanet.cellHeight, 0, 0]);
+            var newOrigin = Isometric.doIsometricOffset(resource.x, resource.y);
+            var originXp = newOrigin.x + FiercePlanet.cellWidth / 2;
+            var originYp = newOrigin.y + FiercePlanet.cellHeight;
+            ctx.fillStyle = "#fff";
+            Isometric.draw3DTile(ctx, [originXp, originYp], FiercePlanet.cellHeight);
+            ctx.fill();
+
+            resourceGradient = ctx.createLinearGradient(originXp, originYp - FiercePlanet.cellHeight + yOffset, originXp, originYp);
+            resourceGradient.addColorStop(0, "#fff");
+            resourceGradient.addColorStop(0.5, "#" + c);
+            resourceGradient.addColorStop(1, "#" + c);
+            ctx.fillStyle = resourceGradient;
+            Isometric.draw3DTile(ctx, [originXp, originYp], FiercePlanet.cellHeight);
+            ctx.fill();
+
+            Isometric.draw3DTile(ctx, [originXp, originYp], FiercePlanet.cellHeight);
+//            ctx.clip();
+            // Draw resource-specific representation here
+            if (resource.kind.image) {
+                var imgOffsetX = originXp + 4;
+                var imgOffsetY = originYp + tileOffset.y * 2 + 4;
+                var resImage = new Image();
+                resImage.src = resource.kind.image;
+                ctx.drawImage(resImage, originXp - tileOffset.x / 2, originYp + tileOffset.y / 2, tileOffset.x, tileOffset.y);
+//                ctx.save();
+//                ctx.translate(imgOffsetX, imgOffsetY);
+//                ctx.rotate(Isometric.PERSPECTIVE_ANGLE);
+//                var slices = 27;
+//                for (var i = 0; i < slices; i++) {
+//                    var proportion = i / slices;
+//                    var sliceOffsetX = imgOffsetX + (proportion * tileOffset.x);
+//                    var sliceOffsetY = imgOffsetY + (proportion * tileOffset.y);
+//                    ctx.save();
+//                    ctx.translate(sliceOffsetX, sliceOffsetY);
+//                    ctx.rotate(Math.PI / 2 - Isometric.PERSPECTIVE_ANGLE);
+//                    var extent = (i + 1) / slices;
+//                    var slicePortion = (1) / slices;
+//                    var imgWidth = FiercePlanet.cellWidth - 8;
+//                    var imgHeight = FiercePlanet.cellHeight - 8;
+//                    console.log('-----------------------------')
+//                    console.log(tileOffset.x)
+//                    console.log(proportion * tileOffset.x)
+//                    console.log(proportion * tileOffset.y)
+//                    console.log(proportion)
+//                    console.log(extent)
+//                    console.log(slicePortion)
+//                    console.log(extent * imgWidth)
+//                    console.log(imgHeight)
+//                    console.log(slicePortion * imgWidth)
+//                    console.log(i)
+////                    ctx.drawImage(resImage,
+////                            proportion * imgWidth, 0,
+////                            extent * imgWidth, imgHeight);
+////                    ctx.drawImage(resImage,
+////                            i, 0,
+////                            i+1, 16,
+////                            0, 0,
+////                            imgWidth, imgHeight);
+//                    ctx.drawImage(resImage,
+//                            i, 0,
+//                            i+1, 27,
+//                            proportion * imgWidth, 0,
+//                            extent * imgWidth, imgHeight);
+//                    if (i == 11)
+//                        break;
+//                    ctx.restore();
+//                }
+                ctx.restore();
+            }
+//            canvas.width = canvas.width; // This is the trick... we need to reset the canvas to reset the clip region...
         }
-    
-        ctx.lineWidth = 4;
-        ctx.strokeStyle = "#" + newColor;
-    //    ctx.strokeRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
-    //    ctx.strokeText(p.getUpgradeLevel(), x + 10, y + 10);
-    
-        // Actual rect to draw
-    //    ctx.strokeRect(x + 2, y + 2, FiercePlanet.cellWidth - 4, FiercePlanet.cellHeight - 4);
-    
-        // Draw resource-specific representation here
-        if (resource.kind.image) {
-            var resImage = new Image();
-            resImage.src = resource.kind.image;
-            ctx.drawImage(resImage, x + 4, y + 4, FiercePlanet.cellWidth - 8, FiercePlanet.cellHeight - 8);
+        else {
+            // Clear and fill the resource tile with a white background
+            ctx.clearRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
+            ctx.fillStyle = "#fff";
+            ctx.fillRect(x, y, FiercePlanet.cellWidth, FiercePlanet.cellHeight);
+
+            ctx.fillStyle = resourceGradient;
+            ctx.strokeStyle = "#333";
+            ctx.fillRect(x, y + yOffset, FiercePlanet.cellWidth, (FiercePlanet.cellHeight - yOffset));
+
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "#" + newColor;
+
+            // Draw resource-specific representation here
+            if (resource.kind.image) {
+                var resImage = new Image();
+                resImage.src = resource.kind.image;
+                ctx.drawImage(resImage, x + 4, y + 4, FiercePlanet.cellWidth - 8, FiercePlanet.cellHeight - 8);
+            }
         }
-        ctx.restore();
     };
     
     
@@ -563,8 +611,15 @@ FiercePlanet.Drawing = FiercePlanet.Drawing || {};
                 var wx = agent.wanderX;
                 var wy = agent.wanderY;
                 var __ret = this.getDrawingPosition(agent, FiercePlanet.waveCounter - 1);
-                var intX = __ret.intX * FiercePlanet.cellWidth + wx + 1;
-                var intY = __ret.intY * FiercePlanet.cellHeight + wy + 1;
+                var xPos = __ret.intX;
+                var yPos = __ret.intY;
+                var intX = xPos * FiercePlanet.cellWidth + wx + 1;
+                var intY = yPos * FiercePlanet.cellHeight + wy + 1;
+                if ((World.settings.skewTiles || FiercePlanet.currentLevel.isometric)) {
+                    var newOrigin = Isometric.doIsometricOffset(xPos, yPos);
+                    intX = newOrigin.x + wx + 1;// - FiercePlanet.cellWidth / 2;
+                    intY = newOrigin.y + wx + 1;// - FiercePlanet.cellHeight / 2;
+                }
                 ctx.clearRect(intX, intY, FiercePlanet.cellWidth + wx + 1, FiercePlanet.cellHeight + wy + 1);
                 if (World.settings.agentTracing) {
                     ctx.beginPath();
@@ -718,8 +773,20 @@ FiercePlanet.Drawing = FiercePlanet.Drawing || {};
             var wx = agent.wanderX;
             var wy = agent.wanderY;
             var __ret = this.getDrawingPosition(agent, FiercePlanet.waveCounter);
-            var intX = __ret.intX * FiercePlanet.cellWidth + wx + FiercePlanet.cellWidth / 2;
-            var intY = __ret.intY * FiercePlanet.cellHeight + wy + FiercePlanet.cellHeight / 4;
+            var xPos = __ret.intX;
+            var yPos = __ret.intY;
+
+            var intX = xPos * FiercePlanet.cellWidth + wx + FiercePlanet.cellWidth / 2;
+            var intY = yPos * FiercePlanet.cellHeight + wy + FiercePlanet.cellHeight / 4;
+
+            if ((World.settings.skewTiles || FiercePlanet.currentLevel.isometric)) {
+                var newOrigin = Isometric.doIsometricOffset(xPos, yPos);
+                intX = newOrigin.x + wx + FiercePlanet.cellWidth / 2;
+                intY = newOrigin.y + wy + FiercePlanet.cellHeight / 4;
+//                ctx.fillRect(Math.floor(intX), Math.floor(newIntY), 5, 5);
+//                ctx.fillRect(Math.floor(intX), Math.floor(intY), 5, 5);
+            }
+
             var direction = this.getAgentDirection(agent);
     
     
@@ -837,7 +904,7 @@ FiercePlanet.Drawing = FiercePlanet.Drawing || {};
      */
     this.drawScore = function() {
         var e = $('#score-display')[0];
-        e.innerHTML = FiercePlanet.zeroFill(FiercePlanet.currentProfile.current_score, 5);
+        e.innerHTML = FiercePlanet.Utils.zeroFill(FiercePlanet.currentProfile.current_score, 5);
     };
     
     /**
